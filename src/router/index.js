@@ -3,6 +3,11 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err);
+};
+
 const routes = [
     {
         path: '/',
@@ -16,6 +21,14 @@ const routes = [
                 component: () => import(/* webpackChunkName: "dotWord" */ '../views/dot-word/DotWord.vue'),
                 meta: {
                     title: '点阵字生成器'
+                }
+            },
+            {
+                path: 'dot-image',
+                name: 'dotImage',
+                component: () => import(/* webpackChunkName: "dotWord" */ '../views/dot-image/DotImage.vue'),
+                meta: {
+                    title: '点阵图生成器'
                 }
             }
         ]

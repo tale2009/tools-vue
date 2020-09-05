@@ -5,11 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        current: {}  // 当前表单
+        collapse: false
     },
     mutations: {
-        setCurrent(state, value) {
-            state.current = value;
+        setCollapse(state) {
+            state.collapse = !state.collapse;
         }
     },
     actions: {}
