@@ -2,7 +2,7 @@
     <div class="app-header-container">
         <div class="header-left">
             <el-button class="collapse-icon" type="text" @click="setCollapse">
-                <i class="fal fa-arrow-left" :style="collapseIconStyle"></i>
+                <i class="fal fa-arrow-to-left" :style="collapseIconStyle"></i>
             </el-button>
         </div>
 
