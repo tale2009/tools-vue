@@ -40,6 +40,7 @@
 
         .page-main {
             height: 100%;
+            overflow: auto;
             flex-grow: 1;
         }
 
