@@ -6,7 +6,9 @@
             </el-button>
         </div>
 
-        <div class="header-right"></div>
+        <div class="header-right">
+            <i class="fab fa-github" @click="toGithub"></i>
+        </div>
     </div>
 </template>
 
@@ -16,7 +18,10 @@
     export default {
         name: 'AppHeader',
         methods: {
-            ...mapMutations(['setCollapse'])
+            ...mapMutations(['setCollapse']),
+            toGithub() {
+                open('https://github.com/kooriookami/tools-vue');
+            }
         },
         computed: {
             ...mapState(['collapse']),
@@ -47,7 +52,14 @@
         }
 
         .header-right {
+            i {
+                font-size: 24px;
+                cursor: pointer;
 
+                &:hover {
+                    color: $primary-color
+                }
+            }
         }
     }
 </style>

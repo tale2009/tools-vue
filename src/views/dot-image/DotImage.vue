@@ -72,7 +72,6 @@
         },
         methods: {
             createDotList() {
-                this.dotList = [];
                 let pixel = this.form.pixel;
                 let canvas = document.createElement('canvas');
                 let context = canvas.getContext('2d');
@@ -88,6 +87,7 @@
 
                     context.drawImage(img, 0, 0, pixelX, pixelY);
                     let imageData = context.getImageData(0, 0, pixelX, pixelY);
+                    let dotList = [];
                     for (let y = 0; y < pixelY; y++) {
                         let rowList = [];
                         for (let x = 0; x < pixelX; x++) {
@@ -100,12 +100,13 @@
                             let b = imageData.data[bIndex];
                             let a = imageData.data[aIndex];
 
-                            rowList.push(`rgba(${r},${g},${b},${a})`);
+                            rowList.push([r, g, b, a]);
                             if (x === pixelX - 1) {
-                                this.dotList.push(rowList);
+                                dotList.push(rowList);
                             }
                         }
                     }
+                    this.dotList = dotList;
                 };
             },
             beforeUpload(file) {
@@ -124,7 +125,7 @@
                 return {
                     width: `${this.form.size}px`,
                     height: `${this.form.size}px`,
-                    background: dot,
+                    background: `rgba(${dot[0]},${dot[1]},${dot[2]},${dot[3]})`,
                     border: this.form.grid ? '1px solid #dcdfe6' : '',
                     borderRadius: this.form.shape === 'round' ? '100%' : ''
                 };

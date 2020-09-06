@@ -91,9 +91,9 @@
         },
         methods: {
             createWordList() {
-                this.wordList = [];
                 let textList = Array.from(this.form.text);
                 let pixel = this.form.pixel;
+                let wordList = [];
                 textList.forEach(text => {
                     let canvas = document.createElement('canvas');
                     let context = canvas.getContext('2d');
@@ -114,15 +114,20 @@
                             let gIndex = (y * pixelX + x) * 4 + 1;
                             let bIndex = (y * pixelX + x) * 4 + 2;
                             let aIndex = (y * pixelX + x) * 4 + 3;
+                            let r = imageData.data[rIndex];
+                            let g = imageData.data[gIndex];
+                            let b = imageData.data[bIndex];
+                            let a = imageData.data[aIndex];
 
-                            rowList.push(imageData.data[aIndex]);
+                            rowList.push(a);
                             if (x === pixelX - 1) {
                                 dotList.push(rowList);
                             }
                         }
                     }
-                    this.wordList.push(dotList);
+                    wordList.push(dotList);
                 });
+                this.wordList = wordList;
             },
             dotStyle(dot) {
                 let background;
