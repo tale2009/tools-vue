@@ -20,7 +20,7 @@
         name: 'AppLeft',
         data() {
             return {
-                toolList: require('@/assets/toolList.json')
+                toolList: require('@/assets/json/toolList.json')
             };
         },
         methods: {
