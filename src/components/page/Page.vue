@@ -1,19 +1,17 @@
 <template>
     <div class="page-container">
-        <el-container>
-            <el-main>
-                <el-scrollbar ref="main-scrollbar" class="scrollbar">
-                    <div style="padding: 20px">
-                        <slot></slot>
-                    </div>
-                </el-scrollbar>
-            </el-main>
-            <el-aside v-show="$slots.form" class="right-aside" width="400px">
-                <el-scrollbar ref="right-scrollbar" class="scrollbar">
-                    <slot name="form"></slot>
-                </el-scrollbar>
-            </el-aside>
-        </el-container>
+        <div class="page-main">
+            <el-scrollbar ref="main-scrollbar" class="scrollbar">
+                <div style="padding: 20px">
+                    <slot></slot>
+                </div>
+            </el-scrollbar>
+        </div>
+        <div v-show="$slots.form" class="page-form">
+            <el-scrollbar ref="right-scrollbar" class="scrollbar">
+                <slot name="form"></slot>
+            </el-scrollbar>
+        </div>
     </div>
 </template>
 
@@ -37,16 +35,19 @@
 
 <style lang="scss" scoped>
     .page-container {
-        .el-container {
-            height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
+        display: flex;
 
-            .el-main {
-                padding: 0;
-            }
+        .page-main {
+            height: 100%;
+            flex-grow: 1;
+        }
 
-            .right-aside {
-                border-left: 1px solid $border-color;
-            }
+        .page-form {
+            height: 100%;
+            width: 400px;
+            flex-shrink: 0;
+            border-left: 1px solid $border-color;
         }
     }
 </style>
