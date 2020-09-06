@@ -31,6 +31,9 @@
                                 <el-radio-button label="round">圆形</el-radio-button>
                             </el-radio-group>
                         </el-form-item>
+                        <el-form-item label="黑白">
+                            <el-switch v-model="form.monochrome"></el-switch>
+                        </el-form-item>
                         <el-form-item label="网格">
                             <el-switch v-model="form.grid"></el-switch>
                         </el-form-item>
@@ -61,6 +64,7 @@
                     image: require('@/assets/image/my-avatar.jpg'),
                     pixel: 48,
                     shape: 'square',
+                    monochrome: false,
                     grid: false,
                     size: 10
                 },
@@ -122,10 +126,18 @@
                 return flag;
             },
             dotStyle(dot) {
+                let background;
+                if (this.form.monochrome) {
+                    let rgb = Math.round((dot[0] + dot[1] + dot[2]) / 3);
+                    background = `rgba(${rgb},${rgb},${rgb},${dot[3]})`;
+                } else {
+                    background = `rgba(${dot[0]},${dot[1]},${dot[2]},${dot[3]})`;
+                }
+
                 return {
                     width: `${this.form.size}px`,
                     height: `${this.form.size}px`,
-                    background: `rgba(${dot[0]},${dot[1]},${dot[2]},${dot[3]})`,
+                    background: background,
                     border: this.form.grid ? '1px solid #dcdfe6' : '',
                     borderRadius: this.form.shape === 'round' ? '100%' : ''
                 };
