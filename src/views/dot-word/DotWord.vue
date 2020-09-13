@@ -14,7 +14,7 @@
             <template #form>
                 <div class="form-title">
                     <span>点阵字生成器</span>
-                    <span class="form-remarks">16px 宋体效果最佳</span>
+                    <span class="form-remarks">16 px 宋体效果最佳</span>
                 </div>
 
                 <div class="form-main">

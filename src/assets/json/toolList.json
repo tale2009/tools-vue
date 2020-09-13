@@ -8,5 +8,10 @@
         "title": "点阵图",
         "path": "/dot-image",
         "icon": "fa-image"
+    },
+    {
+        "title": "游戏王卡片",
+        "path": "/yugioh",
+        "icon": "fa-rectangle-portrait"
     }
 ]
