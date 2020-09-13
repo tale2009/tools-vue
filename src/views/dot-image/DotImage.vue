@@ -116,7 +116,7 @@
             beforeUpload(file) {
                 let flag = file.type.includes('image');
                 if (flag) {
-                    this.fileToBase64(file).then(res => {
+                    this.fileToDataURL(file).then(res => {
                         this.form.image = res.target.result;
                         this.createDotList();
                     });
@@ -148,9 +148,10 @@
                     backgroundColor: 'transparent'
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
+                    let blob = this.dataURLtoBlob(dataURL);
                     let a = document.createElement('a');
                     a.download = '点阵图';
-                    a.href = dataURL;
+                    a.href = URL.createObjectURL(blob);
                     a.click();
                 });
             }

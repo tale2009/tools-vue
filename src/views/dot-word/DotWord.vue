@@ -162,9 +162,10 @@
                     backgroundColor: 'transparent'
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
+                    let blob = this.dataURLtoBlob(dataURL);
                     let a = document.createElement('a');
                     a.download = this.form.text;
-                    a.href = dataURL;
+                    a.href = URL.createObjectURL(blob);
                     a.click();
                 });
             }

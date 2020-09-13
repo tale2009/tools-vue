@@ -35,6 +35,7 @@
                     </div>
 
                     <div class="link-arrow" v-if="form.type==='monster'&&form.cardType==='link'">
+                        <el-image :src="baseImage + '/arrow-base.png'" style="top: 293px;left: 87px"></el-image>
                         <el-image :src="baseImage + '/arrow-up.png'" style="top: 301px;left: 577px"></el-image>
                         <el-image :src="baseImage + '/arrow-right-up.png'" style="top: 322px;left: 1149px"></el-image>
                         <el-image :src="baseImage + '/arrow-right.png'" style="top: 782px;left: 1224px"></el-image>
@@ -220,7 +221,7 @@
             beforeUpload(file) {
                 let flag = file.type.includes('image');
                 if (flag) {
-                    this.fileToBase64(file).then(res => {
+                    this.fileToDataURL(file).then(res => {
                         this.form.image = res.target.result;
                     });
                 } else {
@@ -231,14 +232,15 @@
             exportImage() {
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
-                    useCORS: true
+                    useCORS: true,
+                    width: this.form.scale * 1393,
+                    height: this.form.scale * 2031
                 }).then(canvas => {
-                    let context = canvas.getContext('2d');
-                    console.log(context);
                     let dataURL = canvas.toDataURL('image/png', 1);
+                    let blob = this.dataURLtoBlob(dataURL);
                     let a = document.createElement('a');
                     a.download = this.form.name;
-                    a.href = dataURL;
+                    a.href = URL.createObjectURL(blob);
                     a.click();
                 });
             }
@@ -382,7 +384,6 @@
 
                 .el-image {
                     position: absolute;
-                    filter: drop-shadow(0 0 5px);
                 }
             }
 
