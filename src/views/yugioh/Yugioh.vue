@@ -26,8 +26,12 @@
                         <span>】</span>
                     </div>
 
-                    <div class="card-image" v-if="form.image">
-                        <el-image :src="form.image" fit="cover"></el-image>
+                    <div class="card-image" v-if="form.image" :style="cardImageStyle">
+                        <!--html2canvas不支持object-fit，只能用background-->
+                    </div>
+
+                    <div class="card-mask">
+                        <el-image :src="baseImage + '/card-mask.png'" fit="cover"></el-image>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -36,18 +40,18 @@
 
                     <div class="link-arrow" v-if="form.type==='monster'&&form.cardType==='link'">
                         <el-image :src="baseImage + '/arrow-base.png'" style="top: 293px;left: 87px"></el-image>
-                        <el-image :src="baseImage + '/arrow-up.png'" style="top: 301px;left: 577px"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-up.png'" style="top: 322px;left: 1149px"></el-image>
-                        <el-image :src="baseImage + '/arrow-right.png'" style="top: 782px;left: 1224px"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-down.png'" style="top: 1355px;left: 1149px"></el-image>
-                        <el-image :src="baseImage + '/arrow-down.png'" style="top: 1430px;left: 577px"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-down.png'" style="top: 1355px;left: 118px"></el-image>
-                        <el-image :src="baseImage + '/arrow-left.png'" style="top: 780px;left: 94px"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-up.png'" style="top: 322px;left: 118px"></el-image>
+                        <el-image :src="baseImage + '/arrow-up.png'" style="top: 301px;left: 577px" v-if="form.arrowList.includes(1)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-up.png'" style="top: 322px;left: 1149px" v-if="form.arrowList.includes(2)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right.png'" style="top: 782px;left: 1223px" v-if="form.arrowList.includes(3)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-down.png'" style="top: 1355px;left: 1149px" v-if="form.arrowList.includes(4)"></el-image>
+                        <el-image :src="baseImage + '/arrow-down.png'" style="top: 1430px;left: 577px" v-if="form.arrowList.includes(5)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-down.png'" style="top: 1355px;left: 118px" v-if="form.arrowList.includes(6)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left.png'" style="top: 779px;left: 95px" v-if="form.arrowList.includes(7)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-up.png'" style="top: 322px;left: 118px" v-if="form.arrowList.includes(8)"></el-image>
                     </div>
 
                     <div class="card-description">
-                        <span v-if="form.type==='monster'" class="card-effect">【龙族/通常】</span>
+                        <span v-if="form.type==='monster'&&form.monsterType" class="card-effect">【{{form.monsterType}}】</span>
                         <span>{{form.description}}</span>
                     </div>
 
@@ -65,10 +69,10 @@
                     </div>
 
                     <div class="card-link" v-if="form.type==='monster'&&form.cardType==='link'">
-                        <span>0</span>
+                        <span>{{form.arrowList.length}}</span>
                     </div>
 
-                    <div class="card-password">
+                    <div class="card-password" :style="passwordStyle">
                         <span>{{form.password}}</span>
                     </div>
 
@@ -146,11 +150,28 @@
                         <el-form-item label="阶级" v-if="form.type==='monster'&&form.cardType==='xyz'">
                             <el-input-number v-model="form.rank" :min="1" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
+                        <el-form-item label="种族" v-if="form.type==='monster'">
+                            <el-input v-model="form.monsterType" placeholder="请输入种族"></el-input>
+                        </el-form-item>
                         <el-form-item label="ATK" v-if="form.type==='monster'">
                             <el-input-number v-model="form.atk" :min="0" :max="9999" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="DEF" v-if="form.type==='monster'&&form.cardType!=='link'">
                             <el-input-number v-model="form.def" :min="0" :max="9999" :precision="0"></el-input-number>
+                        </el-form-item>
+                        <el-form-item label="箭头" v-if="form.type==='monster'&&form.cardType==='link'">
+                            <div class="arrow-form">
+                                <div class="arrow-item" v-for="item in [8,1,2,7,9,3,6,5,4]" @click="toggleArrow(item)" :style="arrowItemStyle(item)">
+                                    <i class="fas fa-arrow-alt-up" v-if="item===1"></i>
+                                    <i class="fas fa-arrow-alt-up" style="transform: rotate(45deg)" v-if="item===2"></i>
+                                    <i class="fas fa-arrow-alt-right" v-if="item===3"></i>
+                                    <i class="fas fa-arrow-alt-right" style="transform: rotate(45deg)" v-if="item===4"></i>
+                                    <i class="fas fa-arrow-alt-down" v-if="item===5"></i>
+                                    <i class="fas fa-arrow-alt-down" style="transform: rotate(45deg)" v-if="item===6"></i>
+                                    <i class="fas fa-arrow-alt-left" v-if="item===7"></i>
+                                    <i class="fas fa-arrow-alt-left" style="transform: rotate(45deg)" v-if="item===8"></i>
+                                </div>
+                            </div>
                         </el-form-item>
                         <el-form-item label="效果">
                             <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果"></el-input>
@@ -166,9 +187,6 @@
                         </el-form-item>
                         <el-form-item label="缩放">
                             <el-slider v-model="form.scale" :min="0.1" :max="1" :step="0.1"></el-slider>
-                        </el-form-item>
-                        <el-form-item label="切换">
-                            <el-switch v-model="form.switch"></el-switch>
                         </el-form-item>
                     </el-form>
 
@@ -206,14 +224,15 @@
                     cardType: 'normal',
                     level: 8,
                     rank: 1,
+                    monsterType: '龙族/通常',
                     atk: 3000,
                     def: 2500,
+                    arrowList: [],
                     description: '以高攻击力著称的传说之龙。任何对手都能粉碎，其破坏力不可估量。',
                     package: 'SD25-SC001',
                     password: '89631139',
                     scale: 1,
-                    laser: false,
-                    switch: true
+                    laser: false
                 }
             };
         },
@@ -229,12 +248,47 @@
                 }
                 return flag;
             },
+            toggleArrow(item) {
+                if (this.form.arrowList.includes(item)) {
+                    this.form.arrowList = this.form.arrowList.filter(value => value !== item);
+                } else {
+                    this.form.arrowList.push(item);
+                }
+            },
+            arrowItemStyle(item) {
+                let border = '';
+                let color = '';
+                if (this.form.arrowList.includes(item)) {
+                    border = '1px solid darkorange';
+                    color = 'darkorange';
+                }
+                return {
+                    border: border,
+                    color: color,
+                    visibility: item === 9 ? 'hidden' : ''
+                };
+            },
             exportImage() {
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
                     useCORS: true,
                     width: this.form.scale * 1393,
-                    height: this.form.scale * 2031
+                    height: this.form.scale * 2031,
+                    onclone: (doc) => {
+                        // 微调字体位置
+                        let cardAtk = doc.querySelector('.card-atk');
+                        if (cardAtk) {
+                            cardAtk.style.top = '1837px';
+                        }
+                        let cardDef = doc.querySelector('.card-def');
+                        if (cardDef) {
+                            cardDef.style.top = '1837px';
+                        }
+                        let cardLink = doc.querySelector('.card-link');
+                        if (cardLink) {
+                            cardLink.style.top = '1848px';
+                        }
+                    }
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
@@ -248,14 +302,10 @@
         computed: {
             cardStyle() {
                 let background;
-                if (this.form.switch) {
-                    if (this.form.type === 'monster') {
-                        background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
-                    } else {
-                        background = `url(${this.baseImage}/card-${this.form.type}.png) no-repeat center/cover`;
-                    }
+                if (this.form.type === 'monster') {
+                    background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
                 } else {
-                    background = `url(${require('@/assets/image/sample.png')}) no-repeat center/cover`;
+                    background = `url(${this.baseImage}/card-${this.form.type}.png) no-repeat center/cover`;
                 }
                 return {
                     transform: `scale(${this.form.scale})`,
@@ -287,10 +337,20 @@
                     return `${this.baseImage}/attribute-${this.form.type}.png`;
                 }
             },
+            cardImageStyle() {
+                return {
+                    background: `url(${this.form.image}) no-repeat center/cover`
+                };
+            },
             packageStyle() {
                 return {
                     color: this.form.cardType === 'xyz' ? 'white' : 'black',
                     right: this.form.cardType === 'link' ? '252px' : '148px'
+                };
+            },
+            passwordStyle() {
+                return {
+                    color: this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
             }
         }
@@ -361,15 +421,17 @@
 
             .card-image {
                 position: absolute;
-                left: 168px;
-                top: 373px;
-                box-shadow: 0 0 5px 0.5px;
+                left: 171px;
+                top: 374px;
+                width: 1051px;
+                height: 1054px;
+            }
 
-                .el-image {
-                    display: flex;
-                    width: 1057px;
-                    height: 1057px;
-                }
+            .card-mask {
+                position: absolute;
+                z-index: 10;
+                left: 168px;
+                top: 371px;
             }
 
             .card-package {
@@ -380,10 +442,9 @@
             }
 
             .link-arrow {
-                z-index: 10;
-
                 .el-image {
                     position: absolute;
+                    z-index: 20;
                 }
             }
 
@@ -463,6 +524,29 @@
 
                 i {
                     margin-right: 10px;
+                    font-size: 18px;
+                }
+            }
+
+            .arrow-form {
+                width: 130px;
+                display: flex;
+                flex-wrap: wrap;
+                margin-right: -10px;
+                margin-bottom: -10px;
+
+                .arrow-item {
+                    width: 32px;
+                    height: 32px;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                    border: 1px solid $border-color;
+                    border-radius: 4px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    color: $placeholder-color;
                     font-size: 18px;
                 }
             }
