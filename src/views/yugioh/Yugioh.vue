@@ -364,6 +364,7 @@
             }
         },
         directives: {
+            // 文本压缩变形
             compressText: (el, binding) => {
                 setTimeout(() => {
                     let scale = 1;
