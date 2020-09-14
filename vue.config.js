@@ -13,17 +13,13 @@ module.exports = {
             }
         }
     },
-    configureWebpack: config => {
-        if (process.env.NODE_ENV === 'production') {
-            return {
-                plugins: [
-                    new CompressionPlugin({
-                        test: /\.(js|css)$/,
-                        threshold: 10240,   // 超过10k压缩
-                        deleteOriginalAssets: false // 删除源文件
-                    })
-                ]
-            };
-        }
+    configureWebpack: {
+        plugins: [
+            new CompressionPlugin({
+                test: /\.(js|css)$/,
+                threshold: 10240,   // 超过10k压缩
+                deleteOriginalAssets: false // 删除源文件
+            })
+        ]
     }
 };

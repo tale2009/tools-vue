@@ -2,7 +2,7 @@
     <div class="page-container">
         <div class="page-main">
             <el-scrollbar ref="main-scrollbar" class="scrollbar">
-                <div style="padding: 20px">
+                <div style="padding: 20px;display: inline-block">
                     <slot></slot>
                 </div>
             </el-scrollbar>
