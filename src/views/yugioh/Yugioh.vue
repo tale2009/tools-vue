@@ -185,6 +185,9 @@
                         <el-form-item label="角标">
                             <el-switch v-model="form.laser"></el-switch>
                         </el-form-item>
+                        <el-form-item label="圆角">
+                            <el-switch v-model="form.radius"></el-switch>
+                        </el-form-item>
                         <el-form-item label="缩放">
                             <el-slider v-model="form.scale" :min="0.1" :max="1" :step="0.1"></el-slider>
                         </el-form-item>
@@ -232,7 +235,8 @@
                     package: 'SD25-SC001',
                     password: '89631139',
                     scale: 0.5,
-                    laser: false
+                    laser: false,
+                    radius: false
                 }
             };
         },
@@ -272,6 +276,7 @@
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
                     useCORS: true,
+                    backgroundColor: 'transparent',
                     width: this.form.scale * 1393,
                     height: this.form.scale * 2031,
                     onclone: (doc) => {
@@ -310,6 +315,7 @@
                 return {
                     transform: `scale(${this.form.scale})`,
                     background: background,
+                    borderRadius: this.form.radius ? '24px' : '',
                     marginRight: `${(this.form.scale - 1) * 1393}px`,
                     marginBottom: `${(this.form.scale - 1) * 2031}px`
                 };
