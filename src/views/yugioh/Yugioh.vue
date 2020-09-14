@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
-                        <span v-compressText="{width:1030,height:150}">{{form.name}}</span>
+                        <span v-compressText="{width:1030,height:130}">{{form.name}}</span>
                     </div>
 
                     <div class="card-attribute">
@@ -402,7 +402,7 @@
                 left: 116px;
                 top: 100px;
                 width: 1030px;
-                max-height: 150px;
+                max-height: 130px;
                 overflow: hidden;
             }
 
