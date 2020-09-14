@@ -51,7 +51,10 @@
                     </div>
 
                     <div class="card-description">
-                        <span v-if="form.type==='monster'" class="card-effect">【{{form.monsterType}}】</span>
+                        <div v-if="form.type==='monster'" class="card-effect" v-compressText="{width:1170,height:60}">
+                            <span>【{{form.monsterType}}】</span>
+                        </div>
+
                         <div v-for="(item,index) in form.description.split('\n')">
                             <!--单行压缩-->
                             <span v-if="index<form.description.split('\n').length-1" v-compressText="{width:1170,height:50}">{{item}}</span>
@@ -512,10 +515,6 @@
                 letter-spacing: 2px;
                 text-align: justify;
                 overflow: hidden;
-
-                span {
-                    display: block;
-                }
 
                 .card-effect {
                     text-indent: -0.5em;
