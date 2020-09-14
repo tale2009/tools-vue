@@ -3,8 +3,8 @@
         <Page>
             <template>
                 <div class="yugioh-card" :style="cardStyle" ondragstart="return false">
-                    <div v-compressText="{width:970,height:150}" class="card-name" :style="nameStyle">
-                        <span>{{form.name}}</span>
+                    <div class="card-name" :style="nameStyle">
+                        <span v-compressText="{width:1030,height:150}">{{form.name}}</span>
                     </div>
 
                     <div class="card-attribute">
@@ -51,8 +51,8 @@
                     </div>
 
                     <div class="card-description">
-                        <span v-if="form.type==='monster'&&form.monsterType" class="card-effect">【{{form.monsterType}}】</span>
-                        <span>{{form.description}}</span>
+                        <span v-if="form.type==='monster'" class="card-effect">【{{form.monsterType}}】</span>
+                        <span v-compressText="{width:1170,height:descriptionHeight}">{{form.description}}</span>
                     </div>
 
                     <div class="atk-def-link">
@@ -348,6 +348,15 @@
                     right: this.form.cardType === 'link' ? '252px' : '148px'
                 };
             },
+            descriptionHeight() {
+                let height;
+                if (this.form.type === 'monster') {
+                    height = 260;
+                } else {
+                    height = 370;
+                }
+                return height;
+            },
             passwordStyle() {
                 return {
                     color: this.form.cardType === 'xyz' ? 'white' : 'black'
@@ -356,17 +365,20 @@
         },
         directives: {
             compressText: (el, binding) => {
-                let scale = 1;
-                el.style.wordBreak = 'break-all';
-                el.style.width = `${binding.value.width}px`;
-                el.style.transform = 'none';
-                el.style.transformOrigin = '0 0';
+                setTimeout(() => {
+                    let scale = 1;
+                    el.style.display = 'inline-block';
+                    el.style.wordBreak = 'break-all';
+                    el.style.width = `${binding.value.width}px`;
+                    el.style.transform = 'none';
+                    el.style.transformOrigin = '0 0';
 
-                while (el.clientHeight > binding.value.height && scale > 0) {
-                    scale -= 0.01;
-                    el.style.width = `${binding.value.width / scale}px`;
-                    el.style.transform = `scaleX(${scale})`;
-                }
+                    while (el.clientHeight > binding.value.height && scale > 0) {
+                        scale -= 0.01;
+                        el.style.width = `${binding.value.width / scale}px`;
+                        el.style.transform = `scaleX(${scale})`;
+                    }
+                });
             }
         }
     };
@@ -388,7 +400,9 @@
                 font-size: 108px;
                 left: 116px;
                 top: 100px;
-                width: 970px;
+                width: 1030px;
+                max-height: 150px;
+                overflow: hidden;
             }
 
             .card-attribute {
@@ -463,12 +477,13 @@
 
             .card-description {
                 position: absolute;
-                top: 1530px;
+                top: 1528px;
                 left: 109px;
                 width: 1170px;
                 font-size: 36px;
                 letter-spacing: 2px;
                 text-align: justify;
+                overflow: hidden;
 
                 span {
                     display: block;
