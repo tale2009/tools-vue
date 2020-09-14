@@ -3,7 +3,7 @@
         <Page>
             <template>
                 <div class="yugioh-card" :style="cardStyle" ondragstart="return false">
-                    <div class="card-name" :style="nameStyle">
+                    <div v-compressText="{width:970,height:150}" class="card-name" :style="nameStyle">
                         <span>{{form.name}}</span>
                     </div>
 
@@ -353,6 +353,21 @@
                     color: this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
             }
+        },
+        directives: {
+            compressText: (el, binding) => {
+                let scale = 1;
+                el.style.wordBreak = 'break-all';
+                el.style.width = `${binding.value.width}px`;
+                el.style.transform = 'none';
+                el.style.transformOrigin = '0 0';
+
+                while (el.clientHeight > binding.value.height && scale > 0) {
+                    scale -= 0.01;
+                    el.style.width = `${binding.value.width / scale}px`;
+                    el.style.transform = `scaleX(${scale})`;
+                }
+            }
         }
     };
 </script>
@@ -374,9 +389,6 @@
                 left: 116px;
                 top: 100px;
                 width: 970px;
-                white-space: nowrap;
-                text-overflow: clip;
-                overflow: hidden;
             }
 
             .card-attribute {

@@ -1,4 +1,14 @@
+const fs = require('fs');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+
+// 保存配置文件
+function saveConfig() {
+    let config = {
+        updateTime: new Date().getTime()
+    };
+    fs.writeFileSync('./src/assets/json/config.json', JSON.stringify(config));
+}
 
 module.exports = {
     publicPath: './',
@@ -15,11 +25,13 @@ module.exports = {
     },
     configureWebpack: {
         plugins: [
+            new MomentLocalesPlugin(),  // 剥离除 “en” 以外的所有语言环境。
             new CompressionPlugin({
                 test: /\.(js|css)$/,
                 threshold: 10240,   // 超过10k压缩
                 deleteOriginalAssets: false // 删除源文件
-            })
+            }),
+            saveConfig
         ]
     }
 };
