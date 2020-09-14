@@ -52,7 +52,12 @@
 
                     <div class="card-description">
                         <span v-if="form.type==='monster'" class="card-effect">【{{form.monsterType}}】</span>
-                        <span v-compressText="{width:1170,height:descriptionHeight}">{{form.description}}</span>
+                        <div v-for="(item,index) in form.description.split('\n')">
+                            <!--单行压缩-->
+                            <span v-if="index<form.description.split('\n').length-1" v-compressText="{width:1170,height:50}">{{item}}</span>
+                            <!--最后一行压缩-->
+                            <span v-if="index===form.description.split('\n').length-1" v-compressText="{width:1170,height:descriptionHeight}">{{item}}</span>
+                        </div>
                     </div>
 
                     <div class="atk-def-link">
@@ -174,7 +179,7 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="效果">
-                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果" @input="inputDescription"></el-input>
                         </el-form-item>
                         <el-form-item label="卡包">
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
@@ -272,6 +277,20 @@
                     visibility: item === 9 ? 'hidden' : ''
                 };
             },
+            inputDescription() {
+                // 只保留两个换行符号
+                let list = Array.from(this.form.description);
+                let count = 0;
+                list.forEach((value, index) => {
+                    if (value === '\n') {
+                        count++;
+                        if (count > 2) {
+                            list[index] = '';
+                        }
+                    }
+                });
+                this.form.description = list.join('');
+            },
             exportImage() {
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
@@ -356,8 +375,10 @@
             },
             descriptionHeight() {
                 let height;
+                let enterCount = this.form.description.split('\n').length - 1;
                 if (this.form.type === 'monster') {
-                    height = 260;
+                    // 41为一行文本高度
+                    height = 260 - enterCount * 41;
                 } else {
                     height = 370;
                 }
