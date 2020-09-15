@@ -288,6 +288,7 @@
                     if (value === '\n') {
                         count++;
                         if (count > 2) {
+                            this.$message.warning('最多允许两个换行符');
                             list[index] = '';
                         }
                     }
