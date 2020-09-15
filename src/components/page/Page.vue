@@ -2,7 +2,7 @@
     <div class="page-container">
         <div class="page-main">
             <el-scrollbar ref="main-scrollbar" class="scrollbar">
-                <div style="padding: 20px;display: inline-block">
+                <div class="page-slot">
                     <slot></slot>
                 </div>
             </el-scrollbar>
@@ -42,6 +42,11 @@
             height: 100%;
             overflow: auto;
             flex-grow: 1;
+
+            .page-slot {
+                padding: 20px;
+                display: inline-block;
+            }
         }
 
         .page-form {
