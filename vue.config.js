@@ -4,10 +4,12 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 // 保存配置文件
 function saveConfig() {
-    let config = {
-        updateTime: new Date().getTime()
-    };
-    fs.writeFileSync('./src/assets/json/config.json', JSON.stringify(config));
+    if (process.env.NODE_ENV === 'production') {
+        let config = {
+            updateTime: new Date().getTime()
+        };
+        fs.writeFileSync('./src/assets/json/config.json', JSON.stringify(config));
+    }
 }
 
 module.exports = {

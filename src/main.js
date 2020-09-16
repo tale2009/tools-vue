@@ -6,12 +6,14 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import 'normalize.css';
 import '@/core/route-actived';
+import moment from 'moment';
 import base from '@/plugins/base';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(base);
+Vue.prototype.moment = moment;
 
 new Vue({
     router,

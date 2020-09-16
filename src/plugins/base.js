@@ -1,5 +1,13 @@
 const base = {
     install(Vue, options) {
+        Vue.prototype.config = require('@/assets/json/config.json');
+
+        Vue.filter('timeFilter', function (value) {
+            if (value) {
+                return Vue.prototype.moment(value).format('YYYY-MM-DD HH:mm:ss');
+            }
+        });
+
         Vue.prototype.fileToDataURL = function (file) {
             return new Promise(((resolve, reject) => {
                 const reader = new FileReader();

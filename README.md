@@ -1,12 +1,15 @@
 # 网页小工具
 这个小工具是使用 vue 编写的，不定期发布和更新有趣实用的小工具。
 
+## 小工具地址
+[小工具地址](http://tools.kooriookami.top)
+
 ## 使用说明
-[我的B站文集](https://www.bilibili.com/read/readlist/rl314448)
+[B站文集](https://www.bilibili.com/read/readlist/rl314448)
 
 ## 小工具列表
-* 点阵图生成器
 * 点阵字生成器
+* 点阵图生成器
 * 游戏王卡片生成器
 
 ## 赞助

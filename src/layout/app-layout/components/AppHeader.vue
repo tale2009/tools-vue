@@ -8,15 +8,27 @@
 
         <div class="header-right">
             <i class="fab fa-github" @click="toGithub"></i>
+            <el-button style="margin-left: 10px" type="text" @click="aboutDialog = true">关于</el-button>
+
+            <AboutDialog :aboutDialog.sync="aboutDialog"></AboutDialog>
         </div>
     </div>
 </template>
 
 <script>
+    import AboutDialog from '@/layout/app-layout/components/AboutDialog';
     import {mapMutations, mapState} from 'vuex';
 
     export default {
         name: 'AppHeader',
+        components: {
+            AboutDialog
+        },
+        data() {
+            return {
+                aboutDialog: false
+            };
+        },
         methods: {
             ...mapMutations(['setCollapse']),
             toGithub() {
@@ -52,6 +64,9 @@
         }
 
         .header-right {
+            display: flex;
+            align-items: center;
+
             i {
                 font-size: 24px;
                 cursor: pointer;
