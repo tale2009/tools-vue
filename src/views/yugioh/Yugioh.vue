@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
-                        <span v-compressText="{width:1030,height:130}">{{form.name}}</span>
+                        <span v-compressText="{width:1030,height:130}" v-html="formatVHtml(form.name)"></span>
                     </div>
 
                     <div class="card-attribute">
@@ -301,6 +301,14 @@
                     }
                 });
                 this.form.description = list.join('');
+            },
+            formatVHtml(value) {
+                return value.replace(/\[(\S+?)\((\S+?)\)]/g, s => {
+                    return s.replace('[', '<ruby>')
+                        .replace('(', '<rt>')
+                        .replace(')', '</rt>')
+                        .replace(']', '</ruby>');
+                });
             },
             exportImage() {
                 let element = document.querySelector('.yugioh-card');
