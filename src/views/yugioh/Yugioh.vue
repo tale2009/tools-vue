@@ -103,6 +103,12 @@
                     </div>
 
                     <el-form ref="form" :model="form" label-width="auto" size="small">
+                        <el-form-item label="语言">
+                            <el-select v-model="form.language" placeholder="请选择语言">
+                                <el-option label="简体中文" value="sc"></el-option>
+                                <el-option label="日文" value="jp"></el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item label="卡名">
                             <el-input v-model="form.name" placeholder="请输入卡名"></el-input>
                         </el-form-item>
@@ -227,6 +233,7 @@
                 baseImage: 'http://static.kooriookami.top/yugioh/image',
                 fontLoading: true,
                 form: {
+                    language: 'sc',
                     name: '青眼白龙',
                     type: 'monster',
                     attribute: 'light',
@@ -329,13 +336,20 @@
         },
         computed: {
             cardStyle() {
+                let font;
                 let background;
+                if (this.form.language === 'sc') {
+                    font = 'ygo-sc, 楷体, serif';
+                } else if (this.form.language === 'jp') {
+                    font = 'ygo-jp, 楷体, serif';
+                }
                 if (this.form.type === 'monster') {
                     background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
                 } else {
                     background = `url(${this.baseImage}/card-${this.form.type}.png) no-repeat center/cover`;
                 }
                 return {
+                    fontFamily: font,
                     transform: `scale(${this.form.scale})`,
                     background: background,
                     borderRadius: this.form.radius ? '24px' : '',
@@ -421,7 +435,6 @@
         .yugioh-card {
             width: 1393px;
             height: 2031px;
-            font-family: 'ygo-sc', '楷体', serif;
             position: relative;
             user-select: none;
             color: black;
