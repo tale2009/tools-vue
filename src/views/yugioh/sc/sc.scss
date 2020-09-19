@@ -1,0 +1,22 @@
+.sc-class {
+    font-family: ygo-sc, 楷体, serif;
+
+    .card-name {
+        top: 100px;
+    }
+
+    .spell-trap {
+        top: 256px;
+        font-size: 76px;
+        right: 94px;
+        letter-spacing: 2px;
+    }
+
+    .card-description {
+        letter-spacing: 2px;
+    }
+
+    .card-effect {
+        text-indent: -0.5em;
+    }
+}

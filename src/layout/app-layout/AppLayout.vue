@@ -29,6 +29,8 @@
             AppLeft
         },
         mounted() {
+            document.onkeydown = this.disableKey;
+            document.onkeypress = this.disableKey;
             addEventListener('resize', this.updateScrollbar);
         },
         destroyed() {
@@ -37,6 +39,12 @@
         methods: {
             updateScrollbar() {
                 this.$refs['left-scrollbar'].update();
+            },
+            // 屏蔽某些键
+            disableKey(e) {
+                if (e.key === 'Backspace' && !['text', 'textarea', 'password'].includes(e.target.type)) {
+                    return false;
+                }
             }
         },
         computed: {

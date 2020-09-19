@@ -1,0 +1,18 @@
+.jp-class {
+    font-family: ygo-jp, 楷体, serif;
+
+    .card-name {
+        top: 95px;
+    }
+
+    .spell-trap {
+        top: 250px;
+        font-size: 80px;
+        right: 130px;
+        letter-spacing: -4px;
+    }
+
+    .card-effect {
+        text-indent: -0.2em;
+    }
+}

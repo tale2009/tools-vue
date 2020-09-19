@@ -2,7 +2,7 @@
     <div class="yugioh-container">
         <Page>
             <template>
-                <div class="yugioh-card" :style="cardStyle" ondragstart="return false">
+                <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
                         <span v-compressText="{width:1030,height:130}" v-html="formatVHtml(form.name)"></span>
                     </div>
@@ -20,8 +20,8 @@
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span v-if="form.type==='spell'">【魔法卡</span>
-                        <span v-if="form.type==='trap'">【陷阱卡</span>
+                        <span>【</span>
+                        <span v-html="formatVHtml(spellTrapName)"></span>
                         <el-image v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>】</span>
                     </div>
@@ -51,15 +51,19 @@
                     </div>
 
                     <div class="card-description">
-                        <div v-if="form.type==='monster'" class="card-effect" v-compressText="{width:1170,height:60}">
-                            <span>【{{form.monsterType}}】</span>
+                        <div v-if="form.type==='monster'" class="card-effect">
+                            <span>【</span>
+                            <span v-html="formatVHtml(form.monsterType)"></span>
+                            <span>】</span>
                         </div>
 
                         <div v-for="(item,index) in form.description.split('\n')">
                             <!--单行压缩-->
-                            <span v-if="index<form.description.split('\n').length-1" v-compressText="{width:1170,height:50}">{{item}}</span>
+                            <span v-if="index<form.description.split('\n').length-1"
+                                  v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
                             <!--最后一行压缩-->
-                            <span v-if="index===form.description.split('\n').length-1" v-compressText="{width:1170,height:descriptionHeight}">{{item}}</span>
+                            <span v-if="index===form.description.split('\n').length-1"
+                                  v-compressText="{width:1170,height:descriptionHeight}" v-html="formatVHtml(item)"></span>
                         </div>
                     </div>
 
@@ -303,12 +307,12 @@
                 this.form.description = list.join('');
             },
             formatVHtml(value) {
-                return value.replace(/\[(\S+?)\((\S+?)\)]/g, s => {
-                    return s.replace('[', '<ruby>')
-                        .replace('(', '<rt>')
-                        .replace(')', '</rt>')
-                        .replace(']', '</ruby>');
-                });
+                return value.replace(/\[([\S\s]*?)\(([\S\s]*?)\)]/g, s =>
+                    s.replace('[', '<span class="ruby">')
+                        .replace('(', '<span class="rt">')
+                        .replace(')', '</span>')
+                        .replace(']', '</span>')
+                );
             },
             exportImage() {
                 let element = document.querySelector('.yugioh-card');
@@ -343,21 +347,17 @@
             }
         },
         computed: {
+            cardClass() {
+                return `${this.form.language}-class`;
+            },
             cardStyle() {
-                let font;
                 let background;
-                if (this.form.language === 'sc') {
-                    font = 'ygo-sc, 楷体, serif';
-                } else if (this.form.language === 'jp') {
-                    font = 'ygo-jp, 楷体, serif';
-                }
                 if (this.form.type === 'monster') {
                     background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
                 } else {
                     background = `url(${this.baseImage}/card-${this.form.type}.png) no-repeat center/cover`;
                 }
                 return {
-                    fontFamily: font,
                     transform: `scale(${this.form.scale})`,
                     background: background,
                     borderRadius: this.form.radius ? '24px' : '',
@@ -382,10 +382,29 @@
                 };
             },
             attributeSrc() {
+                let suffix = '';
+                if (this.form.language === 'jp') {
+                    suffix = '-jp';
+                }
                 if (this.form.type === 'monster') {
-                    return `${this.baseImage}/attribute-${this.form.attribute}.png`;
+                    return `${this.baseImage}/attribute-${this.form.attribute}${suffix}.png`;
                 } else {
-                    return `${this.baseImage}/attribute-${this.form.type}.png`;
+                    return `${this.baseImage}/attribute-${this.form.type}${suffix}.png`;
+                }
+            },
+            spellTrapName() {
+                if (this.form.language === 'sc') {
+                    if (this.form.type === 'spell') {
+                        return '魔法卡';
+                    } else if (this.form.type === 'trap') {
+                        return '陷阱卡';
+                    }
+                } else if (this.form.language === 'jp') {
+                    if (this.form.type === 'spell') {
+                        return '[魔(ま)][法(ほう)]カード';
+                    } else if (this.form.type === 'trap') {
+                        return '[罠(トラップ)]カード';
+                    }
                 }
             },
             cardImageStyle() {
@@ -395,8 +414,8 @@
             },
             packageStyle() {
                 return {
-                    color: this.form.cardType === 'xyz' ? 'white' : 'black',
-                    right: this.form.cardType === 'link' ? '252px' : '148px'
+                    color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black',
+                    right: this.form.type === 'monster' && this.form.cardType === 'link' ? '252px' : '148px'
                 };
             },
             descriptionHeight() {
@@ -412,7 +431,7 @@
             },
             passwordStyle() {
                 return {
-                    color: this.form.cardType === 'xyz' ? 'white' : 'black'
+                    color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
             }
         },
@@ -439,6 +458,9 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "./sc/sc";
+    @import "./jp/jp";
+
     .yugioh-container {
         .yugioh-card {
             width: 1393px;
@@ -446,16 +468,23 @@
             position: relative;
             user-select: none;
             color: black;
+            white-space: pre-wrap;
             transform-origin: 0 0;
 
             .card-name {
                 position: absolute;
                 font-size: 108px;
                 left: 116px;
-                top: 100px;
                 width: 1030px;
                 max-height: 130px;
                 overflow: hidden;
+
+                ::v-deep .ruby {
+                    .rt {
+                        font-size: 18px;
+                        top: 3px;
+                    }
+                }
             }
 
             .card-attribute {
@@ -486,12 +515,15 @@
 
             .spell-trap {
                 position: absolute;
-                right: 94px;
-                top: 256px;
-                font-size: 76px;
-                letter-spacing: 2px;
                 display: flex;
                 align-items: center;
+
+                ::v-deep .ruby {
+                    .rt {
+                        font-size: 18px;
+                        top: -2px;
+                    }
+                }
 
                 .el-image {
                     display: flex;
@@ -534,13 +566,26 @@
                 left: 109px;
                 width: 1170px;
                 font-size: 36px;
-                letter-spacing: 2px;
                 text-align: justify;
-                overflow: hidden;
 
                 .card-effect {
-                    text-indent: -0.5em;
                     font-size: 44px;
+
+                    ::v-deep .ruby {
+                        .rt {
+                            font-size: 12px;
+                            top: -3px;
+                            transform: scale(1);
+                        }
+                    }
+                }
+
+                ::v-deep .ruby {
+                    .rt {
+                        font-size: 12px;
+                        top: -4px;
+                        transform: scale(0.9);
+                    }
                 }
             }
 
@@ -589,6 +634,23 @@
                 position: absolute;
                 left: 1276px;
                 top: 1913px;
+            }
+
+            ::v-deep .ruby {
+                position: relative;
+
+                .rt {
+                    font-family: ygo-tip, sans-serif;
+                    font-size: 16px;
+                    font-weight: bold;
+                    position: absolute;
+                    left: 0;
+                    width: 100%;
+                    text-align: center;
+                    white-space: pre;
+                    letter-spacing: 0;
+                    text-indent: 0;
+                }
             }
         }
 
