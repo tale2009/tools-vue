@@ -325,11 +325,11 @@
                         // 微调字体位置
                         let cardAtk = doc.querySelector('.card-atk');
                         if (cardAtk) {
-                            cardAtk.style.top = '1837px';
+                            cardAtk.style.top = '1835px';
                         }
                         let cardDef = doc.querySelector('.card-def');
                         if (cardDef) {
-                            cardDef.style.top = '1837px';
+                            cardDef.style.top = '1835px';
                         }
                         let cardLink = doc.querySelector('.card-link');
                         if (cardLink) {
@@ -594,19 +594,19 @@
 
             .card-atk {
                 position: absolute;
-                right: 401px;
-                top: 1847px;
+                right: 399px;
+                top: 1845px;
                 font-family: ygo-atk-def, serif;
-                font-size: 58px;
+                font-size: 60px;
                 letter-spacing: 2px;
             }
 
             .card-def {
                 position: absolute;
-                right: 130px;
-                top: 1847px;
+                right: 128px;
+                top: 1845px;
                 font-family: ygo-atk-def, serif;
-                font-size: 58px;
+                font-size: 60px;
                 letter-spacing: 2px;
             }
 
