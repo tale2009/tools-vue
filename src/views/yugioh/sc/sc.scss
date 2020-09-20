@@ -13,10 +13,12 @@
     }
 
     .card-description {
+        font-size: 36px;
         letter-spacing: 2px;
-    }
 
-    .card-effect {
-        text-indent: -0.5em;
+        .card-effect {
+            font-size: 44px;
+            text-indent: -0.5em;
+        }
     }
 }

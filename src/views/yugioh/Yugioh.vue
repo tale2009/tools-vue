@@ -57,7 +57,7 @@
                             <span>】</span>
                         </div>
 
-                        <div v-for="(item,index) in form.description.split('\n')">
+                        <div class="description-info" v-for="(item,index) in form.description.split('\n')">
                             <!--单行压缩-->
                             <span v-if="index<form.description.split('\n').length-1"
                                   v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
@@ -565,26 +565,23 @@
                 top: 1528px;
                 left: 109px;
                 width: 1170px;
-                font-size: 36px;
                 text-align: justify;
 
                 .card-effect {
-                    font-size: 44px;
-
                     ::v-deep .ruby {
                         .rt {
-                            font-size: 12px;
-                            top: -3px;
-                            transform: scale(1);
+                            font-size: 14px;
+                            top: -4px;
                         }
                     }
                 }
 
-                ::v-deep .ruby {
-                    .rt {
-                        font-size: 12px;
-                        top: -4px;
-                        transform: scale(0.9);
+                .description-info {
+                    ::v-deep .ruby {
+                        .rt {
+                            font-size: 12px;
+                            top: -4px;
+                        }
                     }
                 }
             }
