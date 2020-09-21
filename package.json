@@ -21,7 +21,7 @@
         "@vue/cli-plugin-router": "^4.5.6",
         "@vue/cli-plugin-vuex": "^4.5.6",
         "@vue/cli-service": "^4.5.6",
-        "compression-webpack-plugin": "^6.0.1",
+        "compression-webpack-plugin": "^6.0.2",
         "moment-locales-webpack-plugin": "^1.2.0",
         "sass": "^1.26.11",
         "sass-loader": "^10.0.2",

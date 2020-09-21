@@ -39,15 +39,23 @@
                     </div>
 
                     <div class="link-arrow" v-if="form.type==='monster'&&form.cardType==='link'">
-                        <el-image :src="baseImage + '/arrow-base.png'" style="top: 293px;left: 87px"></el-image>
-                        <el-image :src="baseImage + '/arrow-up.png'" style="top: 301px;left: 577px" v-if="form.arrowList.includes(1)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-up.png'" style="top: 322px;left: 1149px" v-if="form.arrowList.includes(2)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right.png'" style="top: 782px;left: 1223px" v-if="form.arrowList.includes(3)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-down.png'" style="top: 1355px;left: 1149px" v-if="form.arrowList.includes(4)"></el-image>
-                        <el-image :src="baseImage + '/arrow-down.png'" style="top: 1430px;left: 577px" v-if="form.arrowList.includes(5)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-down.png'" style="top: 1355px;left: 118px" v-if="form.arrowList.includes(6)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left.png'" style="top: 779px;left: 95px" v-if="form.arrowList.includes(7)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-up.png'" style="top: 322px;left: 118px" v-if="form.arrowList.includes(8)"></el-image>
+                        <el-image :src="baseImage + '/arrow-up-on.png'" style="top: 293px;left: 569px" v-show="form.arrowList.includes(1)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-up-on.png'" style="top: 313px;left: 1141px" v-show="form.arrowList.includes(2)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-on.png'" style="top: 774px;left: 1221px" v-show="form.arrowList.includes(3)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-down-on.png'" style="top: 1347px;left: 1141px" v-show="form.arrowList.includes(4)"></el-image>
+                        <el-image :src="baseImage + '/arrow-down-on.png'" style="top: 1427px;left: 569px" v-show="form.arrowList.includes(5)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-down-on.png'" style="top: 1347px;left: 109px" v-show="form.arrowList.includes(6)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-on.png'" style="top: 774px;left: 88px" v-show="form.arrowList.includes(7)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-up-on.png'" style="top: 313px;left: 109px" v-show="form.arrowList.includes(8)"></el-image>
+
+                        <el-image :src="baseImage + '/arrow-up-off.png'" style="top: 293px;left: 569px" v-show="!form.arrowList.includes(1)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-up-off.png'" style="top: 313px;left: 1141px" v-show="!form.arrowList.includes(2)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-off.png'" style="top: 774px;left: 1221px" v-show="!form.arrowList.includes(3)"></el-image>
+                        <el-image :src="baseImage + '/arrow-right-down-off.png'" style="top: 1347px;left: 1141px" v-show="!form.arrowList.includes(4)"></el-image>
+                        <el-image :src="baseImage + '/arrow-down-off.png'" style="top: 1427px;left: 569px" v-show="!form.arrowList.includes(5)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-down-off.png'" style="top: 1347px;left: 109px" v-show="!form.arrowList.includes(6)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-off.png'" style="top: 771px;left: 87px" v-show="!form.arrowList.includes(7)"></el-image>
+                        <el-image :src="baseImage + '/arrow-left-up-off.png'" style="top: 313px;left: 109px" v-show="!form.arrowList.includes(8)"></el-image>
                     </div>
 
                     <div class="card-description">
@@ -489,8 +497,8 @@
 
             .card-attribute {
                 position: absolute;
-                left: 1161px;
-                top: 98px;
+                left: 1159px;
+                top: 96px;
             }
 
             .card-level {
@@ -534,16 +542,16 @@
             .card-image {
                 position: absolute;
                 left: 171px;
-                top: 374px;
+                top: 376px;
                 width: 1051px;
-                height: 1054px;
+                height: 1051px;
             }
 
             .card-mask {
                 position: absolute;
                 z-index: 10;
                 left: 168px;
-                top: 371px;
+                top: 373px;
             }
 
             .card-package {
