@@ -2,7 +2,7 @@
 这个小工具是使用 vue 编写的，不定期发布和更新有趣实用的小工具。
 
 ## 小工具地址
-[小工具地址](http://tools.kooriookami.top)
+[小工具地址](https://tools.kooriookami.top)
 
 ## 使用说明
 [B站文集](https://www.bilibili.com/read/readlist/rl314448)

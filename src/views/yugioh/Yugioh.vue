@@ -242,7 +242,7 @@
         },
         data() {
             return {
-                baseImage: 'http://static.kooriookami.top/yugioh/image',
+                baseImage: 'https://static.kooriookami.top/yugioh/image',
                 fontLoading: true,
                 form: {
                     language: 'sc',
