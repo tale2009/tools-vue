@@ -219,7 +219,21 @@
                         </el-form-item>
                     </el-form>
 
-                    <el-button style="width: 100%" type="primary" size="medium" @click="exportImage">导出图片</el-button>
+                    <div class="button-group">
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-upload action="/" :show-file-list="false" accept="application/json" :before-upload="importJson">
+                                    <el-button plain size="medium">导入数据</el-button>
+                                </el-upload>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-button plain size="medium" @click="exportJson">导出数据</el-button>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-button type="primary" size="medium" @click="exportImage">导出图片</el-button>
+                            </el-col>
+                        </el-row>
+                    </div>
                 </div>
             </template>
         </Page>
@@ -322,6 +336,26 @@
                         .replace(']', '</span>')
                 );
             },
+            importJson(file) {
+                let reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = (e => {
+                    try {
+                        let data = JSON.parse(e.target?.result);
+                        this.form = Object.assign(this.form, data);
+                    } catch (e) {
+                        this.$message.error('数据导入失败');
+                    }
+                });
+            },
+            exportJson() {
+                let form = this._.cloneDeep(this.form);
+                // 去除图片数据
+                form.image = '';
+                let data = JSON.stringify(form);
+                let blob = new Blob([data], {type: 'application/json'});
+                this.downloadBlob(blob, this.exportFileName);
+            },
             exportImage() {
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
@@ -347,10 +381,7 @@
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
-                    let a = document.createElement('a');
-                    a.download = this.form.name;
-                    a.href = URL.createObjectURL(blob);
-                    a.click();
+                    this.downloadBlob(blob, this.exportFileName);
                 });
             }
         },
@@ -441,6 +472,13 @@
                 return {
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
+            },
+            exportFileName() {
+                return this.form.name.replace(/\[([\S\s]*?)\(([\S\s]*?)\)]/g, s =>
+                    s.replace('[', '')
+                        .replace(']', '')
+                        .replace(/\(([\S\s]*?)\)/g, '')
+                );
             }
         },
         directives: {
@@ -692,6 +730,24 @@
                     cursor: pointer;
                     color: $placeholder-color;
                     font-size: 18px;
+                }
+            }
+
+            .button-group {
+                .el-row {
+                    margin-top: -20px;
+
+                    .el-col {
+                        margin-top: 20px;
+
+                        ::v-deep .el-upload {
+                            width: 100%;
+                        }
+
+                        .el-button {
+                            width: 100%;
+                        }
+                    }
                 }
             }
         }

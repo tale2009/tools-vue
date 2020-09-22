@@ -149,10 +149,7 @@
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
-                    let a = document.createElement('a');
-                    a.download = '点阵图';
-                    a.href = URL.createObjectURL(blob);
-                    a.click();
+                    this.downloadBlob(blob, '点阵图');
                 });
             }
         },
