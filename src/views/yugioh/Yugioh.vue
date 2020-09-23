@@ -83,11 +83,13 @@
                     </div>
 
                     <div class="card-atk" v-if="form.type==='monster'">
-                        <span>{{form.atk}}</span>
+                        <span v-if="form.atk >= 0">{{form.atk}}</span>
+                        <span v-else-if="form.atk === -1">?</span>
                     </div>
 
                     <div class="card-def" v-if="form.type==='monster'&&form.cardType!=='link'">
-                        <span>{{form.def}}</span>
+                        <span v-if="form.def >= 0">{{form.def}}</span>
+                        <span v-else-if="form.def === -1">?</span>
                     </div>
 
                     <div class="card-link" v-if="form.type==='monster'&&form.cardType==='link'">
@@ -185,19 +187,21 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="星级" v-if="form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType)">
-                            <el-input-number v-model="form.level" :min="1" :max="12" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.level" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="阶级" v-if="form.type==='monster'&&form.cardType==='xyz'">
-                            <el-input-number v-model="form.rank" :min="1" :max="12" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="种族" v-if="form.type==='monster'">
                             <el-input v-model="form.monsterType" placeholder="请输入种族"></el-input>
                         </el-form-item>
                         <el-form-item label="ATK" v-if="form.type==='monster'">
-                            <el-input-number v-model="form.atk" :min="0" :max="9999" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.atk" :min="-1" :max="9999" :precision="0"></el-input-number>
+                            <span class="tip">（? 输入 -1）</span>
                         </el-form-item>
                         <el-form-item label="DEF" v-if="form.type==='monster'&&form.cardType!=='link'">
-                            <el-input-number v-model="form.def" :min="0" :max="9999" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.def" :min="-1" :max="9999" :precision="0"></el-input-number>
+                            <span class="tip">（? 输入 -1）</span>
                         </el-form-item>
                         <el-form-item label="箭头" v-if="form.type==='monster'&&form.cardType==='link'">
                             <div class="arrow-form">
