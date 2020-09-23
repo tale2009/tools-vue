@@ -17,7 +17,7 @@
                         <el-image v-for="item in form.level" :src="baseImage + '/level.png'"></el-image>
                     </div>
 
-                    <div class="card-rank" v-if="form.type==='monster'&&form.cardType==='xyz'">
+                    <div class="card-rank" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
                         <el-image v-for="item in form.rank" :src="baseImage + '/rank.png'"></el-image>
                     </div>
 
@@ -28,12 +28,13 @@
                         <span>】</span>
                     </div>
 
-                    <div class="card-image" v-if="form.image" :style="cardImageStyle">
+                    <div class="card-image" v-if="form.image" :style="imageStyle">
                         <!--html2canvas不支持object-fit，只能用background-->
                     </div>
 
-                    <div class="card-mask">
-                        <el-image :src="baseImage + '/card-mask.png'" fit="cover"></el-image>
+                    <div class="card-mask" :style="maskStyle">
+                        <el-image v-if="form.type==='pendulum'" :src="baseImage + '/card-mask-pendulum.png'" fit="cover"></el-image>
+                        <el-image v-else :src="baseImage + '/card-mask.png'" fit="cover"></el-image>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -61,7 +62,7 @@
                     </div>
 
                     <div class="card-description">
-                        <div v-if="form.type==='monster'" class="card-effect">
+                        <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
                             <span>【</span>
                             <span v-html="formatVHtml(form.monsterType)"></span>
                             <span>】</span>
@@ -78,16 +79,17 @@
                     </div>
 
                     <div class="atk-def-link">
-                        <el-image :src="baseImage + '/atk-def.png'" v-if="form.type==='monster'&&form.cardType!=='link'"></el-image>
+                        <el-image :src="baseImage + '/atk-def.png'"
+                                  v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'"></el-image>
                         <el-image :src="baseImage + '/atk-link.png'" v-if="form.type==='monster'&&form.cardType==='link'"></el-image>
                     </div>
 
-                    <div class="card-atk" v-if="form.type==='monster'">
+                    <div class="card-atk" v-if="['monster','pendulum'].includes(form.type)">
                         <span v-if="form.atk >= 0">{{form.atk}}</span>
                         <span v-else-if="form.atk === -1">?</span>
                     </div>
 
-                    <div class="card-def" v-if="form.type==='monster'&&form.cardType!=='link'">
+                    <div class="card-def" v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'">
                         <span v-if="form.def >= 0">{{form.def}}</span>
                         <span v-else-if="form.def === -1">?</span>
                     </div>
@@ -189,17 +191,17 @@
                         <el-form-item label="星级" v-if="form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType)">
                             <el-input-number v-model="form.level" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
-                        <el-form-item label="阶级" v-if="form.type==='monster'&&form.cardType==='xyz'">
+                        <el-form-item label="阶级" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
                             <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
-                        <el-form-item label="种族" v-if="form.type==='monster'">
+                        <el-form-item label="种族" v-if="['monster','pendulum'].includes(form.type)">
                             <el-input v-model="form.monsterType" placeholder="请输入种族"></el-input>
                         </el-form-item>
-                        <el-form-item label="ATK" v-if="form.type==='monster'">
+                        <el-form-item label="ATK" v-if="['monster','pendulum'].includes(form.type)">
                             <el-input-number v-model="form.atk" :min="-1" :max="9999" :precision="0"></el-input-number>
                             <span class="tip">（? 输入 -1）</span>
                         </el-form-item>
-                        <el-form-item label="DEF" v-if="form.type==='monster'&&form.cardType!=='link'">
+                        <el-form-item label="DEF" v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'">
                             <el-input-number v-model="form.def" :min="-1" :max="9999" :precision="0"></el-input-number>
                             <span class="tip">（? 输入 -1）</span>
                         </el-form-item>
@@ -473,21 +475,64 @@
                     }
                 }
             },
-            cardImageStyle() {
+            imageStyle() {
+                let left, top, width, height;
+                if (this.form.type === 'pendulum') {
+                    left = '96px';
+                    top = '367px';
+                    width = '1201px';
+                    height = '1201px';
+                } else {
+                    left = '171px';
+                    top = '376px';
+                    width = '1051px';
+                    height = '1051px';
+                }
                 return {
+                    left: left,
+                    top: top,
+                    width: width,
+                    height: height,
                     background: `url(${this.form.image}) no-repeat center/cover`
                 };
             },
+            maskStyle() {
+                let left, top;
+                if (this.form.type === 'pendulum') {
+                    left = '82px';
+                    top = '1254px';
+                } else {
+                    left = '168px';
+                    top = '373px';
+                }
+                return {
+                    left: left,
+                    top: top
+                };
+            },
             packageStyle() {
+                let top, left, right;
+                if (this.form.type === 'pendulum') {
+                    top = '1854px';
+                    left = '124px';
+                } else if (this.form.type === 'monster' && this.form.cardType === 'link') {
+                    top = '1456px';
+                    right = '252px';
+                } else {
+                    top = '1456px';
+                    right = '148px';
+                }
                 return {
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black',
-                    right: this.form.type === 'monster' && this.form.cardType === 'link' ? '252px' : '148px'
+                    top: top,
+                    left: left,
+                    right: right
                 };
             },
             descriptionHeight() {
                 let height;
                 let enterCount = this.form.description.split('\n').length - 1;
-                if (this.form.type === 'monster') {
+                if (['monster', 'pendulum'].includes(this.form.type)) {
                     // 41为一行文本高度
                     height = 260 - enterCount * 41;
                 } else {
@@ -606,22 +651,15 @@
 
             .card-image {
                 position: absolute;
-                left: 171px;
-                top: 376px;
-                width: 1051px;
-                height: 1051px;
             }
 
             .card-mask {
                 position: absolute;
                 z-index: 10;
-                left: 168px;
-                top: 373px;
             }
 
             .card-package {
                 position: absolute;
-                top: 1456px;
                 font-family: ygo-password, serif;
                 font-size: 40px;
             }
@@ -667,19 +705,19 @@
 
             .card-atk {
                 position: absolute;
-                right: 399px;
+                right: 395px;
                 top: 1845px;
                 font-family: ygo-atk-def, serif;
-                font-size: 60px;
+                font-size: 61px;
                 letter-spacing: 2px;
             }
 
             .card-def {
                 position: absolute;
-                right: 128px;
+                right: 124px;
                 top: 1845px;
                 font-family: ygo-atk-def, serif;
-                font-size: 60px;
+                font-size: 61px;
                 letter-spacing: 2px;
             }
 

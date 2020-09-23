@@ -33,7 +33,10 @@ const base = {
             return new Blob([u8arr], {type: mime});
         };
 
-        Vue.prototype.downloadBlob = function (blob, fileName = new Date().getTime().toString()) {
+        Vue.prototype.downloadBlob = function (blob, fileName) {
+            if (!fileName) {
+                fileName = new Date().getTime();
+            }
             let a = document.createElement('a');
             a.download = fileName;
             a.href = URL.createObjectURL(blob);
