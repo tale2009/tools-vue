@@ -11,7 +11,9 @@
                         <el-image :src="attributeSrc"></el-image>
                     </div>
 
-                    <div class="card-level" v-if="form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType)">
+                    <div class="card-level"
+                         v-if="(form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType))
+                         ||(form.type==='pendulum'&&['normal-pendulum','effect-pendulum','ritual-pendulum','fusion-pendulum','synchro-pendulum'].includes(form.pendulumType))">
                         <el-image v-for="item in form.level" :src="baseImage + '/level.png'"></el-image>
                     </div>
 
@@ -129,9 +131,10 @@
                                 <el-radio-button label="monster">怪兽</el-radio-button>
                                 <el-radio-button label="spell">魔法</el-radio-button>
                                 <el-radio-button label="trap">陷阱</el-radio-button>
+                                <el-radio-button label="pendulum">灵摆</el-radio-button>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="属性" v-if="form.type==='monster'">
+                        <el-form-item label="属性" v-if="['monster','pendulum'].includes(form.type)">
                             <el-radio-group v-model="form.attribute">
                                 <el-radio-button label="dark">暗</el-radio-button>
                                 <el-radio-button label="light">光</el-radio-button>
@@ -168,6 +171,17 @@
                                 <el-option label="超量" value="xyz"></el-option>
                                 <el-option label="连接" value="link"></el-option>
                                 <el-option label="衍生物" value="token"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="灵摆" v-if="form.type==='pendulum'">
+                            <el-select v-model="form.pendulumType" placeholder="请选择灵摆">
+                                <el-option label="通常／灵摆" value="normal-pendulum"></el-option>
+                                <el-option label="效果／灵摆" value="effect-pendulum"></el-option>
+                                <el-option label="仪式／灵摆" value="ritual-pendulum"></el-option>
+                                <el-option label="融合／灵摆" value="fusion-pendulum"></el-option>
+                                <el-option label="同调／灵摆" value="synchro-pendulum"></el-option>
+                                <el-option label="超量／灵摆" value="xyz-pendulum"></el-option>
+                                <el-option label="连接／灵摆" value="link-pendulum" v-if="false"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="星级" v-if="form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType)">
@@ -266,6 +280,7 @@
                     icon: '',
                     image: require('@/assets/image/blue-eyes.jpg'),
                     cardType: 'normal',
+                    pendulumType: 'normal-pendulum',
                     level: 8,
                     rank: 1,
                     monsterType: '龙族/通常',
@@ -393,6 +408,8 @@
                 let background;
                 if (this.form.type === 'monster') {
                     background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
+                } else if (this.form.type === 'pendulum') {
+                    background = `url(${this.baseImage}/card-${this.form.pendulumType}.png) no-repeat center/cover`;
                 } else {
                     background = `url(${this.baseImage}/card-${this.form.type}.png) no-repeat center/cover`;
                 }
@@ -412,6 +429,12 @@
                     } else {
                         color = 'black';
                     }
+                } else if (this.form.type === 'pendulum') {
+                    if (['xyz-pendulum', 'link-pendulum'].includes(this.form.pendulumType)) {
+                        color = 'white';
+                    } else {
+                        color = 'black';
+                    }
                 } else {
                     color = 'white';
                 }
@@ -425,7 +448,7 @@
                 if (this.form.language === 'jp') {
                     suffix = '-jp';
                 }
-                if (this.form.type === 'monster') {
+                if (['monster', 'pendulum'].includes(this.form.type)) {
                     return `${this.baseImage}/attribute-${this.form.attribute}${suffix}.png`;
                 } else {
                     return `${this.baseImage}/attribute-${this.form.type}${suffix}.png`;
