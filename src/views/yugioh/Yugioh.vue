@@ -37,6 +37,14 @@
                         <el-image v-else :src="baseImage + '/card-mask.png'" fit="cover"></el-image>
                     </div>
 
+                    <div class="left-pendulum" v-if="form.type==='pendulum'">
+                        <span>{{form.pendulumScale}}</span>
+                    </div>
+
+                    <div class="right-pendulum" v-if="form.type==='pendulum'">
+                        <span>{{form.pendulumScale}}</span>
+                    </div>
+
                     <div class="card-package" :style="packageStyle">
                         <span>{{form.package}}</span>
                     </div>
@@ -63,9 +71,7 @@
 
                     <div class="card-description">
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span>【</span>
-                            <span v-html="formatVHtml(form.monsterType)"></span>
-                            <span>】</span>
+                            <span v-html="`【${formatVHtml(form.monsterType)}】`"></span>
                         </div>
 
                         <div class="description-info" v-for="(item,index) in form.description.split('\n')">
@@ -188,11 +194,18 @@
                                 <el-option label="连接／灵摆" value="link-pendulum" v-if="false"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="星级" v-if="form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType)">
+                        <el-form-item label="星级" v-if="(form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType))
+                        ||(form.type==='pendulum'&&['normal-pendulum','effect-pendulum','ritual-pendulum','fusion-pendulum','synchro-pendulum'].includes(form.pendulumType))">
                             <el-input-number v-model="form.level" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="阶级" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
                             <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
+                        </el-form-item>
+                        <el-form-item label="摆值" v-if="form.type==='pendulum'">
+                            <el-input-number v-model="form.pendulumScale" :min="0" :max="12" :precision="0"></el-input-number>
+                        </el-form-item>
+                        <el-form-item label="灵摆效果" label-width="40px" v-if="form.type==='pendulum'">
+                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.pendulumDescription" placeholder="请输入灵摆效果"></el-input>
                         </el-form-item>
                         <el-form-item label="种族" v-if="['monster','pendulum'].includes(form.type)">
                             <el-input v-model="form.monsterType" placeholder="请输入种族"></el-input>
@@ -289,6 +302,8 @@
                     pendulumType: 'normal-pendulum',
                     level: 8,
                     rank: 1,
+                    pendulumScale: 0,
+                    pendulumDescription: '',
                     monsterType: '龙族/通常',
                     atk: 3000,
                     def: 2500,
@@ -481,7 +496,8 @@
                     left = '96px';
                     top = '367px';
                     width = '1201px';
-                    height = '1201px';
+                    // height = '1201px';
+                    height = '895px';
                 } else {
                     left = '171px';
                     top = '376px';
@@ -658,6 +674,28 @@
                 z-index: 10;
             }
 
+            .left-pendulum {
+                position: absolute;
+                top: 1379px;
+                left: 93px;
+                width: 95px;
+                font-family: ygo-atk-def, serif;
+                font-size: 98px;
+                text-align: center;
+                letter-spacing: -10px;
+            }
+
+            .right-pendulum {
+                position: absolute;
+                top: 1379px;
+                right: 104px;
+                width: 95px;
+                font-family: ygo-atk-def, serif;
+                font-size: 98px;
+                text-align: center;
+                letter-spacing: -10px;
+            }
+
             .card-package {
                 position: absolute;
                 font-family: ygo-password, serif;
@@ -679,6 +717,9 @@
                 text-align: justify;
 
                 .card-effect {
+                    white-space: nowrap;
+                    overflow: hidden;
+
                     ::v-deep .ruby {
                         .rt {
                             font-size: 14px;
