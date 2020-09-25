@@ -45,6 +45,10 @@
                         <span>{{form.pendulumScale}}</span>
                     </div>
 
+                    <div class="pendulum-description" v-if="form.type==='pendulum'">
+                        <span v-compressText="{width:950,height:220}" v-html="formatVHtml(form.pendulumDescription)"></span>
+                    </div>
+
                     <div class="card-package" :style="packageStyle">
                         <span>{{form.package}}</span>
                     </div>
@@ -128,7 +132,7 @@
 
                     <el-form ref="form" :model="form" label-width="auto" size="small">
                         <el-form-item label="语言">
-                            <el-select v-model="form.language" placeholder="请选择语言">
+                            <el-select v-model="form.language" placeholder="请选择语言" @change="changeLanguage">
                                 <el-option label="简体中文" value="sc"></el-option>
                                 <el-option label="日文" value="jp"></el-option>
                             </el-select>
@@ -205,7 +209,8 @@
                             <el-input-number v-model="form.pendulumScale" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="灵摆效果" label-width="40px" v-if="form.type==='pendulum'">
-                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.pendulumDescription" placeholder="请输入灵摆效果"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.pendulumDescription"
+                                      placeholder="请输入灵摆效果" @input="inputPendulumDescription"></el-input>
                         </el-form-item>
                         <el-form-item label="种族" v-if="['monster','pendulum'].includes(form.type)">
                             <el-input v-model="form.monsterType" placeholder="请输入种族"></el-input>
@@ -318,6 +323,14 @@
             };
         },
         methods: {
+            changeLanguage() {
+                setTimeout(() => {
+                    this.fontLoading = true;
+                    document.fonts.ready.then(() => {
+                        this.fontLoading = false;
+                    });
+                });
+            },
             beforeUpload(file) {
                 let flag = file.type.includes('image');
                 if (flag) {
@@ -328,6 +341,17 @@
                     this.$message.warning('请选择正确图片格式');
                 }
                 return flag;
+            },
+            inputPendulumDescription() {
+                // 不保留换行符号
+                let list = Array.from(this.form.pendulumDescription);
+                list.forEach((value, index) => {
+                    if (value === '\n') {
+                        this.$message.warning('不允许换行符');
+                        list[index] = '';
+                    }
+                });
+                this.form.pendulumDescription = list.join('');
             },
             toggleArrow(item) {
                 if (this.form.arrowList.includes(item)) {
@@ -401,6 +425,14 @@
                     height: this.form.scale * 2031,
                     onclone: (doc) => {
                         // 微调字体位置
+                        let leftPendulum = doc.querySelector('.left-pendulum');
+                        if (leftPendulum) {
+                            leftPendulum.style.top = '1363px';
+                        }
+                        let rightPendulum = doc.querySelector('.right-pendulum');
+                        if (rightPendulum) {
+                            rightPendulum.style.top = '1363px';
+                        }
                         let cardAtk = doc.querySelector('.card-atk');
                         if (cardAtk) {
                             cardAtk.style.top = '1835px';
@@ -496,8 +528,8 @@
                     left = '96px';
                     top = '367px';
                     width = '1201px';
-                    // height = '1201px';
-                    height = '895px';
+                    height = '1201px';
+                    // height = '895px';
                 } else {
                     left = '171px';
                     top = '376px';
@@ -515,7 +547,7 @@
             maskStyle() {
                 let left, top;
                 if (this.form.type === 'pendulum') {
-                    left = '82px';
+                    left = '81px';
                     top = '1254px';
                 } else {
                     left = '168px';
@@ -530,7 +562,7 @@
                 let top, left, right;
                 if (this.form.type === 'pendulum') {
                     top = '1854px';
-                    left = '124px';
+                    left = '116px';
                 } else if (this.form.type === 'monster' && this.form.cardType === 'link') {
                     top = '1456px';
                     right = '252px';
@@ -683,6 +715,7 @@
                 font-size: 98px;
                 text-align: center;
                 letter-spacing: -10px;
+                z-index: 20;
             }
 
             .right-pendulum {
@@ -694,12 +727,30 @@
                 font-size: 98px;
                 text-align: center;
                 letter-spacing: -10px;
+                z-index: 20;
+            }
+
+            .pendulum-description {
+                position: absolute;
+                left: 221px;
+                top: 1288px;
+                width: 950px;
+                text-align: justify;
+                z-index: 20;
+
+                ::v-deep .ruby {
+                    .rt {
+                        font-size: 12px;
+                        top: -4px;
+                    }
+                }
             }
 
             .card-package {
                 position: absolute;
                 font-family: ygo-password, serif;
                 font-size: 40px;
+                z-index: 20;
             }
 
             .link-arrow {
@@ -715,10 +766,10 @@
                 left: 109px;
                 width: 1170px;
                 text-align: justify;
+                z-index: 20;
 
                 .card-effect {
                     white-space: nowrap;
-                    overflow: hidden;
 
                     ::v-deep .ruby {
                         .rt {
@@ -742,6 +793,7 @@
                 position: absolute;
                 left: 109px;
                 top: 1844px;
+                z-index: 20;
             }
 
             .card-atk {
@@ -751,6 +803,7 @@
                 font-family: ygo-atk-def, serif;
                 font-size: 61px;
                 letter-spacing: 2px;
+                z-index: 20;
             }
 
             .card-def {
@@ -760,6 +813,7 @@
                 font-family: ygo-atk-def, serif;
                 font-size: 61px;
                 letter-spacing: 2px;
+                z-index: 20;
             }
 
             .card-link {
@@ -769,14 +823,15 @@
                 font-family: ygo-link, serif;
                 font-size: 54px;
                 letter-spacing: 2px;
+                z-index: 20;
             }
 
             .card-password {
                 position: absolute;
                 left: 66px;
-                top: 1933px;
+                top: 1930px;
                 font-family: ygo-password, serif;
-                font-size: 39px;
+                font-size: 40px;
             }
 
             .card-laser {
