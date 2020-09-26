@@ -24,7 +24,7 @@
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
                         <span>【</span>
                         <span v-html="formatVHtml(spellTrapName)"></span>
-                        <el-image v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
+                        <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>】</span>
                     </div>
 
@@ -78,13 +78,15 @@
                             <span v-html="`【${formatVHtml(form.monsterType)}】`"></span>
                         </div>
 
-                        <div class="description-info" v-for="(item,index) in form.description.split('\n')">
-                            <!--单行压缩-->
-                            <span v-if="index<form.description.split('\n').length-1"
-                                  v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
-                            <!--最后一行压缩-->
-                            <span v-if="index===form.description.split('\n').length-1"
-                                  v-compressText="{width:1170,height:descriptionHeight}" v-html="formatVHtml(item)"></span>
+                        <div class="description-info">
+                            <template v-for="(item,index) in form.description.split('\n')">
+                                <!--单行压缩-->
+                                <span v-if="index<form.description.split('\n').length-1"
+                                      v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
+                                <!--最后一行压缩-->
+                                <span v-if="index===form.description.split('\n').length-1"
+                                      v-compressText="{width:1170,height:descriptionHeight}" v-html="formatVHtml(item)"></span>
+                            </template>
                         </div>
                     </div>
 
@@ -134,6 +136,7 @@
                         <el-form-item label="语言">
                             <el-select v-model="form.language" placeholder="请选择语言" @change="changeLanguage">
                                 <el-option label="简体中文" value="sc"></el-option>
+                                <el-option label="繁体中文" value="tc"></el-option>
                                 <el-option label="日文" value="jp"></el-option>
                             </el-select>
                         </el-form-item>
@@ -403,6 +406,8 @@
                     try {
                         let data = JSON.parse(e.target?.result);
                         this.form = Object.assign(this.form, data);
+                        // 字体可能加载
+                        this.changeLanguage();
                     } catch (e) {
                         this.$message.error('数据导入失败');
                     }
@@ -508,19 +513,27 @@
                 }
             },
             spellTrapName() {
+                let name = '';
                 if (this.form.language === 'sc') {
                     if (this.form.type === 'spell') {
-                        return '魔法卡';
+                        name = '魔法卡';
                     } else if (this.form.type === 'trap') {
-                        return '陷阱卡';
+                        name = '陷阱卡';
+                    }
+                } else if (this.form.language === 'tc') {
+                    if (this.form.type === 'spell') {
+                        name = '魔法卡';
+                    } else if (this.form.type === 'trap') {
+                        name = '陷阱卡';
                     }
                 } else if (this.form.language === 'jp') {
                     if (this.form.type === 'spell') {
-                        return '[魔(ま)][法(ほう)]カード';
+                        name = '[魔(ま)][法(ほう)]カード';
                     } else if (this.form.type === 'trap') {
-                        return '[罠(トラップ)]カード';
+                        name = '[罠(トラップ)]カード';
                     }
                 }
+                return name;
             },
             imageStyle() {
                 let left, top, width, height;
@@ -625,6 +638,7 @@
 
 <style lang="scss" scoped>
     @import "./sc/sc";
+    @import "./tc/tc";
     @import "./jp/jp";
 
     .yugioh-container {

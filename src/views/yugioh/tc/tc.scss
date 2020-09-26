@@ -1,5 +1,5 @@
-.sc-class {
-    font-family: ygo-sc, 楷体, serif;
+.tc-class {
+    font-family: ygo-tc, 楷体, serif;
 
     .card-name {
         top: 100px;
@@ -8,8 +8,7 @@
     .spell-trap {
         top: 256px;
         font-size: 76px;
-        right: 94px;
-        letter-spacing: 2px;
+        right: 100px;
 
         .spell-trap-icon {
             margin-left: 10px;
@@ -18,12 +17,10 @@
 
     .pendulum-description {
         font-size: 36px;
-        letter-spacing: 2px;
     }
 
     .card-description {
         font-size: 36px;
-        letter-spacing: 2px;
 
         .card-effect {
             font-size: 44px;
