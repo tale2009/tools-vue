@@ -8,25 +8,30 @@
 
         <div class="header-right">
             <i class="fab fa-github" @click="toGithub"></i>
-            <el-button style="margin-left: 10px" type="text" @click="aboutDialog = true">关于</el-button>
+            <el-button style="margin-left: 10px" type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
+            <el-button style="margin-left: 10px" type="text" @click="thankDialog = true">感谢</el-button>
 
             <AboutDialog :aboutDialog.sync="aboutDialog"></AboutDialog>
+            <ThankDialog :thankDialog.sync="thankDialog"></ThankDialog>
         </div>
     </div>
 </template>
 
 <script>
-    import AboutDialog from '@/layout/app-layout/components/AboutDialog';
+    import AboutDialog from '@/components/dialog/AboutDialog';
+    import ThankDialog from '@/components/dialog/ThankDialog';
     import {mapMutations, mapState} from 'vuex';
 
     export default {
         name: 'AppHeader',
         components: {
-            AboutDialog
+            AboutDialog,
+            ThankDialog
         },
         data() {
             return {
-                aboutDialog: false
+                aboutDialog: false,
+                thankDialog: false
             };
         },
         methods: {
