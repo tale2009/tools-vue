@@ -1,3 +1,5 @@
+const mime = require('mime');
+
 const base = {
     install(Vue, options) {
         Vue.prototype.config = require('@/assets/json/config.json');
@@ -38,7 +40,8 @@ const base = {
                 fileName = new Date().getTime();
             }
             let a = document.createElement('a');
-            a.download = fileName;
+            let extension = mime.getExtension(blob.type);
+            a.download = `${fileName}.${extension}`;
             a.href = URL.createObjectURL(blob);
             a.click();
         };

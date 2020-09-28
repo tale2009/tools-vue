@@ -143,6 +143,10 @@
                         <el-form-item label="卡名">
                             <el-input v-model="form.name" placeholder="请输入卡名"></el-input>
                         </el-form-item>
+                        <el-form-item label="颜色" style="margin-bottom: 8px">
+                            <el-color-picker v-model="form.color"></el-color-picker>
+                            <span class="tip" style="display: inline-block;transform:translateY(-10px)">（自动选择清空）</span>
+                        </el-form-item>
                         <el-form-item label="类型">
                             <el-radio-group v-model="form.type">
                                 <el-radio-button label="monster">怪兽</el-radio-button>
@@ -302,6 +306,7 @@
                 form: {
                     language: 'sc',
                     name: '青眼白龙',
+                    color: '',
                     type: 'monster',
                     attribute: 'light',
                     icon: '',
@@ -481,20 +486,26 @@
             },
             nameStyle() {
                 let color;
-                if (this.form.type === 'monster') {
-                    if (['xyz', 'link'].includes(this.form.cardType)) {
-                        color = 'white';
-                    } else {
-                        color = 'black';
-                    }
-                } else if (this.form.type === 'pendulum') {
-                    if (['xyz-pendulum', 'link-pendulum'].includes(this.form.pendulumType)) {
-                        color = 'white';
-                    } else {
-                        color = 'black';
-                    }
+                if (this.form.color) {
+                    // 用户颜色
+                    color = this.form.color;
                 } else {
-                    color = 'white';
+                    // 自动颜色
+                    if (this.form.type === 'monster') {
+                        if (['xyz', 'link'].includes(this.form.cardType)) {
+                            color = 'white';
+                        } else {
+                            color = 'black';
+                        }
+                    } else if (this.form.type === 'pendulum') {
+                        if (['xyz-pendulum', 'link-pendulum'].includes(this.form.pendulumType)) {
+                            color = 'white';
+                        } else {
+                            color = 'black';
+                        }
+                    } else {
+                        color = 'white';
+                    }
                 }
 
                 return {
