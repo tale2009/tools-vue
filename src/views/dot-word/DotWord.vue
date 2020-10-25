@@ -26,7 +26,7 @@
                             <el-input-number v-model="form.pixel" :min="8" :max="64" @change="createWordList"></el-input-number>
                         </el-form-item>
                         <el-form-item label="字体">
-                            <el-select v-model="form.font" placeholder="请选择字体" @change="createWordList">
+                            <el-select v-model="form.font" placeholder="请选择字体" filterable allow-create @change="createWordList">
                                 <el-option v-for="item in fontList" :label="item" :value="item"></el-option>
                             </el-select>
                         </el-form-item>
