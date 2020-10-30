@@ -6,7 +6,7 @@ const base = {
 
         Vue.filter('timeFilter', function (value) {
             if (value) {
-                return Vue.prototype.moment(value).format('YYYY-MM-DD HH:mm:ss');
+                return Vue.prototype.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
             }
         });
 

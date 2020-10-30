@@ -1,5 +1,4 @@
 const fs = require('fs');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 // 保存配置文件
@@ -27,7 +26,6 @@ module.exports = {
     },
     configureWebpack: {
         plugins: [
-            new MomentLocalesPlugin(),  // 剥离除 “en” 以外的所有语言环境。
             new CompressionPlugin({
                 test: /\.(js|css)$/,
                 threshold: 10240,   // 超过10k压缩
