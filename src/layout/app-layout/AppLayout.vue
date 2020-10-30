@@ -33,7 +33,7 @@
             document.onkeypress = this.disableKey;
             addEventListener('resize', this.updateScrollbar);
         },
-        destroyed() {
+        unmounted() {
             removeEventListener('resize', this.updateScrollbar);
         },
         methods: {

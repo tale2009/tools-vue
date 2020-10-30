@@ -1,25 +1,22 @@
-import Vue from 'vue';
+import {createApp} from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
 import 'normalize.css';
 import '@/core/route-actived';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import base from '@/plugins/base';
 
-Vue.config.productionTip = false;
+const app = createApp(App);
 
-Vue.use(ElementUI);
-Vue.use(base);
+app.config.globalProperties.dayjs = dayjs;
+app.config.globalProperties._ = _;
 
-Vue.prototype.dayjs = dayjs;
-Vue.prototype._ = _;
-
-new Vue({
-    router,
-    store,
-    render: h => h(App)
-}).$mount('#app');
+app.use(router);
+app.use(store);
+app.use(ElementPlus);
+app.use(base);
+app.mount('#app');
