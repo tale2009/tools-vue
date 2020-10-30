@@ -4,11 +4,9 @@ const base = {
     install(app, options) {
         app.config.globalProperties.config = require('@/assets/json/config.json');
 
-        app.config.globalProperties.$filters = {
-            timeFilter(value) {
-                if (value) {
-                    return app.config.globalProperties.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
-                }
+        app.config.globalProperties.timeFilter = function (value) {
+            if (value) {
+                return app.config.globalProperties.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
             }
         };
 

@@ -14,7 +14,7 @@
                         <el-link type="primary" :underline="false" slot="reference">微信</el-link>
                     </el-popover>
                 </p>
-                <p>最后更新时间：{{config.updateTime|timeFilter}}</p>
+                <p>最后更新时间：{{timeFilter(config.updateTime)}}</p>
             </div>
             <div slot="footer">
                 <el-button plain size="medium" @click="closeDialog">关闭</el-button>

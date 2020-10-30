@@ -5,7 +5,7 @@ import {Message} from 'element-plus';
 router.beforeEach((to, from, next) => {
     if (!router.resolve(to.path).matched.length) {
         Message.warning('页面不存在');
-        router.go(-1);
+        next(from.path);
     } else {
         setDocumentTitle(to);
         next();
