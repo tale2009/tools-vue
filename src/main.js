@@ -15,8 +15,8 @@ const app = createApp(App);
 app.config.globalProperties.dayjs = dayjs;
 app.config.globalProperties._ = _;
 
-app.use(router);
-app.use(store);
 app.use(ElementPlus);
 app.use(base);
+app.use(router);
+app.use(store);
 app.mount('#app');

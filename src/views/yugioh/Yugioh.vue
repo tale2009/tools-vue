@@ -670,7 +670,7 @@
                 max-height: 130px;
                 overflow: hidden;
 
-                ::v-deep .ruby {
+                ::v-deep(.ruby) {
                     .rt {
                         font-size: 18px;
                         top: 3px;
@@ -709,7 +709,7 @@
                 display: flex;
                 align-items: center;
 
-                ::v-deep .ruby {
+                ::v-deep(.ruby) {
                     .rt {
                         font-size: 18px;
                         top: -2px;
@@ -763,7 +763,7 @@
                 text-align: justify;
                 z-index: 20;
 
-                ::v-deep .ruby {
+                ::v-deep(.ruby) {
                     .rt {
                         font-size: 12px;
                         top: -4px;
@@ -796,7 +796,7 @@
                 .card-effect {
                     white-space: nowrap;
 
-                    ::v-deep .ruby {
+                    ::v-deep(.ruby) {
                         .rt {
                             font-size: 14px;
                             top: -4px;
@@ -805,7 +805,7 @@
                 }
 
                 .description-info {
-                    ::v-deep .ruby {
+                    ::v-deep(.ruby) {
                         .rt {
                             font-size: 12px;
                             top: -4px;
@@ -865,7 +865,7 @@
                 top: 1913px;
             }
 
-            ::v-deep .ruby {
+            ::v-deep(.ruby) {
                 position: relative;
 
                 .rt {
@@ -926,7 +926,7 @@
                     .el-col {
                         margin-top: 20px;
 
-                        ::v-deep .el-upload {
+                        ::v-deep(.el-upload) {
                             width: 100%;
                         }
 
