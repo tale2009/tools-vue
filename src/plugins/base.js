@@ -1,16 +1,18 @@
 const mime = require('mime');
 
 const base = {
-    install(Vue, options) {
-        Vue.prototype.config = require('@/assets/json/config.json');
+    install(app, options) {
+        app.config.globalProperties.config = require('@/assets/json/config.json');
 
-        Vue.filter('timeFilter', function (value) {
-            if (value) {
-                return Vue.prototype.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+        app.config.globalProperties.$filters = {
+            timeFilter(value) {
+                if (value) {
+                    return app.config.globalProperties.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+                }
             }
-        });
+        };
 
-        Vue.prototype.fileToDataURL = function (file) {
+        app.config.globalProperties.fileToDataURL = function (file) {
             return new Promise(((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = (res) => {
@@ -23,7 +25,7 @@ const base = {
             }));
         };
 
-        Vue.prototype.dataURLtoBlob = function (dataURL) {
+        app.config.globalProperties.dataURLtoBlob = function (dataURL) {
             let arr = dataURL.split(',');
             let mime = arr[0].match(/:(.*?);/)[1];
             let bstr = atob(arr[1]);
@@ -35,7 +37,7 @@ const base = {
             return new Blob([u8arr], {type: mime});
         };
 
-        Vue.prototype.downloadBlob = function (blob, fileName) {
+        app.config.globalProperties.downloadBlob = function (blob, fileName) {
             if (!fileName) {
                 fileName = new Date().getTime();
             }

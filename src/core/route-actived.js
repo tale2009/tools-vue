@@ -1,9 +1,9 @@
 import router from '../router';
-import {Message} from 'element-ui';
+import {Message} from 'element-plus';
 
 // 启用路由拦截
 router.beforeEach((to, from, next) => {
-    if (!router.match(to.path).matched.length) {
+    if (!router.resolve(to.path).matched.length) {
         Message.warning('页面不存在');
         router.go(-1);
     } else {
