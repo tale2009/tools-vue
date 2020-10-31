@@ -21,10 +21,16 @@
 
     .card-description {
         font-size: 36px;
+        line-height: 1.2;
 
         .card-effect {
             font-size: 44px;
             text-indent: -0.5em;
+            margin-bottom: -10px;
+        }
+
+        .description-info {
+            margin-top: 10px;
         }
     }
 }
