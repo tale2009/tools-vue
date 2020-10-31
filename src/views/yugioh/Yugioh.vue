@@ -245,7 +245,8 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="效果">
-                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果" @input="inputDescription"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description"
+                                      placeholder="请输入效果" @input="inputDescription"></el-input>
                         </el-form-item>
                         <el-form-item label="卡包">
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
@@ -336,6 +337,8 @@
                     this.fontLoading = true;
                     document.fonts.ready.then(() => {
                         this.fontLoading = false;
+                        // 强制更新视图
+                        this.$forceUpdate();
                     });
                 });
             },
@@ -397,7 +400,7 @@
                 this.form.description = list.join('');
             },
             formatVHtml(value) {
-                return value.replace(/\[([\S\s]*?)\(([\S\s]*?)\)]/g, s =>
+                return value.replace(/\[.*?\(.*?\)]/g, s =>
                     s.replace('[', '<span class="ruby">')
                         .replace('(', '<span class="rt">')
                         .replace(')', '</span>')
@@ -553,7 +556,6 @@
                     top = '367px';
                     width = '1201px';
                     height = '1201px';
-                    // height = '895px';
                 } else {
                     left = '171px';
                     top = '376px';
@@ -618,16 +620,16 @@
                 };
             },
             exportFileName() {
-                return this.form.name.replace(/\[([\S\s]*?)\(([\S\s]*?)\)]/g, s =>
+                return this.form.name.replace(/\[.*?\(.*?\)]/g, s =>
                     s.replace('[', '')
                         .replace(']', '')
-                        .replace(/\(([\S\s]*?)\)/g, '')
+                        .replace(/\(.*?\)/g, '')
                 );
             }
         },
         directives: {
             // 文本压缩变形
-            compressText: (el, binding) => {
+            compressText(el, binding) {
                 setTimeout(() => {
                     let scale = 1;
                     el.style.display = 'inline-block';
