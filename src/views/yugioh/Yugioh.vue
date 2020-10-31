@@ -397,7 +397,7 @@
                 this.form.description = list.join('');
             },
             formatVHtml(value) {
-                return value.replace(/\[([\S\s]*?)\(([\S\s]*?)\)]/g, s =>
+                return value.replace(/\[.*?\(.*?\)]/g, s =>
                     s.replace('[', '<span class="ruby">')
                         .replace('(', '<span class="rt">')
                         .replace(')', '</span>')
@@ -618,10 +618,10 @@
                 };
             },
             exportFileName() {
-                return this.form.name.replace(/\[([\S\s]*?)\(([\S\s]*?)\)]/g, s =>
+                return this.form.name.replace(/\[.*?\(.*?\)]/g, s =>
                     s.replace('[', '')
                         .replace(']', '')
-                        .replace(/\(([\S\s]*?)\)/g, '')
+                        .replace(/\(.*?\)/g, '')
                 );
             }
         },
