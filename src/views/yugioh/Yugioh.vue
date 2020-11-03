@@ -286,7 +286,7 @@
                 </div>
             </template>
 
-            <KanjiKanaDialog :kanjiKanaDialog.sync="kanjiKanaDialog"></KanjiKanaDialog>
+            <KanjiKanaDialog v-model:kanjiKanaDialog="kanjiKanaDialog"></KanjiKanaDialog>
         </Page>
     </div>
 </template>
