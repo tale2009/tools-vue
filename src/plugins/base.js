@@ -3,6 +3,12 @@ const mime = require('mime');
 const base = {
     install(Vue, options) {
         Vue.prototype.config = require('@/assets/json/config.json');
+        //重置表单
+        Vue.prototype.resetForm = function (formName) {
+            if (this.$refs[formName]) {
+                this.$refs[formName].resetFields();
+            }
+        };
 
         Vue.filter('timeFilter', function (value) {
             if (value) {

@@ -28,6 +28,7 @@
         },
         methods: {
             closeDialog() {
+                this.resetForm('form');
                 this.$emit('update:kanjiKanaDialog', false);
             },
             addKana() {
