@@ -267,6 +267,9 @@
 
                     <div class="button-group">
                         <el-row :gutter="20">
+                            <el-col :span="24">
+                                <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
+                            </el-col>
                             <el-col :span="12">
                                 <el-upload action="/" :show-file-list="false" accept="application/json" :before-upload="importJson">
                                     <el-button plain size="medium">导入数据</el-button>
@@ -282,18 +285,22 @@
                     </div>
                 </div>
             </template>
+
+            <KanjiKanaDialog :kanjiKanaDialog.sync="kanjiKanaDialog"></KanjiKanaDialog>
         </Page>
     </div>
 </template>
 
 <script>
     import Page from '@/components/page/Page';
+    import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
 
     export default {
         name: 'Yugioh',
         components: {
-            Page
+            Page,
+            KanjiKanaDialog
         },
         mounted() {
             document.fonts.ready.then(() => {
@@ -328,7 +335,8 @@
                     scale: 0.5,
                     laser: false,
                     radius: false
-                }
+                },
+                kanjiKanaDialog: false
             };
         },
         methods: {
@@ -400,12 +408,7 @@
                 this.form.description = list.join('');
             },
             formatVHtml(value) {
-                return value.replace(/\[.*?\(.*?\)]/g, s =>
-                    s.replace('[', '<span class="ruby">')
-                        .replace('(', '<span class="rt">')
-                        .replace(')', '</span>')
-                        .replace(']', '</span>')
-                );
+                return value.replace(/\[(.*?)\((.*?)\)]/g, '<span class="ruby">$1<span class="rt">$2</span></span>');
             },
             importJson(file) {
                 let reader = new FileReader();
@@ -620,11 +623,7 @@
                 };
             },
             exportFileName() {
-                return this.form.name.replace(/\[.*?\(.*?\)]/g, s =>
-                    s.replace('[', '')
-                        .replace(']', '')
-                        .replace(/\(.*?\)/g, '')
-                );
+                return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
             }
         },
         directives: {
