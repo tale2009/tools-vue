@@ -28,19 +28,18 @@
         },
         methods: {
             closeDialog() {
+                this.resetForm('form');
                 this.$emit('update:kanjiKanaDialog', false);
             },
             addKana() {
                 // 重新排序kanjiKanaMap，最长key的放在最前
-                let kanjiKanaReg = Object.keys(this.kanjiKanaMap).sort((a, b) => b.length - a.length).join('|');
-                // 未注音的正则，重复的"|"替换成单独的
-                let filterReg = this.form.text.replace(/\[.*?\(.*?\)]/g, s => '|').replace(/\|+/g, '|')
-                    .split('|').sort((a, b) => b.length - a.length).join('|');
-                // 转义正则，"|"不转义
-                filterReg = this._.escapeRegExp(filterReg).replace(/\\\|/g, '|');
-                this.form.text = this.form.text.replace(new RegExp(filterReg, 'g'), s => {
-                    return s.replace(new RegExp(kanjiKanaReg, 'g'), s => this.kanjiKanaMap[s]);
-                });
+                let kanjiKanaReg = new RegExp(Object.keys(this.kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
+                this.form.text = this.form.text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
+                    if (!/\[.*?\(.*?\)]/g.test(value)) {
+                        return value.replace(kanjiKanaReg, s => this.kanjiKanaMap[s]);
+                    }
+                    return value;
+                }).join('');
             }
         }
     };
