@@ -25,7 +25,7 @@
         props: ['thankDialog'],
         data() {
             return {
-                thankList: require('@/assets/json/thankList.json')
+                thankList: require('@/assets/json/thank-list.json')
             };
         },
         methods: {

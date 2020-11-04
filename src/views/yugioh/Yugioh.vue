@@ -295,6 +295,9 @@
     import Page from '@/components/page/Page';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
+    import scDemo from './sc/sc-demo';
+    import tcDemo from './tc/tc-demo';
+    import jpDemo from './jp/jp-demo';
 
     export default {
         name: 'Yugioh',
@@ -302,36 +305,31 @@
             Page,
             KanjiKanaDialog
         },
-        mounted() {
-            document.fonts.ready.then(() => {
-                this.fontLoading = false;
-            });
-        },
         data() {
             return {
                 baseImage: 'https://static.kooriookami.top/yugioh/image',
                 fontLoading: true,
                 form: {
                     language: 'sc',
-                    name: '青眼白龙',
+                    name: '',
                     color: '',
                     type: 'monster',
-                    attribute: 'light',
+                    attribute: 'dark',
                     icon: '',
-                    image: require('@/assets/image/blue-eyes.jpg'),
+                    image: '',
                     cardType: 'normal',
                     pendulumType: 'normal-pendulum',
-                    level: 8,
-                    rank: 1,
+                    level: 0,
+                    rank: 0,
                     pendulumScale: 0,
                     pendulumDescription: '',
-                    monsterType: '龙族/通常',
-                    atk: 3000,
-                    def: 2500,
+                    monsterType: '',
+                    atk: 0,
+                    def: 0,
                     arrowList: [],
-                    description: '以高攻击力著称的传说之龙。任何对手都能粉碎，其破坏力不可估量。',
-                    package: 'SD25-SC001',
-                    password: '89631139',
+                    description: '',
+                    package: '',
+                    password: '',
                     scale: 0.5,
                     laser: false,
                     radius: false
@@ -339,8 +337,24 @@
                 kanjiKanaDialog: false
             };
         },
+        created() {
+            Object.assign(this.form, scDemo);
+        },
+        mounted() {
+            document.fonts.ready.then(() => {
+                this.fontLoading = false;
+            });
+        },
         methods: {
-            changeLanguage() {
+            changeLanguage(value) {
+                if (value === 'sc') {
+                    Object.assign(this.form, scDemo);
+                } else if (value === 'tc') {
+                    Object.assign(this.form, tcDemo);
+                } else if (value === 'jp') {
+                    Object.assign(this.form, jpDemo);
+                }
+
                 setTimeout(() => {
                     this.fontLoading = true;
                     document.fonts.ready.then(() => {
@@ -418,7 +432,14 @@
                         let data = JSON.parse(e.target?.result);
                         this.form = Object.assign(this.form, data);
                         // 字体可能加载
-                        this.changeLanguage();
+                        setTimeout(() => {
+                            this.fontLoading = true;
+                            document.fonts.ready.then(() => {
+                                this.fontLoading = false;
+                                // 强制更新视图
+                                this.$forceUpdate();
+                            });
+                        });
                     } catch (e) {
                         this.$message.error('数据导入失败');
                     }
