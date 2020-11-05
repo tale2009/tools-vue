@@ -79,11 +79,13 @@
                         <div class="description-info">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行压缩-->
-                                <span v-if="index<form.description.split('\n').length-1"
-                                      v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
+                                <div v-if="index<form.description.split('\n').length-1">
+                                    <span v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
+                                </div>
                                 <!--最后一行压缩-->
-                                <span v-if="index===form.description.split('\n').length-1"
-                                      v-compressText="{width:1170,height:descriptionHeight}" v-html="formatVHtml(item)"></span>
+                                <div v-if="index===form.description.split('\n').length-1">
+                                    <span v-compressText="{width:1170,height:descriptionHeight}" v-html="formatVHtml(item)"></span>
+                                </div>
                             </template>
                         </div>
                     </div>
