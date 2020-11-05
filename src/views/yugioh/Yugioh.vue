@@ -11,13 +11,11 @@
                         <el-image :src="attributeSrc"></el-image>
                     </div>
 
-                    <div class="card-level"
-                         v-if="(form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType))
-                         ||(form.type==='pendulum'&&['normal-pendulum','effect-pendulum','ritual-pendulum','fusion-pendulum','synchro-pendulum'].includes(form.pendulumType))">
+                    <div class="card-level" v-if="showLevel">
                         <el-image v-for="item in form.level" :src="baseImage + '/level.png'"></el-image>
                     </div>
 
-                    <div class="card-rank" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
+                    <div class="card-rank" v-if="showRank">
                         <el-image v-for="item in form.rank" :src="baseImage + '/rank.png'"></el-image>
                     </div>
 
@@ -205,11 +203,10 @@
                                 <el-option label="连接／灵摆" value="link-pendulum" v-if="false"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="星级" v-if="(form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType))
-                        ||(form.type==='pendulum'&&['normal-pendulum','effect-pendulum','ritual-pendulum','fusion-pendulum','synchro-pendulum'].includes(form.pendulumType))">
+                        <el-form-item label="星级" v-if="showLevel">
                             <el-input-number v-model="form.level" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
-                        <el-form-item label="阶级" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
+                        <el-form-item label="阶级" v-if="showRank">
                             <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="摆值" v-if="form.type==='pendulum'">
@@ -259,6 +256,9 @@
                         </el-form-item>
                         <el-form-item label="圆角">
                             <el-switch v-model="form.radius"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="卡背">
+                            <el-switch v-model="form.cardBack"></el-switch>
                         </el-form-item>
                         <el-form-item label="缩放">
                             <el-slider v-model="form.scale" :min="0.1" :max="1" :step="0.1"></el-slider>
@@ -332,7 +332,8 @@
                     password: '',
                     scale: 0.5,
                     laser: false,
-                    radius: false
+                    radius: false,
+                    cardBack: false
                 },
                 kanjiKanaDialog: false
             };
@@ -459,30 +460,7 @@
                     useCORS: true,
                     backgroundColor: 'transparent',
                     width: this.form.scale * 1393,
-                    height: this.form.scale * 2031,
-                    onclone: (doc) => {
-                        // 微调字体位置
-                        let leftPendulum = doc.querySelector('.left-pendulum');
-                        if (leftPendulum) {
-                            leftPendulum.style.top = '1363px';
-                        }
-                        let rightPendulum = doc.querySelector('.right-pendulum');
-                        if (rightPendulum) {
-                            rightPendulum.style.top = '1363px';
-                        }
-                        let cardAtk = doc.querySelector('.card-atk');
-                        if (cardAtk) {
-                            cardAtk.style.top = '1835px';
-                        }
-                        let cardDef = doc.querySelector('.card-def');
-                        if (cardDef) {
-                            cardDef.style.top = '1835px';
-                        }
-                        let cardLink = doc.querySelector('.card-link');
-                        if (cardLink) {
-                            cardLink.style.top = '1848px';
-                        }
-                    }
+                    height: this.form.scale * 2031
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
@@ -492,11 +470,13 @@
         },
         computed: {
             cardClass() {
-                return `${this.form.language}-class`;
+                return `${this.form.language}-class ${this.form.cardBack ? 'card-back' : ''}`;
             },
             cardStyle() {
                 let background;
-                if (this.form.type === 'monster') {
+                if (this.form.cardBack) {
+                    background = `url(${this.baseImage}/card-back.png) no-repeat center/cover`;
+                } else if (this.form.type === 'monster') {
                     background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
                 } else if (this.form.type === 'pendulum') {
                     background = `url(${this.baseImage}/card-${this.form.pendulumType}.png) no-repeat center/cover`;
@@ -572,6 +552,24 @@
                     }
                 }
                 return name;
+            },
+            showLevel() {
+                let flag = false;
+                if (this.form.type === 'monster') {
+                    flag = ['normal', 'effect', 'ritual', 'fusion', 'synchro', 'token'].includes(this.form.cardType);
+                } else if (this.form.type === 'pendulum') {
+                    flag = ['normal-pendulum', 'effect-pendulum', 'ritual-pendulum', 'fusion-pendulum', 'synchro-pendulum'].includes(this.form.pendulumType);
+                }
+                return flag;
+            },
+            showRank() {
+                let flag = false;
+                if (this.form.type === 'monster') {
+                    flag = this.form.cardType === 'xyz';
+                } else if (this.form.type === 'pendulum') {
+                    flag = this.form.pendulumType === 'xyz-pendulum';
+                }
+                return flag;
             },
             imageStyle() {
                 let left, top, width, height;
@@ -901,6 +899,12 @@
                     white-space: pre;
                     letter-spacing: 0;
                     text-indent: 0;
+                }
+            }
+
+            &.card-back {
+                * {
+                    display: none;
                 }
             }
         }
