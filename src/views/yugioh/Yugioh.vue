@@ -178,9 +178,10 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="图片">
-                            <el-upload action="/" :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
+                            <el-upload style="display: inline-block" action="/" :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
                                 <el-button type="primary">选择图片</el-button>
                             </el-upload>
+                            <el-button style="margin-left: 10px" plain @click="deleteImage">删除</el-button>
                         </el-form-item>
                         <el-form-item label="卡类" v-if="form.type==='monster'">
                             <el-select v-model="form.cardType" placeholder="请选择卡类">
@@ -211,7 +212,7 @@
                         <el-form-item label="阶级" v-if="showRank">
                             <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
-                        <el-form-item label="摆值" v-if="form.type==='pendulum'">
+                        <el-form-item label="刻度" v-if="form.type==='pendulum'">
                             <el-input-number v-model="form.pendulumScale" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="灵摆效果" label-width="40px" v-if="form.type==='pendulum'">
@@ -253,22 +254,30 @@
                         <el-form-item label="密码">
                             <el-input v-model="form.password" placeholder="请输入密码"></el-input>
                         </el-form-item>
-                        <el-form-item label="角标">
-                            <el-switch v-model="form.laser"></el-switch>
-                        </el-form-item>
-                        <el-form-item label="圆角">
-                            <el-switch v-model="form.radius"></el-switch>
-                        </el-form-item>
-                        <el-form-item label="卡背">
-                            <el-switch v-model="form.cardBack"></el-switch>
-                        </el-form-item>
+                        <el-row :gutter="10">
+                            <el-col :span="8">
+                                <el-form-item label="角标">
+                                    <el-switch v-model="form.laser"></el-switch>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="圆角">
+                                    <el-switch v-model="form.radius"></el-switch>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="卡背">
+                                    <el-switch v-model="form.cardBack"></el-switch>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                         <el-form-item label="缩放">
                             <el-slider v-model="form.scale" :min="0.1" :max="1" :step="0.1"></el-slider>
                         </el-form-item>
                     </el-form>
 
                     <div class="button-group">
-                        <el-row :gutter="20">
+                        <el-row :gutter="10">
                             <el-col :span="24">
                                 <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
                             </el-col>
@@ -379,6 +388,9 @@
                 }
                 return flag;
             },
+            deleteImage() {
+                this.form.image = '';
+            },
             inputPendulumDescription() {
                 // 不保留换行符号
                 let list = Array.from(this.form.pendulumDescription);
@@ -437,7 +449,7 @@
                 } else {
                     this.lastDescriptionHeight = 0;
                 }
-                if (this.lastDescriptionHeight < 0) {
+                if (this.lastDescriptionHeight <= 0) {
                     this.$message.warning('文本超过可压缩高度');
                 }
             },
@@ -466,10 +478,7 @@
                 });
             },
             exportJson() {
-                let form = this._.cloneDeep(this.form);
-                // 去除图片数据
-                form.image = '';
-                let data = JSON.stringify(form);
+                let data = JSON.stringify(this.form);
                 let blob = new Blob([data], {type: 'application/json'});
                 this.downloadBlob(blob, this.exportFileName);
             },
@@ -656,21 +665,24 @@
         directives: {
             // 文本压缩变形
             compressText(el, binding) {
-                let scale = 1;
-                el.style.display = 'inline-block';
-                el.style.wordBreak = 'break-all';
-                el.style.width = `${binding.value.width}px`;
-                el.style.transform = 'none';
-                el.style.transformOrigin = '0 0';
+                // 异步作用是先处理compressRt，防止注音margin的误差
+                setTimeout(() => {
+                    let scale = 1;
+                    el.style.display = 'inline-block';
+                    el.style.wordBreak = 'break-all';
+                    el.style.width = `${binding.value.width}px`;
+                    el.style.transform = 'none';
+                    el.style.transformOrigin = '0 0';
 
-                while (el.clientHeight > binding.value.height && scale > 0) {
-                    scale -= 0.01;
-                    el.style.width = `${binding.value.width / scale}px`;
-                    el.style.transform = `scaleX(${scale})`;
-                }
+                    while (el.clientHeight > binding.value.height && scale > 0) {
+                        scale -= 0.01;
+                        el.style.width = `${binding.value.width / scale}px`;
+                        el.style.transform = `scaleX(${scale})`;
+                    }
+                });
             },
             // 压缩或拉伸注音文字
-            compressRt(el, binding) {
+            compressRt(el, binding, vnode) {
                 let rubyList = el.querySelectorAll('.ruby');
                 rubyList.forEach(ruby => {
                     let rt = ruby.querySelector('.rt');
@@ -678,11 +690,22 @@
                     let rubyWidth = ruby.offsetWidth;
                     let rtWidth = rt.offsetWidth;
                     if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
+                        // 拉伸两端对齐
                         rt.classList.add('justify');
                     } else if (rtWidth > rubyWidth) {
                         // 压缩
-                        rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                        if (rubyWidth / rtWidth < 0.6) {
+                            // 防止过度压缩，加宽ruby
+                            // 公式：(rubyWidth + widen) / rtWidth = 0.6
+                            let widen = 0.6 * rtWidth - rubyWidth;
+                            ruby.style.margin = `0 ${widen / 2}px`;
+                            rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth})`;
+                            rt.style.left = `${-widen / 2}px`;
+                        } else {
+                            rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                        }
                     } else {
+                        // 不变并居中
                         rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
                     }
                 });
