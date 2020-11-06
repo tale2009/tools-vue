@@ -4,26 +4,24 @@
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
-                        <span v-compressText="{width:1030,height:130}" v-html="formatVHtml(form.name)"></span>
+                        <span v-compress-text="{width:1030,height:130}" v-html="formatVHtml(form.name)" v-compress-rt></span>
                     </div>
 
                     <div class="card-attribute">
                         <el-image :src="attributeSrc"></el-image>
                     </div>
 
-                    <div class="card-level"
-                         v-if="(form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType))
-                         ||(form.type==='pendulum'&&['normal-pendulum','effect-pendulum','ritual-pendulum','fusion-pendulum','synchro-pendulum'].includes(form.pendulumType))">
+                    <div class="card-level" v-if="showLevel">
                         <el-image v-for="item in form.level" :src="baseImage + '/level.png'"></el-image>
                     </div>
 
-                    <div class="card-rank" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
+                    <div class="card-rank" v-if="showRank">
                         <el-image v-for="item in form.rank" :src="baseImage + '/rank.png'"></el-image>
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
                         <span>【</span>
-                        <span v-html="formatVHtml(spellTrapName)"></span>
+                        <span v-html="formatVHtml(spellTrapName)" v-compress-rt></span>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>】</span>
                     </div>
@@ -46,7 +44,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-compressText="{width:950,height:220}" v-html="formatVHtml(form.pendulumDescription)"></span>
+                        <span v-compress-text="{width:950,height:220}" v-html="formatVHtml(form.pendulumDescription)" v-compress-rt></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -73,19 +71,21 @@
                         <el-image :src="baseImage + '/arrow-left-up-off.png'" style="top: 313px;left: 109px" v-show="!form.arrowList.includes(8)"></el-image>
                     </div>
 
-                    <div class="card-description">
+                    <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span v-html="`【${formatVHtml(form.monsterType)}】`"></span>
+                            <span v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-rt></span>
                         </div>
 
                         <div class="description-info">
                             <template v-for="(item,index) in form.description.split('\n')">
-                                <!--单行压缩-->
-                                <span v-if="index<form.description.split('\n').length-1"
-                                      v-compressText="{width:1170,height:50}" v-html="formatVHtml(item)"></span>
+                                <!--单行不压缩-->
+                                <div v-if="index<form.description.split('\n').length-1">
+                                    <span v-html="formatVHtml(item)" v-compress-rt></span>
+                                </div>
                                 <!--最后一行压缩-->
-                                <span v-if="index===form.description.split('\n').length-1"
-                                      v-compressText="{width:1170,height:descriptionHeight}" v-html="formatVHtml(item)"></span>
+                                <div v-if="index===form.description.split('\n').length-1" class="last-description">
+                                    <span v-compress-text="{width:1170,height:lastDescriptionHeight}" v-html="formatVHtml(item)" v-compress-rt></span>
+                                </div>
                             </template>
                         </div>
                     </div>
@@ -205,11 +205,10 @@
                                 <el-option label="连接／灵摆" value="link-pendulum" v-if="false"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="星级" v-if="(form.type==='monster'&&['normal','effect','ritual','fusion','synchro','token'].includes(form.cardType))
-                        ||(form.type==='pendulum'&&['normal-pendulum','effect-pendulum','ritual-pendulum','fusion-pendulum','synchro-pendulum'].includes(form.pendulumType))">
+                        <el-form-item label="星级" v-if="showLevel">
                             <el-input-number v-model="form.level" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
-                        <el-form-item label="阶级" v-if="(form.type==='monster'&&form.cardType==='xyz')||(form.type==='pendulum'&&form.pendulumType==='xyz-pendulum')">
+                        <el-form-item label="阶级" v-if="showRank">
                             <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="摆值" v-if="form.type==='pendulum'">
@@ -259,6 +258,9 @@
                         </el-form-item>
                         <el-form-item label="圆角">
                             <el-switch v-model="form.radius"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="卡背">
+                            <el-switch v-model="form.cardBack"></el-switch>
                         </el-form-item>
                         <el-form-item label="缩放">
                             <el-slider v-model="form.scale" :min="0.1" :max="1" :step="0.1"></el-slider>
@@ -332,8 +334,10 @@
                     password: '',
                     scale: 0.5,
                     laser: false,
-                    radius: false
+                    radius: false,
+                    cardBack: false
                 },
+                lastDescriptionHeight: 300,   // 最后一行效果压缩高度
                 kanjiKanaDialog: false
             };
         },
@@ -421,6 +425,22 @@
                 });
                 this.form.description = list.join('');
             },
+            // 获取最后一行效果的压缩高度
+            getLastDescriptionHeight() {
+                let lastDescription = document.querySelector('.last-description');
+                if (lastDescription) {
+                    if (['monster', 'pendulum'].includes(this.form.type)) {
+                        this.lastDescriptionHeight = 310 - lastDescription.offsetTop;
+                    } else {
+                        this.lastDescriptionHeight = 370 - lastDescription.offsetTop;
+                    }
+                } else {
+                    this.lastDescriptionHeight = 0;
+                }
+                if (this.lastDescriptionHeight < 0) {
+                    this.$message.warning('文本超过可压缩高度');
+                }
+            },
             formatVHtml(value) {
                 return value.replace(/\[(.*?)\((.*?)\)]/g, '<span class="ruby">$1<span class="rt">$2</span></span>');
             },
@@ -459,30 +479,7 @@
                     useCORS: true,
                     backgroundColor: 'transparent',
                     width: this.form.scale * 1393,
-                    height: this.form.scale * 2031,
-                    onclone: (doc) => {
-                        // 微调字体位置
-                        let leftPendulum = doc.querySelector('.left-pendulum');
-                        if (leftPendulum) {
-                            leftPendulum.style.top = '1363px';
-                        }
-                        let rightPendulum = doc.querySelector('.right-pendulum');
-                        if (rightPendulum) {
-                            rightPendulum.style.top = '1363px';
-                        }
-                        let cardAtk = doc.querySelector('.card-atk');
-                        if (cardAtk) {
-                            cardAtk.style.top = '1835px';
-                        }
-                        let cardDef = doc.querySelector('.card-def');
-                        if (cardDef) {
-                            cardDef.style.top = '1835px';
-                        }
-                        let cardLink = doc.querySelector('.card-link');
-                        if (cardLink) {
-                            cardLink.style.top = '1848px';
-                        }
-                    }
+                    height: this.form.scale * 2031
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
@@ -492,11 +489,13 @@
         },
         computed: {
             cardClass() {
-                return `${this.form.language}-class`;
+                return `${this.form.language}-class ${this.form.cardBack ? 'card-back' : ''}`;
             },
             cardStyle() {
                 let background;
-                if (this.form.type === 'monster') {
+                if (this.form.cardBack) {
+                    background = `url(${this.baseImage}/card-back.png) no-repeat center/cover`;
+                } else if (this.form.type === 'monster') {
                     background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
                 } else if (this.form.type === 'pendulum') {
                     background = `url(${this.baseImage}/card-${this.form.pendulumType}.png) no-repeat center/cover`;
@@ -573,6 +572,24 @@
                 }
                 return name;
             },
+            showLevel() {
+                let flag = false;
+                if (this.form.type === 'monster') {
+                    flag = ['normal', 'effect', 'ritual', 'fusion', 'synchro', 'token'].includes(this.form.cardType);
+                } else if (this.form.type === 'pendulum') {
+                    flag = ['normal-pendulum', 'effect-pendulum', 'ritual-pendulum', 'fusion-pendulum', 'synchro-pendulum'].includes(this.form.pendulumType);
+                }
+                return flag;
+            },
+            showRank() {
+                let flag = false;
+                if (this.form.type === 'monster') {
+                    flag = this.form.cardType === 'xyz';
+                } else if (this.form.type === 'pendulum') {
+                    flag = this.form.pendulumType === 'xyz-pendulum';
+                }
+                return flag;
+            },
             imageStyle() {
                 let left, top, width, height;
                 if (this.form.type === 'pendulum') {
@@ -627,17 +644,6 @@
                     right: right
                 };
             },
-            descriptionHeight() {
-                let height;
-                let enterCount = this.form.description.split('\n').length - 1;
-                if (['monster', 'pendulum'].includes(this.form.type)) {
-                    // 41为一行文本高度
-                    height = 260 - enterCount * 41;
-                } else {
-                    height = 370;
-                }
-                return height;
-            },
             passwordStyle() {
                 return {
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
@@ -650,19 +656,41 @@
         directives: {
             // 文本压缩变形
             compressText(el, binding) {
-                setTimeout(() => {
-                    let scale = 1;
-                    el.style.display = 'inline-block';
-                    el.style.wordBreak = 'break-all';
-                    el.style.width = `${binding.value.width}px`;
-                    el.style.transform = 'none';
-                    el.style.transformOrigin = '0 0';
+                let scale = 1;
+                el.style.display = 'inline-block';
+                el.style.wordBreak = 'break-all';
+                el.style.width = `${binding.value.width}px`;
+                el.style.transform = 'none';
+                el.style.transformOrigin = '0 0';
 
-                    while (el.clientHeight > binding.value.height && scale > 0) {
-                        scale -= 0.01;
-                        el.style.width = `${binding.value.width / scale}px`;
-                        el.style.transform = `scaleX(${scale})`;
+                while (el.clientHeight > binding.value.height && scale > 0) {
+                    scale -= 0.01;
+                    el.style.width = `${binding.value.width / scale}px`;
+                    el.style.transform = `scaleX(${scale})`;
+                }
+            },
+            // 压缩或拉伸注音文字
+            compressRt(el, binding) {
+                let rubyList = el.querySelectorAll('.ruby');
+                rubyList.forEach(ruby => {
+                    let rt = ruby.querySelector('.rt');
+                    let text = ruby.innerText.split('\n')[0];
+                    let rubyWidth = ruby.offsetWidth;
+                    let rtWidth = rt.offsetWidth;
+                    if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
+                        rt.classList.add('justify');
+                    } else if (rtWidth > rubyWidth) {
+                        // 压缩
+                        rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                    } else {
+                        rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
                     }
+                });
+            },
+            cardDescription(el, binding, vnode) {
+                let that = vnode.context;
+                setTimeout(() => {
+                    that.getLastDescriptionHeight();
                 });
             }
         }
@@ -896,11 +924,23 @@
                     font-weight: bold;
                     position: absolute;
                     left: 0;
-                    width: 100%;
                     text-align: center;
                     white-space: pre;
                     letter-spacing: 0;
                     text-indent: 0;
+                    transform-origin: 0 0;
+
+                    &.justify {
+                        text-align-last: justify;
+                        left: 5%;
+                        width: 90%;
+                    }
+                }
+            }
+
+            &.card-back {
+                * {
+                    display: none;
                 }
             }
         }
