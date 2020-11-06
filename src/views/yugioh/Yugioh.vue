@@ -430,9 +430,9 @@
                 let lastDescription = document.querySelector('.last-description');
                 if (lastDescription) {
                     if (['monster', 'pendulum'].includes(this.form.type)) {
-                        this.lastDescriptionHeight = 310 - lastDescription.offsetTop;
+                        this.lastDescriptionHeight = 330 - lastDescription.offsetTop;
                     } else {
-                        this.lastDescriptionHeight = 370 - lastDescription.offsetTop;
+                        this.lastDescriptionHeight = 380 - lastDescription.offsetTop;
                     }
                 } else {
                     this.lastDescriptionHeight = 0;
@@ -837,7 +837,6 @@
 
             .card-description {
                 position: absolute;
-                top: 1528px;
                 left: 109px;
                 width: 1170px;
                 text-align: justify;
