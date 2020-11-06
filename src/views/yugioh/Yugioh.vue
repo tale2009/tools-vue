@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
-                        <span v-compress-text="{width:1030,height:130}" v-html="formatVHtml(form.name)"></span>
+                        <span v-compress-text="{width:1030,height:130}" v-html="formatVHtml(form.name)" v-compress-rt></span>
                     </div>
 
                     <div class="card-attribute">
@@ -21,7 +21,7 @@
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
                         <span>【</span>
-                        <span v-html="formatVHtml(spellTrapName)"></span>
+                        <span v-html="formatVHtml(spellTrapName)" v-compress-rt></span>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>】</span>
                     </div>
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-compress-text="{width:950,height:220}" v-html="formatVHtml(form.pendulumDescription)"></span>
+                        <span v-compress-text="{width:950,height:220}" v-html="formatVHtml(form.pendulumDescription)" v-compress-rt></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -73,18 +73,18 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span v-html="`【${formatVHtml(form.monsterType)}】`"></span>
+                            <span v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-rt></span>
                         </div>
 
                         <div class="description-info">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行不压缩-->
                                 <div v-if="index<form.description.split('\n').length-1">
-                                    <span v-html="formatVHtml(item)"></span>
+                                    <span v-html="formatVHtml(item)" v-compress-rt></span>
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <span v-compress-text="{width:1170,height:lastDescriptionHeight}" v-html="formatVHtml(item)"></span>
+                                    <span v-compress-text="{width:1170,height:lastDescriptionHeight}" v-html="formatVHtml(item)" v-compress-rt></span>
                                 </div>
                             </template>
                         </div>
@@ -437,7 +437,7 @@
                 } else {
                     this.lastDescriptionHeight = 0;
                 }
-                if (this.lastDescriptionHeight <= 0) {
+                if (this.lastDescriptionHeight < 0) {
                     this.$message.warning('文本超过可压缩高度');
                 }
             },
@@ -656,18 +656,34 @@
         directives: {
             // 文本压缩变形
             compressText(el, binding) {
-                setTimeout(() => {
-                    let scale = 1;
-                    el.style.display = 'inline-block';
-                    el.style.wordBreak = 'break-all';
-                    el.style.width = `${binding.value.width}px`;
-                    el.style.transform = 'none';
-                    el.style.transformOrigin = '0 0';
+                let scale = 1;
+                el.style.display = 'inline-block';
+                el.style.wordBreak = 'break-all';
+                el.style.width = `${binding.value.width}px`;
+                el.style.transform = 'none';
+                el.style.transformOrigin = '0 0';
 
-                    while (el.clientHeight > binding.value.height && scale > 0) {
-                        scale -= 0.01;
-                        el.style.width = `${binding.value.width / scale}px`;
-                        el.style.transform = `scaleX(${scale})`;
+                while (el.clientHeight > binding.value.height && scale > 0) {
+                    scale -= 0.01;
+                    el.style.width = `${binding.value.width / scale}px`;
+                    el.style.transform = `scaleX(${scale})`;
+                }
+            },
+            // 压缩或拉伸注音文字
+            compressRt(el, binding) {
+                let rubyList = el.querySelectorAll('.ruby');
+                rubyList.forEach(ruby => {
+                    let rt = ruby.querySelector('.rt');
+                    let text = ruby.innerText.split('\n')[0];
+                    let rubyWidth = ruby.offsetWidth;
+                    let rtWidth = rt.offsetWidth;
+                    if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
+                        rt.classList.add('justify');
+                    } else if (rtWidth > rubyWidth) {
+                        // 压缩
+                        rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                    } else {
+                        rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
                     }
                 });
             },
@@ -908,11 +924,17 @@
                     font-weight: bold;
                     position: absolute;
                     left: 0;
-                    width: 100%;
                     text-align: center;
                     white-space: pre;
                     letter-spacing: 0;
                     text-indent: 0;
+                    transform-origin: 0 0;
+
+                    &.justify {
+                        text-align-last: justify;
+                        left: 5%;
+                        width: 90%;
+                    }
                 }
             }
 
