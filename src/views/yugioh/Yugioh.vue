@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
-                        <span v-compress-text="{width:1030,height:130}" v-html="formatVHtml(form.name)" v-compress-rt></span>
+                        <span v-html="formatVHtml(form.name)" v-compress-rt v-compress-text="{width:1030,height:130}"></span>
                     </div>
 
                     <div class="card-attribute">
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-compress-text="{width:950,height:220}" v-html="formatVHtml(form.pendulumDescription)" v-compress-rt></span>
+                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-rt v-compress-text="{width:950,height:220}"></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -84,7 +84,7 @@
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <span v-compress-text="{width:1170,height:lastDescriptionHeight}" v-html="formatVHtml(item)" v-compress-rt></span>
+                                    <span v-html="formatVHtml(item)" v-compress-rt v-compress-text="{width:1170,height:lastDescriptionHeight}"></span>
                                 </div>
                             </template>
                         </div>
@@ -665,21 +665,18 @@
         directives: {
             // 文本压缩变形
             compressText(el, binding) {
-                // 异步作用是先处理compressRt，防止注音margin的误差
-                setTimeout(() => {
-                    let scale = 1;
-                    el.style.display = 'inline-block';
-                    el.style.wordBreak = 'break-all';
-                    el.style.width = `${binding.value.width}px`;
-                    el.style.transform = 'none';
-                    el.style.transformOrigin = '0 0';
+                let scale = 1;
+                el.style.display = 'inline-block';
+                el.style.wordBreak = 'break-all';
+                el.style.width = `${binding.value.width}px`;
+                el.style.transform = 'none';
+                el.style.transformOrigin = '0 0';
 
-                    while (el.clientHeight > binding.value.height && scale > 0) {
-                        scale -= 0.01;
-                        el.style.width = `${binding.value.width / scale}px`;
-                        el.style.transform = `scaleX(${scale})`;
-                    }
-                });
+                while (el.clientHeight > binding.value.height && scale > 0) {
+                    scale -= 0.01;
+                    el.style.width = `${binding.value.width / scale}px`;
+                    el.style.transform = `scaleX(${scale})`;
+                }
             },
             // 压缩或拉伸注音文字
             compressRt(el, binding, vnode) {
