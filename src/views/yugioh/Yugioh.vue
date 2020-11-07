@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" :style="nameStyle">
-                        <span v-html="formatVHtml(form.name)" v-compress-rt v-compress-text="{width:1030,height:130}"></span>
+                        <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:130}"></span>
                     </div>
 
                     <div class="card-attribute">
@@ -21,7 +21,7 @@
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
                         <span>【</span>
-                        <span v-html="formatVHtml(spellTrapName)" v-compress-rt></span>
+                        <span v-html="formatVHtml(spellTrapName)" v-compress-text></span>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>】</span>
                     </div>
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-rt v-compress-text="{width:950,height:220}"></span>
+                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:220}"></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -73,18 +73,18 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-rt></span>
+                            <span v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-text></span>
                         </div>
 
                         <div class="description-info">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行不压缩-->
                                 <div v-if="index<form.description.split('\n').length-1">
-                                    <span v-html="formatVHtml(item)" v-compress-rt></span>
+                                    <span v-html="formatVHtml(item)" v-compress-text></span>
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <span v-html="formatVHtml(item)" v-compress-rt v-compress-text="{width:1170,height:lastDescriptionHeight}"></span>
+                                    <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight}"></span>
                                 </div>
                             </template>
                         </div>
@@ -663,53 +663,56 @@
             }
         },
         directives: {
-            // 文本压缩变形
-            compressText(el, binding) {
-                let scale = 1;
-                el.style.display = 'inline-block';
-                el.style.wordBreak = 'break-all';
-                el.style.width = `${binding.value.width}px`;
-                el.style.transform = 'none';
-                el.style.transformOrigin = '0 0';
-
-                while (el.clientHeight > binding.value.height && scale > 0) {
-                    scale -= 0.01;
-                    el.style.width = `${binding.value.width / scale}px`;
-                    el.style.transform = `scaleX(${scale})`;
-                }
-            },
-            // 压缩或拉伸注音文字
-            compressRt(el, binding, vnode) {
-                let rubyList = el.querySelectorAll('.ruby');
-                rubyList.forEach(ruby => {
-                    let rt = ruby.querySelector('.rt');
-                    let text = ruby.innerText.split('\n')[0];
-                    let rubyWidth = ruby.offsetWidth;
-                    let rtWidth = rt.offsetWidth;
-                    if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
-                        // 拉伸两端对齐
-                        rt.classList.add('justify');
-                    } else if (rtWidth > rubyWidth) {
-                        // 压缩
-                        if (rubyWidth / rtWidth < 0.6) {
-                            // 防止过度压缩，加宽ruby
-                            // 公式：(rubyWidth + widen) / rtWidth = 0.6
-                            let widen = 0.6 * rtWidth - rubyWidth;
-                            ruby.style.margin = `0 ${widen / 2}px`;
-                            rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth})`;
-                            rt.style.left = `${-widen / 2}px`;
+            compressText(el, binding, vnode) {
+                let that = vnode.context;
+                that.$nextTick(() => {
+                    // 压缩或拉伸注音文字
+                    let rubyList = el.querySelectorAll('.ruby');
+                    rubyList.forEach(ruby => {
+                        let rt = ruby.querySelector('.rt');
+                        let text = ruby.innerText.split('\n')[0];
+                        let rubyWidth = ruby.offsetWidth;
+                        let rtWidth = rt.offsetWidth;
+                        if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
+                            // 拉伸两端对齐
+                            rt.classList.add('justify');
+                        } else if (rtWidth > rubyWidth) {
+                            // 压缩
+                            if (rubyWidth / rtWidth < 0.6) {
+                                // 防止过度压缩，加宽ruby
+                                // 公式：(rubyWidth + widen) / rtWidth = 0.6
+                                let widen = 0.6 * rtWidth - rubyWidth;
+                                ruby.style.margin = `0 ${widen / 2}px`;
+                                rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth})`;
+                                rt.style.left = `${-widen / 2}px`;
+                            } else {
+                                rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                            }
                         } else {
-                            rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                            // 不变并居中
+                            rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
                         }
-                    } else {
-                        // 不变并居中
-                        rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
+                    });
+                    // 压缩文本文字
+                    if (binding.value?.width && binding.value?.height) {
+                        let scale = 1;
+                        el.style.display = 'inline-block';
+                        el.style.wordBreak = 'break-all';
+                        el.style.width = `${binding.value.width}px`;
+                        el.style.transform = 'none';
+                        el.style.transformOrigin = '0 0';
+
+                        while (el.clientHeight > binding.value.height && scale > 0) {
+                            scale -= 0.01;
+                            el.style.width = `${binding.value.width / scale}px`;
+                            el.style.transform = `scaleX(${scale})`;
+                        }
                     }
                 });
             },
             cardDescription(el, binding, vnode) {
                 let that = vnode.context;
-                setTimeout(() => {
+                that.$nextTick(() => {
                     that.getLastDescriptionHeight();
                 });
             }
