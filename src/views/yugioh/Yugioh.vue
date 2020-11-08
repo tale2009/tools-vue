@@ -91,9 +91,9 @@
                     </div>
 
                     <div class="atk-def-link">
-                        <el-image :src="baseImage + '/atk-def.png'"
+                        <el-image :src="baseImage + '/atk-def.svg'"
                                   v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'"></el-image>
-                        <el-image :src="baseImage + '/atk-link.png'" v-if="form.type==='monster'&&form.cardType==='link'"></el-image>
+                        <el-image :src="baseImage + '/atk-link.svg'" v-if="form.type==='monster'&&form.cardType==='link'"></el-image>
                     </div>
 
                     <div class="card-atk" v-if="['monster','pendulum'].includes(form.type)">
@@ -112,6 +112,10 @@
 
                     <div class="card-password" :style="passwordStyle">
                         <span>{{form.password}}</span>
+                    </div>
+
+                    <div class="card-copyright" v-if="form.copyright" :style="copyrightStyle">
+                        <el-image :src="copyrightSrc"></el-image>
                     </div>
 
                     <div class="card-laser" v-if="form.laser">
@@ -203,7 +207,6 @@
                                 <el-option label="融合／灵摆" value="fusion-pendulum"></el-option>
                                 <el-option label="同调／灵摆" value="synchro-pendulum"></el-option>
                                 <el-option label="超量／灵摆" value="xyz-pendulum"></el-option>
-                                <el-option label="连接／灵摆" value="link-pendulum" v-if="false"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="星级" v-if="showLevel">
@@ -253,6 +256,12 @@
                         </el-form-item>
                         <el-form-item label="密码">
                             <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+                        </el-form-item>
+                        <el-form-item label="版权">
+                            <el-select v-model="form.copyright" placeholder="请选择版权" clearable>
+                                <el-option label="简体中文" value="sc"></el-option>
+                                <el-option label="日文" value="jp"></el-option>
+                            </el-select>
                         </el-form-item>
                         <el-row :gutter="10">
                             <el-col :span="8">
@@ -341,10 +350,11 @@
                     description: '',
                     package: '',
                     password: '',
-                    scale: 0.5,
+                    copyright: '',
                     laser: false,
                     radius: false,
-                    cardBack: false
+                    cardBack: false,
+                    scale: 0.5
                 },
                 lastDescriptionHeight: 300,   // 最后一行效果压缩高度
                 kanjiKanaDialog: false
@@ -640,10 +650,10 @@
                     top = '1854px';
                     left = '116px';
                 } else if (this.form.type === 'monster' && this.form.cardType === 'link') {
-                    top = '1456px';
+                    top = '1455px';
                     right = '252px';
                 } else {
-                    top = '1456px';
+                    top = '1455px';
                     right = '148px';
                 }
                 return {
@@ -657,6 +667,21 @@
                 return {
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
+            },
+            copyrightStyle() {
+                let top;
+                if (this.form.copyright === 'sc') {
+                    top = '1934px';
+                } else if (this.form.copyright === 'jp') {
+                    top = '1935px';
+                }
+                return {
+                    top: top
+                };
+            },
+            copyrightSrc() {
+                let color = this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black';
+                return `${this.baseImage}/copyright-${this.form.copyright}-${color}.svg`;
             },
             exportFileName() {
                 return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
@@ -926,15 +951,23 @@
             .card-password {
                 position: absolute;
                 left: 66px;
-                top: 1930px;
+                top: 1929px;
                 font-family: ygo-password, serif;
                 font-size: 40px;
+                z-index: 20;
+            }
+
+            .card-copyright {
+                position: absolute;
+                right: 141px;
+                z-index: 20;
             }
 
             .card-laser {
                 position: absolute;
                 left: 1276px;
                 top: 1913px;
+                z-index: 20;
             }
 
             ::v-deep .ruby {
