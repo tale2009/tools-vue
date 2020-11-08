@@ -3,7 +3,7 @@
         <Page>
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
-                    <div class="card-name" :style="nameStyle">
+                    <div class="card-name" v-name-color="form.color">
                         <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:130}"></span>
                     </div>
 
@@ -529,34 +529,6 @@
                     marginBottom: `${(this.form.scale - 1) * 2031}px`
                 };
             },
-            nameStyle() {
-                let color;
-                if (this.form.color) {
-                    // 用户颜色
-                    color = this.form.color;
-                } else {
-                    // 自动颜色
-                    if (this.form.type === 'monster') {
-                        if (['xyz', 'link'].includes(this.form.cardType)) {
-                            color = 'white';
-                        } else {
-                            color = 'black';
-                        }
-                    } else if (this.form.type === 'pendulum') {
-                        if (['xyz-pendulum', 'link-pendulum'].includes(this.form.pendulumType)) {
-                            color = 'white';
-                        } else {
-                            color = 'black';
-                        }
-                    } else {
-                        color = 'white';
-                    }
-                }
-
-                return {
-                    color: color
-                };
-            },
             attributeSrc() {
                 let suffix = '';
                 if (this.form.language === 'jp') {
@@ -688,6 +660,21 @@
             }
         },
         directives: {
+            nameColor(el, binding, vnode) {
+                let that = vnode.context;
+                // 文本和注音颜色分开控制
+                let color = 'black';
+                // 自动颜色
+                if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
+                    (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
+                    color = 'white';
+                }
+                el.style.color = binding.value || color;
+                let rtList = el.querySelectorAll('.rt');
+                rtList.forEach(rt => {
+                    rt.style.color = color;
+                });
+            },
             compressText(el, binding, vnode) {
                 let that = vnode.context;
                 that.$nextTick(() => {
