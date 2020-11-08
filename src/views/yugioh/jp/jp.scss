@@ -19,17 +19,19 @@
     }
 
     .card-description {
+        top: 1522px;
         font-size: 38px;
-        letter-spacing: -2px;
+        line-height: 1.2;
 
         .card-effect {
             font-size: 46px;
             text-indent: -0.2em;
-            margin-bottom: -10px;
+            margin-bottom: -16px;
         }
 
         .description-info {
-            margin-top: 10px;
+            margin-top: 16px;
+            letter-spacing: -2px;
         }
     }
 }
