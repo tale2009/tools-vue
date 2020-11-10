@@ -248,8 +248,7 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="效果">
-                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description"
-                                      placeholder="请输入效果" @input="inputDescription"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果"></el-input>
                         </el-form-item>
                         <el-form-item label="卡包">
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
@@ -403,14 +402,10 @@
             },
             inputPendulumDescription() {
                 // 不保留换行符号
-                let list = Array.from(this.form.pendulumDescription);
-                list.forEach((value, index) => {
-                    if (value === '\n') {
-                        this.$message.warning('不允许换行符');
-                        list[index] = '';
-                    }
-                });
-                this.form.pendulumDescription = list.join('');
+                if (this.form.pendulumDescription.includes('\n')) {
+                    this.$message.warning('不允许换行符');
+                    this.form.pendulumDescription = this.form.pendulumDescription.replace('\n', '');
+                }
             },
             toggleArrow(item) {
                 if (this.form.arrowList.includes(item)) {
@@ -432,21 +427,6 @@
                     visibility: item === 9 ? 'hidden' : ''
                 };
             },
-            inputDescription() {
-                // 只保留两个换行符号
-                let list = Array.from(this.form.description);
-                let count = 0;
-                list.forEach((value, index) => {
-                    if (value === '\n') {
-                        count++;
-                        if (count > 3) {
-                            this.$message.warning('最多允许三个换行符');
-                            list[index] = '';
-                        }
-                    }
-                });
-                this.form.description = list.join('');
-            },
             // 获取最后一行效果的压缩高度
             getLastDescriptionHeight() {
                 let lastDescription = document.querySelector('.last-description');
@@ -459,7 +439,7 @@
                 } else {
                     this.lastDescriptionHeight = 0;
                 }
-                if (this.lastDescriptionHeight <= 0) {
+                if (this.lastDescriptionHeight <= 40) {
                     this.$message.warning('文本超过可压缩高度');
                 }
             },
