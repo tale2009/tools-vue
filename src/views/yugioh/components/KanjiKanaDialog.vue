@@ -41,6 +41,10 @@
                     }
                     return value;
                 }).join('');
+                // 复制到剪切板
+                this.$copyText(this.form.text).then(() => {
+                    this.$message.success('已复制到剪切板');
+                });
             },
             // 英文字母全角转半角
             fullToHalf(value) {

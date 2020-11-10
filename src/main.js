@@ -9,11 +9,13 @@ import '@/core/route-actived';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import base from '@/plugins/base';
+import VueClipboard from 'vue-clipboard2';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(base);
+Vue.use(VueClipboard);
 
 Vue.prototype.dayjs = dayjs;
 Vue.prototype._ = _;
