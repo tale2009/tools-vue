@@ -147,9 +147,9 @@
                         <el-form-item label="卡名">
                             <el-input v-model="form.name" placeholder="请输入卡名"></el-input>
                         </el-form-item>
-                        <el-form-item label="颜色" style="margin-bottom: 8px">
+                        <el-form-item label="颜色">
                             <el-color-picker v-model="form.color"></el-color-picker>
-                            <span class="tip" style="display: inline-block;transform:translateY(-10px)">（自动选择清空）</span>
+                            <span class="tip">（自动选择清空）</span>
                         </el-form-item>
                         <el-form-item label="类型">
                             <el-radio-group v-model="form.type">
