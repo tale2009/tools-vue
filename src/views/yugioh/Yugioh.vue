@@ -254,7 +254,10 @@
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
                         </el-form-item>
                         <el-form-item label="密码">
-                            <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+                            <div style="display: flex">
+                                <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+                                <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
+                            </div>
                         </el-form-item>
                         <el-form-item label="版权">
                             <el-select v-model="form.copyright" placeholder="请选择版权" clearable>
@@ -328,6 +331,7 @@
             return {
                 baseImage: 'https://static.kooriookami.top/yugioh/image',
                 fontLoading: true,
+                searchLoading: false,
                 form: {
                     language: 'sc',
                     name: '',
@@ -442,6 +446,21 @@
                 if (this.lastDescriptionHeight <= 40) {
                     this.$message.warning('文本超过可压缩高度');
                 }
+            },
+            searchCardByPassword() {
+                this.searchLoading = true;
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/card/' + this.form.password,
+                    params: {
+                        lang: this.form.language
+                    }
+                }).then(res => {
+                    let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+                    Object.assign(this.form, cardInfo);
+                }).finally(() => {
+                    this.searchLoading = false;
+                });
             },
             formatVHtml(value) {
                 return value.replace(/\[(.*?)\((.*?)\)]/g, '<span class="ruby">$1<span class="rt">$2</span></span>');

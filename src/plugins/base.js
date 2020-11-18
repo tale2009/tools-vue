@@ -1,6 +1,6 @@
 const mime = require('mime');
 
-const base = {
+export default {
     install(Vue, options) {
         Vue.prototype.config = require('@/assets/json/config.json');
         //重置表单
@@ -53,5 +53,3 @@ const base = {
         };
     }
 };
-
-export default base;

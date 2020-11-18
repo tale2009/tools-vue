@@ -20,7 +20,6 @@
         props: ['kanjiKanaDialog'],
         data() {
             return {
-                kanjiKanaMap: require('@/assets/json/kanji-kana.json'),
                 form: {
                     text: ''
                 }
@@ -32,31 +31,7 @@
                 this.$emit('update:kanjiKanaDialog', false);
             },
             addKana() {
-                let text = this.fullToHalf(this.form.text);
-                // 重新排序kanjiKanaMap，最长key的放在最前
-                let kanjiKanaReg = new RegExp(Object.keys(this.kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
-                this.form.text = text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
-                    if (!/\[.*?\(.*?\)]/g.test(value)) {
-                        return value.replace(kanjiKanaReg, s => this.kanjiKanaMap[s]);
-                    }
-                    return value;
-                }).join('');
-            },
-            // 英文字母全角转半角
-            fullToHalf(value) {
-                // 全角A：65313，半角A：65
-                // 全角Z：65338，半角Z：90
-                // 全角a：65345，半角a：97
-                // 全角z：65370，半角z：122
-                // 全角-半角=65248
-                let charList = Array.from(value).map(char => {
-                    let code = char.charCodeAt();
-                    if ((code >= 65313 && code <= 65338) || (code >= 65345 && code <= 65370)) {
-                        return String.fromCharCode(code - 65248);
-                    }
-                    return char;
-                });
-                return charList.join('');
+                this.form.text = this.kanjiToKana(this.form.text);
             }
         }
     };

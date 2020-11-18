@@ -7,6 +7,7 @@
         "build": "vue-cli-service build"
     },
     "dependencies": {
+        "axios": "^0.21.0",
         "core-js": "^3.7.0",
         "dayjs": "^1.9.6",
         "element-plus": "^1.0.1-alpha.14",
@@ -15,6 +16,7 @@
         "lodash": "^4.17.20",
         "mime": "^2.4.6",
         "normalize.css": "^8.0.1",
+        "qs": "^6.9.4",
         "vue": "^2.6.12",
         "vue-router": "^3.4.9",
         "vuex": "^3.5.1"

@@ -3,7 +3,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 // 保存配置文件
 function saveConfig() {
-    if (process.env.NODE_ENV === 'production'){
+    if (process.env.NODE_ENV === 'production') {
         let config = {
             updateTime: new Date().getTime()
         };
