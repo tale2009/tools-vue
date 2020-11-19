@@ -661,17 +661,19 @@
         directives: {
             nameColor(el, binding, vnode) {
                 let that = vnode.context;
-                // 文本和注音颜色分开控制
-                let color = 'black';
-                // 自动颜色
-                if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
-                    (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
-                    color = 'white';
-                }
-                el.style.color = binding.value || color;
-                let rtList = el.querySelectorAll('.rt');
-                rtList.forEach(rt => {
-                    rt.style.color = color;
+                that.$nextTick(() => {
+                    // 文本和注音颜色分开控制
+                    let color = 'black';
+                    // 自动颜色
+                    if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
+                        (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
+                        color = 'white';
+                    }
+                    el.style.color = binding.value || color;
+                    let rtList = el.querySelectorAll('.rt');
+                    rtList.forEach(rt => {
+                        rt.style.color = color;
+                    });
                 });
             },
             compressText(el, binding, vnode) {

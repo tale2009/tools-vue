@@ -2,13 +2,12 @@ export default {
     install(Vue, options) {
         // 解析游戏王卡片
         Vue.prototype.parseYugiohCard = function (data, lang) {
-            console.log(data);
             let card = {
                 name: parseName(data),
                 type: parseType(data),
                 attribute: parseAttribute(data),
                 icon: parseIcon(data),
-                image: '',
+                image: parseImage(data),
                 cardType: parseCardType(data),
                 pendulumType: parsePendulumType(data),
                 level: parseLevelRank(data),
@@ -48,6 +47,7 @@ export default {
 };
 
 const kanjiKanaMap = require('@/assets/json/kanji-kana.json');
+const monsterTypeList = require('@/assets/json/monster-type-list.json');
 
 // 英文字母全角转半角
 function characterToHalf(value) {
@@ -101,7 +101,7 @@ function parseType(data) {
     } else if (data.type & 0x1) {
         return 'monster';
     } else {
-        return '';
+        return 'monster';
     }
 }
 
@@ -121,12 +121,8 @@ function parseAttribute(data) {
         return 'water';
     } else if (data.attribute & 0x1) {
         return 'earth';
-    } else if (data.type & 0x4) {
-        return 'trap';
-    } else if (data.type & 0x2) {
-        return 'spell';
     } else {
-        return '';
+        return 'light';
     }
 }
 
@@ -148,6 +144,10 @@ function parseIcon(data) {
     }
 }
 
+function parseImage(data) {
+    return `https://ymssx.gitee.io/card/pics/${data.id}.jpg`;
+}
+
 function parseCardType(data) {
     if (data.type & 0x4000000) {
         return 'link';
@@ -166,7 +166,7 @@ function parseCardType(data) {
     } else if (data.type & 0x10) {
         return 'normal';
     } else {
-        return '';
+        return 'normal';
     }
 }
 
@@ -185,10 +185,10 @@ function parsePendulumType(data) {
         } else if (data.type & 0x10) {
             return 'normal-pendulum';
         } else {
-            return '';
+            return 'normal-pendulum';
         }
     } else {
-        return '';
+        return 'normal-pendulum';
     }
 }
 
@@ -197,7 +197,7 @@ function parseLevelRank(data) {
     if (number <= 12) {
         return number;
     } else {
-        return 0;
+        return 1;
     }
 }
 
@@ -220,7 +220,107 @@ function parsePendulumDescription(data) {
 }
 
 function parseMonsterType(data, lang) {
-    return '';
+    let list = [];
+    // 先判断种族
+    if (data.race & 0x1000000) {
+        list.push('cyberse');
+    } else if (data.race & 0x800000) {
+        list.push('wyrm');
+    } else if (data.race & 0x400000) {
+        list.push('creatorGod');
+    } else if (data.race & 0x200000) {
+        list.push('divineBeast');
+    } else if (data.race & 0x100000) {
+        list.push('psychic');
+    } else if (data.race & 0x80000) {
+        list.push('reptile');
+    } else if (data.race & 0x40000) {
+        list.push('seaSerpent');
+    } else if (data.race & 0x20000) {
+        list.push('fish');
+    } else if (data.race & 0x10000) {
+        list.push('dinosaur');
+    } else if (data.race & 0x8000) {
+        list.push('beastWarrior');
+    } else if (data.race & 0x4000) {
+        list.push('beast');
+    } else if (data.race & 0x2000) {
+        list.push('dragon');
+    } else if (data.race & 0x1000) {
+        list.push('thunder');
+    } else if (data.race & 0x800) {
+        list.push('insect');
+    } else if (data.race & 0x400) {
+        list.push('plant');
+    } else if (data.race & 0x200) {
+        list.push('wingedBeast');
+    } else if (data.race & 0x100) {
+        list.push('rock');
+    } else if (data.race & 0x80) {
+        list.push('pyro');
+    } else if (data.race & 0x40) {
+        list.push('aqua');
+    } else if (data.race & 0x20) {
+        list.push('machine');
+    } else if (data.race & 0x10) {
+        list.push('zombie');
+    } else if (data.race & 0x8) {
+        list.push('fiend');
+    } else if (data.race & 0x4) {
+        list.push('fairy');
+    } else if (data.race & 0x2) {
+        list.push('spellcaster');
+    } else if (data.race & 0x1) {
+        list.push('warrior');
+    }
+    // 判断其他,顺序根据实卡做调整
+    if (data.type & 0x2000000) {
+        list.push('spsummon');
+    }
+    if (data.type & 0x4000000) {
+        list.push('link');
+    } else if (data.type & 0x1000000) {
+        list.push('pendulum');
+    } else if (data.type & 0x800000) {
+        list.push('xyz');
+    } else if (data.type & 0x2000) {
+        list.push('synchro');
+    } else if (data.type & 0x80) {
+        list.push('ritual');
+    } else if (data.type & 0x40) {
+        list.push('fusion');
+    }
+    if (data.type & 0x400000) {
+        list.push('toon');
+    }
+    if (data.type & 0x200000) {
+        list.push('flip');
+    }
+    if (data.type & 0x1000) {
+        list.push('tuner');
+    }
+    if (data.type & 0x800) {
+        list.push('gemini');
+    }
+    if (data.type & 0x400) {
+        list.push('union');
+    }
+    if (data.type & 0x200) {
+        list.push('spirit');
+    }
+    if (data.type & 0x20) {
+        list.push('effect');
+    } else if (data.type & 0x10) {
+        list.push('normal');
+    }
+    list = list.map(value => monsterTypeList[lang][value]).filter(value => value);
+    if (['sc', 'en'].includes(lang)) {
+        return list.join('/');
+    } else if (['tc', 'jp'].includes(lang)) {
+        return list.join('／');
+    } else {
+        return list.join('/');
+    }
 }
 
 function parseAtk(data) {
