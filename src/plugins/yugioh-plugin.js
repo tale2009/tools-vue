@@ -145,7 +145,7 @@ function parseIcon(data) {
 }
 
 function parseImage(data) {
-    return `https://ymssx.gitee.io/card/pics/${data.id}.jpg`;
+    return `https://tools.kooriookami.top/yugioh-image/${data.id}.jpg`;
 }
 
 function parseCardType(data) {

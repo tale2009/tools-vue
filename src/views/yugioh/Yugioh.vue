@@ -289,8 +289,11 @@
 
                     <div class="button-group">
                         <el-row :gutter="10">
-                            <el-col :span="24">
+                            <el-col :span="12">
                                 <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-button plain size="medium" :loading="randomLoading" @click="getRandomCard">随机生成</el-button>
                             </el-col>
                             <el-col :span="12">
                                 <el-upload action="/" :show-file-list="false" accept="application/json" :before-upload="importJson">
@@ -332,6 +335,7 @@
                 baseImage: 'https://static.kooriookami.top/yugioh/image',
                 fontLoading: true,
                 searchLoading: false,
+                randomLoading: false,
                 form: {
                     language: 'sc',
                     name: '',
@@ -372,15 +376,8 @@
             });
         },
         methods: {
-            changeLanguage(value) {
-                if (value === 'sc') {
-                    Object.assign(this.form, scDemo);
-                } else if (value === 'tc') {
-                    Object.assign(this.form, tcDemo);
-                } else if (value === 'jp') {
-                    Object.assign(this.form, jpDemo);
-                }
-
+            // 刷新字体
+            refreshFont() {
                 setTimeout(() => {
                     this.fontLoading = true;
                     document.fonts.ready.then(() => {
@@ -389,6 +386,16 @@
                         this.$forceUpdate();
                     });
                 });
+            },
+            changeLanguage(value) {
+                if (value === 'sc') {
+                    Object.assign(this.form, scDemo);
+                } else if (value === 'tc') {
+                    Object.assign(this.form, tcDemo);
+                } else if (value === 'jp') {
+                    Object.assign(this.form, jpDemo);
+                }
+                this.refreshFont();
             },
             beforeUpload(file) {
                 let flag = file.type.includes('image');
@@ -462,6 +469,21 @@
                     this.searchLoading = false;
                 });
             },
+            getRandomCard() {
+                this.randomLoading = true;
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/random-card',
+                    params: {
+                        lang: this.form.language
+                    }
+                }).then(res => {
+                    let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+                    Object.assign(this.form, cardInfo);
+                }).finally(() => {
+                    this.randomLoading = false;
+                });
+            },
             formatVHtml(value) {
                 return value.replace(/\[(.*?)\((.*?)\)]/g, '<span class="ruby">$1<span class="rt">$2</span></span>');
             },
@@ -473,14 +495,7 @@
                         let data = JSON.parse(e.target?.result);
                         this.form = Object.assign(this.form, data);
                         // 字体可能加载
-                        setTimeout(() => {
-                            this.fontLoading = true;
-                            document.fonts.ready.then(() => {
-                                this.fontLoading = false;
-                                // 强制更新视图
-                                this.$forceUpdate();
-                            });
-                        });
+                        this.refreshFont();
                     } catch (e) {
                         this.$message.error('数据导入失败');
                     }
@@ -728,6 +743,17 @@
                 that.$nextTick(() => {
                     that.getLastDescriptionHeight();
                 });
+            }
+        },
+        watch: {
+            // 图片转base64
+            async 'form.image'() {
+                if (this.form.image && !this.form.image.startsWith('data:image')) {
+                    let dataURL = await this.imageToDataURL(this.form.image);
+                    if (dataURL) {
+                        this.form.image = dataURL;
+                    }
+                }
             }
         }
     };

@@ -15,7 +15,7 @@ module.exports = {
     publicPath: './',
     productionSourceMap: false, //打包不生成map文件
     devServer: {
-        port: 8100
+        port: 8010
     },
     css: {
         loaderOptions: {

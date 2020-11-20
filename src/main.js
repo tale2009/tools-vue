@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
     Vue.prototype.baseURL = 'https://tools.kooriookami.top/api';
 } else {
     // 本地环境
-    Vue.prototype.baseURL = 'http://localhost:7010/api/';
+    Vue.prototype.baseURL = 'http://localhost:7010/api';
 }
 
 new Vue({
