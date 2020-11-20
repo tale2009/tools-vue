@@ -747,12 +747,11 @@
         },
         watch: {
             // 图片转base64
-            async 'form.image'() {
+            'form.image'() {
                 if (this.form.image && !this.form.image.startsWith('data:image')) {
-                    let dataURL = await this.imageToDataURL(this.form.image);
-                    if (dataURL) {
-                        this.form.image = dataURL;
-                    }
+                    this.imageToDataURL(this.form.image).then(data => {
+                        this.form.image = data;
+                    });
                 }
             }
         }
