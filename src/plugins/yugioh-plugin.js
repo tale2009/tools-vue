@@ -212,7 +212,7 @@ function parsePendulumScale(data) {
 
 function parsePendulumDescription(data) {
     if (parseType(data) === 'pendulum') {
-        let list = data.desc.replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
+        let list = characterToHalf(data.desc).replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
         return list?.[1].replace(/\d+→|\n/g, '').trim();
     } else {
         return '';
@@ -375,7 +375,7 @@ function parseArrowList(data) {
 }
 
 function parseDescription(data) {
-    let description = data.desc.replace(/\r/g, '\n').replace(/\n\n/g, '\n');
+    let description = characterToHalf(data.desc).replace(/\r/g, '\n').replace(/\n\n/g, '\n');
     if (parseType(data) === 'pendulum') {
         let list = description.split(/【.*?】/);
         description = list?.[2].replace(/\n/g, '').trim();

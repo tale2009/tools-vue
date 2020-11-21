@@ -672,7 +672,7 @@
                 if (this.form.copyright === 'sc') {
                     top = '1934px';
                 } else if (this.form.copyright === 'jp') {
-                    top = '1935px';
+                    top = '1936px';
                 }
                 return {
                     top: top
