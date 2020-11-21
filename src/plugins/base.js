@@ -1,5 +1,3 @@
-import loadImage from 'blueimp-load-image';
-
 const mime = require('mime');
 
 export default {
@@ -17,30 +15,6 @@ export default {
                 return Vue.prototype.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
             }
         });
-
-        Vue.prototype.imageToDataURL = function (url) {
-            return new Promise((resolve => {
-                loadImage(url, {
-                    canvas: true,
-                    crossOrigin: 'Anonymous'
-                }).then(data => {
-                    resolve(data.image.toDataURL('image/png', 1));
-                });
-            }));
-        };
-
-        Vue.prototype.fileToDataURL = function (file) {
-            return new Promise(((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (res) => {
-                    resolve(res);
-                };
-                reader.onerror = (err) => {
-                    reject(err);
-                };
-                reader.readAsDataURL(file);
-            }));
-        };
 
         Vue.prototype.dataURLtoBlob = function (dataURL) {
             let arr = dataURL.split(',');

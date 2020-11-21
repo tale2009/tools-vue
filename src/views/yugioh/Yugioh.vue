@@ -27,7 +27,11 @@
                     </div>
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
-                        <!--html2canvas不支持object-fit，只能用background-->
+                        <el-image :src="form.image">
+                            <div slot="placeholder" class="image-loading">
+                                <i class="fal fa-spinner fa-pulse"></i>
+                            </div>
+                        </el-image>
                     </div>
 
                     <div class="card-mask" :style="maskStyle">
@@ -256,7 +260,9 @@
                         <el-form-item label="密码">
                             <div style="display: flex">
                                 <el-input v-model="form.password" placeholder="请输入密码"></el-input>
-                                <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
+                                <el-tooltip content="通过密码搜索卡片" placement="top">
+                                    <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
+                                </el-tooltip>
                             </div>
                         </el-form-item>
                         <el-form-item label="版权">
@@ -304,7 +310,7 @@
                                 <el-button plain size="medium" @click="exportJson">导出数据</el-button>
                             </el-col>
                             <el-col :span="24">
-                                <el-button type="primary" size="medium" @click="exportImage">导出图片</el-button>
+                                <el-button type="primary" size="medium" :loading="exportLoading" @click="exportImage">导出图片</el-button>
                             </el-col>
                         </el-row>
                     </div>
@@ -320,6 +326,7 @@
     import Page from '@/components/page/Page';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
+    import loadImage from 'blueimp-load-image';
     import scDemo from './sc/sc-demo';
     import tcDemo from './tc/tc-demo';
     import jpDemo from './jp/jp-demo';
@@ -336,6 +343,7 @@
                 fontLoading: true,
                 searchLoading: false,
                 randomLoading: false,
+                exportLoading: false,
                 form: {
                     language: 'sc',
                     name: '',
@@ -400,13 +408,16 @@
             beforeUpload(file) {
                 let flag = file.type.includes('image');
                 if (flag) {
-                    this.fileToDataURL(file).then(res => {
-                        this.form.image = res.target.result;
+                    loadImage(file, {
+                        canvas: true,
+                        aspectRatio: 1
+                    }).then(data => {
+                        this.form.image = data.image.toDataURL('image/png', 1);
                     });
                 } else {
                     this.$message.warning('请选择正确图片格式');
                 }
-                return flag;
+                return false;
             },
             deleteImage() {
                 this.form.image = '';
@@ -507,6 +518,7 @@
                 this.downloadBlob(blob, this.exportFileName);
             },
             exportImage() {
+                this.exportLoading = true;
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
                     useCORS: true,
@@ -517,6 +529,8 @@
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
                     this.downloadBlob(blob, this.exportFileName);
+                }).finally(() => {
+                    this.exportLoading = false;
                 });
             }
         },
@@ -612,8 +626,7 @@
                     left: left,
                     top: top,
                     width: width,
-                    height: height,
-                    background: `url(${this.form.image}) no-repeat center/cover`
+                    height: height
                 };
             },
             maskStyle() {
@@ -749,8 +762,12 @@
             // 图片转base64
             'form.image'() {
                 if (this.form.image && !this.form.image.startsWith('data:image')) {
-                    this.imageToDataURL(this.form.image).then(data => {
-                        this.form.image = data;
+                    loadImage(this.form.image, {
+                        canvas: true,
+                        aspectRatio: 1,
+                        crossOrigin: 'Anonymous'
+                    }).then(data => {
+                        this.form.image = data.image.toDataURL('image/png', 1);
                     });
                 }
             }
@@ -835,6 +852,21 @@
 
             .card-image {
                 position: absolute;
+
+                .el-image {
+                    width: 100%;
+                    height: 100%;
+
+                    .image-loading {
+                        display: flex;
+                        height: 100%;
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 120px;
+                        color: $normal-color;
+                    }
+                }
             }
 
             .card-mask {
