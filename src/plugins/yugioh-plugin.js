@@ -380,8 +380,8 @@ function parseDescription(data) {
         let list = description.split(/【.*?】/);
         description = list?.[2].replace(/\n/g, '').trim();
     } else {
-        // 融合、同调、超量、连接保留一个换行
-        if (['fusion', 'synchro', 'xyz', 'link'].includes(parseCardType(data))) {
+        // 融合、同调、超量、连接、衍生物保留一个换行
+        if (['fusion', 'synchro', 'xyz', 'link', 'token'].includes(parseCardType(data))) {
             let lfCount = 0;
             let charList = Array.from(description).map(char => {
                 if (char === '\n') {

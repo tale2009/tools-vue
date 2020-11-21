@@ -90,6 +90,8 @@
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
                                     <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight}"></span>
                                 </div>
+                                <!--item为空提供换行-->
+                                <br v-if="!item">
                             </template>
                         </div>
                     </div>
