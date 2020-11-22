@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" v-name-color="form.color">
-                        <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:130}"></span>
+                        <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:200}"></span>
                     </div>
 
                     <div class="card-attribute">
@@ -20,10 +20,12 @@
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span>【</span>
+                        <span v-if="form.language==='en'">[</span>
+                        <span v-else>【</span>
                         <span v-html="formatVHtml(spellTrapName)" v-compress-text></span>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
-                        <span>】</span>
+                        <span v-if="form.language==='en'">]</span>
+                        <span v-else>】</span>
                     </div>
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
@@ -51,7 +53,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:220}"></span>
+                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:230}"></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -80,10 +82,11 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-text></span>
+                            <span v-if="form.language==='en'" v-html="`[${formatVHtml(form.monsterType)}]`" v-compress-text></span>
+                            <span v-else v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-text></span>
                         </div>
 
-                        <div class="description-info">
+                        <div class="description-info" :style="descriptionStyle">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行不压缩-->
                                 <div v-if="index<form.description.split('\n').length-1">
@@ -151,6 +154,7 @@
                                 <el-option label="简体中文" value="sc"></el-option>
                                 <el-option label="繁体中文" value="tc"></el-option>
                                 <el-option label="日文" value="jp"></el-option>
+                                <el-option label="英文" value="en"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="卡名">
@@ -180,8 +184,7 @@
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="图标" v-if="['spell','trap'].includes(form.type)">
-                            <el-select v-model="form.icon" placeholder="请选择卡类">
-                                <el-option label="通常" value=""></el-option>
+                            <el-select v-model="form.icon" placeholder="请选择图标" clearable>
                                 <el-option label="装备" value="equip"></el-option>
                                 <el-option label="场地" value="filed"></el-option>
                                 <el-option label="速攻" value="quick-play"></el-option>
@@ -337,6 +340,7 @@
     import scDemo from './sc/sc-demo';
     import tcDemo from './tc/tc-demo';
     import jpDemo from './jp/jp-demo';
+    import enDemo from './en/en-demo';
 
     export default {
         name: 'Yugioh',
@@ -409,6 +413,8 @@
                     Object.assign(this.form, tcDemo);
                 } else if (value === 'jp') {
                     Object.assign(this.form, jpDemo);
+                } else if (value === 'en') {
+                    Object.assign(this.form, enDemo);
                 }
                 this.refreshFont();
             },
@@ -568,6 +574,8 @@
                 let suffix = '';
                 if (this.form.language === 'jp') {
                     suffix = '-jp';
+                } else if (this.form.language === 'en') {
+                    suffix = '-en';
                 }
                 if (['monster', 'pendulum'].includes(this.form.type)) {
                     return `${this.baseImage}/attribute-${this.form.attribute}${suffix}.png`;
@@ -594,6 +602,12 @@
                         name = '[魔(ま)][法(ほう)]カード';
                     } else if (this.form.type === 'trap') {
                         name = '[罠(トラップ)]カード';
+                    }
+                } else if (this.form.language === 'en') {
+                    if (this.form.type === 'spell') {
+                        name = 'Spell Card';
+                    } else if (this.form.type === 'trap') {
+                        name = 'Trap Card';
                     }
                 }
                 return name;
@@ -667,6 +681,18 @@
                     top: top,
                     left: left,
                     right: right
+                };
+            },
+            descriptionStyle() {
+                let fontFamily;
+                if (this.form.language === 'en') {
+                    if ((this.form.type === 'monster' && this.form.cardType === 'normal') ||
+                        (this.form.type === 'pendulum' && this.form.pendulumType === 'normal-pendulum')) {
+                        fontFamily = 'ygo-en-italic';
+                    }
+                }
+                return {
+                    fontFamily: fontFamily
                 };
             },
             passwordStyle() {
@@ -745,15 +771,33 @@
                     if (binding.value?.width && binding.value?.height) {
                         let scale = 1;
                         el.style.display = 'inline-block';
-                        el.style.wordBreak = 'break-all';
                         el.style.width = `${binding.value.width}px`;
                         el.style.transform = 'none';
                         el.style.transformOrigin = '0 0';
+                        let pendulumDescription = document.querySelector('.pendulum-description');
+                        if (pendulumDescription) {
+                            pendulumDescription.style.fontSize = '';
+                        }
+                        let descriptionInfo = document.querySelector('.description-info');
+                        if (descriptionInfo) {
+                            descriptionInfo.style.fontSize = '';
+                        }
 
                         while (el.clientHeight > binding.value.height && scale > 0) {
                             scale -= 0.01;
                             el.style.width = `${binding.value.width / scale}px`;
                             el.style.transform = `scaleX(${scale})`;
+                        }
+                        // 如果是英文，灵摆和效果栏字体判断缩小
+                        if (that.form.language === 'en' && scale < 1) {
+                            let parentClassList = Array.from(el.parentNode.classList);
+                            if (parentClassList.includes('pendulum-description')) {
+                                console.log(123);
+                                pendulumDescription.style.fontSize = '16px';
+                            }
+                            if (parentClassList.includes('last-description')) {
+                                descriptionInfo.style.fontSize = '16px';
+                            }
                         }
                     }
                 });
@@ -771,6 +815,7 @@
                 if (this.form.image && !this.form.image.startsWith('data:image')) {
                     loadImage(this.form.image, {
                         canvas: true,
+                        top: 0,
                         aspectRatio: 1,
                         crossOrigin: 'Anonymous'
                     }).then(data => {
@@ -786,6 +831,7 @@
     @import "./sc/sc";
     @import "./tc/tc";
     @import "./jp/jp";
+    @import "./en/en";
 
     .yugioh-container {
         .yugioh-card {
@@ -796,14 +842,13 @@
             color: black;
             white-space: pre-wrap;
             transform-origin: 0 0;
+            overflow: hidden;
 
             .card-name {
                 position: absolute;
-                font-size: 108px;
                 left: 116px;
                 width: 1030px;
                 max-height: 130px;
-                overflow: hidden;
 
                 ::v-deep .ruby {
                     .rt {
@@ -908,7 +953,6 @@
             .pendulum-description {
                 position: absolute;
                 left: 221px;
-                top: 1288px;
                 width: 950px;
                 text-align: justify;
                 z-index: 20;

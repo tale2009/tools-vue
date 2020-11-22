@@ -3,6 +3,7 @@
 
     .card-name {
         top: 95px;
+        font-size: 108px;
         letter-spacing: -2px;
     }
 
@@ -11,9 +12,14 @@
         font-size: 80px;
         right: 130px;
         letter-spacing: -2px;
+
+        .spell-trap-icon {
+            margin-top: 10px;
+        }
     }
 
     .pendulum-description {
+        top: 1288px;
         font-size: 36px;
         letter-spacing: -2px;
     }
