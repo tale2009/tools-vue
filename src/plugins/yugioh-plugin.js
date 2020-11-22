@@ -33,7 +33,6 @@ export default {
         };
         // 添加假名
         Vue.prototype.kanjiToKana = function (text = '') {
-            text = characterToHalf(text);
             // 重新排序kanjiKanaMap，最长key的放在最前
             let kanjiKanaReg = new RegExp(Object.keys(kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
             return text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
@@ -60,6 +59,8 @@ function characterToHalf(value) {
         let code = char.charCodeAt();
         if (char === '　') {
             return ' ';
+        } else if (char === '﹒') {
+            return '·';
         } else if (['＠', '．', '＆', '？', '！'].includes(char) || (code >= 65313 && code <= 65338) || (code >= 65345 && code <= 65370)) {
             return String.fromCharCode(code - 65248);
         }
@@ -212,7 +213,8 @@ function parsePendulumScale(data) {
 
 function parsePendulumDescription(data) {
     if (parseType(data) === 'pendulum') {
-        let list = characterToHalf(data.desc).replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
+        let description = characterToHalf(data.desc);
+        let list = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
         return list?.[1].replace(/\d+→|\n/g, '').trim();
     } else {
         return '';
@@ -375,7 +377,8 @@ function parseArrowList(data) {
 }
 
 function parseDescription(data) {
-    let description = characterToHalf(data.desc).replace(/\r/g, '\n').replace(/\n\n/g, '\n');
+    let description = characterToHalf(data.desc);
+    description = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n');
     if (parseType(data) === 'pendulum') {
         let list = description.split(/【.*?】/);
         description = list?.[2].replace(/\n/g, '').trim();
