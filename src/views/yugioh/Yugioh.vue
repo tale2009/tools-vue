@@ -780,8 +780,12 @@
 
                         while (el.clientHeight > binding.value.height && scale > 0) {
                             // 如果是英文，灵摆和效果栏字体判断缩小
-                            if (that.form.language === 'en' && binding.value?.autoFontSize) {
-                                autoFontSizeElement?.classList.add('small-description');
+                            if (that.form.language === 'en' && binding.value?.autoFontSize && scale < 0.7) {
+                                if (!autoFontSizeElement?.classList.contains('small-description')) {
+                                    // 多一层判断防止死循环
+                                    autoFontSizeElement?.classList.add('small-description');
+                                    scale = 1;
+                                }
                             }
                             scale -= 0.01;
                             el.style.width = `${binding.value.width / scale}px`;
