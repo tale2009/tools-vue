@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:230}"></span>
+                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:230,autoFontSize:'.pendulum-description'}"></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -94,7 +94,7 @@
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight}"></span>
+                                    <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight,autoFontSize:'.card-description'}"></span>
                                 </div>
                                 <!--item为空提供换行-->
                                 <br v-if="!item">
@@ -772,32 +772,20 @@
                         let scale = 1;
                         el.style.display = 'inline-block';
                         el.style.width = `${binding.value.width}px`;
-                        el.style.transform = 'none';
+                        el.style.transform = '';
                         el.style.transformOrigin = '0 0';
-                        let pendulumDescription = document.querySelector('.pendulum-description');
-                        if (pendulumDescription) {
-                            pendulumDescription.style.fontSize = '';
-                        }
-                        let descriptionInfo = document.querySelector('.description-info');
-                        if (descriptionInfo) {
-                            descriptionInfo.style.fontSize = '';
-                        }
+
+                        let autoFontSizeElement = document.querySelector(binding.value?.autoFontSize);
+                        autoFontSizeElement?.classList.remove('small-description');
 
                         while (el.clientHeight > binding.value.height && scale > 0) {
+                            // 如果是英文，灵摆和效果栏字体判断缩小
+                            if (that.form.language === 'en' && binding.value?.autoFontSize) {
+                                autoFontSizeElement?.classList.add('small-description');
+                            }
                             scale -= 0.01;
                             el.style.width = `${binding.value.width / scale}px`;
                             el.style.transform = `scaleX(${scale})`;
-                        }
-                        // 如果是英文，灵摆和效果栏字体判断缩小
-                        if (that.form.language === 'en' && scale < 1) {
-                            let parentClassList = Array.from(el.parentNode.classList);
-                            if (parentClassList.includes('pendulum-description')) {
-                                console.log(123);
-                                pendulumDescription.style.fontSize = '16px';
-                            }
-                            if (parentClassList.includes('last-description')) {
-                                descriptionInfo.style.fontSize = '16px';
-                            }
                         }
                     }
                 });
