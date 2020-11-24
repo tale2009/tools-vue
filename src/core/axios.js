@@ -1,7 +1,7 @@
 import axios from 'axios';
 import app from '@/main';
 import qs from 'qs';
-import {Notification} from 'element-plus';
+import {ElNotification} from 'element-plus';
 
 // 请求拦截器
 axios.interceptors.request.use(config => {
@@ -19,7 +19,7 @@ axios.interceptors.response.use(response => {
 }, error => {
     // 对响应错误做点什么
     let message = error?.response?.data?.message ?? error;
-    Notification.error({
+    ElNotification.error({
         title: '错误',
         message: message
     });

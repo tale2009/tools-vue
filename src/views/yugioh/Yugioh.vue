@@ -30,12 +30,16 @@
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
                         <el-image :src="form.image">
-                            <div slot="placeholder" class="image-slot">
-                                <i class="fal fa-spinner fa-pulse"></i>
-                            </div>
-                            <div slot="error" class="image-slot">
-                                <i class="fal fa-image"></i>
-                            </div>
+                            <template #placeholder>
+                                <div class="image-slot">
+                                    <i class="fal fa-spinner fa-pulse"></i>
+                                </div>
+                            </template>
+                            <template #error>
+                                <div class="image-slot">
+                                    <i class="fal fa-image"></i>
+                                </div>
+                            </template>
                         </el-image>
                     </div>
 
@@ -338,7 +342,6 @@
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
     import loadImage from 'blueimp-load-image';
-    import _ from 'lodash';
     import scDemo from './sc/sc-demo';
     import tcDemo from './tc/tc-demo';
     import jpDemo from './jp/jp-demo';
