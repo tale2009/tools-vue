@@ -4,7 +4,7 @@
             <template>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" v-name-color="form.color">
-                        <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:130}"></span>
+                        <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:200}"></span>
                     </div>
 
                     <div class="card-attribute">
@@ -20,14 +20,23 @@
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span>【</span>
+                        <span v-if="form.language==='en'">[</span>
+                        <span v-else>【</span>
                         <span v-html="formatVHtml(spellTrapName)" v-compress-text></span>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
-                        <span>】</span>
+                        <span v-if="form.language==='en'">]</span>
+                        <span v-else>】</span>
                     </div>
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
-                        <!--html2canvas不支持object-fit，只能用background-->
+                        <el-image :src="form.image">
+                            <div slot="placeholder" class="image-slot">
+                                <i class="fal fa-spinner fa-pulse"></i>
+                            </div>
+                            <div slot="error" class="image-slot">
+                                <i class="fal fa-image"></i>
+                            </div>
+                        </el-image>
                     </div>
 
                     <div class="card-mask" :style="maskStyle">
@@ -44,7 +53,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:220}"></span>
+                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:230,autoFontSize:'.pendulum-description'}"></span>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -73,10 +82,11 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-text></span>
+                            <span v-if="form.language==='en'" v-html="`[${formatVHtml(form.monsterType)}]`" v-compress-text></span>
+                            <span v-else v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-text></span>
                         </div>
 
-                        <div class="description-info">
+                        <div class="description-info" :style="descriptionStyle">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行不压缩-->
                                 <div v-if="index<form.description.split('\n').length-1">
@@ -84,8 +94,10 @@
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight}"></span>
+                                    <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight,autoFontSize:'.card-description'}"></span>
                                 </div>
+                                <!--item为空提供换行-->
+                                <br v-if="!item">
                             </template>
                         </div>
                     </div>
@@ -142,14 +154,15 @@
                                 <el-option label="简体中文" value="sc"></el-option>
                                 <el-option label="繁体中文" value="tc"></el-option>
                                 <el-option label="日文" value="jp"></el-option>
+                                <el-option label="英文" value="en"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="卡名">
                             <el-input v-model="form.name" placeholder="请输入卡名"></el-input>
                         </el-form-item>
-                        <el-form-item label="颜色" style="margin-bottom: 8px">
+                        <el-form-item label="颜色">
                             <el-color-picker v-model="form.color"></el-color-picker>
-                            <span class="tip" style="display: inline-block;transform:translateY(-10px)">（自动选择清空）</span>
+                            <span class="tip">（自动选择清空）</span>
                         </el-form-item>
                         <el-form-item label="类型">
                             <el-radio-group v-model="form.type">
@@ -171,8 +184,7 @@
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="图标" v-if="['spell','trap'].includes(form.type)">
-                            <el-select v-model="form.icon" placeholder="请选择卡类">
-                                <el-option label="通常" value=""></el-option>
+                            <el-select v-model="form.icon" placeholder="请选择图标" clearable>
                                 <el-option label="装备" value="equip"></el-option>
                                 <el-option label="场地" value="filed"></el-option>
                                 <el-option label="速攻" value="quick-play"></el-option>
@@ -254,7 +266,12 @@
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
                         </el-form-item>
                         <el-form-item label="密码">
-                            <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+                            <div style="display: flex">
+                                <el-input v-model="form.password" placeholder="请输入密码"></el-input>
+                                <el-tooltip content="搜索结果会覆盖当前数据" placement="top" :enterable="false">
+                                    <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
+                                </el-tooltip>
+                            </div>
                         </el-form-item>
                         <el-form-item label="版权">
                             <el-select v-model="form.copyright" placeholder="请选择版权" clearable>
@@ -286,8 +303,13 @@
 
                     <div class="button-group">
                         <el-row :gutter="10">
-                            <el-col :span="24">
+                            <el-col :span="12">
                                 <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-tooltip content="根据所选语言随机生成" placement="top" :enterable="false">
+                                    <el-button plain size="medium" :loading="randomLoading" @click="getRandomCard">随机生成</el-button>
+                                </el-tooltip>
                             </el-col>
                             <el-col :span="12">
                                 <el-upload action="/" :show-file-list="false" accept="application/json" :before-upload="importJson">
@@ -298,7 +320,7 @@
                                 <el-button plain size="medium" @click="exportJson">导出数据</el-button>
                             </el-col>
                             <el-col :span="24">
-                                <el-button type="primary" size="medium" @click="exportImage">导出图片</el-button>
+                                <el-button type="primary" size="medium" :loading="exportLoading" @click="exportImage">导出图片</el-button>
                             </el-col>
                         </el-row>
                     </div>
@@ -314,9 +336,11 @@
     import Page from '@/components/page/Page';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
+    import loadImage from 'blueimp-load-image';
     import scDemo from './sc/sc-demo';
     import tcDemo from './tc/tc-demo';
     import jpDemo from './jp/jp-demo';
+    import enDemo from './en/en-demo';
 
     export default {
         name: 'Yugioh',
@@ -328,6 +352,9 @@
             return {
                 baseImage: 'https://static.kooriookami.top/yugioh/image',
                 fontLoading: true,
+                searchLoading: false,
+                randomLoading: false,
+                exportLoading: false,
                 form: {
                     language: 'sc',
                     name: '',
@@ -368,15 +395,8 @@
             });
         },
         methods: {
-            changeLanguage(value) {
-                if (value === 'sc') {
-                    Object.assign(this.form, scDemo);
-                } else if (value === 'tc') {
-                    Object.assign(this.form, tcDemo);
-                } else if (value === 'jp') {
-                    Object.assign(this.form, jpDemo);
-                }
-
+            // 刷新字体
+            refreshFont() {
                 setTimeout(() => {
                     this.fontLoading = true;
                     document.fonts.ready.then(() => {
@@ -386,16 +406,31 @@
                     });
                 });
             },
+            changeLanguage(value) {
+                if (value === 'sc') {
+                    Object.assign(this.form, scDemo);
+                } else if (value === 'tc') {
+                    Object.assign(this.form, tcDemo);
+                } else if (value === 'jp') {
+                    Object.assign(this.form, jpDemo);
+                } else if (value === 'en') {
+                    Object.assign(this.form, enDemo);
+                }
+                this.refreshFont();
+            },
             beforeUpload(file) {
                 let flag = file.type.includes('image');
                 if (flag) {
-                    this.fileToDataURL(file).then(res => {
-                        this.form.image = res.target.result;
+                    loadImage(file, {
+                        canvas: true,
+                        aspectRatio: 1
+                    }).then(data => {
+                        this.form.image = data.image.toDataURL('image/png', 1);
                     });
                 } else {
                     this.$message.warning('请选择正确图片格式');
                 }
-                return flag;
+                return false;
             },
             deleteImage() {
                 this.form.image = '';
@@ -443,6 +478,36 @@
                     this.$message.warning('文本超过可压缩高度');
                 }
             },
+            searchCardByPassword() {
+                this.searchLoading = true;
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/card/' + this.form.password,
+                    params: {
+                        lang: this.form.language
+                    }
+                }).then(res => {
+                    let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+                    Object.assign(this.form, cardInfo);
+                }).finally(() => {
+                    this.searchLoading = false;
+                });
+            },
+            getRandomCard() {
+                this.randomLoading = true;
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/random-card',
+                    params: {
+                        lang: this.form.language
+                    }
+                }).then(res => {
+                    let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+                    Object.assign(this.form, cardInfo);
+                }).finally(() => {
+                    this.randomLoading = false;
+                });
+            },
             formatVHtml(value) {
                 return value.replace(/\[(.*?)\((.*?)\)]/g, '<span class="ruby">$1<span class="rt">$2</span></span>');
             },
@@ -454,14 +519,7 @@
                         let data = JSON.parse(e.target?.result);
                         this.form = Object.assign(this.form, data);
                         // 字体可能加载
-                        setTimeout(() => {
-                            this.fontLoading = true;
-                            document.fonts.ready.then(() => {
-                                this.fontLoading = false;
-                                // 强制更新视图
-                                this.$forceUpdate();
-                            });
-                        });
+                        this.refreshFont();
                     } catch (e) {
                         this.$message.error('数据导入失败');
                     }
@@ -473,6 +531,7 @@
                 this.downloadBlob(blob, this.exportFileName);
             },
             exportImage() {
+                this.exportLoading = true;
                 let element = document.querySelector('.yugioh-card');
                 html2canvas(element, {
                     useCORS: true,
@@ -483,6 +542,8 @@
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
                     this.downloadBlob(blob, this.exportFileName);
+                }).finally(() => {
+                    this.exportLoading = false;
                 });
             }
         },
@@ -513,6 +574,8 @@
                 let suffix = '';
                 if (this.form.language === 'jp') {
                     suffix = '-jp';
+                } else if (this.form.language === 'en') {
+                    suffix = '-en';
                 }
                 if (['monster', 'pendulum'].includes(this.form.type)) {
                     return `${this.baseImage}/attribute-${this.form.attribute}${suffix}.png`;
@@ -539,6 +602,12 @@
                         name = '[魔(ま)][法(ほう)]カード';
                     } else if (this.form.type === 'trap') {
                         name = '[罠(トラップ)]カード';
+                    }
+                } else if (this.form.language === 'en') {
+                    if (this.form.type === 'spell') {
+                        name = 'Spell Card';
+                    } else if (this.form.type === 'trap') {
+                        name = 'Trap Card';
                     }
                 }
                 return name;
@@ -578,8 +647,7 @@
                     left: left,
                     top: top,
                     width: width,
-                    height: height,
-                    background: `url(${this.form.image}) no-repeat center/cover`
+                    height: height
                 };
             },
             maskStyle() {
@@ -615,6 +683,18 @@
                     right: right
                 };
             },
+            descriptionStyle() {
+                let fontFamily;
+                if (this.form.language === 'en') {
+                    if ((this.form.type === 'monster' && this.form.cardType === 'normal') ||
+                        (this.form.type === 'pendulum' && this.form.pendulumType === 'normal-pendulum')) {
+                        fontFamily = 'ygo-en-italic';
+                    }
+                }
+                return {
+                    fontFamily: fontFamily
+                };
+            },
             passwordStyle() {
                 return {
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
@@ -625,7 +705,7 @@
                 if (this.form.copyright === 'sc') {
                     top = '1934px';
                 } else if (this.form.copyright === 'jp') {
-                    top = '1935px';
+                    top = '1936px';
                 }
                 return {
                     top: top
@@ -642,17 +722,19 @@
         directives: {
             nameColor(el, binding, vnode) {
                 let that = vnode.context;
-                // 文本和注音颜色分开控制
-                let color = 'black';
-                // 自动颜色
-                if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
-                    (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
-                    color = 'white';
-                }
-                el.style.color = binding.value || color;
-                let rtList = el.querySelectorAll('.rt');
-                rtList.forEach(rt => {
-                    rt.style.color = color;
+                that.$nextTick(() => {
+                    // 文本和注音颜色分开控制
+                    let color = 'black';
+                    // 自动颜色
+                    if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
+                        (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
+                        color = 'white';
+                    }
+                    el.style.color = binding.value || color;
+                    let rtList = el.querySelectorAll('.rt');
+                    rtList.forEach(rt => {
+                        rt.style.color = color;
+                    });
                 });
             },
             compressText(el, binding, vnode) {
@@ -689,12 +771,22 @@
                     if (binding.value?.width && binding.value?.height) {
                         let scale = 1;
                         el.style.display = 'inline-block';
-                        el.style.wordBreak = 'break-all';
                         el.style.width = `${binding.value.width}px`;
-                        el.style.transform = 'none';
+                        el.style.transform = '';
                         el.style.transformOrigin = '0 0';
 
+                        let autoFontSizeElement = document.querySelector(binding.value?.autoFontSize);
+                        autoFontSizeElement?.classList.remove('small-description');
+
                         while (el.clientHeight > binding.value.height && scale > 0) {
+                            // 如果是英文，灵摆和效果栏字体判断缩小
+                            if (that.form.language === 'en' && binding.value?.autoFontSize && scale < 0.7) {
+                                if (!autoFontSizeElement?.classList.contains('small-description')) {
+                                    // 多一层判断防止死循环
+                                    autoFontSizeElement?.classList.add('small-description');
+                                    scale = 1;
+                                }
+                            }
                             scale -= 0.01;
                             el.style.width = `${binding.value.width / scale}px`;
                             el.style.transform = `scaleX(${scale})`;
@@ -708,6 +800,21 @@
                     that.getLastDescriptionHeight();
                 });
             }
+        },
+        watch: {
+            // 图片转base64
+            'form.image'() {
+                if (this.form.image && !this.form.image.startsWith('data:image')) {
+                    loadImage(this.form.image, {
+                        canvas: true,
+                        top: 0,
+                        aspectRatio: 1,
+                        crossOrigin: 'Anonymous'
+                    }).then(data => {
+                        this.form.image = data.image.toDataURL('image/png', 1);
+                    });
+                }
+            }
         }
     };
 </script>
@@ -716,6 +823,7 @@
     @import "./sc/sc";
     @import "./tc/tc";
     @import "./jp/jp";
+    @import "./en/en";
 
     .yugioh-container {
         .yugioh-card {
@@ -726,14 +834,13 @@
             color: black;
             white-space: pre-wrap;
             transform-origin: 0 0;
+            overflow: hidden;
 
             .card-name {
                 position: absolute;
-                font-size: 108px;
                 left: 116px;
                 width: 1030px;
                 max-height: 130px;
-                overflow: hidden;
 
                 ::v-deep(.ruby) {
                     .rt {
@@ -789,6 +896,21 @@
 
             .card-image {
                 position: absolute;
+
+                .el-image {
+                    width: 100%;
+                    height: 100%;
+
+                    .image-slot {
+                        display: flex;
+                        height: 100%;
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 120px;
+                        color: $normal-color;
+                    }
+                }
             }
 
             .card-mask {
@@ -823,7 +945,6 @@
             .pendulum-description {
                 position: absolute;
                 left: 221px;
-                top: 1288px;
                 width: 950px;
                 text-align: justify;
                 z-index: 20;

@@ -50,7 +50,6 @@
                 ::v-deep(.scrollbar) {
                     .el-scrollbar__wrap {
                         max-height: 300px;
-                        margin-bottom: 0 !important;
                     }
                 }
 

@@ -1,6 +1,6 @@
 const mime = require('mime');
 
-const base = {
+export default {
     install(app, options) {
         app.config.globalProperties.config = require('@/assets/json/config.json');
         //重置表单
@@ -13,19 +13,6 @@ const base = {
             if (value) {
                 return app.config.globalProperties.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
             }
-        };
-
-        app.config.globalProperties.fileToDataURL = function (file) {
-            return new Promise(((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (res) => {
-                    resolve(res);
-                };
-                reader.onerror = (err) => {
-                    reject(err);
-                };
-                reader.readAsDataURL(file);
-            }));
         };
 
         app.config.globalProperties.dataURLtoBlob = function (dataURL) {
@@ -52,5 +39,3 @@ const base = {
         };
     }
 };
-
-export default base;

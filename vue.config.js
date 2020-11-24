@@ -3,7 +3,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 // 保存配置文件
 function saveConfig() {
-    if (process.env.NODE_ENV === 'production'){
+    if (process.env.NODE_ENV === 'production') {
         let config = {
             updateTime: new Date().getTime()
         };
@@ -15,7 +15,7 @@ module.exports = {
     publicPath: './',
     productionSourceMap: false, //打包不生成map文件
     devServer: {
-        port: 8100
+        port: 8010
     },
     css: {
         loaderOptions: {

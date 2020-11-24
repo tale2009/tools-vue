@@ -52,6 +52,7 @@
 <script>
     import Page from '@/components/page/Page';
     import html2canvas from 'html2canvas';
+    import loadImage from 'blueimp-load-image';
 
     export default {
         name: 'DotImage',
@@ -116,14 +117,16 @@
             beforeUpload(file) {
                 let flag = file.type.includes('image');
                 if (flag) {
-                    this.fileToDataURL(file).then(res => {
-                        this.form.image = res.target.result;
+                    loadImage(file, {
+                        canvas: true
+                    }).then(data => {
+                        this.form.image = data.image.toDataURL('image/png', 1);
                         this.createDotList();
                     });
                 } else {
                     this.$message.warning('请选择正确图片格式');
                 }
-                return flag;
+                return false;
             },
             dotStyle(dot) {
                 let background;
