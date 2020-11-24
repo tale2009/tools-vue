@@ -1,11 +1,11 @@
 import axios from 'axios';
-import Vue from 'vue';
+import app from '@/main';
 import qs from 'qs';
-import {Notification} from 'element-ui';
+import {Notification} from 'element-plus';
 
 // 请求拦截器
 axios.interceptors.request.use(config => {
-    config.baseURL = Vue.prototype.baseURL;
+    config.baseURL = app.config.globalProperties.baseURL;
     if (config.method === 'get') {
         config.paramsSerializer = params => qs.stringify(params, {arrayFormat: 'repeat'});
     }

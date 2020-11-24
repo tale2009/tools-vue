@@ -1,7 +1,7 @@
 <template>
     <div class="yugioh-container">
         <Page>
-            <template>
+            <template #default>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" v-name-color="form.color">
                         <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:200}"></span>
@@ -325,18 +325,20 @@
                         </el-row>
                     </div>
                 </div>
-            </template>
 
-            <KanjiKanaDialog v-model:kanjiKanaDialog="kanjiKanaDialog"></KanjiKanaDialog>
+                <KanjiKanaDialog v-model="kanjiKanaDialog"></KanjiKanaDialog>
+            </template>
         </Page>
     </div>
 </template>
 
 <script>
+    import {nextTick} from 'vue';
     import Page from '@/components/page/Page';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
     import loadImage from 'blueimp-load-image';
+    import _ from 'lodash';
     import scDemo from './sc/sc-demo';
     import tcDemo from './tc/tc-demo';
     import jpDemo from './jp/jp-demo';
@@ -720,9 +722,9 @@
             }
         },
         directives: {
-            nameColor(el, binding, vnode) {
-                let that = vnode.context;
-                that.$nextTick(() => {
+            nameColor(el, binding) {
+                let that = binding.instance;
+                nextTick(() => {
                     // 文本和注音颜色分开控制
                     let color = 'black';
                     // 自动颜色
@@ -737,9 +739,9 @@
                     });
                 });
             },
-            compressText(el, binding, vnode) {
-                let that = vnode.context;
-                that.$nextTick(() => {
+            compressText(el, binding) {
+                let that = binding.instance;
+                nextTick(() => {
                     // 压缩或拉伸注音文字
                     let rubyList = el.querySelectorAll('.ruby');
                     rubyList.forEach(ruby => {
@@ -794,9 +796,9 @@
                     }
                 });
             },
-            cardDescription(el, binding, vnode) {
-                let that = vnode.context;
-                that.$nextTick(() => {
+            cardDescription(el, binding) {
+                let that = binding.instance;
+                nextTick(() => {
                     that.getLastDescriptionHeight();
                 });
             }

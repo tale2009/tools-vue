@@ -1,7 +1,7 @@
 <template>
     <div class="dot-image-container">
         <Page>
-            <template>
+            <template #default>
                 <div class="dot-list" :style="listStyle">
                     <div class="row" v-for="row in dotList">
                         <div class="dot" v-for="dot in row" :style="dotStyle(dot)"></div>

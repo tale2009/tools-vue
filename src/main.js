@@ -4,11 +4,11 @@ import router from './router';
 import store from './store';
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
+import locale from 'element-plus/lib/locale/lang/zh-cn';
 import 'normalize.css';
 import '@/core/route-actived';
 import axios from './core/axios';
 import dayjs from 'dayjs';
-import _ from 'lodash';
 import base from '@/plugins/base';
 import yugiohPlugin from '@/plugins/yugioh-plugin';
 
@@ -16,9 +16,8 @@ const app = createApp(App);
 
 app.config.globalProperties.axios = axios;
 app.config.globalProperties.dayjs = dayjs;
-app.config.globalProperties._ = _;
 
-app.use(ElementPlus);
+app.use(ElementPlus, {locale});
 app.use(base);
 app.use(yugiohPlugin);
 app.use(router);
@@ -33,3 +32,5 @@ if (process.env.NODE_ENV === 'production') {
     // 本地环境
     app.config.globalProperties.baseURL = 'http://localhost:7010/api';
 }
+
+export default app;
