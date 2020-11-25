@@ -4,7 +4,7 @@
             <template #default>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" v-name-color="form.color">
-                        <span v-html="formatVHtml(form.name)" v-compress-text="{width:1030,height:200}"></span>
+                        <CompressText :text="form.name" :width="1030" :height="200"></CompressText>
                     </div>
 
                     <div class="card-attribute">
@@ -20,12 +20,10 @@
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span v-if="form.language==='en'">[</span>
-                        <span v-else>【</span>
-                        <span v-html="formatVHtml(spellTrapName)" v-compress-text></span>
+                        <span>{{form.language === 'en' ? '[' : '【'}}</span>
+                        <CompressText :text="spellTrapName"></CompressText>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
-                        <span v-if="form.language==='en'">]</span>
-                        <span v-else>】</span>
+                        <span>{{form.language === 'en' ? ']' : '】'}}</span>
                     </div>
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
@@ -57,7 +55,8 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <span v-html="formatVHtml(form.pendulumDescription)" v-compress-text="{width:950,height:230,autoFontSize:'.pendulum-description'}"></span>
+                        <CompressText :text="form.pendulumDescription" :width="950" :height="230"
+                                      :language="form.language" autoSizeElement=".pendulum-description"></CompressText>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -86,19 +85,21 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span v-if="form.language==='en'" v-html="`[${formatVHtml(form.monsterType)}]`" v-compress-text></span>
-                            <span v-else v-html="`【${formatVHtml(form.monsterType)}】`" v-compress-text></span>
+                            <span>{{form.language === 'en' ? '[' : '【'}}</span>
+                            <CompressText :text="form.monsterType"></CompressText>
+                            <span>{{form.language === 'en' ? ']' : '】'}}</span>
                         </div>
 
                         <div class="description-info" :style="descriptionStyle">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行不压缩-->
                                 <div v-if="index<form.description.split('\n').length-1">
-                                    <span v-html="formatVHtml(item)" v-compress-text></span>
+                                    <CompressText :text="item"></CompressText>
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <span v-html="formatVHtml(item)" v-compress-text="{width:1170,height:lastDescriptionHeight,autoFontSize:'.card-description'}"></span>
+                                    <CompressText :text="item" :width="1170" :height="lastDescriptionHeight"
+                                                  :language="form.language" autoSizeElement=".card-description"></CompressText>
                                 </div>
                                 <!--item为空提供换行-->
                                 <br v-if="!item">
@@ -337,8 +338,8 @@
 </template>
 
 <script>
-    import {nextTick} from 'vue';
     import Page from '@/components/page/Page';
+    import CompressText from '@/views/yugioh/components/CompressText';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
     import loadImage from 'blueimp-load-image';
@@ -351,6 +352,7 @@
         name: 'Yugioh',
         components: {
             Page,
+            CompressText,
             KanjiKanaDialog
         },
         data() {
@@ -727,83 +729,22 @@
         directives: {
             nameColor(el, binding) {
                 let that = binding.instance;
-                nextTick(() => {
-                    // 文本和注音颜色分开控制
-                    let color = 'black';
-                    // 自动颜色
-                    if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
-                        (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
-                        color = 'white';
-                    }
-                    el.style.color = binding.value || color;
-                    let rtList = el.querySelectorAll('.rt');
-                    rtList.forEach(rt => {
-                        rt.style.color = color;
-                    });
-                });
-            },
-            compressText(el, binding) {
-                let that = binding.instance;
-                nextTick(() => {
-                    // 压缩或拉伸注音文字
-                    let rubyList = el.querySelectorAll('.ruby');
-                    rubyList.forEach(ruby => {
-                        let rt = ruby.querySelector('.rt');
-                        let text = ruby.innerText.split('\n')[0];
-                        let rubyWidth = ruby.offsetWidth;
-                        let rtWidth = rt.offsetWidth;
-                        if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
-                            // 拉伸两端对齐
-                            rt.classList.add('justify');
-                        } else if (rtWidth > rubyWidth) {
-                            // 压缩
-                            if (rubyWidth / rtWidth < 0.6) {
-                                // 防止过度压缩，加宽ruby
-                                // 公式：(rubyWidth + widen) / rtWidth = 0.6
-                                let widen = 0.6 * rtWidth - rubyWidth;
-                                ruby.style.margin = `0 ${widen / 2}px`;
-                                rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth})`;
-                                rt.style.left = `${-widen / 2}px`;
-                            } else {
-                                rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
-                            }
-                        } else {
-                            // 不变并居中
-                            rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
-                        }
-                    });
-                    // 压缩文本文字
-                    if (binding.value?.width && binding.value?.height) {
-                        let scale = 1;
-                        el.style.display = 'inline-block';
-                        el.style.width = `${binding.value.width}px`;
-                        el.style.transform = '';
-                        el.style.transformOrigin = '0 0';
-
-                        let autoFontSizeElement = document.querySelector(binding.value?.autoFontSize);
-                        autoFontSizeElement?.classList.remove('small-description');
-
-                        while (el.clientHeight > binding.value.height && scale > 0) {
-                            // 如果是英文，灵摆和效果栏字体判断缩小
-                            if (that.form.language === 'en' && binding.value?.autoFontSize && scale < 0.7) {
-                                if (!autoFontSizeElement?.classList.contains('small-description')) {
-                                    // 多一层判断防止死循环
-                                    autoFontSizeElement?.classList.add('small-description');
-                                    scale = 1;
-                                }
-                            }
-                            scale -= 0.01;
-                            el.style.width = `${binding.value.width / scale}px`;
-                            el.style.transform = `scaleX(${scale})`;
-                        }
-                    }
+                // 文本和注音颜色分开控制
+                let color = 'black';
+                // 自动颜色
+                if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
+                    (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
+                    color = 'white';
+                }
+                el.style.color = binding.value || color;
+                let rtList = el.querySelectorAll('.rt');
+                rtList.forEach(rt => {
+                    rt.style.color = color;
                 });
             },
             cardDescription(el, binding) {
                 let that = binding.instance;
-                nextTick(() => {
-                    that.getLastDescriptionHeight();
-                });
+                that.getLastDescriptionHeight();
             }
         },
         watch: {
@@ -1061,29 +1002,6 @@
                 left: 1276px;
                 top: 1913px;
                 z-index: 20;
-            }
-
-            ::v-deep(.ruby) {
-                position: relative;
-
-                .rt {
-                    font-family: ygo-tip, sans-serif;
-                    font-size: 16px;
-                    font-weight: bold;
-                    position: absolute;
-                    left: 0;
-                    text-align: center;
-                    white-space: pre;
-                    letter-spacing: 0;
-                    text-indent: 0;
-                    transform-origin: 0 0;
-
-                    &.justify {
-                        text-align-last: justify;
-                        left: 5%;
-                        width: 90%;
-                    }
-                }
             }
 
             &.card-back {
