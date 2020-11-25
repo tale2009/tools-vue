@@ -58,30 +58,34 @@
 
                     let autoSizeElement = document.querySelector(params.autoSizeElement);
                     autoSizeElement?.classList.remove('small-description');
-                    // el.clientHeight > params.height &&
-                    let scale = 0.5;
-                    let flag = 'small';
-                    let temp;
-                    while (scale > 0) {
-                        // 如果是英文，灵摆和效果栏字体判断缩小
-                        if (params.language === 'en' && params.autoSizeElement && scale < 0.7) {
-                            if (!autoSizeElement?.classList.contains('small-description')) {
-                                // 多一层判断防止死循环
-                                autoSizeElement?.classList.add('small-description');
-                                scale = 1;
+
+                    if (el.clientHeight > params.height) {
+                        // 用二分法获取最大的scale，精度0.01
+                        let scale = 0.5;
+                        let start = 0;
+                        let end = 1;
+                        while (scale > 0) {
+                            scale = (start + end) / 2;
+                            el.style.width = `${params.width / scale}px`;
+                            el.style.transform = `scaleX(${scale})`;
+                            el.clientHeight > params.height ? end = scale : start = scale;
+                            if (el.clientHeight <= params.height && end - start <= 0.005) {
+                                // 如果是英文，灵摆和效果栏字体判断缩小
+                                if (params.language === 'en' && params.autoSizeElement && scale < 0.7) {
+                                    // 防止死循环
+                                    if (autoSizeElement?.classList.contains('small-description')) {
+                                        break;
+                                    } else {
+                                        autoSizeElement?.classList.add('small-description');
+                                        scale = 0.5;
+                                        start = 0;
+                                        end = 1;
+                                    }
+                                } else {
+                                    break;
+                                }
                             }
                         }
-                        // 用二分法获取最大的scale，精度0.01
-                        temp = scale;
-                        scale = (scale + temp) / 2;
-                        el.style.width = `${params.width / scale}px`;
-                        el.style.transform = `scaleX(${scale})`;
-                        if (el.clientHeight > params.height) {
-                            flag = 'small';
-                        } else {
-                            flag = 'big';
-                        }
-
                     }
                 }
             }
