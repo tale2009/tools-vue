@@ -24,6 +24,11 @@
             compressRt(el) {
                 let ruby = el.parentNode;
                 let rt = el;
+                rt.classList.remove('justify');
+                ruby.style.margin = '';
+                rt.style.transform = '';
+                rt.style.left = '';
+
                 let text = ruby.innerText.split('\n')[0];
                 let rubyWidth = ruby.offsetWidth;
                 let rtWidth = rt.offsetWidth;

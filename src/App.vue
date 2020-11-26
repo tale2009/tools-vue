@@ -9,7 +9,7 @@
 
     * {
         box-sizing: border-box;
-        word-break: break-word;
+        overflow-wrap: break-word;
     }
 
     body {
