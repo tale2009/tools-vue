@@ -1,4 +1,4 @@
-const mime = require('mime');
+import mime from 'mime';
 
 export default {
     install(app, options) {
