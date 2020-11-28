@@ -896,7 +896,7 @@
                 ::v-deep(.ruby) {
                     .rt {
                         font-size: 12px;
-                        top: -4px;
+                        top: -5px;
                     }
                 }
             }
@@ -927,8 +927,8 @@
 
                     ::v-deep(.ruby) {
                         .rt {
-                            font-size: 14px;
-                            top: -4px;
+                            font-size: 13px;
+                            top: -3px;
                         }
                     }
                 }
@@ -937,7 +937,7 @@
                     ::v-deep(.ruby) {
                         .rt {
                             font-size: 12px;
-                            top: -4px;
+                            top: -5px;
                         }
                     }
                 }
