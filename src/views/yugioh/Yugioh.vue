@@ -4,7 +4,7 @@
             <template #default>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" v-name-color="form.color">
-                        <CompressText :text="form.name" :width="1030" :height="200"></CompressText>
+                        <CompressText :text="form.name" :fontLoading="fontLoading" :width="1030" :height="200"></CompressText>
                     </div>
 
                     <div class="card-attribute">
@@ -21,7 +21,7 @@
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
                         <span>{{form.language === 'en' ? '[' : '【'}}</span>
-                        <CompressText :text="spellTrapName"></CompressText>
+                        <CompressText :text="spellTrapName" :fontLoading="fontLoading"></CompressText>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>{{form.language === 'en' ? ']' : '】'}}</span>
                     </div>
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <CompressText :text="form.pendulumDescription" :width="950" :height="230"
+                        <CompressText :text="form.pendulumDescription" :width="950" :height="230" :fontLoading="fontLoading"
                                       :language="form.language" autoSizeElement=".pendulum-description"></CompressText>
                     </div>
 
@@ -86,7 +86,7 @@
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
                             <span>{{form.language === 'en' ? '[' : '【'}}</span>
-                            <CompressText :text="form.monsterType"></CompressText>
+                            <CompressText :text="form.monsterType" :fontLoading="fontLoading"></CompressText>
                             <span>{{form.language === 'en' ? ']' : '】'}}</span>
                         </div>
 
@@ -94,11 +94,11 @@
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--单行不压缩-->
                                 <div v-if="index<form.description.split('\n').length-1">
-                                    <CompressText :text="item"></CompressText>
+                                    <CompressText :text="item" :fontLoading="fontLoading"></CompressText>
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-if="index===form.description.split('\n').length-1" class="last-description">
-                                    <CompressText :text="item" :width="1170" :height="lastDescriptionHeight"
+                                    <CompressText :text="item" :width="1170" :height="lastDescriptionHeight" :fontLoading="fontLoading"
                                                   :language="form.language" autoSizeElement=".card-description"></CompressText>
                                 </div>
                                 <!--item为空提供换行-->
@@ -408,8 +408,6 @@
                     this.fontLoading = true;
                     document.fonts.ready.then(() => {
                         this.fontLoading = false;
-                        // 强制更新视图
-                        this.$forceUpdate();
                     });
                 });
             },

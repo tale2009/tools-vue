@@ -1,7 +1,7 @@
 <script>
     export default {
         name: 'CompressText',
-        props: ['text', 'width', 'height', 'language', 'autoSizeElement'],
+        props: ['text', 'width', 'height', 'language', 'fontLoading', 'autoSizeElement'],
         render() {
             let domList = this.text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
                 if (/\[.*?\(.*?\)]/g.test(value)) {
@@ -18,6 +18,14 @@
                 autoSizeElement: this.autoSizeElement   // 英文语言下压缩到一定程度，字体缩小的元素
             };
             return <span v-compress-text={params}>{domList}</span>;
+        },
+        watch: {
+            fontLoading() {
+                if (!this.fontLoading) {
+                    // 强制刷新
+                    this.$forceUpdate();
+                }
+            }
         },
         directives: {
             // 压缩或拉伸注音文字
