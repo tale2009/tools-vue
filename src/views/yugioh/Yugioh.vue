@@ -428,6 +428,7 @@
                 if (flag) {
                     loadImage(file, {
                         canvas: true,
+                        top: 0,
                         aspectRatio: 1
                     }).then(data => {
                         this.form.image = data.image.toDataURL('image/png', 1);
