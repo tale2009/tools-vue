@@ -928,7 +928,7 @@
 
                     ::v-deep(.ruby) {
                         .rt {
-                            font-size: 13px;
+                            font-size: 14px;
                             top: -3px;
                         }
                     }
