@@ -1,7 +1,7 @@
 <template>
     <div class="dot-word-container">
         <Page>
-            <template>
+            <template #default>
                 <div class="word-list">
                     <div class="word" v-for="word in wordList" :style="wordStyle">
                         <div class="row" v-for="row in word">
@@ -36,7 +36,7 @@
                                 <el-radio-button label="round">圆形</el-radio-button>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="颜色" style="margin-bottom: 8px">
+                        <el-form-item label="颜色">
                             <el-color-picker v-model="form.color"></el-color-picker>
                         </el-form-item>
                         <el-form-item label="灰阶">

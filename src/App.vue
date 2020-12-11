@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div>
         <router-view></router-view>
     </div>
 </template>
@@ -9,7 +9,7 @@
 
     * {
         box-sizing: border-box;
-        word-break: break-word;
+        overflow-wrap: break-word;
     }
 
     body {

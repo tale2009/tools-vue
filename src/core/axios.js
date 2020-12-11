@@ -1,11 +1,11 @@
 import axios from 'axios';
-import Vue from 'vue';
+import app from '@/main';
 import qs from 'qs';
-import {Notification} from 'element-ui';
+import {ElNotification} from 'element-plus';
 
 // 请求拦截器
 axios.interceptors.request.use(config => {
-    config.baseURL = Vue.prototype.baseURL;
+    config.baseURL = app.config.globalProperties.baseURL;
     if (config.method === 'get') {
         config.paramsSerializer = params => qs.stringify(params, {arrayFormat: 'repeat'});
     }
@@ -19,7 +19,7 @@ axios.interceptors.response.use(response => {
 }, error => {
     // 对响应错误做点什么
     let message = error?.response?.data?.message ?? error;
-    Notification.error({
+    ElNotification.error({
         title: '错误',
         message: message
     });

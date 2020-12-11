@@ -11,8 +11,8 @@
             <el-button style="margin-left: 10px" type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
             <el-button style="margin-left: 10px" type="text" @click="thankDialog = true">感谢</el-button>
 
-            <AboutDialog :aboutDialog.sync="aboutDialog"></AboutDialog>
-            <ThankDialog :thankDialog.sync="thankDialog"></ThankDialog>
+            <AboutDialog v-model="aboutDialog"></AboutDialog>
+            <ThankDialog v-model="thankDialog"></ThankDialog>
         </div>
     </div>
 </template>

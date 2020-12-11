@@ -1,38 +1,36 @@
-import Vue from 'vue';
+import {createApp} from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
+import locale from 'element-plus/lib/locale/lang/zh-cn';
 import 'normalize.css';
 import '@/core/route-actived';
 import axios from './core/axios';
 import dayjs from 'dayjs';
-import _ from 'lodash';
 import base from '@/plugins/base';
 import yugiohPlugin from '@/plugins/yugioh-plugin';
 
-Vue.config.productionTip = false;
+const app = createApp(App);
 
-Vue.use(ElementUI);
-Vue.use(base);
-Vue.use(yugiohPlugin);
+app.config.globalProperties.axios = axios;
+app.config.globalProperties.dayjs = dayjs;
 
-Vue.prototype.axios = axios;
-Vue.prototype.dayjs = dayjs;
-Vue.prototype._ = _;
+app.use(ElementPlus, {locale});
+app.use(base);
+app.use(yugiohPlugin);
+app.use(router);
+app.use(store);
+app.mount('#app');
 
 // 接口请求地址配置
 if (process.env.NODE_ENV === 'production') {
     // 上线环境
-    Vue.prototype.baseURL = 'https://tools.kooriookami.top/api';
+    app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 } else {
     // 本地环境
-    Vue.prototype.baseURL = 'http://localhost:7010/api';
+    app.config.globalProperties.baseURL = 'http://localhost:7010/api';
 }
 
-new Vue({
-    router,
-    store,
-    render: h => h(App)
-}).$mount('#app');
+export default app;

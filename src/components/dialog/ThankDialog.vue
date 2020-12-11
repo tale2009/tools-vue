@@ -1,6 +1,6 @@
 <template>
     <div class="thank-dialog-container">
-        <el-dialog title="感谢" :visible="thankDialog" width="500px" :before-close="closeDialog">
+        <el-dialog title="感谢" :modelValue="modelValue" width="500px" :before-close="closeDialog">
             <div class="thank-main">
                 <p>😃以下为赞助列表，感谢大家的支持！😄（按时间排序）</p>
                 <div class="thank-list">
@@ -12,9 +12,9 @@
                     </el-scrollbar>
                 </div>
             </div>
-            <div slot="footer">
+            <template #footer>
                 <el-button plain size="medium" @click="closeDialog">关闭</el-button>
-            </div>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -22,7 +22,7 @@
 <script>
     export default {
         name: 'ThankDialog',
-        props: ['thankDialog'],
+        props: ['modelValue'],
         data() {
             return {
                 thankList: require('@/assets/json/thank-list.json')
@@ -30,7 +30,7 @@
         },
         methods: {
             closeDialog() {
-                this.$emit('update:thankDialog', false);
+                this.$emit('update:modelValue', false);
             }
         }
     };
@@ -47,7 +47,7 @@
             }
 
             .thank-list {
-                ::v-deep .scrollbar {
+                ::v-deep(.scrollbar) {
                     .el-scrollbar__wrap {
                         max-height: 300px;
                     }

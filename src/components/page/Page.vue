@@ -21,7 +21,7 @@
         mounted() {
             addEventListener('resize', this.updateScrollbar);
         },
-        destroyed() {
+        unmounted() {
             removeEventListener('resize', this.updateScrollbar);
         },
         methods: {

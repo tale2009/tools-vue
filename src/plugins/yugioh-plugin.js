@@ -1,7 +1,7 @@
 export default {
-    install(Vue, options) {
+    install(app, options) {
         // 解析游戏王卡片
-        Vue.prototype.parseYugiohCard = function (data, lang) {
+        app.config.globalProperties.parseYugiohCard = function (data, lang) {
             let card = {
                 name: parseName(data),
                 type: parseType(data),
@@ -24,15 +24,15 @@ export default {
             };
             if (lang === 'jp') {
                 // 添加注音
-                card.name = Vue.prototype.kanjiToKana(card.name);
-                card.pendulumDescription = Vue.prototype.kanjiToKana(card.pendulumDescription);
-                card.monsterType = Vue.prototype.kanjiToKana(card.monsterType);
-                card.description = Vue.prototype.kanjiToKana(card.description);
+                card.name = app.config.globalProperties.kanjiToKana(card.name);
+                card.pendulumDescription = app.config.globalProperties.kanjiToKana(card.pendulumDescription);
+                card.monsterType = app.config.globalProperties.kanjiToKana(card.monsterType);
+                card.description = app.config.globalProperties.kanjiToKana(card.description);
             }
             return card;
         };
         // 添加假名
-        Vue.prototype.kanjiToKana = function (text = '') {
+        app.config.globalProperties.kanjiToKana = function (text = '') {
             // 重新排序kanjiKanaMap，最长key的放在最前
             let kanjiKanaReg = new RegExp(Object.keys(kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
             return text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {

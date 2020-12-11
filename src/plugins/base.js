@@ -1,22 +1,21 @@
-const mime = require('mime');
+import mime from 'mime';
 
 export default {
-    install(Vue, options) {
-        Vue.prototype.config = require('@/assets/json/config.json');
+    install(app, options) {
+        app.config.globalProperties.config = require('@/assets/json/config.json');
         //重置表单
-        Vue.prototype.resetForm = function (formName) {
+        app.config.globalProperties.resetForm = function (formName) {
             if (this.$refs[formName]) {
                 this.$refs[formName].resetFields();
             }
         };
-
-        Vue.filter('timeFilter', function (value) {
+        app.config.globalProperties.timeFilter = function (value) {
             if (value) {
-                return Vue.prototype.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+                return app.config.globalProperties.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
             }
-        });
+        };
 
-        Vue.prototype.dataURLtoBlob = function (dataURL) {
+        app.config.globalProperties.dataURLtoBlob = function (dataURL) {
             let arr = dataURL.split(',');
             let mime = arr[0].match(/:(.*?);/)[1];
             let bstr = atob(arr[1]);
@@ -28,7 +27,7 @@ export default {
             return new Blob([u8arr], {type: mime});
         };
 
-        Vue.prototype.downloadBlob = function (blob, fileName) {
+        app.config.globalProperties.downloadBlob = function (blob, fileName) {
             if (!fileName) {
                 fileName = new Date().getTime();
             }

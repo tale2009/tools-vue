@@ -1,11 +1,11 @@
 import router from '../router';
-import {Message} from 'element-ui';
+import {ElMessage} from 'element-plus';
 
 // 启用路由拦截
 router.beforeEach((to, from, next) => {
-    if (!router.match(to.path).matched.length) {
-        Message.warning('页面不存在');
-        router.go(-1);
+    if (!router.resolve(to.path).matched.length) {
+        ElMessage.warning('页面不存在');
+        next(from.path);
     } else {
         setDocumentTitle(to);
         next();
