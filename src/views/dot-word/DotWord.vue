@@ -2,7 +2,7 @@
     <div class="dot-word-container">
         <Page>
             <template #default>
-                <div class="word-list">
+                <div class="word-list" :style="wordListStyle">
                     <div class="word" v-for="word in wordList" :style="wordStyle">
                         <div class="row" v-for="row in word">
                             <div class="dot" v-for="dot in row" :style="dotStyle(dot)"></div>
@@ -29,6 +29,12 @@
                             <el-select v-model="form.font" placeholder="请选择字体" filterable allow-create @change="createWordList">
                                 <el-option v-for="item in fontList" :label="item" :value="item"></el-option>
                             </el-select>
+                        </el-form-item>
+                        <el-form-item label="字距">
+                            <el-slider v-model="form.wordMargin" :min="0" :max="30"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="点距">
+                            <el-slider v-model="form.dotMargin" :min="0" :max="10"></el-slider>
                         </el-form-item>
                         <el-form-item label="形状">
                             <el-radio-group v-model="form.shape">
@@ -75,10 +81,13 @@
                     text: '点阵字生成器',
                     pixel: 16,
                     font: '宋体',
+                    wordMargin: 5,
+                    dotMargin: 0,
                     shape: 'square',
                     color: '#000000',
                     grayscale: false,
                     grid: false,
+                    gridWidth: 1,
                     threshold: 64,
                     size: 10
                 },
@@ -147,7 +156,8 @@
                     width: `${this.form.size}px`,
                     height: `${this.form.size}px`,
                     background: background,
-                    border: this.form.grid ? '1px solid #dcdfe6' : '',
+                    border: this.form.grid ? `${this.form.gridWidth}px solid #dcdfe6` : '',
+                    margin: `${this.form.dotMargin}px`,
                     borderRadius: this.form.shape === 'round' ? '100%' : ''
                 };
             },
@@ -168,10 +178,15 @@
             }
         },
         computed: {
+            wordListStyle() {
+                return {
+                    padding: `${this.form.gridWidth}px`
+                };
+            },
             wordStyle() {
                 return {
-                    border: this.form.grid ? '1px solid #dcdfe6' : '',
-                    margin: `${this.form.size / 2}px`
+                    border: this.form.grid ? `${this.form.gridWidth}px solid #dcdfe6` : '',
+                    margin: this.form.grid ? `${this.form.wordMargin - this.form.gridWidth}px` : `${this.form.wordMargin}px`
                 };
             }
         }
@@ -185,6 +200,7 @@
 
             .word {
                 display: inline-block;
+                vertical-align: top;
 
                 .row {
                     display: flex;
