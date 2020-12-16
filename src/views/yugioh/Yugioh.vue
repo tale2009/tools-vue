@@ -514,9 +514,6 @@
                     this.randomLoading = false;
                 });
             },
-            formatVHtml(value) {
-                return value.replace(/\[(.*?)\((.*?)\)]/g, '<span class="ruby">$1<span class="rt">$2</span></span>');
-            },
             importJson(file) {
                 let reader = new FileReader();
                 reader.readAsText(file);
