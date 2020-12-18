@@ -131,7 +131,7 @@
                         <span>{{form.password}}</span>
                     </div>
 
-                    <div class="card-copyright" v-if="form.copyright" :style="copyrightStyle">
+                    <div class="card-copyright" v-if="form.copyright">
                         <el-image :src="copyrightSrc"></el-image>
                     </div>
 
@@ -282,6 +282,7 @@
                             <el-select v-model="form.copyright" placeholder="请选择版权" clearable>
                                 <el-option label="简体中文" value="sc"></el-option>
                                 <el-option label="日文" value="jp"></el-option>
+                                <el-option label="英文" value="en"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-row :gutter="10">
@@ -703,17 +704,6 @@
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
             },
-            copyrightStyle() {
-                let top;
-                if (this.form.copyright === 'sc') {
-                    top = '1934px';
-                } else if (this.form.copyright === 'jp') {
-                    top = '1936px';
-                }
-                return {
-                    top: top
-                };
-            },
             copyrightSrc() {
                 let color = this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black';
                 return `${this.baseImage}/copyright-${this.form.copyright}-${color}.svg`;
@@ -989,6 +979,7 @@
 
             .card-copyright {
                 position: absolute;
+                top: 1936px;
                 right: 141px;
                 z-index: 20;
             }
