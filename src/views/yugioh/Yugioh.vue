@@ -273,9 +273,7 @@
                         <el-form-item label="密码">
                             <div style="display: flex">
                                 <el-input v-model="form.password" placeholder="请输入密码"></el-input>
-                                <el-tooltip content="搜索结果会覆盖当前数据" placement="top" :enterable="false">
-                                    <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
-                                </el-tooltip>
+                                <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
                             </div>
                         </el-form-item>
                         <el-form-item label="版权">
@@ -313,9 +311,7 @@
                                 <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
                             </el-col>
                             <el-col :span="12">
-                                <el-tooltip content="根据所选语言随机生成" placement="top" :enterable="false">
-                                    <el-button plain size="medium" :loading="randomLoading" @click="getRandomCard">随机生成</el-button>
-                                </el-tooltip>
+                                <el-button plain size="medium" :loading="randomLoading" @click="getRandomCard">随机生成</el-button>
                             </el-col>
                             <el-col :span="12">
                                 <el-upload action="/" :show-file-list="false" accept="application/json" :before-upload="importJson">
