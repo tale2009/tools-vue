@@ -757,6 +757,8 @@
         .yugioh-card {
             width: 1393px;
             height: 2031px;
+            display: inline-block;
+            vertical-align: top;
             position: relative;
             user-select: none;
             color: black;
