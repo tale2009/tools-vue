@@ -1,11 +1,10 @@
 import axios from 'axios';
-import app from '@/main';
 import qs from 'qs';
 import {ElNotification} from 'element-plus';
 
 // 请求拦截器
 axios.interceptors.request.use(config => {
-    config.baseURL = app.config.globalProperties.baseURL;
+    config.baseURL = vm.baseURL;
     if (config.method === 'get') {
         config.paramsSerializer = params => qs.stringify(params, {arrayFormat: 'repeat'});
     }

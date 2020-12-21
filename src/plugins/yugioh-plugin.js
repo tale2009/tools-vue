@@ -24,10 +24,10 @@ export default {
             };
             if (lang === 'jp') {
                 // 添加注音
-                card.name = app.config.globalProperties.kanjiToKana(card.name);
-                card.pendulumDescription = app.config.globalProperties.kanjiToKana(card.pendulumDescription);
-                card.monsterType = app.config.globalProperties.kanjiToKana(card.monsterType);
-                card.description = app.config.globalProperties.kanjiToKana(card.description);
+                card.name = vm.kanjiToKana(card.name);
+                card.pendulumDescription = vm.kanjiToKana(card.pendulumDescription);
+                card.monsterType = vm.kanjiToKana(card.monsterType);
+                card.description = vm.kanjiToKana(card.description);
             }
             return card;
         };

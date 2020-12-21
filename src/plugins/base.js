@@ -11,7 +11,7 @@ export default {
         };
         app.config.globalProperties.timeFilter = function (value) {
             if (value) {
-                return app.config.globalProperties.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+                return vm.dayjs(value).format('YYYY-MM-DD HH:mm:ss');
             }
         };
 
