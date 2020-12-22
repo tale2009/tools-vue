@@ -1,3 +1,4 @@
+import vm from '@/main';
 import axios from 'axios';
 import qs from 'qs';
 import {ElNotification} from 'element-plus';

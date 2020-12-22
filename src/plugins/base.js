@@ -1,3 +1,4 @@
+import vm from '@/main';
 import mime from 'mime';
 
 export default {

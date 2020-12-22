@@ -1,3 +1,5 @@
+import vm from '@/main';
+
 export default {
     install(app, options) {
         // 解析游戏王卡片

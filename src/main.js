@@ -22,7 +22,7 @@ app.use(base);
 app.use(yugiohPlugin);
 app.use(router);
 app.use(store);
-window.vm = app.mount('#app');
+const vm = app.mount('#app');
 
 // 接口请求地址配置
 if (process.env.NODE_ENV === 'production') {
@@ -32,3 +32,5 @@ if (process.env.NODE_ENV === 'production') {
     // 本地环境
     app.config.globalProperties.baseURL = 'http://localhost:7010/api';
 }
+
+export default vm;
