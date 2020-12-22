@@ -68,7 +68,7 @@
 
 <script>
     import Page from '@/components/page/Page';
-    import html2canvas from 'html2canvas';
+    import html2canvas from '@/assets/js/html2canvas';
 
     export default {
         name: 'DotWord',
