@@ -4,7 +4,7 @@
             <div class="thank-main">
                 <p>😃以下为赞助列表，感谢大家的支持！😄（按时间排序）</p>
                 <div class="thank-list">
-                    <el-scrollbar class="scrollbar">
+                    <el-scrollbar>
                         <p class="thank-item" v-for="item in thankList">
                             <span>{{item.name}}</span>
                             <span>{{item.time}}</span>
@@ -47,7 +47,7 @@
             }
 
             .thank-list {
-                ::v-deep(.scrollbar) {
+                ::v-deep(.el-scrollbar) {
                     .el-scrollbar__wrap {
                         max-height: 300px;
                     }

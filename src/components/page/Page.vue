@@ -1,14 +1,14 @@
 <template>
     <div class="page-container">
         <div class="page-main">
-            <el-scrollbar ref="main-scrollbar" class="scrollbar">
+            <el-scrollbar ref="main-scrollbar">
                 <div class="page-slot">
                     <slot></slot>
                 </div>
             </el-scrollbar>
         </div>
         <div v-show="$slots.form" class="page-form">
-            <el-scrollbar ref="right-scrollbar" class="scrollbar">
+            <el-scrollbar ref="right-scrollbar">
                 <slot name="form"></slot>
             </el-scrollbar>
         </div>

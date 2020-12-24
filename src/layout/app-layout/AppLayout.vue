@@ -6,7 +6,7 @@
 
         <el-container>
             <el-aside class="left-aside" width="200px" :style="leftStyle">
-                <el-scrollbar ref="left-scrollbar" class="scrollbar">
+                <el-scrollbar ref="left-scrollbar">
                     <AppLeft></AppLeft>
                 </el-scrollbar>
             </el-aside>
