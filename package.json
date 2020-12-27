@@ -10,7 +10,7 @@
         "axios": "^0.21.1",
         "blueimp-load-image": "^5.14.0",
         "core-js": "^3.8.1",
-        "dayjs": "^1.9.7",
+        "dayjs": "^1.9.8",
         "element-plus": "^1.0.1-beta.14",
         "html2canvas": "^1.0.0-rc.7",
         "lodash": "^4.17.20",
