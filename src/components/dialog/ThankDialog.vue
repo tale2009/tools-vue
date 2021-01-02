@@ -6,7 +6,7 @@
                 <div class="thank-list">
                     <el-scrollbar>
                         <p class="thank-item" v-for="item in thankList">
-                            <span>{{item.name}}</span>
+                            <span>{{item.name}}（￥{{item.money?.toFixed(2)}}）</span>
                             <span>{{item.time}}</span>
                         </p>
                     </el-scrollbar>

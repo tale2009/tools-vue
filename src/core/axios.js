@@ -18,7 +18,7 @@ axios.interceptors.response.use(response => {
     return response;
 }, error => {
     // 对响应错误做点什么
-    let message = error?.response?.data?.message ?? error;
+    let message = error.toJSON?.()?.message ?? error;
     ElNotification.error({
         title: '错误',
         message: message
