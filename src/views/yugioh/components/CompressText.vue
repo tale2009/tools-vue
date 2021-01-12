@@ -1,23 +1,36 @@
+<template>
+    <span v-compress-text="compressParams">
+        <template v-for="item in textList">
+            <span v-if="typeof item === 'object'" class="ruby">{{item.ruby}}<span class="rt" v-compress-rt>{{item.rt}}</span></span>
+            <span v-else>{{item}}</span>
+        </template>
+    </span>
+</template>
+
 <script>
     export default {
         name: 'CompressText',
         props: ['text', 'width', 'height', 'language', 'fontLoading', 'autoSizeElement'],
-        render() {
-            let domList = this.text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
-                if (/\[.*?\(.*?\)]/g.test(value)) {
-                    let ruby = value.replace(/\[(.*?)\((.*?)\)]/g, '$1');
-                    let rt = value.replace(/\[(.*?)\((.*?)\)]/g, '$2');
-                    return <span class="ruby">{ruby}<span class="rt" v-compress-rt>{rt}</span></span>;
-                }
-                return value;
-            });
-            let params = {
-                width: this.width,
-                height: this.height,
-                language: this.language,
-                autoSizeElement: this.autoSizeElement   // 英文语言下压缩到一定程度，字体缩小的元素
-            };
-            return <span v-compress-text={params}>{domList}</span>;
+        computed: {
+            compressParams() {
+                return {
+                    width: this.width,
+                    height: this.height,
+                    language: this.language,
+                    autoSizeElement: this.autoSizeElement   // 英文语言下压缩到一定程度，字体缩小的元素
+                };
+            },
+            textList() {
+                return this.text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
+                    if (/\[.*?\(.*?\)]/g.test(value)) {
+                        return {
+                            ruby: value.replace(/\[(.*?)\((.*?)\)]/g, '$1'),
+                            rt: value.replace(/\[(.*?)\((.*?)\)]/g, '$2')
+                        };
+                    }
+                    return value;
+                });
+            }
         },
         watch: {
             fontLoading() {
@@ -106,7 +119,7 @@
     };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .ruby {
         position: relative;
 
