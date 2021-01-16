@@ -130,7 +130,7 @@
             position: absolute;
             left: 0;
             text-align: center;
-            white-space: pre;
+            white-space: nowrap;
             letter-spacing: 0;
             text-indent: 0;
             transform-origin: 0 0;
