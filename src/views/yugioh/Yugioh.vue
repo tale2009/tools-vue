@@ -762,7 +762,6 @@
             position: relative;
             user-select: none;
             color: black;
-            white-space: pre-wrap;
             transform-origin: 0 0;
             overflow: hidden;
 
