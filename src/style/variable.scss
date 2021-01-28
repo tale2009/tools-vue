@@ -1,10 +1,12 @@
+@import "~element-plus/packages/theme-chalk/src/common/var.scss";
+
 // 主题色
-$primary-color: #409eff;
-$success-color: #67c23a;
-$warning-color: #e6a23c;
-$danger-color: #f56c6c;
-$main-color: #303133;
-$normal-color: #606266;
-$info-color: #909399;
-$placeholder-color: #c0c4cc;
-$border-color: #dcdfe6;
+$primary-color: $--color-primary;
+$success-color: $--color-success;
+$warning-color: $--color-warning;
+$danger-color: $--color-danger;
+$main-color: $--color-text-primary;
+$normal-color: $--color-text-regular;
+$info-color: $--color-text-secondary;
+$placeholder-color: $--color-text-placeholder;
+$border-color: $--border-color-base;
