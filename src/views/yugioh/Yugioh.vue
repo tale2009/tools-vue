@@ -163,7 +163,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="卡名">
-                            <el-input v-model="form.name" placeholder="请输入卡名"></el-input>
+                            <el-autocomplete v-model="form.name" :fetch-suggestions="fetchCardName" placeholder="请输入卡名" @select="selectCardName"></el-autocomplete>
                         </el-form-item>
                         <el-form-item label="颜色">
                             <el-color-picker v-model="form.color"></el-color-picker>
@@ -481,6 +481,30 @@
                     this.$message.warning('文本超过可压缩高度');
                 }
             },
+            fetchCardName(value, callback) {
+                if (value) {
+                    this.axios({
+                        method: 'get',
+                        url: '/yugioh/card',
+                        params: {
+                            name: this.cardName,
+                            lang: this.form.language
+                        }
+                    }).then(res => {
+                        let data = res.data.data;
+                        data.forEach(value => {
+                            value.value = `${value.name}（${value.id}）`;
+                        });
+                        callback(data);
+                    });
+                }
+                callback([]);
+            },
+            selectCardName(value) {
+                this.form.name = value.name;
+                this.form.password = value.id;
+                this.searchCardByPassword();
+            },
             searchCardByPassword() {
                 this.searchLoading = true;
                 this.axios({
@@ -528,7 +552,7 @@
             exportJson() {
                 let data = JSON.stringify(this.form);
                 let blob = new Blob([data], {type: 'application/json'});
-                this.downloadBlob(blob, this.exportFileName);
+                this.downloadBlob(blob, this.cardName);
             },
             exportImage() {
                 this.exportLoading = true;
@@ -541,7 +565,7 @@
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
                     let blob = this.dataURLtoBlob(dataURL);
-                    this.downloadBlob(blob, this.exportFileName);
+                    this.downloadBlob(blob, this.cardName);
                 }).finally(() => {
                     this.exportLoading = false;
                 });
@@ -704,7 +728,7 @@
                 let color = this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black';
                 return `${this.baseImage}/copyright-${this.form.copyright}-${color}.svg`;
             },
-            exportFileName() {
+            cardName() {
                 return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
             }
         },

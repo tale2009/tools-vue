@@ -1,5 +1,8 @@
 import vm from '@/main';
 
+const kanjiKanaMap = require('@/assets/json/kanji-kana.json');
+const monsterTypeList = require('@/assets/json/monster-type-list.json');
+
 export default {
     install(app, options) {
         // 解析游戏王卡片
@@ -46,9 +49,6 @@ export default {
         };
     }
 };
-
-const kanjiKanaMap = require('@/assets/json/kanji-kana.json');
-const monsterTypeList = require('@/assets/json/monster-type-list.json');
 
 // 英文字母全角转半角
 function characterToHalf(value) {
