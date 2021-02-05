@@ -19,7 +19,7 @@
         "qs": "^6.9.6",
         "vue": "^3.0.5",
         "vue-router": "^4.0.3",
-        "vuex": "^4.0.0-rc.2"
+        "vuex": "^4.0.0"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^4.5.11",
@@ -28,7 +28,7 @@
         "@vue/cli-service": "^4.5.11",
         "@vue/compiler-sfc": "^3.0.5",
         "compression-webpack-plugin": "^6.1.1",
-        "sass": "^1.32.5",
+        "sass": "^1.32.6",
         "sass-loader": "^10.1.1"
     }
 }
