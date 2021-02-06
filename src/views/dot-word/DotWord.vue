@@ -2,12 +2,8 @@
     <div class="dot-word-container">
         <Page>
             <template #default>
-                <div class="word-list" :style="wordListStyle">
-                    <div class="word" v-for="word in wordList" :style="wordStyle">
-                        <div class="row" v-for="row in word">
-                            <div class="dot" v-for="dot in row" :style="dotStyle(dot)"></div>
-                        </div>
-                    </div>
+                <div class="word-list">
+                    <canvas :ref="el => canvasRefList[index] = el" v-for="(word,index) in wordList"></canvas>
                 </div>
             </template>
 
@@ -34,7 +30,7 @@
                             <el-slider v-model="form.wordMargin" :min="0" :max="30"></el-slider>
                         </el-form-item>
                         <el-form-item label="点距">
-                            <el-slider v-model="form.dotMargin" :min="0" :max="10"></el-slider>
+                            <el-slider v-model="form.dotMargin" :min="0" :max="30"></el-slider>
                         </el-form-item>
                         <el-form-item label="形状">
                             <el-radio-group v-model="form.shape">
@@ -67,6 +63,7 @@
 </template>
 
 <script>
+    import {nextTick} from 'vue';
     import Page from '@/components/page/Page';
     import html2canvas from '@/assets/js/html2canvas';
 
@@ -92,7 +89,8 @@
                     size: 10
                 },
                 fontList: ['宋体', '黑体', '楷体', '仿宋', '微软雅黑'],
-                wordList: []
+                wordList: [],
+                canvasRefList: []
             };
         },
         mounted() {
@@ -137,34 +135,68 @@
                     wordList.push(dotList);
                 });
                 this.wordList = wordList;
+                this.renderCanvas();
             },
-            dotStyle(dot) {
-                let background;
-                if (this.form.grayscale) {
-                    if (this.form.color) {
-                        let r = parseInt(this.form.color.substring(1, 3), 16);
-                        let g = parseInt(this.form.color.substring(3, 5), 16);
-                        let b = parseInt(this.form.color.substring(5, 7), 16);
-                        let a = dot / 255;
-                        background = `rgba(${r}, ${g}, ${b}, ${a})`;
-                    }
-                } else {
-                    background = dot >= this.form.threshold ? this.form.color : 'transparent';
+            async renderCanvas() {
+                if (!this.wordList.length) {
+                    return;
                 }
 
-                return {
-                    width: `${this.form.size}px`,
-                    height: `${this.form.size}px`,
-                    background: background,
-                    border: this.form.grid ? `${this.form.gridWidth}px solid #dcdfe6` : '',
-                    margin: `${this.form.dotMargin}px`,
-                    borderRadius: this.form.shape === 'round' ? '100%' : ''
-                };
+                await nextTick();
+
+                this.wordList.forEach((word, wordIndex) => {
+                    let canvas = this.canvasRefList[wordIndex];
+                    let context = canvas.getContext('2d');
+                    const lineWidth = this.form.grid ? this.form.gridWidth : 0;
+                    const pixel = this.form.size;
+                    canvas.width = word[0].length * (pixel + this.form.dotMargin) + lineWidth + this.form.wordMargin;
+                    canvas.height = word.length * (pixel + this.form.dotMargin) + lineWidth + this.form.wordMargin;
+                    context.lineWidth = lineWidth;
+                    context.strokeStyle = '#dcdfe6';
+
+                    word.forEach((row, rowIndex) => {
+                        row.forEach((col, colIndex) => {
+                            if (this.form.grayscale) {
+                                if (this.form.color) {
+                                    let r = parseInt(this.form.color.substring(1, 3), 16);
+                                    let g = parseInt(this.form.color.substring(3, 5), 16);
+                                    let b = parseInt(this.form.color.substring(5, 7), 16);
+                                    let a = col / 255;
+                                    context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+                                }
+                            } else {
+                                context.fillStyle = col >= this.form.threshold ? this.form.color : 'transparent';
+                            }
+
+                            if (this.form.shape === 'square') {
+                                const x = colIndex * (pixel + this.form.dotMargin) + lineWidth / 2;
+                                const y = rowIndex * (pixel + this.form.dotMargin) + lineWidth / 2;
+                                const w = pixel;
+                                const h = pixel;
+                                context.fillRect(x, y, w, h);
+                                if (this.form.grid) {
+                                    context.strokeRect(x, y, w, h);
+                                }
+                            } else if (this.form.shape === 'round') {
+                                const x = colIndex * (pixel + this.form.dotMargin) + pixel / 2 + lineWidth / 2;
+                                const y = rowIndex * (pixel + this.form.dotMargin) + pixel / 2 + lineWidth / 2;
+                                const radius = pixel / 2;
+                                const startAngle = 0;
+                                const endAngle = Math.PI * 2;
+                                context.beginPath();
+                                context.arc(x, y, radius, startAngle, endAngle);
+                                context.fill();
+                                if (this.form.grid) {
+                                    context.stroke();
+                                }
+                            }
+                        });
+                    });
+                });
             },
             // 是否为半角
             isHalfWidth(item) {
-                let halfWidthReg = /[\x00-\xff]/g;
-                return halfWidthReg.test(item);
+                return /[\x00-\xff]/g.test(item);
             },
             exportImage() {
                 let element = document.querySelector('.word-list');
@@ -177,17 +209,12 @@
                 });
             }
         },
-        computed: {
-            wordListStyle() {
-                return {
-                    padding: `${this.form.gridWidth}px`
-                };
-            },
-            wordStyle() {
-                return {
-                    border: this.form.grid ? `${this.form.gridWidth}px solid #dcdfe6` : '',
-                    margin: this.form.grid ? `${this.form.wordMargin - this.form.gridWidth}px` : `${this.form.wordMargin}px`
-                };
+        watch: {
+            form: {
+                handler() {
+                    this.renderCanvas();
+                },
+                deep: true
             }
         }
     };
@@ -195,18 +222,6 @@
 
 <style lang="scss" scoped>
     .dot-word-container {
-        .word-list {
-            display: inline-block;
 
-            .word {
-                display: inline-block;
-                vertical-align: top;
-
-                .row {
-                    display: flex;
-                    flex-wrap: nowrap;
-                }
-            }
-        }
     }
 </style>
