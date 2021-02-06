@@ -222,6 +222,9 @@
 
 <style lang="scss" scoped>
     .dot-word-container {
-
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 </style>
