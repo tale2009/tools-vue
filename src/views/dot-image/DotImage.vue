@@ -2,11 +2,7 @@
     <div class="dot-image-container">
         <Page>
             <template #default>
-                <div class="dot-list" :style="listStyle">
-                    <div class="row" v-for="row in dotList">
-                        <div class="dot" v-for="dot in row" :style="dotStyle(dot)"></div>
-                    </div>
-                </div>
+                <canvas ref="canvas"></canvas>
             </template>
 
             <template #form>
@@ -51,7 +47,6 @@
 
 <script>
     import Page from '@/components/page/Page';
-    import html2canvas from '@/assets/js/html2canvas';
     import loadImage from 'blueimp-load-image';
 
     export default {
@@ -112,7 +107,56 @@
                         }
                     }
                     this.dotList = dotList;
+                    this.renderCanvas();
                 };
+            },
+            renderCanvas() {
+                if (!this.dotList.length) {
+                    return;
+                }
+
+                let canvas = this.$refs.canvas;
+                let context = canvas.getContext('2d');
+                const lineWidth = this.form.grid ? 1 : 0;
+                const pixel = this.form.size;
+                canvas.width = this.dotList[0].length * pixel + lineWidth;
+                canvas.height = this.dotList.length * pixel + lineWidth;
+                context.lineWidth = lineWidth;
+                context.strokeStyle = '#dcdfe6';
+
+                this.dotList.forEach((row, rowIndex) => {
+                    row.forEach((col, colIndex) => {
+                        if (this.form.monochrome) {
+                            let rgb = Math.round((col[0] + col[1] + col[2]) / 3);
+                            context.fillStyle = `rgba(${rgb},${rgb},${rgb},${col[3]})`;
+                        } else {
+                            context.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${col[3]})`;
+                        }
+
+                        if (this.form.shape === 'square') {
+                            const x = colIndex * pixel + lineWidth / 2;
+                            const y = rowIndex * pixel + lineWidth / 2;
+                            const w = pixel;
+                            const h = pixel;
+                            context.fillRect(x, y, w, h);
+                            if (this.form.grid) {
+                                context.strokeRect(x, y, w, h);
+                            }
+                        } else if (this.form.shape === 'round') {
+                            const x = colIndex * pixel + pixel / 2 + lineWidth / 2;
+                            const y = rowIndex * pixel + pixel / 2 + lineWidth / 2;
+                            const radius = pixel / 2;
+                            const startAngle = 0;
+                            const endAngle = Math.PI * 2;
+                            context.beginPath();
+                            context.arc(x, y, radius, startAngle, endAngle);
+                            context.fill();
+                            if (this.form.grid) {
+                                context.stroke();
+                            }
+                        }
+                    });
+                });
             },
             beforeUpload(file) {
                 let flag = file.type.includes('image');
@@ -128,39 +172,19 @@
                 }
                 return false;
             },
-            dotStyle(dot) {
-                let background;
-                if (this.form.monochrome) {
-                    let rgb = Math.round((dot[0] + dot[1] + dot[2]) / 3);
-                    background = `rgba(${rgb},${rgb},${rgb},${dot[3]})`;
-                } else {
-                    background = `rgba(${dot[0]},${dot[1]},${dot[2]},${dot[3]})`;
-                }
-
-                return {
-                    width: `${this.form.size}px`,
-                    height: `${this.form.size}px`,
-                    background: background,
-                    border: this.form.grid ? '1px solid #dcdfe6' : '',
-                    borderRadius: this.form.shape === 'round' ? '100%' : ''
-                };
-            },
             exportImage() {
-                let element = document.querySelector('.dot-list');
-                html2canvas(element, {
-                    backgroundColor: 'transparent'
-                }).then(canvas => {
-                    let dataURL = canvas.toDataURL('image/png', 1);
-                    let blob = this.dataURLtoBlob(dataURL);
-                    this.downloadBlob(blob, '点阵图');
-                });
+                let canvas = this.$refs.canvas;
+                let dataURL = canvas.toDataURL('image/png', 1);
+                let blob = this.dataURLtoBlob(dataURL);
+                this.downloadBlob(blob, '点阵图');
             }
         },
-        computed: {
-            listStyle() {
-                return {
-                    border: this.form.grid ? '1px solid #dcdfe6' : ''
-                };
+        watch: {
+            form: {
+                handler() {
+                    this.renderCanvas();
+                },
+                deep: true
             }
         }
     };
@@ -168,13 +192,6 @@
 
 <style lang="scss" scoped>
     .dot-image-container {
-        .dot-list {
-            display: inline-block;
 
-            .row {
-                display: flex;
-                flex-wrap: nowrap;
-            }
-        }
     }
 </style>
