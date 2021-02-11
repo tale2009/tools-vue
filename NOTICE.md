@@ -1,5 +1,5 @@
 # html2canvas
-请在6200行左右，自行修改原始代码
+如果使用包管理器添加依赖，请在源码 6200 行左右，自行修改原始代码
 ```js
 CanvasRenderer.prototype.renderTextWithLetterSpacing = function (text, letterSpacing) {
     var _this = this;

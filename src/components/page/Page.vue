@@ -45,7 +45,6 @@
 
             .page-slot {
                 padding: 20px;
-                display: inline-block;
             }
         }
 

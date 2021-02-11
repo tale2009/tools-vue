@@ -192,6 +192,8 @@
 
 <style lang="scss" scoped>
     .dot-image-container {
-
+        canvas {
+            vertical-align: top;
+        }
     }
 </style>
