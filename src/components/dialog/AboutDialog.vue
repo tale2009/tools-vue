@@ -8,7 +8,7 @@
                     <el-popover width="400" trigger="hover">
                         <el-image :src="require('@/assets/image/ali-qr.jpg')"></el-image>
                         <template #reference>
-                            <el-button style="margin-right: 10px" type="text">支付宝</el-button>
+                            <el-button type="text">支付宝</el-button>
                         </template>
                     </el-popover>
                     <el-popover width="400" trigger="hover">
@@ -17,6 +17,9 @@
                             <el-button type="text">微信</el-button>
                         </template>
                     </el-popover>
+                </p>
+                <p>使用教程：
+                    <el-button type="text" @click="toCourse">B站文集</el-button>
                 </p>
                 <p>最后更新时间：{{timeFilter(config.updateTime)}}</p>
             </div>
@@ -34,6 +37,9 @@
         methods: {
             closeDialog() {
                 this.$emit('update:modelValue', false);
+            },
+            toCourse() {
+                open('https://www.bilibili.com/read/readlist/rl314448');
             }
         }
     };
@@ -48,8 +54,9 @@
                 line-height: 1.7;
                 margin: 10px 0;
 
-                .el-button{
+                .el-button {
                     padding: 0;
+                    min-height: auto;
                 }
             }
         }
