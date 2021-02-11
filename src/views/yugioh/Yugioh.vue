@@ -11,11 +11,11 @@
                         <el-image :src="attributeSrc"></el-image>
                     </div>
 
-                    <div class="card-level" v-if="showLevel">
+                    <div class="card-level" v-if="showLevel" :style="levelStyle">
                         <el-image v-for="item in form.level" :src="baseImage + '/level.png'"></el-image>
                     </div>
 
-                    <div class="card-rank" v-if="showRank">
+                    <div class="card-rank" v-if="showRank" :style="rankStyle">
                         <el-image v-for="item in form.rank" :src="baseImage + '/rank.png'"></el-image>
                     </div>
 
@@ -227,10 +227,10 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="星级" v-if="showLevel">
-                            <el-input-number v-model="form.level" :min="0" :max="12" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.level" :min="0" :max="13" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="阶级" v-if="showRank">
-                            <el-input-number v-model="form.rank" :min="0" :max="12" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.rank" :min="0" :max="13" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="刻度" v-if="form.type==='pendulum'">
                             <el-input-number v-model="form.pendulumScale" :min="0" :max="12" :precision="0"></el-input-number>
@@ -654,6 +654,28 @@
                 }
                 return flag;
             },
+            levelStyle() {
+                let right;
+                if (this.form.level < 13) {
+                    right = '146px'
+                } else {
+                    right = '100px'
+                }
+                return {
+                    right: right
+                }
+            },
+            rankStyle() {
+                let left;
+                if (this.form.rank < 13) {
+                    left = '147px'
+                } else {
+                    left = '100px'
+                }
+                return {
+                    left: left
+                }
+            },
             imageStyle() {
                 let left, top, width, height;
                 if (this.form.type === 'pendulum') {
@@ -811,7 +833,6 @@
 
             .card-level {
                 position: absolute;
-                right: 146px;
                 top: 250px;
 
                 .el-image {
@@ -821,7 +842,6 @@
 
             .card-rank {
                 position: absolute;
-                left: 147px;
                 top: 250px;
 
                 .el-image {

@@ -197,7 +197,7 @@ function parsePendulumType(data) {
 
 function parseLevelRank(data) {
     let number = parseInt(data.level.toString(16).substr(-1), 16);
-    if (number <= 12) {
+    if (number <= 13) {
         return number;
     } else {
         return 1;
