@@ -176,11 +176,6 @@
                 return false;
             },
             exportImage() {
-                // let canvas = this.$refs.canvas;
-                // let dataURL = canvas.toDataURL('image/png', 1);
-                // let blob = this.dataURLtoBlob(dataURL);
-                // this.downloadBlob(blob, '点阵图');
-
                 let element = document.querySelector('.dot-image');
                 html2canvas(element, {
                     backgroundColor: 'transparent'
@@ -207,6 +202,7 @@
         .dot-image {
             display: inline-flex;
             flex-wrap: wrap;
+            vertical-align: top;
         }
     }
 </style>

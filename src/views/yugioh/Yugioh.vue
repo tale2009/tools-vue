@@ -805,6 +805,7 @@
             height: 2031px;
             display: inline-flex;
             flex-wrap: wrap;
+            vertical-align: top;
             position: relative;
             user-select: none;
             color: black;

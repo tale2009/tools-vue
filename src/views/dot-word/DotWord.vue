@@ -225,6 +225,7 @@
         .word-list {
             display: inline-flex;
             flex-wrap: wrap;
+            vertical-align: top;
         }
     }
 </style>
