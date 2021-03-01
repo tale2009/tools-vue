@@ -223,7 +223,7 @@
 <style lang="scss" scoped>
     .dot-word-container {
         .word-list {
-            display: flex;
+            display: inline-flex;
             flex-wrap: wrap;
         }
     }

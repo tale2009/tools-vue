@@ -2,7 +2,9 @@
     <div class="dot-image-container">
         <Page>
             <template #default>
-                <canvas ref="canvas"></canvas>
+                <div class="dot-image">
+                    <canvas ref="canvas"></canvas>
+                </div>
             </template>
 
             <template #form>
@@ -48,6 +50,7 @@
 <script>
     import Page from '@/components/page/Page';
     import loadImage from 'blueimp-load-image';
+    import html2canvas from '@/assets/js/html2canvas';
 
     export default {
         name: 'DotImage',
@@ -173,10 +176,19 @@
                 return false;
             },
             exportImage() {
-                let canvas = this.$refs.canvas;
-                let dataURL = canvas.toDataURL('image/png', 1);
-                let blob = this.dataURLtoBlob(dataURL);
-                this.downloadBlob(blob, '点阵图');
+                // let canvas = this.$refs.canvas;
+                // let dataURL = canvas.toDataURL('image/png', 1);
+                // let blob = this.dataURLtoBlob(dataURL);
+                // this.downloadBlob(blob, '点阵图');
+
+                let element = document.querySelector('.dot-image');
+                html2canvas(element, {
+                    backgroundColor: 'transparent'
+                }).then(canvas => {
+                    let dataURL = canvas.toDataURL('image/png', 1);
+                    let blob = this.dataURLtoBlob(dataURL);
+                    this.downloadBlob(blob, '点阵图');
+                });
             }
         },
         watch: {
@@ -192,8 +204,9 @@
 
 <style lang="scss" scoped>
     .dot-image-container {
-        canvas {
-            vertical-align: top;
+        .dot-image {
+            display: inline-flex;
+            flex-wrap: wrap;
         }
     }
 </style>
