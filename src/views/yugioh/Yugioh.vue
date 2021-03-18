@@ -92,12 +92,16 @@
 
                         <div class="description-info" :style="descriptionStyle">
                             <template v-for="(item,index) in form.description.split('\n')">
+                                <!--判断首行是否压缩-->
+                                <div v-if="index === 0 && form.firstLineCompress">
+                                    <CompressText :text="item" :width="1170" :height="70" :fontLoading="fontLoading"></CompressText>
+                                </div>
                                 <!--单行不压缩-->
-                                <div v-if="index<form.description.split('\n').length-1">
+                                <div v-else-if="index < form.description.split('\n').length - 1">
                                     <CompressText :text="item" :fontLoading="fontLoading"></CompressText>
                                 </div>
                                 <!--最后一行压缩-->
-                                <div v-if="index===form.description.split('\n').length-1" class="last-description">
+                                <div v-else-if="index === form.description.split('\n').length - 1" class="last-description">
                                     <CompressText :text="item" :width="1170" :height="lastDescriptionHeight" :fontLoading="fontLoading"
                                                   :language="form.language" autoSizeElement=".card-description"></CompressText>
                                 </div>
@@ -265,7 +269,8 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="效果">
-                            <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果"></el-input>
+                            <el-switch v-model="form.firstLineCompress" active-text="首行压缩"></el-switch>
+                            <el-input style="margin-top: 10px" type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果"></el-input>
                         </el-form-item>
                         <el-form-item label="卡包">
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
@@ -378,6 +383,7 @@
                     def: 0,
                     arrowList: [],
                     description: '',
+                    firstLineCompress: false,
                     package: '',
                     password: '',
                     copyright: '',
@@ -474,11 +480,11 @@
                     } else {
                         this.lastDescriptionHeight = 380 - lastDescription.offsetTop;
                     }
+                    if (this.lastDescriptionHeight <= 40) {
+                        this.$message.warning('文本超过可压缩高度');
+                    }
                 } else {
                     this.lastDescriptionHeight = 0;
-                }
-                if (this.lastDescriptionHeight <= 40) {
-                    this.$message.warning('文本超过可压缩高度');
                 }
             },
             fetchCardName(value, callback) {
@@ -657,24 +663,24 @@
             levelStyle() {
                 let right;
                 if (this.form.level < 13) {
-                    right = '146px'
+                    right = '146px';
                 } else {
-                    right = '100px'
+                    right = '100px';
                 }
                 return {
                     right: right
-                }
+                };
             },
             rankStyle() {
                 let left;
                 if (this.form.rank < 13) {
-                    left = '147px'
+                    left = '147px';
                 } else {
-                    left = '100px'
+                    left = '100px';
                 }
                 return {
                     left: left
-                }
+                };
             },
             imageStyle() {
                 let left, top, width, height;
