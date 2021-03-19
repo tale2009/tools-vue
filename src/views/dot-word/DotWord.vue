@@ -16,15 +16,21 @@
                 <div class="form-main">
                     <el-form ref="form" :model="form" label-width="auto" size="small">
                         <el-form-item label="文字">
-                            <el-input v-model="form.text" placeholder="请输入文字" @input="createWordList"></el-input>
+                            <el-input v-model="form.text" placeholder="请输入文字"></el-input>
                         </el-form-item>
                         <el-form-item label="像素">
-                            <el-input-number v-model="form.pixel" :min="8" :max="64" @change="createWordList"></el-input-number>
+                            <el-input-number v-model="form.pixel" :min="8" :max="64"></el-input-number>
                         </el-form-item>
                         <el-form-item label="字体">
-                            <el-select v-model="form.font" placeholder="请选择字体" filterable allow-create @change="createWordList">
+                            <el-select v-model="form.font" placeholder="请选择字体" filterable allow-create>
                                 <el-option v-for="item in fontList" :label="item" :value="item"></el-option>
                             </el-select>
+                        </el-form-item>
+                        <el-form-item label="基线">
+                            <el-radio-group v-model="form.textBaseline">
+                                <el-radio-button label="top">top</el-radio-button>
+                                <el-radio-button label="hanging">hanging</el-radio-button>
+                            </el-radio-group>
                         </el-form-item>
                         <el-form-item label="字距">
                             <el-slider v-model="form.wordMargin" :min="0" :max="30"></el-slider>
@@ -78,6 +84,7 @@
                     text: '点阵字生成器',
                     pixel: 16,
                     font: '宋体',
+                    textBaseline: 'top',
                     wordMargin: 5,
                     dotMargin: 0,
                     shape: 'square',
@@ -110,7 +117,7 @@
                     canvas.width = pixelX;
                     canvas.height = pixelY;
                     context.font = `${pixel}px ${this.form.font}`;
-                    context.textBaseline = this.form.font === '微软雅黑' ? 'hanging' : 'top';
+                    context.textBaseline = this.form.textBaseline;
                     context.fillText(text, 0, 0);
                     let imageData = context.getImageData(0, 0, pixelX, pixelY);
                     let dotList = [];
@@ -212,7 +219,7 @@
         watch: {
             form: {
                 handler() {
-                    this.renderCanvas();
+                    this.createWordList();
                 },
                 deep: true
             }

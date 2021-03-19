@@ -55,8 +55,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <CompressText :text="form.pendulumDescription" :width="950" :height="230" :fontLoading="fontLoading"
-                                      :language="form.language" autoSizeElement=".pendulum-description"></CompressText>
+                        <CompressText :text="form.pendulumDescription" :width="950" :height="230" :fontLoading="fontLoading"></CompressText>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
