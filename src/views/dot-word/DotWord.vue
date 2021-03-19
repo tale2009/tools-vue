@@ -27,7 +27,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="基线">
-                            <el-radio-group v-model="form.textBaseline">
+                            <el-radio-group v-model="form.baseline">
                                 <el-radio-button label="top">top</el-radio-button>
                                 <el-radio-button label="hanging">hanging</el-radio-button>
                             </el-radio-group>
@@ -84,7 +84,7 @@
                     text: '点阵字生成器',
                     pixel: 16,
                     font: '宋体',
-                    textBaseline: 'top',
+                    baseline: 'top',
                     wordMargin: 5,
                     dotMargin: 0,
                     shape: 'square',
@@ -117,7 +117,7 @@
                     canvas.width = pixelX;
                     canvas.height = pixelY;
                     context.font = `${pixel}px ${this.form.font}`;
-                    context.textBaseline = this.form.textBaseline;
+                    context.textBaseline = this.form.baseline;
                     context.fillText(text, 0, 0);
                     let imageData = context.getImageData(0, 0, pixelX, pixelY);
                     let dotList = [];
