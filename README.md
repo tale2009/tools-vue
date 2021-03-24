@@ -14,8 +14,8 @@
 
 ## 赞助
     网站的建设离不开大家的支持，如果这个小工具对你有用，可以选择赞助，让它可以活的更久一些。
-![alt 属性文本](./src/assets/image/ali-qr.jpg)
-![alt 属性文本](./src/assets/image/wx-qr.png)
+![支付宝收款码](./src/assets/image/ali-qr.jpg)
+![微信收款码](./src/assets/image/wx-qr.png)
 
 ## 友情链接
 ### Electron 版游戏王卡片生成器

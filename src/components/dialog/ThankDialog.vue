@@ -13,6 +13,7 @@
                 </div>
             </div>
             <template #footer>
+                <span class="sum-money">￥{{sumMoney}}</span>
                 <el-button plain size="medium" @click="closeDialog">关闭</el-button>
             </template>
         </el-dialog>
@@ -31,6 +32,11 @@
         methods: {
             closeDialog() {
                 this.$emit('update:modelValue', false);
+            }
+        },
+        computed: {
+            sumMoney() {
+                return this.thankList.reduce((acc, current) => acc + current.money, 0).toFixed(2);
             }
         }
     };
@@ -58,6 +64,11 @@
                     justify-content: space-between;
                 }
             }
+        }
+
+        .sum-money {
+            color: transparent;
+            margin-right: 10px;
         }
     }
 </style>
