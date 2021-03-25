@@ -19,7 +19,7 @@
                             <el-input v-model="form.text" placeholder="请输入文字"></el-input>
                         </el-form-item>
                         <el-form-item label="像素">
-                            <el-input-number v-model="form.pixel" :min="8" :max="64"></el-input-number>
+                            <el-input-number v-model="form.pixel" :min="8" :max="64" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="字体">
                             <el-select v-model="form.font" placeholder="请选择字体" filterable allow-create>

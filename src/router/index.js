@@ -24,6 +24,14 @@ const routes = [
                 }
             },
             {
+                path: 'paint-board',
+                name: 'paintBoard',
+                component: () => import(/* webpackChunkName: "paintBoard" */ '../views/paint-board/PaintBoard.vue'),
+                meta: {
+                    title: '画图板'
+                }
+            },
+            {
                 path: 'yugioh',
                 name: 'yugioh',
                 component: () => import(/* webpackChunkName: "yugioh" */ '../views/yugioh/Yugioh.vue'),

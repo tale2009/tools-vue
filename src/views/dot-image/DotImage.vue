@@ -20,7 +20,7 @@
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="像素">
-                            <el-input-number v-model="form.pixel" :min="1" :max="128" @change="createDotList"></el-input-number>
+                            <el-input-number v-model="form.pixel" :min="1" :max="128" :precision="0" @change="createDotList"></el-input-number>
                             <span class="tip">（长边）</span>
                         </el-form-item>
                         <el-form-item label="形状">

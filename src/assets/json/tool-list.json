@@ -10,6 +10,11 @@
         "icon": "fa-image"
     },
     {
+        "title": "画图板",
+        "path": "/paint-board",
+        "icon": "fa-paint-brush"
+    },
+    {
         "title": "游戏王卡片",
         "path": "/yugioh",
         "icon": "fa-rectangle-portrait"
