@@ -156,7 +156,7 @@
                         <span>字体加载中...</span>
                     </div>
 
-                    <el-form ref="form" :model="form" label-width="auto" size="small">
+                    <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="语言">
                             <el-select v-model="form.language" placeholder="请选择语言" @change="changeLanguage">
                                 <el-option label="简体中文" value="sc"></el-option>

@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="form-main">
-                    <el-form ref="form" :model="form" label-width="auto" size="small">
+                    <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="文字">
                             <el-input v-model="form.text" placeholder="请输入文字"></el-input>
                         </el-form-item>

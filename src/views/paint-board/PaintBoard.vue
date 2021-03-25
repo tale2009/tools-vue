@@ -18,7 +18,7 @@
                         <el-button type="danger" size="small" @click="clearPaintBoard">清空</el-button>
                     </el-space>
 
-                    <el-form ref="form" :model="form" label-width="auto" size="small">
+                    <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="宽度">
                             <el-input-number v-model="form.width" :min="100" :max="9999" :precision="0" @change="resetSize"></el-input-number>
                         </el-form-item>
@@ -40,114 +40,115 @@
 
 <script>
     import Page from '@/components/page/Page';
+    import {computed, onBeforeUnmount, onMounted, reactive, ref} from 'vue';
 
     export default {
         name: 'PaintBoard',
         components: {
             Page
         },
-        data() {
-            return {
-                form: {
-                    width: 1920,
-                    height: 1080,
-                    color: '#000',
-                    lineWidth: 3
-                },
-                lastPoint: {},
-                historyList: [] // 保存历史图像
-            };
-        },
-        mounted() {
-            this.createPaintBoard();
-        },
-        beforeUnmount() {
-            let canvas = this.$refs.canvas;
-            canvas.removeEventListener('mousedown', this.onMousedown);
-        },
-        methods: {
-            createPaintBoard() {
-                let canvas = this.$refs.canvas;
-                let context = canvas.getContext('2d');
+        setup() {
+            let canvas = ref(null);
+            let context;
+            let form = reactive({
+                width: 1920,
+                height: 1080,
+                color: '#000',
+                lineWidth: 3
+            });
+            let lastPoint = ref({});
+            let historyList = ref([]); // 保存历史图像
 
-                canvas.width = this.form.width;
-                canvas.height = this.form.height;
+            onMounted(() => {
+                context = canvas.value.getContext('2d');
+
+                canvas.value.width = form.width;
+                canvas.value.height = form.height;
 
                 context.lineCap = 'round';
                 context.lineJoin = 'round';
 
-                canvas.addEventListener('mousedown', this.onMousedown);
-            },
-            resetSize() {
-                let canvas = this.$refs.canvas;
-                let context = canvas.getContext('2d');
+                canvas.value.addEventListener('mousedown', onMousedown);
+            });
 
-                let history = context.getImageData(0, 0, canvas.width, canvas.height);
+            onBeforeUnmount(() => {
+                canvas.value.removeEventListener('mousedown', onMousedown);
+            });
 
-                canvas.width = this.form.width;
-                canvas.height = this.form.height;
+            const paintBoardStyle = computed(() => {
+                return {
+                    width: `${form.width}px`,
+                    height: `${form.height}px`
+                };
+            });
+
+            const resetSize = () => {
+                let history = context.getImageData(0, 0, canvas.value.width, canvas.value.height);
+
+                canvas.value.width = form.width;
+                canvas.value.height = form.height;
 
                 context.putImageData(history, 0, 0);
-            },
-            drawLine(x, y) {
-                let canvas = this.$refs.canvas;
-                let context = canvas.getContext('2d');
+            };
+
+            const drawLine = (x, y) => {
                 context.beginPath();
-                context.moveTo(this.lastPoint.x, this.lastPoint.y);
+                context.moveTo(lastPoint.value.x, lastPoint.value.y);
                 context.lineTo(x, y);
-                this.lastPoint = {x: x, y: y};
-                context.lineWidth = this.form.lineWidth;
-                context.strokeStyle = this.form.color;
+                lastPoint.value = {x: x, y: y};
+                context.lineWidth = form.lineWidth;
+                context.strokeStyle = form.color;
                 context.stroke();
-            },
-            saveHistory() {
-                let canvas = this.$refs.canvas;
-                let context = canvas.getContext('2d');
-                let history = context.getImageData(0, 0, canvas.width, canvas.height);
-                this.historyList.push(history);
-            },
-            restoreHistory() {
-                let canvas = this.$refs.canvas;
-                let context = canvas.getContext('2d');
-                let history = this.historyList.pop();
+            };
+
+            const saveHistory = () => {
+                let history = context.getImageData(0, 0, canvas.value.width, canvas.value.height);
+                historyList.value.push(history);
+            };
+
+            const restoreHistory = () => {
+                let history = historyList.value.pop();
                 context.putImageData(history, 0, 0);
-            },
-            clearPaintBoard() {
-                let canvas = this.$refs.canvas;
-                let context = canvas.getContext('2d');
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                this.historyList = [];
-            },
-            onMousedown(e) {
-                let canvas = this.$refs.canvas;
-                canvas.addEventListener('mousemove', this.onMousemove);
-                addEventListener('mouseup', this.onMouseup);
-                this.saveHistory();
-                this.lastPoint = {x: e.offsetX, y: e.offsetY};
-                this.drawLine(e.offsetX, e.offsetY);
+            };
+
+            const clearPaintBoard = () => {
+                context.clearRect(0, 0, canvas.value.width, canvas.value.height);
+                historyList.value = [];
+            };
+
+            const onMousedown = e => {
+                canvas.value.addEventListener('mousemove', onMousemove);
+                addEventListener('mouseup', onMouseup);
+                saveHistory();
+                lastPoint.value = {x: e.offsetX, y: e.offsetY};
+                drawLine(e.offsetX, e.offsetY);
 
                 document.onselectstart = () => false;
                 document.ondragstart = () => false;
-            },
-            onMousemove(e) {
-                this.drawLine(e.offsetX, e.offsetY);
-            },
-            onMouseup() {
-                let canvas = this.$refs.canvas;
-                canvas.removeEventListener('mousemove', this.onMousemove);
-                removeEventListener('mouseup', this.onMouseup);
+            };
+
+            const onMousemove = e => {
+                drawLine(e.offsetX, e.offsetY);
+            };
+
+            const onMouseup = () => {
+                canvas.value.removeEventListener('mousemove', onMousemove);
+                removeEventListener('mouseup', onMouseup);
 
                 document.onselectstart = null;
                 document.ondragstart = null;
-            }
-        },
-        computed: {
-            paintBoardStyle() {
-                return {
-                    width: `${this.form.width}px`,
-                    height: `${this.form.height}px`
-                };
-            }
+            };
+
+            return {
+                canvas,
+                form,
+                lastPoint,
+                historyList,
+                paintBoardStyle,
+                restoreHistory,
+                clearPaintBoard,
+                resetSize
+            };
         }
     };
 </script>

@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="form-main">
-                    <el-form ref="form" :model="form" label-width="auto" size="small">
+                    <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="图片">
                             <el-upload action="/" :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
                                 <el-button type="primary">选择图片</el-button>
