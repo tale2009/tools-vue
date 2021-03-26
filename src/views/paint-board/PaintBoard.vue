@@ -52,16 +52,16 @@
             Page
         },
         setup() {
-            let canvas = ref(null);
+            const canvas = ref(null);
             let context;
-            let form = reactive({
+            const form = reactive({
                 width: 1920,
                 height: 1080,
                 color: '#000',
                 lineWidth: 3
             });
-            let lastPoint = ref({});
-            let historyList = ref([]); // 保存历史图像
+            const lastPoint = ref({});
+            const historyList = ref([]); // 保存历史图像
 
             onMounted(() => {
                 createPaintBoard();
@@ -91,7 +91,7 @@
             });
 
             const resetSize = () => {
-                let history = context.getImageData(0, 0, canvas.value.width, canvas.value.height);
+                const history = context.getImageData(0, 0, canvas.value.width, canvas.value.height);
 
                 canvas.value.width = form.width;
                 canvas.value.height = form.height;
@@ -114,12 +114,12 @@
             };
 
             const saveHistory = () => {
-                let history = context.getImageData(0, 0, canvas.value.width, canvas.value.height);
+                const history = context.getImageData(0, 0, canvas.value.width, canvas.value.height);
                 historyList.value.push(history);
             };
 
             const restoreHistory = () => {
-                let history = historyList.value.pop();
+                const history = historyList.value.pop();
                 context.putImageData(history, 0, 0);
             };
 
