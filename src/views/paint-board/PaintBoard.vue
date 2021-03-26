@@ -15,7 +15,11 @@
                 <div class="form-main">
                     <el-space class="form-bar" :size="10">
                         <el-button plain size="small" @click="restoreHistory" :disabled="!historyList.length">撤销</el-button>
-                        <el-button type="danger" size="small" @click="clearPaintBoard">清空</el-button>
+                        <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
+                            <template #reference>
+                                <el-button type="danger" size="small">清空</el-button>
+                            </template>
+                        </el-popconfirm>
                     </el-space>
 
                     <el-form :model="form" label-width="auto" size="small">
@@ -60,6 +64,14 @@
             let historyList = ref([]); // 保存历史图像
 
             onMounted(() => {
+                createPaintBoard();
+            });
+
+            onBeforeUnmount(() => {
+                canvas.value.removeEventListener('mousedown', onMousedown);
+            });
+
+            const createPaintBoard = () => {
                 context = canvas.value.getContext('2d');
 
                 canvas.value.width = form.width;
@@ -69,11 +81,7 @@
                 context.lineJoin = 'round';
 
                 canvas.value.addEventListener('mousedown', onMousedown);
-            });
-
-            onBeforeUnmount(() => {
-                canvas.value.removeEventListener('mousedown', onMousedown);
-            });
+            };
 
             const paintBoardStyle = computed(() => {
                 return {
@@ -93,7 +101,11 @@
 
             const drawLine = (x, y) => {
                 context.beginPath();
-                context.moveTo(lastPoint.value.x, lastPoint.value.y);
+                if (Object.keys(lastPoint.value).length) {
+                    context.moveTo(lastPoint.value.x, lastPoint.value.y);
+                } else {
+                    context.moveTo(x, y);
+                }
                 context.lineTo(x, y);
                 lastPoint.value = {x: x, y: y};
                 context.lineWidth = form.lineWidth;
@@ -117,7 +129,7 @@
             };
 
             const onMousedown = e => {
-                canvas.value.addEventListener('mousemove', onMousemove);
+                addEventListener('mousemove', onMousemove);
                 addEventListener('mouseup', onMouseup);
                 saveHistory();
                 lastPoint.value = {x: e.offsetX, y: e.offsetY};
@@ -128,11 +140,15 @@
             };
 
             const onMousemove = e => {
-                drawLine(e.offsetX, e.offsetY);
+                if (e.target === canvas.value) {
+                    drawLine(e.offsetX, e.offsetY);
+                } else {
+                    lastPoint.value = {};
+                }
             };
 
             const onMouseup = () => {
-                canvas.value.removeEventListener('mousemove', onMousemove);
+                removeEventListener('mousemove', onMousemove);
                 removeEventListener('mouseup', onMouseup);
 
                 document.onselectstart = null;
