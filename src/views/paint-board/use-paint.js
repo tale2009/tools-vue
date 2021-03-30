@@ -9,6 +9,7 @@ const usePaint = (usePaintKey, type, e) => {
 
     const history = historyList.value[historyList.value.length - 1];
 
+    const shiftKey = e.shiftKey;
     const x = e.offsetX;
     const y = e.offsetY;
     context.value.lineCap = 'butt';
@@ -49,7 +50,12 @@ const usePaint = (usePaintKey, type, e) => {
 
     const useRectangle = () => {
         context.value.putImageData(history, 0, 0);
-        context.value.strokeRect(downPoint.value.x, downPoint.value.y, x - downPoint.value.x, y - downPoint.value.y);
+        if (shiftKey) {
+            const length = Math.min(x - downPoint.value.x, y - downPoint.value.y);
+            context.value.strokeRect(downPoint.value.x, downPoint.value.y, length, length);
+        } else {
+            context.value.strokeRect(downPoint.value.x, downPoint.value.y, x - downPoint.value.x, y - downPoint.value.y);
+        }
     };
 
     const useEllipse = () => {
@@ -57,9 +63,16 @@ const usePaint = (usePaintKey, type, e) => {
         context.value.beginPath();
         let radiusX = Math.abs((x - downPoint.value.x) / 2);
         let radiusY = Math.abs((y - downPoint.value.y) / 2);
-        let centerX = radiusX + Math.min(downPoint.value.x, x);
-        let centerY = radiusY + Math.min(downPoint.value.y, y);
-        context.value.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+        if (shiftKey) {
+            let radius = Math.min(radiusX, radiusY);
+            let centerX = x > downPoint.value.x ? radius + downPoint.value.x : downPoint.value.x - radius;
+            let centerY = y > downPoint.value.y ? radius + downPoint.value.y : downPoint.value.y - radius;
+            context.value.ellipse(centerX, centerY, radius, radius, 0, 0, Math.PI * 2);
+        } else {
+            let centerX = radiusX + Math.min(downPoint.value.x, x);
+            let centerY = radiusY + Math.min(downPoint.value.y, y);
+            context.value.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+        }
         context.value.stroke();
     };
 

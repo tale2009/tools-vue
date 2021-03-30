@@ -34,6 +34,9 @@
                                 <el-check-tag :checked="form.type === 'pencil'" @change="changeType('pencil')">铅笔</el-check-tag>
                                 <el-check-tag :checked="form.type === 'text'" @change="changeType('text')" v-if="false">文本</el-check-tag>
                                 <el-check-tag :checked="form.type === 'eraser'" @change="changeType('eraser')">橡皮擦</el-check-tag>
+                                <el-tooltip content="线宽可以控制橡皮擦大小" placement="top">
+                                    <i class="el-icon-info"></i>
+                                </el-tooltip>
                             </el-space>
                         </el-form-item>
                         <el-form-item label="形状">
@@ -41,6 +44,9 @@
                                 <el-check-tag :checked="form.type === 'straight'" @change="changeType('straight')">直线</el-check-tag>
                                 <el-check-tag :checked="form.type === 'rectangle'" @change="changeType('rectangle')">矩形</el-check-tag>
                                 <el-check-tag :checked="form.type === 'ellipse'" @change="changeType('ellipse')">圆形</el-check-tag>
+                                <el-tooltip content="按住 shift 画图试试" placement="top">
+                                    <i class="el-icon-info"></i>
+                                </el-tooltip>
                             </el-space>
                         </el-form-item>
                         <el-form-item label="颜色">
