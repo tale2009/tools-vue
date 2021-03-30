@@ -70,7 +70,7 @@
             Page
         },
         setup() {
-            const {ctx} = getCurrentInstance();
+            const {proxy} = getCurrentInstance();
             const canvas = ref(null);
             const context = ref(null);
             const form = reactive({
@@ -190,8 +190,8 @@
                     }
                 }).then(canvas => {
                     let dataURL = canvas.toDataURL('image/png', 1);
-                    let blob = ctx.dataURLtoBlob(dataURL);
-                    ctx.downloadBlob(blob, '画图板');
+                    let blob = proxy.dataURLtoBlob(dataURL);
+                    proxy.downloadBlob(blob, '画图板');
                 });
             };
 
