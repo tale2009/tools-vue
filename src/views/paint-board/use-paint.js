@@ -12,10 +12,12 @@ const usePaint = (usePaintKey, type, e) => {
     const shiftKey = e.shiftKey;
     const x = e.offsetX;
     const y = e.offsetY;
+    context.value.globalCompositeOperation = 'source-over';
     context.value.lineCap = 'butt';
     context.value.lineJoin = 'miter';
     context.value.lineWidth = form.lineWidth;
     context.value.strokeStyle = form.color;
+    context.value.fillStyle = form.fillColor;
 
     const usePencil = () => {
         context.value.beginPath();
@@ -35,14 +37,51 @@ const usePaint = (usePaintKey, type, e) => {
     };
 
     const useEraser = () => {
-        context.value.clearRect(x, y, form.lineWidth, form.lineWidth);
+        context.value.globalCompositeOperation = 'destination-out';
+        usePencil();
     };
 
     const useStraight = () => {
         context.value.putImageData(history, 0, 0);
         context.value.beginPath();
         context.value.moveTo(downPoint.value.x, downPoint.value.y);
-        context.value.lineTo(x, y);
+        if (shiftKey) {
+            // 数学直角坐标系的角度
+            let angle = -Math.atan2(y - downPoint.value.y, x - downPoint.value.x) * 180 / Math.PI;
+            let newX;
+            let newY;
+            if (angle >= -157.5 && angle < -112.5) {
+                angle = -135;
+            } else if (angle >= -112.5 && angle < -67.5) {
+                angle = -90;
+                newX = downPoint.value.x;
+                newY = y;
+            } else if (angle >= -67.5 && angle < -22.5) {
+                angle = -45;
+            } else if (angle >= -22.5 && angle < 22.5) {
+                angle = 0;
+                newX = x;
+                newY = downPoint.value.y;
+            } else if (angle >= 22.5 && angle < 67.5) {
+                angle = 45;
+                newX = downPoint.value.x+x;
+                newY = downPoint.value.y+y;
+            } else if (angle >= 67.5 && angle < 112.5) {
+                angle = 90;
+                newX = downPoint.value.x;
+                newY = y;
+            } else if (angle >= 112.5 && angle < 157.5) {
+                angle = 135;
+            } else {
+                angle = 0;
+                newX = x;
+                newY = downPoint.value.y;
+            }
+            console.log(angle);
+            context.value.lineTo(newX, newY);
+        } else {
+            context.value.lineTo(x, y);
+        }
         context.value.lineCap = 'round';
         context.value.lineJoin = 'round';
         context.value.stroke();
@@ -53,8 +92,14 @@ const usePaint = (usePaintKey, type, e) => {
         if (shiftKey) {
             const length = Math.min(x - downPoint.value.x, y - downPoint.value.y);
             context.value.strokeRect(downPoint.value.x, downPoint.value.y, length, length);
+            if (form.fillColor) {
+                context.value.fillRect(downPoint.value.x, downPoint.value.y, length, length);
+            }
         } else {
             context.value.strokeRect(downPoint.value.x, downPoint.value.y, x - downPoint.value.x, y - downPoint.value.y);
+            if (form.fillColor) {
+                context.value.fillRect(downPoint.value.x, downPoint.value.y, x - downPoint.value.x, y - downPoint.value.y);
+            }
         }
     };
 
@@ -74,6 +119,9 @@ const usePaint = (usePaintKey, type, e) => {
             context.value.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
         }
         context.value.stroke();
+        if (form.fillColor) {
+            context.value.fill();
+        }
     };
 
     switch (type) {

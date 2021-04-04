@@ -49,9 +49,18 @@
                                 </el-tooltip>
                             </el-space>
                         </el-form-item>
-                        <el-form-item label="颜色">
-                            <el-color-picker v-model="form.color"></el-color-picker>
-                        </el-form-item>
+                        <el-row :gutter="10">
+                            <el-col :span="8">
+                                <el-form-item label="颜色">
+                                    <el-color-picker v-model="form.color"></el-color-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="填充">
+                                    <el-color-picker v-model="form.fillColor"></el-color-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                         <el-form-item label="线宽">
                             <el-slider v-model="form.lineWidth" :min="1" :max="30"></el-slider>
                         </el-form-item>
@@ -84,6 +93,7 @@
                 height: 1080,
                 type: 'pencil',
                 color: '#000',
+                fillColor: '',
                 lineWidth: 3
             });
             const downPoint = ref({}); // 鼠标按钮坐标
