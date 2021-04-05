@@ -12,6 +12,7 @@ const usePaint = (usePaintKey, type, e) => {
     const shiftKey = e.shiftKey;
     const x = e.offsetX;
     const y = e.offsetY;
+    // 初始化以下为默认变量
     context.value.globalCompositeOperation = 'source-over';
     context.value.lineCap = 'butt';
     context.value.lineJoin = 'miter';

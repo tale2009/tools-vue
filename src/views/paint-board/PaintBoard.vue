@@ -13,14 +13,14 @@
                 </div>
 
                 <div class="form-main">
-                    <el-space class="form-bar" :size="10">
+                    <el-button-group class="form-bar">
                         <el-button plain size="small" @click="restoreHistory" :disabled="!historyList.length">撤销</el-button>
                         <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
                             <template #reference>
                                 <el-button type="danger" size="small">清空</el-button>
                             </template>
                         </el-popconfirm>
-                    </el-space>
+                    </el-button-group>
 
                     <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="宽度">
@@ -32,7 +32,7 @@
                         <el-form-item label="工具">
                             <el-space :size="10" wrap>
                                 <el-check-tag :checked="form.type === 'pencil'" @change="changeType('pencil')">铅笔</el-check-tag>
-                                <el-check-tag :checked="form.type === 'text'" @change="changeType('text')" v-if="false">文本</el-check-tag>
+                                <el-check-tag :checked="form.type === 'text'" @change="changeType('text')">文本</el-check-tag>
                                 <el-check-tag :checked="form.type === 'eraser'" @change="changeType('eraser')">橡皮擦</el-check-tag>
                                 <el-tooltip content="线宽可以控制橡皮擦大小" placement="top">
                                     <i class="el-icon-info"></i>
@@ -43,8 +43,8 @@
                             <el-space :size="10" wrap>
                                 <el-check-tag :checked="form.type === 'straight'" @change="changeType('straight')">直线</el-check-tag>
                                 <el-check-tag :checked="form.type === 'rectangle'" @change="changeType('rectangle')">矩形</el-check-tag>
-                                <el-check-tag :checked="form.type === 'ellipse'" @change="changeType('ellipse')">圆形</el-check-tag>
-                                <el-tooltip content="按住 shift 画图试试" placement="top">
+                                <el-check-tag :checked="form.type === 'ellipse'" @change="changeType('ellipse')">椭圆形</el-check-tag>
+                                <el-tooltip content="按住 Shift 画图试试" placement="top">
                                     <i class="el-icon-info"></i>
                                 </el-tooltip>
                             </el-space>
