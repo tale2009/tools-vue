@@ -47,37 +47,36 @@ const usePaint = (usePaintKey, type, e) => {
         context.value.moveTo(downPoint.value.x, downPoint.value.y);
         if (shiftKey) {
             // 数学直角坐标系的角度
-            let angle = -Math.atan2(y - downPoint.value.y, x - downPoint.value.x) * 180 / Math.PI;
+            const angle = -Math.atan2(y - downPoint.value.y, x - downPoint.value.x) * 180 / Math.PI;
+            // 45°偏移
+            const offset = (Math.abs(x - downPoint.value.x) + Math.abs(y - downPoint.value.y)) / 2;
             let newX;
             let newY;
             if (angle >= -157.5 && angle < -112.5) {
-                angle = -135;
+                newX = downPoint.value.x - offset;
+                newY = downPoint.value.y + offset;
             } else if (angle >= -112.5 && angle < -67.5) {
-                angle = -90;
                 newX = downPoint.value.x;
                 newY = y;
             } else if (angle >= -67.5 && angle < -22.5) {
-                angle = -45;
+                newX = downPoint.value.x + offset;
+                newY = downPoint.value.y + offset;
             } else if (angle >= -22.5 && angle < 22.5) {
-                angle = 0;
                 newX = x;
                 newY = downPoint.value.y;
             } else if (angle >= 22.5 && angle < 67.5) {
-                angle = 45;
-                newX = downPoint.value.x+x;
-                newY = downPoint.value.y+y;
+                newX = downPoint.value.x + offset;
+                newY = downPoint.value.y - offset;
             } else if (angle >= 67.5 && angle < 112.5) {
-                angle = 90;
                 newX = downPoint.value.x;
                 newY = y;
             } else if (angle >= 112.5 && angle < 157.5) {
-                angle = 135;
+                newX = downPoint.value.x - offset;
+                newY = downPoint.value.y - offset;
             } else {
-                angle = 0;
                 newX = x;
                 newY = downPoint.value.y;
             }
-            console.log(angle);
             context.value.lineTo(newX, newY);
         } else {
             context.value.lineTo(x, y);
