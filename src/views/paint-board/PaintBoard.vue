@@ -14,10 +14,10 @@
 
                 <div class="form-main">
                     <el-button-group class="form-bar">
-                        <el-button plain size="small" @click="restoreHistory" :disabled="!historyList.length">撤销</el-button>
+                        <el-button plain icon="fas fa-undo" size="small" @click="undoHistory" :disabled="!historyList.length"></el-button>
                         <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
                             <template #reference>
-                                <el-button type="danger" size="small">清空</el-button>
+                                <el-button type="danger" icon="fas fa-trash" size="small"></el-button>
                             </template>
                         </el-popconfirm>
                     </el-button-group>
@@ -32,7 +32,7 @@
                         <el-form-item label="工具">
                             <el-space :size="10" wrap>
                                 <el-check-tag :checked="form.type === 'pencil'" @change="changeType('pencil')">铅笔</el-check-tag>
-                                <el-check-tag :checked="form.type === 'text'" @change="changeType('text')">文本</el-check-tag>
+                                <el-check-tag :checked="form.type === 'text'" @change="changeType('text')" v-if="false">文本</el-check-tag>
                                 <el-check-tag :checked="form.type === 'eraser'" @change="changeType('eraser')">橡皮擦</el-check-tag>
                                 <el-tooltip content="线宽可以控制橡皮擦大小" placement="top">
                                     <i class="el-icon-info"></i>
@@ -110,10 +110,12 @@
 
             onMounted(() => {
                 createPaintBoard();
+                addEventListener('keydown', registerShortcut);
             });
 
             onBeforeUnmount(() => {
                 canvas.value.removeEventListener('mousedown', onMousedown);
+                removeEventListener('keydown', registerShortcut);
             });
 
             const createPaintBoard = () => {
@@ -123,6 +125,13 @@
                 canvas.value.height = form.height;
 
                 canvas.value.addEventListener('mousedown', onMousedown);
+            };
+
+            const registerShortcut = e => {
+                const {ctrlKey, key} = e;
+                if (ctrlKey && key === 'z') {
+                    undoHistory();
+                }
             };
 
             const paintBoardStyle = computed(() => {
@@ -150,9 +159,11 @@
                 historyList.value.push(history);
             };
 
-            const restoreHistory = () => {
+            const undoHistory = () => {
                 const history = historyList.value.pop();
-                context.value.putImageData(history, 0, 0);
+                if (history) {
+                    context.value.putImageData(history, 0, 0);
+                }
             };
 
             const clearPaintBoard = () => {
@@ -217,7 +228,7 @@
                 form,
                 historyList,
                 paintBoardStyle,
-                restoreHistory,
+                undoHistory,
                 clearPaintBoard,
                 resetSize,
                 changeType,
