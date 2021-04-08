@@ -2,7 +2,7 @@
     <span v-compress-text="compressParams">
         <template v-for="item in textList">
             <span v-if="typeof item === 'object'" class="ruby">{{item.ruby}}<span class="rt" v-compress-rt>{{item.rt}}</span></span>
-            <span v-else :style="noCompress.includes(item) ? noCompressStyle : ''">{{item}}</span>
+            <span v-else>{{item}}</span>
         </template>
     </span>
 </template>
@@ -11,12 +11,6 @@
     export default {
         name: 'CompressText',
         props: ['text', 'width', 'height', 'language', 'fontLoading', 'autoSizeElement'],
-        data() {
-            return {
-                noCompress: '●①②③④⑤⑥⑦⑧⑨⑩',
-                textScale: 1
-            };
-        },
         computed: {
             compressParams() {
                 return {
@@ -27,7 +21,7 @@
                 };
             },
             textList() {
-                return this.text.replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompress}]`, 'g'), s => `|${s}|`).split('|').filter(value => value).map(value => {
+                return this.text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
                     if (/\[.*?\(.*?\)]/g.test(value)) {
                         return {
                             ruby: value.replace(/\[(.*?)\((.*?)\)]/g, '$1'),
@@ -36,13 +30,6 @@
                     }
                     return value;
                 });
-            },
-            noCompressStyle() {
-                return {
-                    display: 'inline-block',
-                    transform: `scaleX(${1 / this.textScale})`,
-                    padding: `0 ${(1 - this.textScale) * 36}px`
-                };
             }
         },
         watch: {
@@ -88,7 +75,6 @@
             },
             // 压缩文本文字
             compressText(el, binding) {
-                let that = binding.instance;
                 let params = binding.value;
                 if (params.width && params.height) {
                     el.style.display = 'inline-block';
@@ -126,9 +112,6 @@
                                 }
                             }
                         }
-                        that.textScale = scale;
-                    } else {
-                        that.textScale = 1;
                     }
                 }
             }
