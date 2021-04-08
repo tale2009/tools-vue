@@ -26,13 +26,18 @@
                 const left = parseInt(textEditor.style.left);
                 const top = parseInt(textEditor.style.top);
                 const textList = this.form.editText.split('\n');
+                const borderWidth = 1;
+                const lineHeight = 1.5;
+                const padding = 5;
 
                 this.context.beginPath();
                 this.context.fillStyle = this.form.color;
                 this.context.textBaseline = 'top';
                 this.context.font = `${this.form.editFontSize}px auto`;
                 textList.forEach((text, index) => {
-                    this.context.fillText(text, left, top + index * this.form.editFontSize * 1.5);
+                    const x = left + borderWidth + padding;
+                    const y = top + (index + (lineHeight - 1) / 2) * this.form.editFontSize * lineHeight + padding;
+                    this.context.fillText(text, x, y);
                 });
                 this.context.closePath();
                 this.form.editing = false;
@@ -60,7 +65,7 @@
             display: block;
             white-space: nowrap;
             border: 1px dashed $primary-color;
-            padding: 0;
+            padding: 5px;
             outline: none;
             line-height: 1.5;
             background: transparent;
