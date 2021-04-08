@@ -4,6 +4,7 @@
             <template #default>
                 <div class="paint-board" :style="paintBoardStyle">
                     <canvas ref="canvas"></canvas>
+                    <TextEditor v-show="form.type === 'text' && form.editing" :form="form" :context="context"></TextEditor>
                 </div>
             </template>
 
@@ -32,7 +33,7 @@
                         <el-form-item label="工具">
                             <el-space :size="10" wrap>
                                 <el-check-tag :checked="form.type === 'pencil'" @change="changeType('pencil')">铅笔</el-check-tag>
-                                <el-check-tag :checked="form.type === 'text'" @change="changeType('text')" v-if="false">文本</el-check-tag>
+                                <el-check-tag :checked="form.type === 'text'" @change="changeType('text')">文本</el-check-tag>
                                 <el-check-tag :checked="form.type === 'eraser'" @change="changeType('eraser')">橡皮擦</el-check-tag>
                                 <el-tooltip content="线宽可以控制橡皮擦大小" placement="top">
                                     <i class="el-icon-info"></i>
@@ -78,11 +79,13 @@
     import {computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref} from 'vue';
     import html2canvas from '@/assets/js/html2canvas';
     import usePaint from '@/views/paint-board/use-paint';
+    import TextEditor from '@/views/paint-board/components/TextEditor';
 
     export default {
         name: 'PaintBoard',
         components: {
-            Page
+            Page,
+            TextEditor
         },
         setup() {
             const {proxy} = getCurrentInstance();
@@ -94,7 +97,10 @@
                 type: 'pencil',
                 color: '#000',
                 fillColor: '',
-                lineWidth: 3
+                lineWidth: 3,
+                editing: false,
+                editText: '', // 编辑文字
+                editFontSize: 14 // 编辑文字大小
             });
             const downPoint = ref({}); // 鼠标按钮坐标
             const lastPoint = ref({});  // 上一次的坐标
@@ -152,6 +158,7 @@
 
             const changeType = type => {
                 form.type = type;
+                form.editing = false;
             };
 
             const saveHistory = () => {
@@ -179,6 +186,7 @@
                 saveHistory();
                 downPoint.value = {x, y};
                 lastPoint.value = {x, y};
+                form.editing = true;
                 usePaint(usePaintKey, form.type, e);
 
                 document.onselectstart = () => false;
@@ -241,6 +249,7 @@
 <style lang="scss" scoped>
     .paint-board-container {
         .paint-board {
+            position: relative;
             box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
         }
 
