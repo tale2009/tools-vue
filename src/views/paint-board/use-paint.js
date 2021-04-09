@@ -33,13 +33,8 @@ const usePaint = (usePaintKey, type, e) => {
         context.value.stroke();
     };
 
-    const useText = async () => {
-        if (form.editing) {
-            // 编辑中
-            const textEditor = document.querySelector('.text-editor');
-            textEditor.style.left = `${x}px`;
-            textEditor.style.top = `${y}px`;
-        }
+    const useText = () => {
+        form.editPosition = {x, y};
     };
 
     const useEraser = () => {

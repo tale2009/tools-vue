@@ -1,11 +1,12 @@
 <template>
-    <div ref="textEditor" class="text-editor">
-        <textarea ref="textarea" rows="5" cols="50" placeholder="请输入内容" v-model="form.editText" :style="textareaStyle"></textarea>
+    <div class="text-editor" :style="editorStyle" v-if="form.type === 'text' && form.editing">
+        <textarea ref="textarea" rows="5" cols="50" v-model="form.editText" placeholder="请输入内容" :style="textareaStyle"></textarea>
 
         <el-space class="text-operate" :size="5">
             <el-select style="width: 80px" v-model="form.editFontSize" size="mini">
                 <el-option v-for="item in fontSizeList" :label="`${item} px`" :value="item"></el-option>
             </el-select>
+            <el-button plain size="mini" @click="cancelInput">取消</el-button>
             <el-button type="primary" size="mini" @click="confirmInput">完成</el-button>
         </el-space>
     </div>
@@ -21,35 +22,54 @@
             };
         },
         methods: {
+            cancelInput() {
+                this.form.editing = false;
+                this.form.editText = '';
+            },
             confirmInput() {
-                const textEditor = this.$refs.textEditor;
-                const left = parseInt(textEditor.style.left);
-                const top = parseInt(textEditor.style.top);
                 const textList = this.form.editText.split('\n');
                 const borderWidth = 1;
                 const lineHeight = 1.5;
                 const padding = 5;
+                const fontFamily = getComputedStyle(document.body).fontFamily || 'sans-serif';
 
                 this.context.beginPath();
                 this.context.fillStyle = this.form.color;
                 this.context.textBaseline = 'top';
-                this.context.font = `${this.form.editFontSize}px auto`;
+                this.context.font = `${this.form.editFontSize}px ${fontFamily}`;
                 textList.forEach((text, index) => {
-                    const x = left + borderWidth + padding;
-                    const y = top + (index + (lineHeight - 1) / 2) * this.form.editFontSize * lineHeight + padding;
+                    const x = this.form.editPosition.x + borderWidth + padding;
+                    const y = this.form.editPosition.y + (index + (lineHeight - 1) / 2) * this.form.editFontSize * lineHeight + padding;
                     this.context.fillText(text, x, y);
                 });
                 this.context.closePath();
-                this.form.editing = false;
-                this.form.editText = '';
+                this.cancelInput();
             }
         },
         computed: {
+            editorStyle() {
+                return {
+                    left: `${this.form.editPosition.x}px`,
+                    top: `${this.form.editPosition.y}px`
+                };
+            },
             textareaStyle() {
                 return {
                     color: this.form.color,
                     fontSize: `${this.form.editFontSize}px`
                 };
+            }
+        },
+        watch: {
+            form: {
+                handler() {
+                    if (this.form.type === 'text' && this.form.editing) {
+                        setTimeout(() => {
+                            this.$refs.textarea.focus();
+                        });
+                    }
+                },
+                deep: true
             }
         }
     };

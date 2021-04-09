@@ -4,7 +4,7 @@
             <template #default>
                 <div class="paint-board" :style="paintBoardStyle">
                     <canvas ref="canvas"></canvas>
-                    <TextEditor v-show="form.type === 'text' && form.editing" :form="form" :context="context"></TextEditor>
+                    <TextEditor ref="textEditor" :form="form" :context="context"></TextEditor>
                 </div>
             </template>
 
@@ -91,6 +91,7 @@
             const {proxy} = getCurrentInstance();
             const canvas = ref(null);
             const context = ref(null);
+            const textEditor = ref(null);
             const form = reactive({
                 width: 1920,
                 height: 1080,
@@ -100,7 +101,8 @@
                 lineWidth: 3,
                 editing: false,
                 editText: '', // 编辑文字
-                editFontSize: 14 // 编辑文字大小
+                editFontSize: 14, // 编辑文字大小
+                editPosition: {}    // 编辑框位置
             });
             const downPoint = ref({}); // 鼠标按钮坐标
             const lastPoint = ref({});  // 上一次的坐标
@@ -158,7 +160,7 @@
 
             const changeType = type => {
                 form.type = type;
-                form.editing = false;
+                textEditor.value.cancelInput();
             };
 
             const saveHistory = () => {
@@ -233,6 +235,7 @@
             return {
                 canvas,
                 context,
+                textEditor,
                 form,
                 historyList,
                 paintBoardStyle,
