@@ -1,5 +1,5 @@
 <template>
-    <span v-compress-text="compressParams">
+    <span class="compress-text" v-compress-text="compressParams">
         <template v-for="item in textList">
             <span v-if="typeof item === 'object'" class="ruby">{{item.ruby}}<span class="rt" v-compress-rt>{{item.rt}}</span></span>
             <span v-else>{{item}}</span>
@@ -77,10 +77,8 @@
             compressText(el, binding) {
                 let params = binding.value;
                 if (params.width && params.height) {
-                    el.style.display = 'inline-block';
                     el.style.width = `${params.width}px`;
                     el.style.transform = '';
-                    el.style.transformOrigin = '0 0';
 
                     let autoSizeElement = document.querySelector(params.autoSizeElement);
                     autoSizeElement?.classList.remove('small-description');
@@ -120,25 +118,30 @@
 </script>
 
 <style lang="scss" scoped>
-    .ruby {
-        position: relative;
+    .compress-text {
+        display: inline-block;
+        transform-origin: 0 0;
 
-        .rt {
-            font-family: ygo-tip, sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-            text-align: center;
-            white-space: nowrap;
-            letter-spacing: 0;
-            text-indent: 0;
-            transform-origin: 0 0;
+        .ruby {
+            position: relative;
 
-            &.justify {
-                text-align-last: justify;
-                left: 5%;
-                width: 90%;
+            .rt {
+                font-family: ygo-tip, sans-serif;
+                font-size: 16px;
+                font-weight: bold;
+                position: absolute;
+                left: 0;
+                text-align: center;
+                white-space: nowrap;
+                letter-spacing: 0;
+                text-indent: 0;
+                transform-origin: 0 0;
+
+                &.justify {
+                    text-align-last: justify;
+                    left: 5%;
+                    width: 90%;
+                }
             }
         }
     }

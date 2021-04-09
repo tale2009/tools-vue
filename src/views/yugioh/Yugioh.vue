@@ -202,10 +202,12 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="图片">
-                            <el-upload style="display: inline-block" action="/" :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
-                                <el-button type="primary">选择图片</el-button>
-                            </el-upload>
-                            <el-button style="margin-left: 10px" plain @click="deleteImage">删除</el-button>
+                            <el-space :size="10">
+                                <el-upload action="/" :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
+                                    <el-button type="primary">选择图片</el-button>
+                                </el-upload>
+                                <el-button plain @click="deleteImage">删除</el-button>
+                            </el-space>
                         </el-form-item>
                         <el-form-item label="卡类" v-if="form.type==='monster'">
                             <el-select v-model="form.cardType" placeholder="请选择卡类">
