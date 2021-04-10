@@ -1,10 +1,10 @@
 <template>
-    <span class="compress-text" v-compress-text="compressParams">
+    <div class="compress-text" v-compress-text="compressParams">
         <template v-for="item in textList">
             <span v-if="typeof item === 'object'" class="ruby">{{item.ruby}}<span class="rt" v-compress-rt>{{item.rt}}</span></span>
             <span v-else>{{item}}</span>
         </template>
-    </span>
+    </div>
 </template>
 
 <script>
@@ -119,7 +119,6 @@
 
 <style lang="scss" scoped>
     .compress-text {
-        display: inline-block;
         transform-origin: 0 0;
 
         .ruby {
@@ -134,7 +133,6 @@
                 text-align: center;
                 white-space: nowrap;
                 letter-spacing: 0;
-                text-indent: 0;
                 transform-origin: 0 0;
 
                 &.justify {

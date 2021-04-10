@@ -30,7 +30,8 @@ if (process.env.NODE_ENV === 'production') {
     app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 } else {
     // 本地环境
-    app.config.globalProperties.baseURL = 'http://localhost:7010/api';
+    // app.config.globalProperties.baseURL = 'http://localhost:7010/api';
+    app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 }
 
 export default vm;

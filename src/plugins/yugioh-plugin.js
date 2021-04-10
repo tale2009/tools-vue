@@ -318,13 +318,9 @@ function parseMonsterType(data, lang) {
         list.push('normal');
     }
     list = list.map(value => monsterTypeList[lang][value]).filter(value => value);
-    if (['sc', 'en'].includes(lang)) {
-        return list.join('/');
-    } else if (['tc', 'jp'].includes(lang)) {
-        return list.join('／');
-    } else {
-        return list.join('/');
-    }
+
+    const separator = ['tc', 'jp'].includes(lang) ? '／' : '/';
+    return list.join(separator);
 }
 
 function parseAtk(data) {

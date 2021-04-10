@@ -84,9 +84,7 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <span>{{form.language === 'en' ? '[' : '【'}}</span>
-                            <CompressText :text="form.monsterType" :fontLoading="fontLoading"></CompressText>
-                            <span>{{form.language === 'en' ? ']' : '】'}}</span>
+                            <CompressText :text="monsterType" :width="1170" :height="80" :fontLoading="fontLoading"></CompressText>
                         </div>
 
                         <div class="description-info" :style="descriptionStyle">
@@ -752,6 +750,12 @@
                 return {
                     color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
                 };
+            },
+            monsterType() {
+                const leftBracket = this.form.language === 'en' ? '[' : '【';
+                const rightBracket = this.form.language === 'en' ? ']' : '】';
+                return `${leftBracket}${this.form.monsterType}${rightBracket}`;
+
             },
             copyrightSrc() {
                 let color = this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black';
