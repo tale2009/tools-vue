@@ -24,7 +24,7 @@ export default {
                 def: parseDef(data),
                 arrowList: parseArrowList(data),
                 description: parseDescription(data),
-                package: parsePackage(data),
+                package: parsePackage(data, lang),
                 password: parsePassword(data)
             };
             if (lang === 'jp') {
@@ -401,8 +401,9 @@ function parseDescription(data) {
     return description;
 }
 
-function parsePackage(data) {
-    return data.setid.split(',').reverse()[0];
+function parsePackage(data, lang) {
+    const packageList = data.setid.split(',').reverse();
+    return packageList.find(value => value.includes(`-${lang.toUpperCase()}`)) || '';
 }
 
 function parsePassword(data) {
