@@ -33,6 +33,10 @@ const usePaint = (usePaintKey, type, e) => {
         context.value.stroke();
     };
 
+    const useBucket = () => {
+
+    };
+
     const useText = () => {
         form.editPosition = {x, y};
     };
@@ -40,6 +44,14 @@ const usePaint = (usePaintKey, type, e) => {
     const useEraser = () => {
         context.value.globalCompositeOperation = 'destination-out';
         usePencil();
+    };
+
+    const useAbsorber = () => {
+        const imageData = context.value.getImageData(x, y, 1, 1);
+        const r = imageData.data[0];
+        const g = imageData.data[1];
+        const b = imageData.data[2];
+        form.color = `rgb(${r}, ${g}, ${b})`;
     };
 
     const useStraight = () => {
@@ -128,11 +140,17 @@ const usePaint = (usePaintKey, type, e) => {
         case 'pencil':
             usePencil();
             break;
+        case 'bucket':
+            useBucket();
+            break;
         case 'text':
             useText();
             break;
         case 'eraser':
             useEraser();
+            break;
+        case 'absorber':
+            useAbsorber();
             break;
         case 'straight':
             useStraight();

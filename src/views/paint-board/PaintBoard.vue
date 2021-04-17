@@ -4,7 +4,7 @@
             <template #default>
                 <div class="paint-board" :style="paintBoardStyle">
                     <canvas ref="canvas"></canvas>
-                    <TextEditor ref="textEditor" :form="form" :context="context"></TextEditor>
+                    <TextEditor ref="textEditor" :form="form" :context="context" @confirm="saveHistory"></TextEditor>
                 </div>
             </template>
 
@@ -33,8 +33,10 @@
                         <el-form-item label="工具">
                             <el-space :size="10" wrap>
                                 <el-check-tag :checked="form.type === 'pencil'" @change="changeType('pencil')">铅笔</el-check-tag>
+                                <el-check-tag :checked="form.type === 'bucket'" @change="changeType('bucket')" v-if="false">油漆桶</el-check-tag>
                                 <el-check-tag :checked="form.type === 'text'" @change="changeType('text')">文本</el-check-tag>
                                 <el-check-tag :checked="form.type === 'eraser'" @change="changeType('eraser')">橡皮擦</el-check-tag>
+                                <el-check-tag :checked="form.type === 'absorber'" @change="changeType('absorber')">吸色器</el-check-tag>
                                 <el-tooltip content="线宽可以控制橡皮擦大小" placement="top">
                                     <i class="el-icon-info"></i>
                                 </el-tooltip>
@@ -185,7 +187,9 @@
                 const y = e.offsetY;
                 addEventListener('mousemove', onMousemove);
                 addEventListener('mouseup', onMouseup);
-                saveHistory();
+                if (!['text', 'absorber'].includes(form.type)) {
+                    saveHistory();
+                }
                 downPoint.value = {x, y};
                 lastPoint.value = {x, y};
                 form.editing = true;
@@ -199,7 +203,9 @@
                 const x = e.offsetX;
                 const y = e.offsetY;
                 if (e.target === canvas.value) {
-                    usePaint(usePaintKey, form.type, e);
+                    if (!['text', 'bucket'].includes(form.type)) {
+                        usePaint(usePaintKey, form.type, e);
+                    }
                     lastPoint.value = {x, y};
                 } else {
                     lastPoint.value = {};
@@ -243,6 +249,7 @@
                 clearPaintBoard,
                 resetSize,
                 changeType,
+                saveHistory,
                 exportImage
             };
         }

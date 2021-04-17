@@ -33,6 +33,7 @@
                 const padding = 5;
                 const fontFamily = getComputedStyle(document.body).fontFamily || 'sans-serif';
 
+                this.$emit('confirm');
                 this.context.beginPath();
                 this.context.fillStyle = this.form.color;
                 this.context.textBaseline = 'top';

@@ -84,7 +84,7 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <CompressText :text="monsterType" :width="1170" :height="80" :fontLoading="fontLoading"></CompressText>
+                            <CompressText :text="monsterType" :fontLoading="fontLoading"></CompressText>
                         </div>
 
                         <div class="description-info" :style="descriptionStyle">
