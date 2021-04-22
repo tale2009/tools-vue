@@ -24,6 +24,7 @@ export default {
                 def: parseDef(data),
                 arrowList: parseArrowList(data),
                 description: parseDescription(data),
+                firstLineCompress: parseFirstLineCompress(data),
                 package: parsePackage(data, lang),
                 password: parsePassword(data)
             };
@@ -399,6 +400,10 @@ function parseDescription(data) {
         }
     }
     return description;
+}
+
+function parseFirstLineCompress(data) {
+    return ['monster', 'pendulum'].includes(parseType(data)) && ['fusion', 'synchro', 'xyz', 'link'].includes(parseCardType(data));
 }
 
 function parsePackage(data, lang) {
