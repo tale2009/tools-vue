@@ -236,7 +236,7 @@
                             <el-input-number v-model="form.rank" :min="0" :max="13" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="刻度" v-if="form.type==='pendulum'">
-                            <el-input-number v-model="form.pendulumScale" :min="0" :max="12" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.pendulumScale" :min="0" :max="13" :precision="0"></el-input-number>
                         </el-form-item>
                         <el-form-item label="灵摆效果" label-width="40px" v-if="form.type==='pendulum'">
                             <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.pendulumDescription"
