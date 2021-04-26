@@ -2,11 +2,15 @@ import {createStore} from 'vuex';
 
 export default createStore({
     state: {
-        collapse: false
+        leftCollapse: false,
+        rightCollapse: false
     },
     mutations: {
-        setCollapse(state) {
-            state.collapse = !state.collapse;
+        setLeftCollapse(state, value) {
+            state.leftCollapse = value;
+        },
+        setRightCollapse(state, value) {
+            state.rightCollapse = value;
         }
     },
     actions: {}

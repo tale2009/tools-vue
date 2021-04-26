@@ -8,11 +8,7 @@
             </template>
 
             <template #form>
-                <div class="form-title">
-                    <span>点阵图生成器</span>
-                </div>
-
-                <div class="form-main">
+                <PageForm title="点阵图生成器">
                     <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="图片">
                             <el-upload action="/" :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
@@ -41,7 +37,7 @@
                     </el-form>
 
                     <el-button style="width: 100%" type="primary" size="medium" @click="exportImage">导出图片</el-button>
-                </div>
+                </PageForm>
             </template>
         </Page>
     </div>
@@ -49,13 +45,15 @@
 
 <script>
     import Page from '@/components/page/Page';
+    import PageForm from '@/components/page/PageForm';
     import loadImage from 'blueimp-load-image';
     import html2canvas from '@/assets/js/html2canvas';
 
     export default {
         name: 'DotImage',
         components: {
-            Page
+            Page,
+            PageForm
         },
         data() {
             return {

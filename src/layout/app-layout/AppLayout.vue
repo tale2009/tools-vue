@@ -6,7 +6,7 @@
 
         <el-container>
             <el-aside class="left-aside" width="200px" :style="leftStyle">
-                <el-scrollbar ref="left-scrollbar">
+                <el-scrollbar>
                     <AppLeft></AppLeft>
                 </el-scrollbar>
             </el-aside>
@@ -31,10 +31,6 @@
         mounted() {
             document.onkeydown = this.disableKey;
             document.onkeypress = this.disableKey;
-            addEventListener('resize', this.updateScrollbar);
-        },
-        unmounted() {
-            removeEventListener('resize', this.updateScrollbar);
         },
         methods: {
             updateScrollbar() {
@@ -48,10 +44,10 @@
             }
         },
         computed: {
-            ...mapState(['collapse']),
+            ...mapState(['leftCollapse']),
             leftStyle() {
                 return {
-                    marginLeft: this.collapse ? '-200px' : '0'
+                    marginLeft: this.leftCollapse ? '-200px' : '0'
                 };
             }
         }

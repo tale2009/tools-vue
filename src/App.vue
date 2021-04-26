@@ -8,6 +8,7 @@
     * {
         box-sizing: border-box;
         overflow-wrap: break-word;
+        -webkit-tap-highlight-color: transparent;
     }
 
     body {

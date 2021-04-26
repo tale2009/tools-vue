@@ -1,5 +1,7 @@
 import router from '../router';
+import store from '../store';
 import {ElMessage} from 'element-plus';
+import {nextTick} from 'vue';
 
 // 启用路由拦截
 router.beforeEach((to, from, next) => {
@@ -10,6 +12,13 @@ router.beforeEach((to, from, next) => {
         setDocumentTitle(to);
         next();
     }
+});
+
+router.afterEach(() => {
+    nextTick().then(() => {
+        store.commit('setLeftCollapse', false);
+        store.commit('setRightCollapse', false);
+    });
 });
 
 // 设置文档标题

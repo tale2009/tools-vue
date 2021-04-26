@@ -9,11 +9,7 @@
             </template>
 
             <template #form>
-                <div class="form-title">
-                    <span>画图板</span>
-                </div>
-
-                <div class="form-main">
+                <PageForm title="画图板">
                     <el-button-group class="form-bar">
                         <el-button plain icon="fas fa-undo" size="small" @click="undoHistory" :disabled="!historyList.length"></el-button>
                         <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
@@ -70,7 +66,7 @@
                     </el-form>
 
                     <el-button style="width: 100%" type="primary" size="medium" @click="exportImage">导出图片</el-button>
-                </div>
+                </PageForm>
             </template>
         </Page>
     </div>
@@ -78,6 +74,7 @@
 
 <script>
     import Page from '@/components/page/Page';
+    import PageForm from '@/components/page/PageForm';
     import {computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref} from 'vue';
     import html2canvas from '@/assets/js/html2canvas';
     import usePaint from '@/views/paint-board/use-paint';
@@ -87,6 +84,7 @@
         name: 'PaintBoard',
         components: {
             Page,
+            PageForm,
             TextEditor
         },
         setup() {

@@ -143,12 +143,7 @@
             </template>
 
             <template #form>
-                <div class="form-title">
-                    <span>游戏王卡片生成器</span>
-                    <span class="form-remarks">最大尺寸 1393 px * 2031 px，超高清素材 by 怀特索尔</span>
-                </div>
-
-                <div class="form-main">
+                <PageForm title="游戏王卡片生成器" description="最大尺寸 1393 px * 2031 px，超高清素材 by 怀特索尔">
                     <div class="font-loading" v-if="fontLoading">
                         <i class="el-icon-loading"></i>
                         <span>字体加载中...</span>
@@ -330,9 +325,9 @@
                             </el-col>
                         </el-row>
                     </div>
-                </div>
 
-                <KanjiKanaDialog v-model="kanjiKanaDialog"></KanjiKanaDialog>
+                    <KanjiKanaDialog v-model="kanjiKanaDialog"></KanjiKanaDialog>
+                </PageForm>
             </template>
         </Page>
     </div>
@@ -340,6 +335,7 @@
 
 <script>
     import Page from '@/components/page/Page';
+    import PageForm from '@/components/page/PageForm';
     import CompressText from '@/views/yugioh/components/CompressText';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from '@/assets/js/html2canvas';
@@ -353,6 +349,7 @@
         name: 'Yugioh',
         components: {
             Page,
+            PageForm,
             CompressText,
             KanjiKanaDialog
         },

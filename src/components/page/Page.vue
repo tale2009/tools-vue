@@ -1,14 +1,14 @@
 <template>
     <div class="page-container">
         <div class="page-main">
-            <el-scrollbar ref="main-scrollbar">
+            <el-scrollbar>
                 <div class="page-slot">
                     <slot></slot>
                 </div>
             </el-scrollbar>
         </div>
-        <div v-show="$slots.form" class="page-form">
-            <el-scrollbar ref="right-scrollbar">
+        <div v-show="$slots.form" class="page-form" :style="formStyle">
+            <el-scrollbar>
                 <slot name="form"></slot>
             </el-scrollbar>
         </div>
@@ -16,18 +16,21 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
         name: 'Page',
-        mounted() {
-            addEventListener('resize', this.updateScrollbar);
+        data() {
+            return {
+                collapse: false
+            };
         },
-        unmounted() {
-            removeEventListener('resize', this.updateScrollbar);
-        },
-        methods: {
-            updateScrollbar() {
-                this.$refs['main-scrollbar'].update();
-                this.$refs['right-scrollbar'].update();
+        computed: {
+            ...mapState(['rightCollapse']),
+            formStyle() {
+                return {
+                    marginRight: this.rightCollapse ? '-400px' : '0'
+                };
             }
         }
     };
@@ -37,6 +40,7 @@
     .page-container {
         height: calc(100vh - 60px);
         display: flex;
+        overflow: hidden;
 
         .page-main {
             height: 100%;
@@ -56,6 +60,7 @@
             width: 400px;
             flex-shrink: 0;
             border-left: 1px solid $border-color;
+            transition: all 0.3s;
         }
     }
 </style>

@@ -8,12 +8,7 @@
             </template>
 
             <template #form>
-                <div class="form-title">
-                    <span>点阵字生成器</span>
-                    <span class="form-remarks">16 px 宋体效果最佳</span>
-                </div>
-
-                <div class="form-main">
+                <PageForm title="点阵字生成器" description="16 px 宋体效果最佳">
                     <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="文字">
                             <el-input v-model="form.text" placeholder="请输入文字"></el-input>
@@ -62,7 +57,7 @@
                     </el-form>
 
                     <el-button style="width: 100%" type="primary" size="medium" @click="exportImage">导出图片</el-button>
-                </div>
+                </PageForm>
             </template>
         </Page>
     </div>
@@ -71,12 +66,14 @@
 <script>
     import {nextTick} from 'vue';
     import Page from '@/components/page/Page';
+    import PageForm from '@/components/page/PageForm';
     import html2canvas from '@/assets/js/html2canvas';
 
     export default {
         name: 'DotWord',
         components: {
-            Page
+            Page,
+            PageForm
         },
         data() {
             return {

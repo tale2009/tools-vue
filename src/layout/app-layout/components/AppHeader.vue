@@ -1,8 +1,8 @@
 <template>
     <div class="app-header-container">
         <div class="header-left">
-            <el-button class="collapse-icon" type="text" @click="setCollapse">
-                <i class="fal fa-arrow-to-left" :style="collapseIconStyle"></i>
+            <el-button class="collapse-icon" type="text" @click="setLeftCollapse(!leftCollapse)">
+                <i class="fal fa-arrow-to-left" :style="leftCollapseIconStyle"></i>
             </el-button>
         </div>
 
@@ -11,6 +11,9 @@
                 <i class="fab fa-github" @click="toGithub"></i>
                 <el-button type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
                 <el-button type="text" @click="thankDialog = true">感谢</el-button>
+                <el-button class="collapse-icon" type="text" @click="setRightCollapse(!rightCollapse)">
+                    <i class="fal fa-arrow-to-right" :style="rightCollapseIconStyle"></i>
+                </el-button>
             </el-space>
 
             <AboutDialog v-model="aboutDialog"></AboutDialog>
@@ -37,16 +40,21 @@
             };
         },
         methods: {
-            ...mapMutations(['setCollapse']),
+            ...mapMutations(['setLeftCollapse', 'setRightCollapse']),
             toGithub() {
                 open('https://github.com/kooriookami/tools-vue');
             }
         },
         computed: {
-            ...mapState(['collapse']),
-            collapseIconStyle() {
+            ...mapState(['leftCollapse', 'rightCollapse']),
+            leftCollapseIconStyle() {
                 return {
-                    transform: this.collapse ? 'rotate(180deg)' : ''
+                    transform: this.leftCollapse ? 'rotate(180deg)' : ''
+                };
+            },
+            rightCollapseIconStyle() {
+                return {
+                    transform: this.rightCollapse ? 'rotate(-180deg)' : ''
                 };
             }
         }
@@ -60,13 +68,11 @@
         justify-content: space-between;
         align-items: center;
 
-        .header-left {
-            .collapse-icon {
-                font-size: 24px;
+        .collapse-icon {
+            font-size: 24px;
 
-                i {
-                    transition: all 0.3s;
-                }
+            i {
+                transition: all 0.3s;
             }
         }
 
