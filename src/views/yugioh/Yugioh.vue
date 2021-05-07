@@ -20,10 +20,10 @@
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span>{{form.language === 'en' ? '[' : '【'}}</span>
+                        <span>{{['en', 'kr'].includes(form.language) ? '[' : '【'}}</span>
                         <CompressText :text="spellTrapName" :fontLoading="fontLoading"></CompressText>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
-                        <span>{{form.language === 'en' ? ']' : '】'}}</span>
+                        <span>{{['en', 'kr'].includes(form.language) ? ']' : '】'}}</span>
                     </div>
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
@@ -143,7 +143,7 @@
             </template>
 
             <template #form>
-                <PageForm title="游戏王卡片生成器" description="最大尺寸 1393 px * 2031 px，超高清素材 by 怀特索尔">
+                <PageForm title="游戏王卡片生成器" description="最大尺寸 1393 px * 2031 px，卡模素材 by 怀特索尔">
                     <div class="font-loading" v-if="fontLoading">
                         <i class="el-icon-loading"></i>
                         <span>字体加载中...</span>
@@ -155,6 +155,7 @@
                                 <el-option label="简体中文" value="sc"></el-option>
                                 <el-option label="繁体中文" value="tc"></el-option>
                                 <el-option label="日文" value="jp"></el-option>
+                                <el-option label="韩文" value="kr"></el-option>
                                 <el-option label="英文" value="en"></el-option>
                             </el-select>
                         </el-form-item>
@@ -343,6 +344,7 @@
     import scDemo from './demo/sc-demo';
     import tcDemo from './demo/tc-demo';
     import jpDemo from './demo/jp-demo';
+    import krDemo from './demo/kr-demo';
     import enDemo from './demo/en-demo';
 
     export default {
@@ -417,6 +419,8 @@
                     Object.assign(this.form, tcDemo);
                 } else if (value === 'jp') {
                     Object.assign(this.form, jpDemo);
+                } else if (value === 'kr') {
+                    Object.assign(this.form, krDemo);
                 } else if (value === 'en') {
                     Object.assign(this.form, enDemo);
                 }
@@ -629,6 +633,12 @@
                     } else if (this.form.type === 'trap') {
                         name = '[罠(トラップ)]カード';
                     }
+                } else if (this.form.language === 'kr') {
+                    if (this.form.type === 'spell') {
+                        name = '마법 카드';
+                    } else if (this.form.type === 'trap') {
+                        name = '함정 카드';
+                    }
                 } else if (this.form.language === 'en') {
                     if (this.form.type === 'spell') {
                         name = 'Spell Card';
@@ -749,8 +759,8 @@
                 };
             },
             monsterType() {
-                const leftBracket = this.form.language === 'en' ? '[' : '【';
-                const rightBracket = this.form.language === 'en' ? ']' : '】';
+                const leftBracket = ['en', 'kr'].includes(this.form.language) ? '[' : '【';
+                const rightBracket = ['en', 'kr'].includes(this.form.language) ? ']' : '】';
                 return `${leftBracket}${this.form.monsterType}${rightBracket}`;
 
             },

@@ -320,7 +320,14 @@ function parseMonsterType(data, lang) {
     }
     list = list.map(value => monsterTypeList[lang][value]).filter(value => value);
 
-    const separator = ['tc', 'jp'].includes(lang) ? '／' : '/';
+    let separator;
+    if (['tc', 'jp'].includes(lang)) {
+        separator = '／';
+    } else if (lang === 'kr') {
+        separator = ' / ';
+    } else {
+        separator = '/';
+    }
     return list.join(separator);
 }
 
