@@ -604,6 +604,8 @@
                 let suffix = '';
                 if (this.form.language === 'jp') {
                     suffix = '-jp';
+                } else if (this.form.language === 'kr') {
+                    suffix = '-kr';
                 } else if (this.form.language === 'en') {
                     suffix = '-en';
                 }
