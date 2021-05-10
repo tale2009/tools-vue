@@ -21,13 +21,6 @@
             position: absolute;
             left: 116px;
             width: 1030px;
-
-            ::v-deep(.ruby) {
-                .rt {
-                    font-size: 18px;
-                    top: 3px;
-                }
-            }
         }
 
         .card-attribute {
@@ -58,13 +51,6 @@
             position: absolute;
             display: flex;
             align-items: center;
-
-            ::v-deep(.ruby) {
-                .rt {
-                    font-size: 18px;
-                    top: -2px;
-                }
-            }
 
             .el-image {
                 display: flex;
@@ -126,13 +112,6 @@
             width: 950px;
             text-align: justify;
             z-index: 20;
-
-            ::v-deep(.ruby) {
-                .rt {
-                    font-size: 12px;
-                    top: -5px;
-                }
-            }
         }
 
         .card-package {
@@ -158,22 +137,6 @@
 
             .card-effect {
                 white-space: nowrap;
-
-                ::v-deep(.ruby) {
-                    .rt {
-                        font-size: 14px;
-                        top: -3px;
-                    }
-                }
-            }
-
-            .description-info {
-                ::v-deep(.ruby) {
-                    .rt {
-                        font-size: 12px;
-                        top: -5px;
-                    }
-                }
             }
         }
 

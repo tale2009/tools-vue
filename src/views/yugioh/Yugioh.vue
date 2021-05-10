@@ -4,7 +4,7 @@
             <template #default>
                 <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
                     <div class="card-name" v-name-color="form.color">
-                        <CompressText :text="form.name" :fontLoading="fontLoading" :width="1030" :height="200"></CompressText>
+                        <CompressText :text="form.name" :refreshKey="refreshKey" :width="1030" :height="200"></CompressText>
                     </div>
 
                     <div class="card-attribute">
@@ -21,7 +21,7 @@
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
                         <span>{{['en', 'kr'].includes(form.language) ? '[' : '【'}}</span>
-                        <CompressText :text="spellTrapName" :fontLoading="fontLoading"></CompressText>
+                        <CompressText :text="spellTrapName" :refreshKey="refreshKey"></CompressText>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
                         <span>{{['en', 'kr'].includes(form.language) ? ']' : '】'}}</span>
                     </div>
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <CompressText :text="form.pendulumDescription" :width="950" :height="230" :fontLoading="fontLoading"></CompressText>
+                        <CompressText :text="form.pendulumDescription" :width="950" :height="230" :refreshKey="refreshKey"></CompressText>
                     </div>
 
                     <div class="card-package" :style="packageStyle">
@@ -84,22 +84,22 @@
 
                     <div class="card-description" v-card-description>
                         <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
-                            <CompressText :text="monsterType" :fontLoading="fontLoading"></CompressText>
+                            <CompressText :text="monsterType" :refreshKey="refreshKey"></CompressText>
                         </div>
 
                         <div class="description-info" :style="descriptionStyle">
                             <template v-for="(item,index) in form.description.split('\n')">
                                 <!--判断首行是否压缩-->
                                 <div v-if="index === 0 && form.firstLineCompress">
-                                    <CompressText :text="item" :width="1170" :height="70" :fontLoading="fontLoading"></CompressText>
+                                    <CompressText :text="item" :width="1170" :height="70" :refreshKey="refreshKey"></CompressText>
                                 </div>
                                 <!--单行不压缩-->
                                 <div v-else-if="index < form.description.split('\n').length - 1">
-                                    <CompressText :text="item" :fontLoading="fontLoading"></CompressText>
+                                    <CompressText :text="item" :refreshKey="refreshKey"></CompressText>
                                 </div>
                                 <!--最后一行压缩-->
                                 <div v-else-if="index === form.description.split('\n').length - 1" class="last-description">
-                                    <CompressText :text="item" :width="1170" :height="lastDescriptionHeight" :fontLoading="fontLoading"
+                                    <CompressText :text="item" :width="1170" :height="lastDescriptionHeight" :refreshKey="refreshKey"
                                                   :language="form.language" autoSizeElement=".card-description"></CompressText>
                                 </div>
                                 <!--item为空提供换行-->
@@ -267,6 +267,9 @@
                             <el-switch v-model="form.firstLineCompress" active-text="首行压缩"></el-switch>
                             <el-input style="margin-top: 10px" type="textarea" :autosize="{minRows: 3}" v-model="form.description" placeholder="请输入效果"></el-input>
                         </el-form-item>
+                        <el-form-item label="字号">
+                            <el-slider v-model="form.descriptionZoom" :min="1" :max="1.5" :step="0.02" @input="changeDescriptionZoom"></el-slider>
+                        </el-form-item>
                         <el-form-item label="卡包">
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
                         </el-form-item>
@@ -358,6 +361,7 @@
         data() {
             return {
                 baseImage: 'https://static.kooriookami.top/yugioh/image',
+                refreshKey: 0,
                 fontLoading: true,
                 searchLoading: false,
                 randomLoading: false,
@@ -382,6 +386,7 @@
                     arrowList: [],
                     description: '',
                     firstLineCompress: false,
+                    descriptionZoom: 1,
                     package: '',
                     password: '',
                     copyright: '',
@@ -400,6 +405,7 @@
         mounted() {
             document.fonts.ready.then(() => {
                 this.fontLoading = false;
+                this.refreshKey++;
             });
         },
         methods: {
@@ -409,6 +415,7 @@
                     this.fontLoading = true;
                     document.fonts.ready.then(() => {
                         this.fontLoading = false;
+                        this.refreshKey++;
                     });
                 });
             },
@@ -450,6 +457,9 @@
                     this.$message.warning('不允许换行符');
                     this.form.pendulumDescription = this.form.pendulumDescription.replace('\n', '');
                 }
+            },
+            changeDescriptionZoom() {
+                this.refreshKey++;
             },
             toggleArrow(item) {
                 if (this.form.arrowList.includes(item)) {
@@ -597,7 +607,8 @@
                     background: background,
                     borderRadius: this.form.radius ? '24px' : '',
                     marginRight: `${(this.form.scale - 1) * 1393}px`,
-                    marginBottom: `${(this.form.scale - 1) * 2031}px`
+                    marginBottom: `${(this.form.scale - 1) * 2031}px`,
+                    '--descriptionZoom': this.form.descriptionZoom
                 };
             },
             attributeSrc() {

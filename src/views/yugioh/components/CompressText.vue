@@ -10,7 +10,7 @@
 <script>
     export default {
         name: 'CompressText',
-        props: ['text', 'width', 'height', 'language', 'fontLoading', 'autoSizeElement'],
+        props: ['text', 'width', 'height', 'language', 'refreshKey', 'autoSizeElement'],
         computed: {
             compressParams() {
                 return {
@@ -33,11 +33,9 @@
             }
         },
         watch: {
-            fontLoading() {
-                if (!this.fontLoading) {
-                    // 强制刷新
-                    this.$forceUpdate();
-                }
+            refreshKey() {
+                // 强制刷新
+                this.$forceUpdate();
             }
         },
         directives: {
@@ -126,7 +124,7 @@
 
             .rt {
                 font-family: ygo-tip, sans-serif;
-                font-size: 16px;
+                font-size: 12px;
                 font-weight: bold;
                 position: absolute;
                 left: 0;
