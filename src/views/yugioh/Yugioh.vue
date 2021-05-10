@@ -217,12 +217,12 @@
                         </el-form-item>
                         <el-form-item label="灵摆" v-if="form.type==='pendulum'">
                             <el-select v-model="form.pendulumType" placeholder="请选择灵摆">
-                                <el-option label="通常／灵摆" value="normal-pendulum"></el-option>
-                                <el-option label="效果／灵摆" value="effect-pendulum"></el-option>
-                                <el-option label="仪式／灵摆" value="ritual-pendulum"></el-option>
-                                <el-option label="融合／灵摆" value="fusion-pendulum"></el-option>
-                                <el-option label="同调／灵摆" value="synchro-pendulum"></el-option>
-                                <el-option label="超量／灵摆" value="xyz-pendulum"></el-option>
+                                <el-option label="通常 / 灵摆" value="normal-pendulum"></el-option>
+                                <el-option label="效果 / 灵摆" value="effect-pendulum"></el-option>
+                                <el-option label="仪式 / 灵摆" value="ritual-pendulum"></el-option>
+                                <el-option label="融合 / 灵摆" value="fusion-pendulum"></el-option>
+                                <el-option label="同调 / 灵摆" value="synchro-pendulum"></el-option>
+                                <el-option label="超量 / 灵摆" value="xyz-pendulum"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="星级" v-if="showLevel">
@@ -278,8 +278,8 @@
                         </el-form-item>
                         <el-form-item label="版权">
                             <el-select v-model="form.copyright" placeholder="请选择版权" clearable>
-                                <el-option label="简体中文" value="sc"></el-option>
-                                <el-option label="日文" value="jp"></el-option>
+                                <el-option label="简体中文 / 韩文" value="sc"></el-option>
+                                <el-option label="繁体中文 / 日文" value="jp"></el-option>
                                 <el-option label="英文" value="en"></el-option>
                             </el-select>
                         </el-form-item>
