@@ -52,14 +52,14 @@
         line-height: 1.18;
 
         .card-effect {
-            font-size: calc(46px * var(--descriptionZoom));
+            font-size: 46px;
             margin: 0 -0.2em;
             margin-bottom: -16px;
 
             ::v-deep(.ruby) {
                 .rt {
-                    font-size: calc(14px * var(--descriptionZoom));
-                    top: calc(-3px * var(--descriptionZoom));
+                    font-size: 14px;
+                    top: -3px;
                 }
             }
         }

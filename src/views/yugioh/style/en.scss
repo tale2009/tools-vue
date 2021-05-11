@@ -34,12 +34,12 @@
 
         .card-effect {
             font-family: ygo-en-race, serif;
-            font-size: calc(56px * var(--descriptionZoom));
+            font-size: 56px;
             letter-spacing: 1px;
         }
     }
 
     .small-description {
-        font-size: calc(36px * var(--descriptionZoom));
+        font-size: 36px;
     }
 }
