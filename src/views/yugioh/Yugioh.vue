@@ -143,7 +143,14 @@
             </template>
 
             <template #form>
-                <PageForm title="游戏王卡片生成器" description="最大尺寸 1393 px * 2031 px，卡模素材 by 怀特索尔">
+                <PageForm title="游戏王卡片生成器">
+                    <template #description>
+                        <span>最大尺寸 1393 px * 2031 px，卡模素材 by 怀特索尔</span>
+                        <el-tooltip :content="`数据库同步时间：${timeFilter(config.updateTime)}`" placement="top">
+                            <i class="el-icon-info" style="margin-left: 5px"></i>
+                        </el-tooltip>
+                    </template>
+
                     <div class="font-loading" v-if="fontLoading">
                         <i class="el-icon-loading"></i>
                         <span>字体加载中...</span>
@@ -396,19 +403,29 @@
                     scale: 0.5
                 },
                 lastDescriptionHeight: 300,   // 最后一行效果压缩高度
-                kanjiKanaDialog: false
+                kanjiKanaDialog: false,
+                config: {}
             };
         },
         created() {
             Object.assign(this.form, scDemo);
         },
         mounted() {
+            this.getConfig();
             document.fonts.ready.then(() => {
                 this.fontLoading = false;
                 this.refreshKey++;
             });
         },
         methods: {
+            getConfig() {
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/config'
+                }).then(res => {
+                    this.config = res.data.data;
+                });
+            },
             // 刷新字体
             refreshFont() {
                 setTimeout(() => {
