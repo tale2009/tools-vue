@@ -23,3 +23,8 @@
 一个封装并拓展了本项目中游戏王卡片生成器的本地运行应用，支持 macOS 和 Windows 系统。
 
 GitHub地址：[rarnu / electron-diy](https://github.com/rarnu/electron-diy)
+
+### 安卓版游戏王卡片生成器
+一个封装并拓展了本项目中游戏王卡片生成器的手机端应用，支持安卓 10 以上版本系统。
+
+GitHub地址：[rarnu / mobile-diy](https://github.com/rarnu/mobile-diy)
