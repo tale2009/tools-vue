@@ -21,7 +21,7 @@
                 <p>使用教程：
                     <el-button type="text" @click="toCourse">B站文集</el-button>
                 </p>
-                <p>最后更新时间：{{timeFilter(config.updateTime)}}</p>
+                <p>更新时间：{{timeFilter(config.updateTime)}}</p>
             </div>
             <template #footer>
                 <el-button plain size="medium" @click="closeDialog">关闭</el-button>
