@@ -48,7 +48,7 @@
                         <el-form-item label="网格">
                             <el-switch v-model="form.grid"></el-switch>
                         </el-form-item>
-                        <el-form-item label="阈值">
+                        <el-form-item label="阈值" v-if="!form.grayscale">
                             <el-slider v-model="form.threshold" :min="1" :max="255"></el-slider>
                         </el-form-item>
                         <el-form-item label="缩放">
