@@ -11,7 +11,7 @@
         "blueimp-load-image": "^5.14.0",
         "core-js": "^3.15.1",
         "dayjs": "^1.10.5",
-        "element-plus": "^1.0.2-beta.51",
+        "element-plus": "^1.0.2-beta.53",
         "lodash": "^4.17.21",
         "mime": "^2.5.2",
         "normalize.css": "^8.0.1",

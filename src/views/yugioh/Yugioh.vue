@@ -143,9 +143,9 @@
             </template>
 
             <template #form>
-                <PageForm title="游戏王卡片生成器">
-                    <template #description>
-                        <span>最大尺寸 1393 px * 2031 px，卡模素材 by 怀特索尔</span>
+                <PageForm description="最大尺寸 1393 px * 2031 px，卡模素材 by 怀特索尔">
+                    <template #title>
+                        <span>游戏王卡片生成器</span>
                         <el-tooltip :content="`数据库同步时间：${timeFilter(config.updateTime)}`" placement="top">
                             <i class="el-icon-info" style="margin-left: 5px"></i>
                         </el-tooltip>
