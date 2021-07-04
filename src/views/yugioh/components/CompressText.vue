@@ -1,8 +1,8 @@
 <template>
     <div class="compress-text" v-compress-text="compressParams">
         <template v-for="item in textList">
-            <span v-if="typeof item === 'object'" class="ruby">{{item.ruby}}<span class="rt" v-compress-rt>{{item.rt}}</span></span>
-            <span v-else>{{item}}</span>
+            <span v-if="typeof item === 'object'" class="ruby">{{ item.ruby }}<span class="rt" v-compress-rt>{{ item.rt }}</span></span>
+            <span v-else>{{ item }}</span>
         </template>
     </div>
 </template>
@@ -77,7 +77,8 @@
                 if (params.width && params.height) {
                     el.style.width = `${params.width}px`;
                     el.style.transform = '';
-
+                    const yugiohCardElement = document.querySelector('.yugioh-card');
+                    const descriptionZoom = Number(yugiohCardElement.style.getPropertyValue('--descriptionZoom'));
                     let autoSizeElement = document.querySelector(params.autoSizeElement);
                     autoSizeElement?.classList.remove('small-description');
 
@@ -92,8 +93,8 @@
                             el.style.transform = `scaleX(${scale})`;
                             el.clientHeight > params.height ? end = scale : start = scale;
                             if (el.clientHeight <= params.height && end - start <= 0.005) {
-                                // 如果是英文，灵摆和效果栏字体判断缩小
-                                if (params.language === 'en' && params.autoSizeElement && scale < 0.7) {
+                                // 如果是英文，灵摆和效果栏字体判断缩小，当字号大于1不执行
+                                if (params.language === 'en' && params.autoSizeElement && scale < 0.7 && descriptionZoom === 1) {
                                     // 防止死循环
                                     if (autoSizeElement?.classList.contains('small-description')) {
                                         break;
