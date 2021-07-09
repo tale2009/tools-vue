@@ -15,6 +15,11 @@
         "icon": "fa-paint-brush"
     },
     {
+        "title": "像素画",
+        "path": "/pixel-art",
+        "icon": "fa-th"
+    },
+    {
         "title": "游戏王卡片",
         "path": "/yugioh",
         "icon": "fa-rectangle-portrait"

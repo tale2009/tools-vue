@@ -32,6 +32,14 @@ const routes = [
                 }
             },
             {
+                path: 'pixel-art',
+                name: 'pixelArt',
+                component: () => import(/* webpackChunkName: "pixelArt" */ '../views/pixel-art/PixelArt'),
+                meta: {
+                    title: '像素画'
+                }
+            },
+            {
                 path: 'yugioh',
                 name: 'yugioh',
                 component: () => import(/* webpackChunkName: "yugioh" */ '../views/yugioh/Yugioh.vue'),
