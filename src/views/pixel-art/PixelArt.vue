@@ -105,7 +105,9 @@
             });
             const dotList = ref([]);
             const historyList = ref([]);
-            const currentDot = ref(null);   // 鼠标当前所在点
+            const downDot = ref({}); // 鼠标按下的点
+            const lastDot = ref({}); // 上一个移动的点
+            const currentDot = ref({});   // 鼠标当前所在点
             const lineWidth = computed(() => form.grid ? 1 : 0);
             const pixel = computed(() => form.size);
             const isMousedown = ref(false);
@@ -113,6 +115,8 @@
             const usePixelKey = {
                 form,
                 dotList,
+                downDot,
+                lastDot,
                 currentDot,
                 isMousedown
             };
@@ -164,10 +168,10 @@
                     });
                 });
 
-                if (currentDot.value) {
+                if (Object.keys(currentDot.value).length) {
                     addDot({
-                        rowIndex: currentDot.value.rowIndex,
-                        colIndex: currentDot.value.colIndex,
+                        rowIndex: currentDot.value.x,
+                        colIndex: currentDot.value.y,
                         color: [255, 255, 255, 0]
                     });
                 }
@@ -207,8 +211,8 @@
             };
 
             const isCurrentDot = (rowIndex, colIndex) => {
-                if (!currentDot.value) return false;
-                return currentDot.value.rowIndex === rowIndex && currentDot.value.colIndex === colIndex;
+                if (!Object.keys(currentDot.value).length) return false;
+                return currentDot.value.x === rowIndex && currentDot.value.y === colIndex;
             };
 
             const changeType = type => {
@@ -230,15 +234,17 @@
                 if (colIndex < 0 || rowIndex < 0) {
                     return;
                 }
-                currentDot.value = {rowIndex, colIndex};
+                lastDot.value = Object.keys(currentDot.value).length ? _.cloneDeep(currentDot.value) : {x: rowIndex, y: colIndex};
+                currentDot.value = {x: rowIndex, y: colIndex};
             };
 
             const onMouseleave = () => {
-                currentDot.value = null;
+                currentDot.value = {};
             };
 
             const onMousedown = () => {
                 isMousedown.value = true;
+                downDot.value = _.cloneDeep(currentDot.value);
                 saveHistory();
                 usePixel(usePixelKey, form.type);
                 createDotList();

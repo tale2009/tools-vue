@@ -4,26 +4,39 @@ const usePixel = (usePixelKey, type) => {
     const {
         form,
         dotList,
+        downDot,
+        lastDot,
         currentDot,
         isMousedown
     } = usePixelKey;
 
-    if (!currentDot.value || !isMousedown.value) {
+    if (!Object.keys(currentDot.value).length || !isMousedown.value) {
         return;
     }
-    const {rowIndex, colIndex} = currentDot.value;
+
+    const downX = downDot.value.x;
+    const downY = downDot.value.y;
+    const lastX = lastDot.value.x;
+    const lastY = lastDot.value.y;
+    const currentX = currentDot.value.x;
+    const currentY = currentDot.value.y;
 
     const usePencil = () => {
-        console.log(getStraightDotList({x: 1, y: 1}, {x: 1, y: 5}));
-        dotList.value[rowIndex][colIndex] = colorToArray(form.color, true);
+        const addDotList = getStraightDotList({x: lastX, y: lastY}, {x: currentX, y: currentY});
+        addDotList.forEach(dot => {
+            dotList.value[dot.x][dot.y] = colorToArray(form.color, true);
+        });
     };
 
     const useEraser = () => {
-        dotList.value[rowIndex][colIndex] = [255, 255, 255, 0];
+        const addDotList = getStraightDotList({x: lastX, y: lastY}, {x: currentX, y: currentY});
+        addDotList.forEach(dot => {
+            dotList.value[dot.x][dot.y] = [255, 255, 255, 0];
+        });
     };
 
     const useAbsorber = () => {
-        form.color = arrayToColor(dotList.value[rowIndex][colIndex], true);
+        form.color = arrayToColor(dotList.value[currentX][currentY], true);
     };
 
     switch (type) {
