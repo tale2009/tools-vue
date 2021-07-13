@@ -1,4 +1,4 @@
-import {arrayToColor, colorToArray} from '@/utils';
+import {arrayToColor, colorToArray, getStraightDotList} from '@/utils';
 
 const usePixel = (usePixelKey, type) => {
     const {
@@ -14,6 +14,7 @@ const usePixel = (usePixelKey, type) => {
     const {rowIndex, colIndex} = currentDot.value;
 
     const usePencil = () => {
+        console.log(getStraightDotList({x: 1, y: 1}, {x: 1, y: 5}));
         dotList.value[rowIndex][colIndex] = colorToArray(form.color, true);
     };
 
