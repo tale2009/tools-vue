@@ -349,7 +349,7 @@
     import PageForm from '@/components/page/PageForm';
     import CompressText from '@/views/yugioh/components/CompressText';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
-    import html2canvas from '@/assets/js/html2canvas';
+    import html2canvas from 'html2canvas';
     import loadImage from 'blueimp-load-image';
     import scDemo from './demo/sc-demo';
     import tcDemo from './demo/tc-demo';

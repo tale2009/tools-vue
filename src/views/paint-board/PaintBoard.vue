@@ -76,7 +76,7 @@
     import Page from '@/components/page/Page';
     import PageForm from '@/components/page/PageForm';
     import {computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref} from 'vue';
-    import html2canvas from '@/assets/js/html2canvas';
+    import html2canvas from 'html2canvas';
     import usePaint from '@/views/paint-board/use-paint';
     import TextEditor from '@/views/paint-board/components/TextEditor';
 

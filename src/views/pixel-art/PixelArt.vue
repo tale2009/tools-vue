@@ -79,7 +79,7 @@
     import Page from '@/components/page/Page';
     import PageForm from '@/components/page/PageForm';
     import {computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref, watch} from 'vue';
-    import html2canvas from '@/assets/js/html2canvas';
+    import html2canvas from 'html2canvas';
     import _ from 'lodash';
     import usePixel from './use-pixel';
 
