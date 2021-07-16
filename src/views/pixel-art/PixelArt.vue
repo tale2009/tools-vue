@@ -20,11 +20,11 @@
 
                     <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="宽度">
-                            <el-input-number v-model="form.widthPixel" :min="1" :max="64" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.widthPixel" :min="1" :max="128" :precision="0"></el-input-number>
                             <span class="tip">（像素）</span>
                         </el-form-item>
                         <el-form-item label="高度">
-                            <el-input-number v-model="form.heightPixel" :min="1" :max="64" :precision="0"></el-input-number>
+                            <el-input-number v-model="form.heightPixel" :min="1" :max="128" :precision="0"></el-input-number>
                             <span class="tip">（像素）</span>
                         </el-form-item>
                         <el-form-item label="工具">
