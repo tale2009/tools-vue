@@ -93,6 +93,8 @@
             const {proxy} = getCurrentInstance();
             const canvas = ref(null);
             const context = ref(null);
+            const offscreenCanvas = ref(null);
+            const offscreenContext = ref(null);
             let form = reactive({
                 heightPixel: 16,
                 widthPixel: 16,
@@ -123,6 +125,9 @@
             };
 
             onMounted(() => {
+                context.value = canvas.value.getContext('2d');
+                offscreenCanvas.value = document.createElement('canvas');
+                offscreenContext.value = offscreenCanvas.value.getContext('2d');
                 createDotList();
                 canvas.value.addEventListener('mousemove', onMousemove);
                 canvas.value.addEventListener('mouseleave', onMouseleave);
@@ -155,42 +160,28 @@
             };
 
             const renderCanvas = () => {
-                context.value = canvas.value.getContext('2d');
                 canvas.value.width = form.widthPixel * pixel.value + lineWidth.value;
                 canvas.value.height = form.heightPixel * pixel.value + lineWidth.value;
 
                 dotList.value.forEach((row, rowIndex) => {
                     row.forEach((col, colIndex) => {
-                        addDot({
-                            rowIndex,
-                            colIndex,
-                            color: col
-                        });
+                        addDot(rowIndex, colIndex, col);
                     });
                 });
-
-                if (Object.keys(currentDot.value).length) {
-                    addDot({
-                        rowIndex: currentDot.value.x,
-                        colIndex: currentDot.value.y,
-                        color: [255, 255, 255, 0]
-                    });
-                }
             };
 
-            function addDot({rowIndex, colIndex, color}) {
-                const _canvas = document.createElement('canvas');
-                const _context = _canvas.getContext('2d');
-                _canvas.height = pixel.value + lineWidth.value;
-                _canvas.width = pixel.value + lineWidth.value;
-                _context.strokeStyle = isCurrentDot(rowIndex, colIndex) ? '#409eff' : '#dcdfe6';
+            function addDot(rowIndex, colIndex, color, isCurrent) {
+                const offscreenCanvasHeight = pixel.value + lineWidth.value;
+                const offscreenCanvasWidth = pixel.value + lineWidth.value;
+                offscreenCanvas.value.height = offscreenCanvasHeight;
+                offscreenCanvas.value.width = offscreenCanvasWidth;
+                offscreenContext.value.strokeStyle = isCurrent ? '#409eff' : '#dcdfe6';
 
                 if (form.monochrome) {
                     let rgb = Math.round((color[0] + color[1] + color[2]) / 3);
-                    _context.fillStyle = `rgba(${rgb},${rgb},${rgb},${color[3]})`;
+                    offscreenContext.value.fillStyle = `rgba(${rgb},${rgb},${rgb},${color[3]})`;
                 } else {
-                    console.log(color);
-                    _context.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
+                    offscreenContext.value.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
                 }
 
                 if (form.shape === 'square') {
@@ -198,9 +189,9 @@
                     const y = lineWidth.value / 2;
                     const w = pixel.value;
                     const h = pixel.value;
-                    _context.fillRect(x, y, w, h);
-                    if (form.grid || isCurrentDot(rowIndex, colIndex)) {
-                        _context.strokeRect(x, y, w, h);
+                    offscreenContext.value.fillRect(x, y, w, h);
+                    if (form.grid || isCurrent) {
+                        offscreenContext.value.strokeRect(x, y, w, h);
                     }
                 } else if (form.shape === 'round') {
                     const x = pixel.value / 2 + lineWidth.value / 2;
@@ -208,20 +199,16 @@
                     const radius = pixel.value / 2;
                     const startAngle = 0;
                     const endAngle = Math.PI * 2;
-                    _context.beginPath();
-                    _context.arc(x, y, radius, startAngle, endAngle);
-                    _context.fill();
-                    if (form.grid || isCurrentDot(rowIndex, colIndex)) {
-                        _context.stroke();
+                    offscreenContext.value.beginPath();
+                    offscreenContext.value.arc(x, y, radius, startAngle, endAngle);
+                    offscreenContext.value.fill();
+                    if (form.grid || isCurrent) {
+                        offscreenContext.value.stroke();
                     }
                 }
-                context.value.drawImage(_canvas, colIndex * pixel.value , rowIndex * pixel.value)
+                context.value.clearRect(colIndex * pixel.value, rowIndex * pixel.value, offscreenCanvasWidth, offscreenCanvasHeight);
+                context.value.drawImage(offscreenCanvas.value, colIndex * pixel.value, rowIndex * pixel.value);
             }
-
-            const isCurrentDot = (rowIndex, colIndex) => {
-                if (!Object.keys(currentDot.value).length) return false;
-                return currentDot.value.x === rowIndex && currentDot.value.y === colIndex;
-            };
 
             const changeType = type => {
                 form.type = type;
@@ -244,6 +231,7 @@
                 }
                 lastDot.value = Object.keys(currentDot.value).length ? _.cloneDeep(currentDot.value) : {x: rowIndex, y: colIndex};
                 currentDot.value = {x: rowIndex, y: colIndex};
+                usePixel(usePixelKey, form.type);
             };
 
             const onMouseleave = () => {
@@ -255,7 +243,6 @@
                 downDot.value = _.cloneDeep(currentDot.value);
                 saveHistory();
                 usePixel(usePixelKey, form.type);
-                // createDotList();
 
                 document.onselectstart = () => false;
                 document.ondragstart = () => false;
@@ -329,8 +316,12 @@
 
             watch(currentDot, (newVal, oldVal) => {
                 if (!_.isEqual(newVal, oldVal)) {
-                    usePixel(usePixelKey, form.type);
-                    // createDotList();
+                    if (Object.keys(oldVal).length) {
+                        addDot(oldVal.x, oldVal.y, dotList.value[oldVal.x][oldVal.y]);
+                    }
+                    if (Object.keys(newVal).length) {
+                        addDot(newVal.x, newVal.y, dotList.value[newVal.x][newVal.y], true);
+                    }
                 }
             });
 

@@ -24,17 +24,19 @@ const usePixel = (usePixelKey, type) => {
 
     const usePencil = () => {
         const addDotList = getStraightDotList({x: lastX, y: lastY}, {x: currentX, y: currentY});
+        const colors = colorToArray(form.color, true);
         addDotList.forEach(dot => {
-            console.log(colorToArray(form.color, true));
-            dotList.value[dot.x][dot.y] = colorToArray(form.color, true);
-            addDot(dot.x,dot.y,colorToArray(form.color, true))
+            dotList.value[dot.x][dot.y] = colors;
+            addDot(dot.x, dot.y, colors);
         });
     };
 
     const useEraser = () => {
         const addDotList = getStraightDotList({x: lastX, y: lastY}, {x: currentX, y: currentY});
         addDotList.forEach(dot => {
-            dotList.value[dot.x][dot.y] = [255, 255, 255, 0];
+            const colors = [255, 255, 255, 0];
+            dotList.value[dot.x][dot.y] = colors;
+            addDot(dot.x, dot.y, colors);
         });
     };
 
