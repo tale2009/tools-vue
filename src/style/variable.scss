@@ -1,3 +1,4 @@
+@use "sass:map";
 @import "~element-plus/packages/theme-chalk/src/common/var.scss";
 
 // 主题色
@@ -9,4 +10,4 @@ $main-color: $--color-text-primary;
 $normal-color: $--color-text-regular;
 $info-color: $--color-text-secondary;
 $placeholder-color: $--color-text-placeholder;
-$border-color: $--border-color-base;
+$border-color: map.get($--border-color, 'base');

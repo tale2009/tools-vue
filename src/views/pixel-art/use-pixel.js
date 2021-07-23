@@ -7,7 +7,8 @@ const usePixel = (usePixelKey, type) => {
         downDot,
         lastDot,
         currentDot,
-        isMousedown
+        isMousedown,
+        addDot
     } = usePixelKey;
 
     if (!Object.keys(currentDot.value).length || !isMousedown.value) {
@@ -24,7 +25,9 @@ const usePixel = (usePixelKey, type) => {
     const usePencil = () => {
         const addDotList = getStraightDotList({x: lastX, y: lastY}, {x: currentX, y: currentY});
         addDotList.forEach(dot => {
+            console.log(colorToArray(form.color, true));
             dotList.value[dot.x][dot.y] = colorToArray(form.color, true);
+            addDot(dot.x,dot.y,colorToArray(form.color, true))
         });
     };
 

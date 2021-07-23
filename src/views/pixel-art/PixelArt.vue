@@ -118,7 +118,8 @@
                 downDot,
                 lastDot,
                 currentDot,
-                isMousedown
+                isMousedown,
+                addDot
             };
 
             onMounted(() => {
@@ -177,38 +178,45 @@
                 }
             };
 
-            const addDot = ({rowIndex, colIndex, color}) => {
-                context.value.strokeStyle = isCurrentDot(rowIndex, colIndex) ? '#409eff' : '#dcdfe6';
+            function addDot({rowIndex, colIndex, color}) {
+                const _canvas = document.createElement('canvas');
+                const _context = _canvas.getContext('2d');
+                _canvas.height = pixel.value + lineWidth.value;
+                _canvas.width = pixel.value + lineWidth.value;
+                _context.strokeStyle = isCurrentDot(rowIndex, colIndex) ? '#409eff' : '#dcdfe6';
+
                 if (form.monochrome) {
                     let rgb = Math.round((color[0] + color[1] + color[2]) / 3);
-                    context.value.fillStyle = `rgba(${rgb},${rgb},${rgb},${color[3]})`;
+                    _context.fillStyle = `rgba(${rgb},${rgb},${rgb},${color[3]})`;
                 } else {
-                    context.value.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
+                    console.log(color);
+                    _context.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
                 }
 
                 if (form.shape === 'square') {
-                    const x = colIndex * pixel.value + lineWidth.value / 2;
-                    const y = rowIndex * pixel.value + lineWidth.value / 2;
+                    const x = lineWidth.value / 2;
+                    const y = lineWidth.value / 2;
                     const w = pixel.value;
                     const h = pixel.value;
-                    context.value.fillRect(x, y, w, h);
+                    _context.fillRect(x, y, w, h);
                     if (form.grid || isCurrentDot(rowIndex, colIndex)) {
-                        context.value.strokeRect(x, y, w, h);
+                        _context.strokeRect(x, y, w, h);
                     }
                 } else if (form.shape === 'round') {
-                    const x = colIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
-                    const y = rowIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
+                    const x = pixel.value / 2 + lineWidth.value / 2;
+                    const y = pixel.value / 2 + lineWidth.value / 2;
                     const radius = pixel.value / 2;
                     const startAngle = 0;
                     const endAngle = Math.PI * 2;
-                    context.value.beginPath();
-                    context.value.arc(x, y, radius, startAngle, endAngle);
-                    context.value.fill();
+                    _context.beginPath();
+                    _context.arc(x, y, radius, startAngle, endAngle);
+                    _context.fill();
                     if (form.grid || isCurrentDot(rowIndex, colIndex)) {
-                        context.value.stroke();
+                        _context.stroke();
                     }
                 }
-            };
+                context.value.drawImage(_canvas, colIndex * pixel.value , rowIndex * pixel.value)
+            }
 
             const isCurrentDot = (rowIndex, colIndex) => {
                 if (!Object.keys(currentDot.value).length) return false;
@@ -247,7 +255,7 @@
                 downDot.value = _.cloneDeep(currentDot.value);
                 saveHistory();
                 usePixel(usePixelKey, form.type);
-                createDotList();
+                // createDotList();
 
                 document.onselectstart = () => false;
                 document.ondragstart = () => false;
@@ -322,7 +330,7 @@
             watch(currentDot, (newVal, oldVal) => {
                 if (!_.isEqual(newVal, oldVal)) {
                     usePixel(usePixelKey, form.type);
-                    createDotList();
+                    // createDotList();
                 }
             });
 
