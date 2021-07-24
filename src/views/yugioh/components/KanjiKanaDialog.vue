@@ -1,7 +1,7 @@
 <template>
     <div class="kanji-kana-dialog">
         <el-dialog title="一键注音" :modelValue="modelValue" width="500px" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
-            <el-form :model="form" label-position="top" size="small">
+            <el-form ref="form" :model="form" label-position="top" size="small">
                 <el-form-item label="注音只支持 OCG 常用语" prop="text">
                     <el-input type="textarea" :autosize="{minRows: 3}" v-model="form.text" placeholder="请输入文本"></el-input>
                 </el-form-item>
@@ -27,7 +27,7 @@
         },
         methods: {
             closeDialog() {
-                this.resetForm('form');
+                this.$refs.form.resetFields();
                 this.$emit('update:modelValue', false);
             },
             addKana() {

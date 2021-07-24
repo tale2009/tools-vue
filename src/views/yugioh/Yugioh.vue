@@ -20,10 +20,10 @@
                     </div>
 
                     <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span>{{['en', 'kr'].includes(form.language) ? '[' : '【'}}</span>
+                        <span>{{ ['en', 'kr'].includes(form.language) ? '[' : '【' }}</span>
                         <CompressText :text="spellTrapName" :refreshKey="refreshKey"></CompressText>
                         <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
-                        <span>{{['en', 'kr'].includes(form.language) ? ']' : '】'}}</span>
+                        <span>{{ ['en', 'kr'].includes(form.language) ? ']' : '】' }}</span>
                     </div>
 
                     <div class="card-image" v-if="form.image" :style="imageStyle">
@@ -47,11 +47,11 @@
                     </div>
 
                     <div class="left-pendulum" v-if="form.type==='pendulum'">
-                        <span>{{form.pendulumScale}}</span>
+                        <span>{{ form.pendulumScale }}</span>
                     </div>
 
                     <div class="right-pendulum" v-if="form.type==='pendulum'">
-                        <span>{{form.pendulumScale}}</span>
+                        <span>{{ form.pendulumScale }}</span>
                     </div>
 
                     <div class="pendulum-description" v-if="form.type==='pendulum'">
@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="card-package" :style="packageStyle">
-                        <span>{{form.package}}</span>
+                        <span>{{ form.package }}</span>
                     </div>
 
                     <div class="link-arrow" v-if="form.type==='monster'&&form.cardType==='link'">
@@ -115,21 +115,21 @@
                     </div>
 
                     <div class="card-atk" v-if="['monster','pendulum'].includes(form.type)">
-                        <span v-if="form.atk >= 0">{{form.atk}}</span>
+                        <span v-if="form.atk >= 0">{{ form.atk }}</span>
                         <span v-else-if="form.atk === -1">?</span>
                     </div>
 
                     <div class="card-def" v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'">
-                        <span v-if="form.def >= 0">{{form.def}}</span>
+                        <span v-if="form.def >= 0">{{ form.def }}</span>
                         <span v-else-if="form.def === -1">?</span>
                     </div>
 
                     <div class="card-link" v-if="form.type==='monster'&&form.cardType==='link'">
-                        <span>{{form.arrowList.length}}</span>
+                        <span>{{ form.arrowList.length }}</span>
                     </div>
 
                     <div class="card-password" :style="passwordStyle">
-                        <span>{{form.password}}</span>
+                        <span>{{ form.password }}</span>
                     </div>
 
                     <div class="card-copyright" v-if="form.copyright">
@@ -146,7 +146,7 @@
                 <PageForm description="最大尺寸 1393 px * 2031 px，卡模素材 by 怀特索尔">
                     <template #title>
                         <span>游戏王卡片生成器</span>
-                        <el-tooltip :content="`数据库同步时间：${timeFilter(config.updateTime)}`" placement="top">
+                        <el-tooltip :content="`数据库同步时间：${formatTime(config.updateTime)}`" placement="top">
                             <i class="el-icon-info" style="margin-left: 5px"></i>
                         </el-tooltip>
                     </template>
@@ -596,9 +596,9 @@
                     width: this.form.scale * 1393,
                     height: this.form.scale * 2031
                 }).then(canvas => {
-                    let dataURL = canvas.toDataURL('image/png', 1);
-                    let blob = this.dataURLtoBlob(dataURL);
-                    this.downloadBlob(blob, this.cardName);
+                    canvas.toBlob(blob => {
+                        this.downloadBlob(blob, this.cardName);
+                    });
                 }).finally(() => {
                     this.exportLoading = false;
                 });

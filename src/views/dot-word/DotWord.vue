@@ -207,9 +207,9 @@
                 html2canvas(element, {
                     backgroundColor: 'transparent'
                 }).then(canvas => {
-                    let dataURL = canvas.toDataURL('image/png', 1);
-                    let blob = this.dataURLtoBlob(dataURL);
-                    this.downloadBlob(blob, this.form.text);
+                    canvas.toBlob(blob => {
+                        this.downloadBlob(blob, this.form.text);
+                    });
                 });
             }
         },

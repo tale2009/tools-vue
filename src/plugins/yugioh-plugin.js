@@ -1,5 +1,3 @@
-import vm from '@/main';
-
 const kanjiKanaMap = require('@/assets/json/kanji-kana.json');
 const monsterTypeList = require('@/assets/json/monster-type-list.json');
 
@@ -30,10 +28,10 @@ export default {
             };
             if (lang === 'jp') {
                 // 添加注音
-                card.name = vm.kanjiToKana(card.name);
-                card.pendulumDescription = vm.kanjiToKana(card.pendulumDescription);
-                card.monsterType = vm.kanjiToKana(card.monsterType);
-                card.description = vm.kanjiToKana(card.description);
+                card.name = app.config.globalProperties.kanjiToKana(card.name);
+                card.pendulumDescription = app.config.globalProperties.kanjiToKana(card.pendulumDescription);
+                card.monsterType = app.config.globalProperties.kanjiToKana(card.monsterType);
+                card.description = app.config.globalProperties.kanjiToKana(card.description);
             }
             return card;
         };

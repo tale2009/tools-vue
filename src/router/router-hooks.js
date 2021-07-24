@@ -1,4 +1,4 @@
-import router from '../router';
+import router from './index';
 import store from '../store';
 import {ElMessage} from 'element-plus';
 import {nextTick} from 'vue';

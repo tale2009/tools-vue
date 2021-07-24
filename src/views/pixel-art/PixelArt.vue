@@ -3,7 +3,7 @@
         <Page>
             <template #default>
                 <div class="pixel-art">
-                    <canvas class="canvas" ref="canvas"></canvas>
+                    <canvas ref="canvas"></canvas>
                     <!--hoverCanvas用来渲染悬浮边框-->
                     <canvas class="hover-canvas" ref="hoverCanvas"></canvas>
                 </div>
@@ -334,9 +334,9 @@
                 html2canvas(element, {
                     backgroundColor: 'transparent'
                 }).then(canvas => {
-                    let dataURL = canvas.toDataURL('image/png', 1);
-                    let blob = proxy.dataURLtoBlob(dataURL);
-                    proxy.downloadBlob(blob, '像素画');
+                    canvas.toBlob(blob => {
+                        proxy.downloadBlob(blob, '像素画');
+                    });
                 });
             };
 
@@ -380,13 +380,10 @@
             vertical-align: top;
             position: relative;
 
-            .canvas, .hover-canvas {
+            .hover-canvas {
                 position: absolute;
                 top: 0;
                 left: 0;
-            }
-
-            .hover-canvas {
                 pointer-events: none;
                 z-index: 10;
             }

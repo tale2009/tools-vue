@@ -230,9 +230,9 @@
                         paintBoard.style.boxShadow = 'none';
                     }
                 }).then(canvas => {
-                    let dataURL = canvas.toDataURL('image/png', 1);
-                    let blob = proxy.dataURLtoBlob(dataURL);
-                    proxy.downloadBlob(blob, '画图板');
+                    canvas.toBlob(blob => {
+                        proxy.downloadBlob(blob, '画图板');
+                    });
                 });
             };
 
