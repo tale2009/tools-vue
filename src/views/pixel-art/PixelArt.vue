@@ -300,9 +300,14 @@
             };
 
             const registerShortcut = e => {
+                if (document.activeElement.nodeName === 'INPUT') {
+                    return;
+                }
+
                 const {ctrlKey, key} = e;
                 if (ctrlKey && key === 'z') {
                     undoHistory();
+                    e.preventDefault();
                 }
             };
 
