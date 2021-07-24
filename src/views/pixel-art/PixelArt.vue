@@ -3,7 +3,9 @@
         <Page>
             <template #default>
                 <div class="pixel-art">
-                    <canvas ref="canvas"></canvas>
+                    <canvas class="canvas" ref="canvas"></canvas>
+                    <!--hoverCanvas用来渲染悬浮边框-->
+                    <canvas class="hover-canvas" ref="hoverCanvas"></canvas>
                 </div>
             </template>
 
@@ -93,6 +95,8 @@
             const {proxy} = getCurrentInstance();
             const canvas = ref(null);
             const context = ref(null);
+            const hoverCanvas = ref(null);
+            const hoverContext = ref(null);
             const offscreenCanvas = ref(null);
             const offscreenContext = ref(null);
             let form = reactive({
@@ -114,18 +118,9 @@
             const pixel = computed(() => form.size);
             const isMousedown = ref(false);
 
-            const usePixelKey = {
-                form,
-                dotList,
-                downDot,
-                lastDot,
-                currentDot,
-                isMousedown,
-                addDot
-            };
-
             onMounted(() => {
                 context.value = canvas.value.getContext('2d');
+                hoverContext.value = hoverCanvas.value.getContext('2d');
                 offscreenCanvas.value = document.createElement('canvas');
                 offscreenContext.value = offscreenCanvas.value.getContext('2d');
                 createDotList();
@@ -162,6 +157,8 @@
             const renderCanvas = () => {
                 canvas.value.width = form.widthPixel * pixel.value + lineWidth.value;
                 canvas.value.height = form.heightPixel * pixel.value + lineWidth.value;
+                hoverCanvas.value.width = canvas.value.width;
+                hoverCanvas.value.height = canvas.value.height;
 
                 dotList.value.forEach((row, rowIndex) => {
                     row.forEach((col, colIndex) => {
@@ -170,12 +167,44 @@
                 });
             };
 
-            function addDot(rowIndex, colIndex, color, isCurrent) {
-                const offscreenCanvasHeight = pixel.value + lineWidth.value;
+            const renderHoverCanvas = () => {
+                hoverContext.value.clearRect(0, 0, hoverCanvas.value.width, hoverCanvas.value.height);
+
+                if (Object.keys(currentDot.value).length) {
+                    const rowIndex = currentDot.value.y;
+                    const colIndex = currentDot.value.x;
+                    hoverContext.value.lineWidth = lineWidth.value;
+                    hoverContext.value.fillStyle = 'rgba(64, 158, 255, 0.2)';
+                    hoverContext.value.strokeStyle = '#409eff';
+
+                    if (form.shape === 'square') {
+                        const x = rowIndex * pixel.value + lineWidth.value / 2;
+                        const y = colIndex * pixel.value + lineWidth.value / 2;
+                        const w = pixel.value;
+                        const h = pixel.value;
+                        hoverContext.value.fillRect(x, y, w, h);
+                        hoverContext.value.strokeRect(x, y, w, h);
+                    } else if (form.shape === 'round') {
+                        const x = rowIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
+                        const y = colIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
+                        const radius = pixel.value / 2;
+                        const startAngle = 0;
+                        const endAngle = Math.PI * 2;
+                        hoverContext.value.beginPath();
+                        hoverContext.value.arc(x, y, radius, startAngle, endAngle);
+                        hoverContext.value.fill();
+                        hoverContext.value.stroke();
+                    }
+                }
+            };
+
+            const addDot = (rowIndex, colIndex, color) => {
                 const offscreenCanvasWidth = pixel.value + lineWidth.value;
-                offscreenCanvas.value.height = offscreenCanvasHeight;
+                const offscreenCanvasHeight = pixel.value + lineWidth.value;
                 offscreenCanvas.value.width = offscreenCanvasWidth;
-                offscreenContext.value.strokeStyle = isCurrent ? '#409eff' : '#dcdfe6';
+                offscreenCanvas.value.height = offscreenCanvasHeight;
+                offscreenContext.value.lineWidth = lineWidth.value;
+                offscreenContext.value.strokeStyle = '#dcdfe6';
 
                 if (form.monochrome) {
                     let rgb = Math.round((color[0] + color[1] + color[2]) / 3);
@@ -190,7 +219,7 @@
                     const w = pixel.value;
                     const h = pixel.value;
                     offscreenContext.value.fillRect(x, y, w, h);
-                    if (form.grid || isCurrent) {
+                    if (form.grid) {
                         offscreenContext.value.strokeRect(x, y, w, h);
                     }
                 } else if (form.shape === 'round') {
@@ -202,13 +231,13 @@
                     offscreenContext.value.beginPath();
                     offscreenContext.value.arc(x, y, radius, startAngle, endAngle);
                     offscreenContext.value.fill();
-                    if (form.grid || isCurrent) {
+                    if (form.grid) {
                         offscreenContext.value.stroke();
                     }
                 }
                 context.value.clearRect(colIndex * pixel.value, rowIndex * pixel.value, offscreenCanvasWidth, offscreenCanvasHeight);
                 context.value.drawImage(offscreenCanvas.value, colIndex * pixel.value, rowIndex * pixel.value);
-            }
+            };
 
             const changeType = type => {
                 form.type = type;
@@ -219,19 +248,31 @@
                 createDotList();
             };
 
+            const usePixelKey = {
+                form,
+                dotList,
+                downDot,
+                lastDot,
+                currentDot,
+                isMousedown,
+                addDot
+            };
+
             const onMousemove = e => {
-                // 算式：const x = colIndex * pixel.value + lineWidth.value / 2;
-                //       const y = rowIndex * pixel.value + lineWidth.value / 2;
+                // 算式：const x = colIndex * pixel.value + lineWidth.value;
+                //       const y = rowIndex * pixel.value + lineWidth.value;
                 const x = e.offsetX;
                 const y = e.offsetY;
-                const colIndex = Math.floor((x - lineWidth.value / 2) / pixel.value);
-                const rowIndex = Math.floor((y - lineWidth.value / 2) / pixel.value);
+                const colIndex = Math.floor((x - lineWidth.value) / pixel.value);
+                const rowIndex = Math.floor((y - lineWidth.value) / pixel.value);
                 if (colIndex < 0 || rowIndex < 0) {
                     return;
                 }
                 lastDot.value = Object.keys(currentDot.value).length ? _.cloneDeep(currentDot.value) : {x: rowIndex, y: colIndex};
                 currentDot.value = {x: rowIndex, y: colIndex};
-                usePixel(usePixelKey, form.type);
+                if (!_.isEqual(lastDot.value, currentDot.value)) {
+                    usePixel(usePixelKey, form.type);
+                }
             };
 
             const onMouseleave = () => {
@@ -316,18 +357,15 @@
 
             watch(currentDot, (newVal, oldVal) => {
                 if (!_.isEqual(newVal, oldVal)) {
-                    if (Object.keys(oldVal).length) {
-                        addDot(oldVal.x, oldVal.y, dotList.value[oldVal.x][oldVal.y]);
-                    }
-                    if (Object.keys(newVal).length) {
-                        addDot(newVal.x, newVal.y, dotList.value[newVal.x][newVal.y], true);
-                    }
+                    renderHoverCanvas();
                 }
             });
 
             return {
                 canvas,
                 context,
+                hoverCanvas,
+                hoverContext,
                 form,
                 dotList,
                 historyList,
@@ -348,6 +386,18 @@
             display: inline-flex;
             flex-wrap: wrap;
             vertical-align: top;
+            position: relative;
+
+            .canvas, .hover-canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .hover-canvas {
+                pointer-events: none;
+                z-index: 10;
+            }
         }
 
         .form-main {
