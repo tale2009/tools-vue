@@ -97,8 +97,6 @@
             const context = ref(null);
             const hoverCanvas = ref(null);
             const hoverContext = ref(null);
-            const offscreenCanvas = ref(null);
-            const offscreenContext = ref(null);
             let form = reactive({
                 heightPixel: 16,
                 widthPixel: 16,
@@ -121,8 +119,6 @@
             onMounted(() => {
                 context.value = canvas.value.getContext('2d');
                 hoverContext.value = hoverCanvas.value.getContext('2d');
-                offscreenCanvas.value = document.createElement('canvas');
-                offscreenContext.value = offscreenCanvas.value.getContext('2d');
                 createDotList();
                 canvas.value.addEventListener('mousemove', onMousemove);
                 canvas.value.addEventListener('mouseleave', onMouseleave);
@@ -171,22 +167,22 @@
                 hoverContext.value.clearRect(0, 0, hoverCanvas.value.width, hoverCanvas.value.height);
 
                 if (Object.keys(currentDot.value).length) {
-                    const rowIndex = currentDot.value.y;
-                    const colIndex = currentDot.value.x;
+                    const rowIndex = currentDot.value.x;
+                    const colIndex = currentDot.value.y;
                     hoverContext.value.lineWidth = lineWidth.value;
                     hoverContext.value.fillStyle = 'rgba(64, 158, 255, 0.2)';
                     hoverContext.value.strokeStyle = '#409eff';
 
                     if (form.shape === 'square') {
-                        const x = rowIndex * pixel.value + lineWidth.value / 2;
-                        const y = colIndex * pixel.value + lineWidth.value / 2;
+                        const x = colIndex * pixel.value + lineWidth.value / 2;
+                        const y = rowIndex * pixel.value + lineWidth.value / 2;
                         const w = pixel.value;
                         const h = pixel.value;
                         hoverContext.value.fillRect(x, y, w, h);
                         hoverContext.value.strokeRect(x, y, w, h);
                     } else if (form.shape === 'round') {
-                        const x = rowIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
-                        const y = colIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
+                        const x = colIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
+                        const y = rowIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
                         const radius = pixel.value / 2;
                         const startAngle = 0;
                         const endAngle = Math.PI * 2;
@@ -199,44 +195,39 @@
             };
 
             const addDot = (rowIndex, colIndex, color) => {
-                const offscreenCanvasWidth = pixel.value + lineWidth.value;
-                const offscreenCanvasHeight = pixel.value + lineWidth.value;
-                offscreenCanvas.value.width = offscreenCanvasWidth;
-                offscreenCanvas.value.height = offscreenCanvasHeight;
-                offscreenContext.value.lineWidth = lineWidth.value;
-                offscreenContext.value.strokeStyle = '#dcdfe6';
+                context.value.clearRect(colIndex * pixel.value, rowIndex * pixel.value, pixel.value, pixel.value);
+                context.value.lineWidth = lineWidth.value;
+                context.value.strokeStyle = '#dcdfe6';
 
                 if (form.monochrome) {
                     let rgb = Math.round((color[0] + color[1] + color[2]) / 3);
-                    offscreenContext.value.fillStyle = `rgba(${rgb},${rgb},${rgb},${color[3]})`;
+                    context.value.fillStyle = `rgba(${rgb},${rgb},${rgb},${color[3]})`;
                 } else {
-                    offscreenContext.value.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
+                    context.value.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
                 }
 
                 if (form.shape === 'square') {
-                    const x = lineWidth.value / 2;
-                    const y = lineWidth.value / 2;
+                    const x = colIndex * pixel.value + lineWidth.value / 2;
+                    const y = rowIndex * pixel.value + lineWidth.value / 2;
                     const w = pixel.value;
                     const h = pixel.value;
-                    offscreenContext.value.fillRect(x, y, w, h);
+                    context.value.fillRect(x, y, w, h);
                     if (form.grid) {
-                        offscreenContext.value.strokeRect(x, y, w, h);
+                        context.value.strokeRect(x, y, w, h);
                     }
                 } else if (form.shape === 'round') {
-                    const x = pixel.value / 2 + lineWidth.value / 2;
-                    const y = pixel.value / 2 + lineWidth.value / 2;
+                    const x = colIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
+                    const y = rowIndex * pixel.value + pixel.value / 2 + lineWidth.value / 2;
                     const radius = pixel.value / 2;
                     const startAngle = 0;
                     const endAngle = Math.PI * 2;
-                    offscreenContext.value.beginPath();
-                    offscreenContext.value.arc(x, y, radius, startAngle, endAngle);
-                    offscreenContext.value.fill();
+                    context.value.beginPath();
+                    context.value.arc(x, y, radius, startAngle, endAngle);
+                    context.value.fill();
                     if (form.grid) {
-                        offscreenContext.value.stroke();
+                        context.value.stroke();
                     }
                 }
-                context.value.clearRect(colIndex * pixel.value, rowIndex * pixel.value, offscreenCanvasWidth, offscreenCanvasHeight);
-                context.value.drawImage(offscreenCanvas.value, colIndex * pixel.value, rowIndex * pixel.value);
             };
 
             const changeType = type => {
@@ -349,10 +340,11 @@
                 });
             };
 
-            watch(form, () => {
+            watch(() => {
+                const {heightPixel, widthPixel, shape, monochrome, grid, size} = form;
+                return {heightPixel, widthPixel, shape, monochrome, grid, size};
+            }, () => {
                 createDotList();
-            }, {
-                deep: true
             });
 
             watch(currentDot, (newVal, oldVal) => {
