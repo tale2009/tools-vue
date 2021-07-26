@@ -4,7 +4,6 @@ import router from './router';
 import store from './store';
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
-import locale from 'element-plus/lib/locale/lang/zh-cn';
 import 'normalize.css';
 import '@/router/router-hooks';
 import httpService from './plugins/http-service';
@@ -16,7 +15,7 @@ const app = createApp(App);
 
 app.config.globalProperties.dayjs = dayjs;
 
-app.use(ElementPlus, {locale});
+app.use(ElementPlus);
 app.use(httpService);
 app.use(base);
 app.use(yugiohPlugin);

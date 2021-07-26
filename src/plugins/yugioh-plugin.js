@@ -57,7 +57,7 @@ function characterToHalf(value) {
     // 全角z：65370，半角z：122
     // 全角-半角=65248
     let charList = Array.from(value).map(char => {
-        let code = char.charCodeAt();
+        let code = char.charCodeAt(0);
         if (char === '　') {
             return ' ';
         } else if (char === '﹒') {
@@ -68,7 +68,7 @@ function characterToHalf(value) {
         return char;
     });
     let text = charList.join('');
-    // 日文卡名中的数字转半角
+    // 日文引号中的数字转半角
     text = text.replace(/「.*?」/g, s => numberToHalf(s));
     return text;
 }
@@ -408,7 +408,11 @@ function parseDescription(data) {
 }
 
 function parseFirstLineCompress(data) {
-    return ['monster', 'pendulum'].includes(parseType(data)) && ['fusion', 'synchro', 'xyz', 'link'].includes(parseCardType(data));
+    // 首行压缩，换行符至少要有1个
+    const hasLf = parseDescription(data).includes('\n');
+    const hasType = ['monster', 'pendulum'].includes(parseType(data));
+    const hasCardType = ['fusion', 'synchro', 'xyz', 'link'].includes(parseCardType(data));
+    return hasLf && hasType && hasCardType;
 }
 
 function parsePackage(data, lang) {

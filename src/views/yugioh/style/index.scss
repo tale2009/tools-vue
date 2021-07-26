@@ -169,10 +169,12 @@
 
         .card-link {
             position: absolute;
-            right: 116px;
-            top: 1846px;
+            right: 124px;
+            top: 1854px;
             font-family: ygo-link, serif;
-            font-size: 54px;
+            font-size: 45px;
+            transform: scaleX(1.3);
+            transform-origin: 50% 50%;
             letter-spacing: 2px;
             z-index: 20;
         }
