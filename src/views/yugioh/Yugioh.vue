@@ -398,7 +398,7 @@
                     password: '',
                     copyright: '',
                     laser: false,
-                    radius: false,
+                    radius: true,
                     cardBack: false,
                     scale: 0.5
                 },
