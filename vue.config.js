@@ -17,6 +17,7 @@ module.exports = {
     devServer: {
         port: 8010
     },
+    transpileDependencies: ['color'],
     css: {
         loaderOptions: {
             sass: {
