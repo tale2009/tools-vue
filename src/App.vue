@@ -20,7 +20,7 @@
         },
         methods: {
             mobileTip() {
-                if (mobile()) {
+                if (mobile({tablet: true})) {
                     this.$confirm('<p>若功能异常，请使用 PC Chrome 浏览器。</p>' +
                         '<p>移动端异常问题不再回复，请谅解！</p>', '移动端提示', {
                         type: 'warning',
