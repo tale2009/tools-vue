@@ -245,6 +245,12 @@
             }
         }
 
+        .attribute-radio-group {
+            ::v-deep(.el-radio-button__inner) {
+                padding: 9px 12px;
+            }
+        }
+
         .button-group {
             .el-row {
                 margin-top: -20px;

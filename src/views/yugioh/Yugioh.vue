@@ -7,7 +7,7 @@
                         <CompressText :text="form.name" :refreshKey="refreshKey" :width="1030" :height="200"></CompressText>
                     </div>
 
-                    <div class="card-attribute">
+                    <div class="card-attribute" v-if="form.attribute">
                         <el-image :src="attributeSrc"></el-image>
                     </div>
 
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="card-description" v-card-description>
-                        <div v-if="['monster','pendulum'].includes(form.type)" class="card-effect">
+                        <div v-if="['monster','pendulum'].includes(form.type) && form.monsterType" class="card-effect">
                             <CompressText :text="monsterType" :refreshKey="refreshKey"></CompressText>
                         </div>
 
@@ -182,7 +182,7 @@
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="属性" v-if="['monster','pendulum'].includes(form.type)">
-                            <el-radio-group v-model="form.attribute">
+                            <el-radio-group class="attribute-radio-group" v-model="form.attribute">
                                 <el-radio-button label="dark">暗</el-radio-button>
                                 <el-radio-button label="light">光</el-radio-button>
                                 <el-radio-button label="earth">地</el-radio-button>
@@ -190,6 +190,7 @@
                                 <el-radio-button label="fire">炎</el-radio-button>
                                 <el-radio-button label="wind">风</el-radio-button>
                                 <el-radio-button label="divine">神</el-radio-button>
+                                <el-radio-button label="">无</el-radio-button>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="图标" v-if="['spell','trap'].includes(form.type)">
