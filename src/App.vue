@@ -1,20 +1,12 @@
 <template>
-    <el-config-provider :locale="locale">
-        <router-view></router-view>
-    </el-config-provider>
+    <router-view></router-view>
 </template>
 
 <script>
     import mobile from 'is-mobile';
-    import zhCn from 'element-plus/lib/locale/lang/zh-cn';
 
     export default {
         name: 'App',
-        data() {
-            return {
-                locale: zhCn
-            };
-        },
         mounted() {
             this.mobileTip();
         },
