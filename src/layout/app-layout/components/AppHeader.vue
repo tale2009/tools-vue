@@ -11,6 +11,10 @@
                 <i class="fab fa-github" @click="toGithub"></i>
                 <el-button type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
                 <el-button type="text" @click="thankDialog = true">感谢</el-button>
+                <el-button class="collapse-icon" type="text" @click="toggleFullscreen">
+                    <i class="fal fa-expand" v-if="!isFullscreen"></i>
+                    <i class="fal fa-compress" v-else></i>
+                </el-button>
                 <el-button class="collapse-icon" type="text" @click="setRightCollapse(!rightCollapse)">
                     <i class="fal fa-arrow-to-right" :style="rightCollapseIconStyle"></i>
                 </el-button>
@@ -23,9 +27,10 @@
 </template>
 
 <script>
+    import screenfull from 'screenfull';
     import AboutDialog from '@/components/dialog/AboutDialog';
     import ThankDialog from '@/components/dialog/ThankDialog';
-    import {mapMutations, mapState} from 'vuex';
+    import { mapMutations, mapState } from 'vuex';
 
     export default {
         name: 'AppHeader',
@@ -35,14 +40,39 @@
         },
         data() {
             return {
+                isFullscreen: false,
                 aboutDialog: false,
                 thankDialog: false
             };
+        },
+        mounted() {
+            this.updateIsFullscreen();
+            addEventListener('keydown', this.registerShortcut);
+            screenfull.on('change', this.updateIsFullscreen);
+        },
+        beforeUnmount() {
+            removeEventListener('keydown', this.registerShortcut);
+            screenfull.off('change', this.updateIsFullscreen);
         },
         methods: {
             ...mapMutations(['setLeftCollapse', 'setRightCollapse']),
             toGithub() {
                 open('https://github.com/kooriookami/tools-vue');
+            },
+            registerShortcut(e) {
+                const {key} = e;
+                if (key === 'F11') {
+                    this.toggleFullscreen();
+                    e.preventDefault();
+                }
+            },
+            updateIsFullscreen() {
+                this.isFullscreen = screenfull.isFullscreen;
+            },
+            toggleFullscreen() {
+                if (screenfull.isEnabled) {
+                    screenfull.toggle();
+                }
             }
         },
         computed: {

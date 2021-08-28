@@ -19,6 +19,7 @@
         "mime": "^2.5.2",
         "normalize.css": "^8.0.1",
         "qs": "^6.10.1",
+        "screenfull": "^5.1.0",
         "vue": "^3.2.6",
         "vue-router": "^4.0.11",
         "vuex": "^4.0.2"
@@ -30,7 +31,7 @@
         "@vue/cli-service": "^4.5.13",
         "@vue/compiler-sfc": "^3.2.6",
         "compression-webpack-plugin": "^6.1.1",
-        "sass": "^1.38.1",
+        "sass": "^1.38.2",
         "sass-loader": "^10.2.0"
     }
 }
