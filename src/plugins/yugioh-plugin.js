@@ -206,7 +206,7 @@ function parseLevelRank(data) {
 function parsePendulumScale(data) {
     if (parseType(data) === 'pendulum') {
         let list = data.desc.split(/【.*?】/);
-        return parseInt(list?.[0].replace(/[^\d]/g, ''));
+        return parseInt(list[0]?.replace(/[^\d]/g, ''));
     } else {
         return 0;
     }
@@ -216,7 +216,7 @@ function parsePendulumDescription(data) {
     if (parseType(data) === 'pendulum') {
         let description = characterToHalf(data.desc);
         let list = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
-        return list?.[1].replace(/\d+→|\n/g, '').trim();
+        return list[1]?.replace(/\d+→|\n/g, '').trim();
     } else {
         return '';
     }
@@ -384,8 +384,9 @@ function parseDescription(data) {
     let description = characterToHalf(data.desc);
     description = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n');
     if (parseType(data) === 'pendulum') {
-        let list = description.split(/【.*?】/);
-        description = list?.[2].replace(/\n/g, '').trim();
+        let list = description.split(/【.*?】/).filter(item => item && item !== '\n');
+        // 新版数据库不确定下标
+        description = list[3]?.replace(/\n/g, '') || list[2]?.replace(/\n/g, '');
     } else {
         // 融合、同调、超量、连接、衍生物保留一个换行
         if (['fusion', 'synchro', 'xyz', 'link', 'token'].includes(parseCardType(data))) {
@@ -404,7 +405,7 @@ function parseDescription(data) {
             description = description.replace(/\n/g, '');
         }
     }
-    return description;
+    return description.trim();
 }
 
 function parseFirstLineCompress(data) {

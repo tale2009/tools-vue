@@ -11,6 +11,11 @@
     export default {
         name: 'CompressText',
         props: ['text', 'width', 'height', 'language', 'refreshKey', 'autoSizeElement'],
+        data() {
+            return {
+                textScale: 1
+            };
+        },
         computed: {
             compressParams() {
                 return {
@@ -36,11 +41,15 @@
             refreshKey() {
                 // 强制刷新
                 this.$forceUpdate();
+            },
+            textScale() {
+                this.$forceUpdate();
             }
         },
         directives: {
             // 压缩或拉伸注音文字
-            compressRt(el) {
+            compressRt(el, binding) {
+                const that = binding.instance;
                 let ruby = el.parentNode;
                 let rt = el;
                 rt.classList.remove('justify');
@@ -50,7 +59,7 @@
 
                 let text = ruby.innerText.split('\n')[0];
                 let rubyWidth = ruby.offsetWidth;
-                let rtWidth = rt.offsetWidth;
+                let rtWidth = rt.offsetWidth / that.textScale;
                 if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
                     // 拉伸两端对齐
                     rt.classList.add('justify');
@@ -61,22 +70,26 @@
                         // 公式：(rubyWidth + widen) / rtWidth = 0.6
                         let widen = 0.6 * rtWidth - rubyWidth;
                         ruby.style.margin = `0 ${widen / 2}px`;
-                        rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth})`;
+                        rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth / that.textScale})`;
                         rt.style.left = `${-widen / 2}px`;
                     } else {
-                        rt.style.transform = `scaleX(${rubyWidth / rtWidth})`;
+                        rt.style.transform = `scaleX(${rubyWidth / rtWidth / that.textScale})`;
                     }
                 } else {
                     // 不变并居中
                     rt.style.left = `${(rubyWidth - rtWidth) / 2}px`;
+                    rt.style.transform = `scaleX(${1 / that.textScale})`;
                 }
             },
             // 压缩文本文字
             compressText(el, binding) {
+                const that = binding.instance;
                 let params = binding.value;
                 if (params.width && params.height) {
                     el.style.width = `${params.width}px`;
                     el.style.transform = '';
+                    el.style.textAlignLast = '';
+                    that.textScale = 1;
                     const yugiohCardElement = document.querySelector('.yugioh-card');
                     const descriptionZoom = Number(yugiohCardElement.style.getPropertyValue('--descriptionZoom'));
                     let autoSizeElement = document.querySelector(params.autoSizeElement);
@@ -91,8 +104,10 @@
                             scale = (start + end) / 2;
                             el.style.width = `${params.width / scale}px`;
                             el.style.transform = `scaleX(${scale})`;
+                            el.style.textAlignLast = 'justify';
+                            that.textScale = scale;
                             el.clientHeight > params.height ? end = scale : start = scale;
-                            if (el.clientHeight <= params.height && end - start <= 0.005) {
+                            if (el.clientHeight <= params.height && end - start <= 0.01) {
                                 // 如果是英文，灵摆和效果栏字体判断缩小，当字号大于1不执行
                                 if (params.language === 'en' && params.autoSizeElement && scale < 0.7 && descriptionZoom === 1) {
                                     // 防止死循环
