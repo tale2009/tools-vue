@@ -159,11 +159,7 @@
                     <el-form :model="form" label-width="auto" size="small">
                         <el-form-item label="语言">
                             <el-select v-model="form.language" placeholder="请选择语言" @change="changeLanguage">
-                                <el-option label="简体中文" value="sc"></el-option>
-                                <el-option label="繁体中文" value="tc"></el-option>
-                                <el-option label="日文" value="jp"></el-option>
-                                <el-option label="韩文" value="kr"></el-option>
-                                <el-option label="英文" value="en"></el-option>
+                                <el-option v-for="item in languageList" :label="item.label" :value="item.value"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="卡名">
@@ -282,9 +278,16 @@
                             <el-input v-model="form.package" placeholder="请输入卡包"></el-input>
                         </el-form-item>
                         <el-form-item label="密码">
-                            <div style="display: flex">
+                            <div style="display: flex;align-items: center">
                                 <el-input v-model="form.password" placeholder="请输入密码"></el-input>
-                                <el-button style="margin-left: 10px" type="primary" :loading="searchLoading" @click="searchCardByPassword">搜索</el-button>
+                                <el-dropdown style="margin-left: 10px;flex-shrink: 0" type="primary" split-button @click="searchCardByPassword('')">
+                                    <span>搜索</span>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <el-dropdown-item v-for="item in languageList" @click="searchCardByPassword(item.value)">{{ item.label }}</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
                             </div>
                         </el-form-item>
                         <el-form-item label="版权">
@@ -371,7 +374,6 @@
                 baseImage: 'https://static.kooriookami.top/yugioh/image',
                 refreshKey: 0,
                 fontLoading: true,
-                searchLoading: false,
                 randomLoading: false,
                 exportLoading: false,
                 form: {
@@ -403,6 +405,13 @@
                     cardBack: false,
                     scale: 0.5
                 },
+                languageList: [
+                    {label: '简体中文', value: 'sc'},
+                    {label: '繁体中文', value: 'tc'},
+                    {label: '日文', value: 'jp'},
+                    {label: '韩文', value: 'kr'},
+                    {label: '英文', value: 'en'}
+                ],
                 lastDescriptionHeight: 300,   // 最后一行效果压缩高度
                 kanjiKanaDialog: false,
                 config: {}
@@ -539,19 +548,20 @@
                 this.form.password = value.id;
                 this.searchCardByPassword();
             },
-            searchCardByPassword() {
-                this.searchLoading = true;
+            searchCardByPassword(lang) {
                 this.axios({
                     method: 'get',
                     url: '/yugioh/card/' + this.form.password,
                     params: {
-                        lang: this.form.language
+                        lang: lang || this.form.language
                     }
                 }).then(res => {
+                    if (lang) {
+                        this.form.language = lang;
+                        this.refreshFont();
+                    }
                     let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
                     Object.assign(this.form, cardInfo);
-                }).finally(() => {
-                    this.searchLoading = false;
                 });
             },
             getRandomCard() {
