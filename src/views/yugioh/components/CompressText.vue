@@ -40,10 +40,14 @@
         watch: {
             refreshKey() {
                 // 强制刷新
-                this.$forceUpdate();
+                setTimeout(() => {
+                    this.$forceUpdate();
+                });
             },
             textScale() {
-                this.$forceUpdate();
+                setTimeout(() => {
+                    this.$forceUpdate();
+                });
             }
         },
         directives: {
