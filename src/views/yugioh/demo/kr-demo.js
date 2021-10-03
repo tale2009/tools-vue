@@ -1,9 +1,11 @@
+import blueEyes from '@/assets/image/blue-eyes.jpg';
+
 export default {
     language: 'kr',
     name: '푸른 눈의 백룡',
     type: 'monster',
     attribute: 'light',
-    image: require('@/assets/image/blue-eyes.jpg'),
+    image: blueEyes,
     cardType: 'normal',
     level: 8,
     monsterType: '드래곤족 / 일반',

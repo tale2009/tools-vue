@@ -1,9 +1,11 @@
+import blueEyes from '@/assets/image/blue-eyes.jpg';
+
 export default {
     language: 'jp',
     name: '[青眼の白龍(ブルーアイズ・ホワイト・ドラゴン)]',
     type: 'monster',
     attribute: 'light',
-    image: require('@/assets/image/blue-eyes.jpg'),
+    image: blueEyes,
     cardType: 'normal',
     level: 8,
     monsterType: 'ドラゴン[族(ぞく)]／[通(つう)][常(じょう)]',

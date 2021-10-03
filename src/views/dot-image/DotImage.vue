@@ -48,6 +48,7 @@
     import PageForm from '@/components/page/PageForm';
     import loadImage from 'blueimp-load-image';
     import html2canvas from 'html2canvas';
+    import myAvatar from '@/assets/image/my-avatar.jpg';
 
     export default {
         name: 'DotImage',
@@ -58,7 +59,7 @@
         data() {
             return {
                 form: {
-                    image: require('@/assets/image/my-avatar.jpg'),
+                    image: myAvatar,
                     pixel: 48,
                     shape: 'square',
                     monochrome: false,

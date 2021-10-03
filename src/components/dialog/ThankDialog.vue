@@ -6,14 +6,14 @@
                 <div class="thank-list">
                     <el-scrollbar>
                         <p class="thank-item" v-for="item in thankList">
-                            <span>{{item.name}}（￥{{item.money?.toFixed(2)}}）</span>
-                            <span>{{item.time}}</span>
+                            <span>{{ item.name }}（￥{{ item.money?.toFixed(2) }}）</span>
+                            <span>{{ item.time }}</span>
                         </p>
                     </el-scrollbar>
                 </div>
             </div>
             <template #footer>
-                <span class="sum-money">￥{{sumMoney}}</span>
+                <span class="sum-money">￥{{ sumMoney }}</span>
                 <el-button plain size="medium" @click="closeDialog">关闭</el-button>
             </template>
         </el-dialog>
@@ -21,12 +21,14 @@
 </template>
 
 <script>
+    import thankList from '@/assets/json/thank-list.json';
+
     export default {
         name: 'ThankDialog',
         props: ['modelValue'],
         data() {
             return {
-                thankList: require('@/assets/json/thank-list.json')
+                thankList: thankList
             };
         },
         methods: {

@@ -1,9 +1,11 @@
+import blueEyes from '@/assets/image/blue-eyes.jpg';
+
 export default {
     language: 'en',
     name: 'Blue-Eyes White Dragon',
     type: 'monster',
     attribute: 'light',
-    image: require('@/assets/image/blue-eyes.jpg'),
+    image: blueEyes,
     cardType: 'normal',
     level: 8,
     monsterType: 'Dragon/Normal',

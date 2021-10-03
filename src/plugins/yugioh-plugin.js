@@ -1,5 +1,5 @@
-const kanjiKanaMap = require('@/assets/json/kanji-kana.json');
-const monsterTypeList = require('@/assets/json/monster-type-list.json');
+import kanjiKanaMap from '@/assets/json/kanji-kana.json';
+import monsterTypeList from '@/assets/json/monster-type-list.json';
 
 export default {
     install(app, options) {

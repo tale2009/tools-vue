@@ -7,7 +7,7 @@
                         <i :class="`fal ${item.icon}`"></i>
                     </div>
                     <div class="item-title">
-                        <span>{{item.title}}</span>
+                        <span>{{ item.title }}</span>
                     </div>
                 </div>
             </el-col>
@@ -16,11 +16,13 @@
 </template>
 
 <script>
+    import toolList from '@/assets/json/tool-list.json';
+
     export default {
         name: 'AppLeft',
         data() {
             return {
-                toolList: require('@/assets/json/tool-list.json')
+                toolList: toolList
             };
         },
         methods: {
