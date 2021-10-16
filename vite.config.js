@@ -12,6 +12,9 @@ function saveConfig() {
         };
         fs.writeFileSync('./src/assets/json/config.json', JSON.stringify(config));
     }
+    return {
+        name: 'save-config'
+    };
 }
 
 export default defineConfig({
