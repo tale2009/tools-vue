@@ -1,3 +1,4 @@
+import mime from 'mime';
 import dayjs from 'dayjs';
 import config from '@/assets/json/config.json';
 
@@ -11,8 +12,9 @@ export default {
             if (!fileName) {
                 fileName = new Date().getTime();
             }
-            let a = document.createElement('a');
-            a.download = fileName;
+            const extension = mime.getExtension(blob.type);
+            const a = document.createElement('a');
+            a.download = `${fileName}.${extension}`;
             a.href = URL.createObjectURL(blob);
             a.click();
         };
