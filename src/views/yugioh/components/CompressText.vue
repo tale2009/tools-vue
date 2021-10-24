@@ -56,17 +56,21 @@
                 const that = binding.instance;
                 let ruby = el.parentNode;
                 let rt = el;
-                rt.classList.remove('justify');
                 ruby.style.padding = '';
+                rt.style.textAlignLast = '';
                 rt.style.transform = '';
                 rt.style.left = '';
+                rt.style.width = '';
 
                 let text = ruby.innerText.split('\n')[0];
                 let rubyWidth = ruby.offsetWidth;
                 let rtWidth = rt.offsetWidth / that.textScale;
                 if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
                     // 拉伸两端对齐
-                    rt.classList.add('justify');
+                    rt.style.width = `${that.textScale * 90}%`;
+                    rt.style.left = '5%';
+                    rt.style.textAlignLast = 'justify';
+                    rt.style.transform = `scaleX(${1 / that.textScale})`;
                 } else if (rtWidth > rubyWidth) {
                     // 压缩
                     if (rubyWidth / rtWidth < 0.6) {
@@ -151,12 +155,6 @@
                 white-space: nowrap;
                 letter-spacing: 0;
                 transform-origin: 0 0;
-
-                &.justify {
-                    text-align-last: justify;
-                    left: 5%;
-                    width: 90%;
-                }
             }
         }
     }
