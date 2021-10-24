@@ -16,12 +16,12 @@ export default {
                 level: parseLevelRank(data),
                 rank: parseLevelRank(data),
                 pendulumScale: parsePendulumScale(data),
-                pendulumDescription: parsePendulumDescription(data),
+                pendulumDescription: parsePendulumDescription(data, lang),
                 monsterType: parseMonsterType(data, lang),
                 atk: parseAtk(data),
                 def: parseDef(data),
                 arrowList: parseArrowList(data),
-                description: parseDescription(data),
+                description: parseDescription(data, lang),
                 firstLineCompress: parseFirstLineCompress(data),
                 package: parsePackage(data, lang),
                 password: parsePassword(data)
@@ -79,6 +79,18 @@ function numberToHalf(value) {
         let code = char.charCodeAt();
         if (code >= 65296 && code <= 65305) {
             return String.fromCharCode(code - 65248);
+        }
+        return char;
+    });
+    return charList.join('');
+}
+
+// 数字转全角
+function numberToFull(value) {
+    let charList = Array.from(value).map(char => {
+        let code = char.charCodeAt();
+        if (code >= 48 && code <= 57) {
+            return String.fromCharCode(code + 65248);
         }
         return char;
     });
@@ -212,11 +224,16 @@ function parsePendulumScale(data) {
     }
 }
 
-function parsePendulumDescription(data) {
+function parsePendulumDescription(data, lang) {
     if (parseType(data) === 'pendulum') {
         let description = characterToHalf(data.desc);
-        let list = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
-        return list[1]?.replace(/\d+→|\n/g, '').trim();
+        const list = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
+        description = list[1]?.replace(/\d+→|\n/g, '').trim();
+        if (['jp', 'sc'].includes(lang)) {
+            // 效果数字全角，卡名数字半角
+            description = numberToFull(description).replace(/(「.*?」)|(“.*?”)/g, s => numberToHalf(s));
+        }
+        return description;
     } else {
         return '';
     }
@@ -380,7 +397,7 @@ function parseArrowList(data) {
     return arrowList;
 }
 
-function parseDescription(data) {
+function parseDescription(data, lang) {
     let description = characterToHalf(data.desc);
     description = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n');
     if (parseType(data) === 'pendulum') {
@@ -404,6 +421,10 @@ function parseDescription(data) {
         } else {
             description = description.replace(/\n/g, '');
         }
+    }
+    if (['jp', 'sc'].includes(lang)) {
+        // 效果数字全角，卡名数字半角
+        description = numberToFull(description).replace(/(「.*?」)|(“.*?”)/g, s => numberToHalf(s));
     }
     return description.trim();
 }

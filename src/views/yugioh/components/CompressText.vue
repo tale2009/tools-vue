@@ -57,7 +57,7 @@
                 let ruby = el.parentNode;
                 let rt = el;
                 rt.classList.remove('justify');
-                ruby.style.margin = '';
+                ruby.style.padding = '';
                 rt.style.transform = '';
                 rt.style.left = '';
 
@@ -73,9 +73,8 @@
                         // 防止过度压缩，加宽ruby
                         // 公式：(rubyWidth + widen) / rtWidth = 0.6
                         let widen = 0.6 * rtWidth - rubyWidth;
-                        ruby.style.margin = `0 ${widen / 2}px`;
+                        ruby.style.padding = `0 ${widen / 2}px`;
                         rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth / that.textScale})`;
-                        rt.style.left = `${-widen / 2}px`;
                     } else {
                         rt.style.transform = `scaleX(${rubyWidth / rtWidth / that.textScale})`;
                     }
