@@ -36,14 +36,22 @@ export const getStraightDotList = (dot1, dot2) => {
         [x1, x2] = [x2, x1];
     }
     for (let x = x1; x <= x2; x++) {
-        dotList.push({x, y: fx(x) >= 0 ? Math.ceil(fx(x)) : Math.floor(fx(x))});
+        dotList.push({ x, y: fx(x) >= 0 ? Math.ceil(fx(x)) : Math.floor(fx(x)) });
     }
     if (y1 > y2) {
         [y1, y2] = [y2, y1];
     }
     for (let y = y1; y <= y2; y++) {
-        dotList.push({x: fy(y) >= 0 ? Math.ceil(fy(y)) : Math.floor(fy(y)), y});
+        dotList.push({ x: fy(y) >= 0 ? Math.ceil(fy(y)) : Math.floor(fy(y)), y });
     }
 
     return [...new Set(dotList.map(v => JSON.stringify(v)))].map(v => JSON.parse(v));
+};
+
+// 动态加载css
+export const loadCSS = url => {
+    let css = document.createElement('link');
+    css.href = url;
+    css.rel = 'stylesheet';
+    document.head.appendChild(css);
 };

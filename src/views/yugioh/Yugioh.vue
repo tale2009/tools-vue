@@ -360,6 +360,7 @@
     import jpDemo from './demo/jp-demo';
     import krDemo from './demo/kr-demo';
     import enDemo from './demo/en-demo';
+    import { mapState } from 'vuex';
 
     export default {
         name: 'Yugioh',
@@ -371,7 +372,6 @@
         },
         data() {
             return {
-                baseImage: 'https://static.kooriookami.top/yugioh/image',
                 refreshKey: 0,
                 fontLoading: true,
                 randomLoading: false,
@@ -406,11 +406,11 @@
                     scale: 0.5
                 },
                 languageList: [
-                    {label: '简体中文', value: 'sc'},
-                    {label: '繁体中文', value: 'tc'},
-                    {label: '日文', value: 'jp'},
-                    {label: '韩文', value: 'kr'},
-                    {label: '英文', value: 'en'}
+                    { label: '简体中文', value: 'sc' },
+                    { label: '繁体中文', value: 'tc' },
+                    { label: '日文', value: 'jp' },
+                    { label: '韩文', value: 'kr' },
+                    { label: '英文', value: 'en' }
                 ],
                 lastDescriptionHeight: 300,   // 最后一行效果压缩高度
                 kanjiKanaDialog: false,
@@ -595,7 +595,7 @@
             },
             exportJson() {
                 let data = JSON.stringify(this.form);
-                let blob = new Blob([data], {type: 'application/json'});
+                let blob = new Blob([data], { type: 'application/json' });
                 this.downloadBlob(blob, this.cardName);
             },
             exportImage() {
@@ -616,6 +616,10 @@
             }
         },
         computed: {
+            ...mapState(['staticURL']),
+            baseImage() {
+                return `${this.staticURL}/yugioh/image`;
+            },
             cardClass() {
                 return `${this.form.language}-class ${this.form.cardBack ? 'card-back' : ''}`;
             },

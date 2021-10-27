@@ -6,6 +6,12 @@
             </el-button>
         </div>
 
+        <div class="header-center">
+            <el-button class="mystery-icon" type="text" @dblclick="openMysteryBox">
+                <i class="fal fa-dog"></i>
+            </el-button>
+        </div>
+
         <div class="header-right">
             <el-space :size="10">
                 <i class="fab fa-github" @click="toGithub"></i>
@@ -60,7 +66,7 @@
                 open('https://github.com/kooriookami/tools-vue');
             },
             registerShortcut(e) {
-                const {key} = e;
+                const { key } = e;
                 if (key === 'F11') {
                     this.toggleFullscreen();
                     e.preventDefault();
@@ -73,6 +79,12 @@
                 if (screenfull.isEnabled) {
                     screenfull.toggle();
                 }
+            },
+            openMysteryBox() {
+                this.$messageBox.prompt('请输入神秘代码', '提示').then(({ value }) => {
+                    localStorage.setItem('mystery-code', value);
+                    location.reload();
+                });
             }
         },
         computed: {
@@ -103,6 +115,17 @@
 
             i {
                 transition: all 0.3s;
+            }
+        }
+
+        .header-center {
+            .mystery-icon {
+                font-size: 24px;
+                color: white;
+
+                &:hover {
+                    color: whitesmoke;
+                }
             }
         }
 
