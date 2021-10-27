@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import md5 from 'md5';
+import { ElNotification } from 'element-plus';
 
 export default createStore({
     state: {
@@ -18,6 +19,11 @@ export default createStore({
             const mysteryCode = localStorage.getItem('mystery-code') || '';
             // 防君子不防小人
             const prefix = md5(mysteryCode) === '21232f297a57a5a743894a0e4a801fc3' ? '' : 'v-';
+            if (!prefix) {
+                ElNotification.success({
+                    title: '已进入神秘模式'
+                });
+            }
             state.staticURL = `https://${prefix}static.kooriookami.top`;
         }
     },
