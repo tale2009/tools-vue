@@ -20,9 +20,11 @@ export default createStore({
             // 防君子不防小人
             const prefix = md5(mysteryCode) === '21232f297a57a5a743894a0e4a801fc3' ? '' : 'v-';
             if (!prefix) {
-                ElNotification.success({
-                    title: '已进入神秘模式'
-                });
+                setTimeout(() => {
+                    ElNotification.success({
+                        title: '已进入神秘模式'
+                    });
+                }, 1000);
             }
             state.staticURL = `https://${prefix}static.kooriookami.top`;
         }
