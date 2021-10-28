@@ -152,8 +152,9 @@
                     </template>
 
                     <div class="font-loading" v-if="fontLoading">
-                        <i class="el-icon-loading"></i>
-                        <span>字体加载中...</span>
+                        <el-progress :percentage="100" text-inside :stroke-width="16" indeterminate>
+                            <span>字体加载中...</span>
+                        </el-progress>
                     </div>
 
                     <el-form :model="form" label-width="auto" size="small">
