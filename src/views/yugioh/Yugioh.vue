@@ -293,9 +293,9 @@
                         </el-form-item>
                         <el-form-item label="版权">
                             <el-select v-model="form.copyright" placeholder="请选择版权" clearable>
-                                <el-option label="简体中文 / 韩文" value="sc"></el-option>
-                                <el-option label="繁体中文 / 日文" value="jp"></el-option>
-                                <el-option label="英文" value="en"></el-option>
+                                <el-option label="©2020 Studio Dice/SHUEISHA, TV TOKYO, KONAMI" value="sc"></el-option>
+                                <el-option label="©スタジオ・ダイス/集英社・テレビ東京・KONAMI" value="jp"></el-option>
+                                <el-option label="©1996 KAZUKI TAKAHASHI" value="en"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-row :gutter="10">
