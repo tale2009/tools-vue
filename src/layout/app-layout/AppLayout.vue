@@ -20,7 +20,7 @@
 <script>
     import AppHeader from '@/layout/app-layout/components/AppHeader';
     import AppLeft from '@/layout/app-layout/components/AppLeft';
-    import {mapState} from 'vuex';
+    import { mapState } from 'vuex';
 
     export default {
         name: 'AppLayout',
@@ -33,12 +33,9 @@
             document.onkeypress = this.disableKey;
         },
         methods: {
-            updateScrollbar() {
-                this.$refs['left-scrollbar'].update();
-            },
             // 屏蔽某些键
             disableKey(e) {
-                if (e.key === 'Backspace' && !['text', 'textarea', 'password'].includes(e.target.type)) {
+                if (e.key === 'Backspace' && !['text', 'textarea', 'password', 'number'].includes(e.target.type)) {
                     return false;
                 }
             }
