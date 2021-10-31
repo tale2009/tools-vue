@@ -11,10 +11,14 @@
             <template #form>
                 <PageForm title="画图板">
                     <el-button-group class="form-bar">
-                        <el-button plain icon="fas fa-undo" size="small" @click="undoHistory" :disabled="!historyList.length"></el-button>
+                        <el-button plain size="small" @click="undoHistory" :disabled="!historyList.length">
+                            <i class="fas fa-undo"></i>
+                        </el-button>
                         <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
                             <template #reference>
-                                <el-button type="danger" icon="fas fa-trash" size="small"></el-button>
+                                <el-button type="danger" size="small">
+                                    <i class="fas fa-trash"></i>
+                                </el-button>
                             </template>
                         </el-popconfirm>
                     </el-button-group>
@@ -34,7 +38,9 @@
                                 <el-check-tag :checked="form.type === 'eraser'" @change="changeType('eraser')">橡皮擦</el-check-tag>
                                 <el-check-tag :checked="form.type === 'absorber'" @change="changeType('absorber')">吸色器</el-check-tag>
                                 <el-tooltip content="线宽可以控制橡皮擦大小" placement="top">
-                                    <i class="el-icon-info"></i>
+                                    <el-icon>
+                                        <info-filled></info-filled>
+                                    </el-icon>
                                 </el-tooltip>
                             </el-space>
                         </el-form-item>
@@ -44,7 +50,9 @@
                                 <el-check-tag :checked="form.type === 'rectangle'" @change="changeType('rectangle')">矩形</el-check-tag>
                                 <el-check-tag :checked="form.type === 'ellipse'" @change="changeType('ellipse')">椭圆形</el-check-tag>
                                 <el-tooltip content="按住 Shift 画图试试" placement="top">
-                                    <i class="el-icon-info"></i>
+                                    <el-icon>
+                                        <info-filled></info-filled>
+                                    </el-icon>
                                 </el-tooltip>
                             </el-space>
                         </el-form-item>
@@ -75,20 +83,22 @@
 <script>
     import Page from '@/components/page/Page';
     import PageForm from '@/components/page/PageForm';
-    import {computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref} from 'vue';
+    import { computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
     import html2canvas from 'html2canvas';
     import usePaint from '@/views/paint-board/use-paint';
     import TextEditor from '@/views/paint-board/components/TextEditor';
+    import { InfoFilled } from '@element-plus/icons';
 
     export default {
         name: 'PaintBoard',
         components: {
             Page,
             PageForm,
-            TextEditor
+            TextEditor,
+            InfoFilled
         },
         setup() {
-            const {proxy} = getCurrentInstance();
+            const { proxy } = getCurrentInstance();
             const canvas = ref(null);
             const context = ref(null);
             const textEditor = ref(null);
@@ -140,7 +150,7 @@
                     return;
                 }
 
-                const {ctrlKey, key} = e;
+                const { ctrlKey, key } = e;
                 if (ctrlKey && key === 'z') {
                     undoHistory();
                     e.preventDefault();
@@ -193,8 +203,8 @@
                 if (!['text', 'absorber'].includes(form.type)) {
                     saveHistory();
                 }
-                downPoint.value = {x, y};
-                lastPoint.value = {x, y};
+                downPoint.value = { x, y };
+                lastPoint.value = { x, y };
                 form.editing = true;
                 usePaint(usePaintKey, form.type, e);
 
@@ -209,7 +219,7 @@
                     if (!['text', 'bucket'].includes(form.type)) {
                         usePaint(usePaintKey, form.type, e);
                     }
-                    lastPoint.value = {x, y};
+                    lastPoint.value = { x, y };
                 } else {
                     lastPoint.value = {};
                 }

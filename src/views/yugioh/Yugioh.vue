@@ -147,7 +147,9 @@
                     <template #title>
                         <span>游戏王卡片生成器</span>
                         <el-tooltip :content="`数据库同步时间：${formatTime(config.updateTime)}`" placement="top">
-                            <i class="el-icon-info" style="margin-left: 5px"></i>
+                            <el-icon style="margin-left: 5px" :size="18">
+                                <info-filled></info-filled>
+                            </el-icon>
                         </el-tooltip>
                     </template>
 
@@ -356,6 +358,7 @@
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
     import loadImage from 'blueimp-load-image';
+    import { InfoFilled } from '@element-plus/icons';
     import scDemo from './demo/sc-demo';
     import tcDemo from './demo/tc-demo';
     import jpDemo from './demo/jp-demo';
@@ -369,7 +372,8 @@
             Page,
             PageForm,
             CompressText,
-            KanjiKanaDialog
+            KanjiKanaDialog,
+            InfoFilled
         },
         data() {
             return {

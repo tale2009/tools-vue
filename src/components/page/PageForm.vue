@@ -1,12 +1,12 @@
 <template>
     <div class="page-form-container">
-        <div class="form-title">
-            <span v-if="$slots.title || title">
-                <slot name="title">{{title}}</slot>
-            </span>
-            <span class="form-description" v-if="$slots.description || description">
-                <slot name="description">{{description}}</slot>
-            </span>
+        <div class="form-header">
+            <div class="form-title" v-if="$slots.title || title">
+                <slot name="title">{{ title }}</slot>
+            </div>
+            <div class="form-description" v-if="$slots.description || description">
+                <slot name="description">{{ description }}</slot>
+            </div>
         </div>
 
         <div class="form-main">
@@ -24,14 +24,19 @@
 
 <style lang="scss" scoped>
     .page-form-container {
-        .form-title {
+        .form-header {
             padding: 30px 20px;
             font-size: 18px;
             font-weight: bold;
             border-bottom: 1px solid $border-color;
 
+            .form-title {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
             .form-description {
-                display: block;
                 margin-top: 20px;
                 font-size: 12px;
                 font-weight: normal;

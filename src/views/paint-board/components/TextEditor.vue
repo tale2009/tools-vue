@@ -3,7 +3,7 @@
         <textarea ref="textarea" rows="5" cols="50" v-model="form.editText" placeholder="请输入内容" :style="textareaStyle"></textarea>
 
         <el-space class="text-operate" :size="5">
-            <el-select style="width: 80px" v-model="form.editFontSize" size="mini">
+            <el-select style="width: 90px" v-model="form.editFontSize" size="mini">
                 <el-option v-for="item in fontSizeList" :label="`${item} px`" :value="item"></el-option>
             </el-select>
             <el-button plain size="mini" @click="cancelInput">取消</el-button>

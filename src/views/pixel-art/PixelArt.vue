@@ -12,10 +12,14 @@
             <template #form>
                 <PageForm title="像素画">
                     <el-button-group class="form-bar">
-                        <el-button plain icon="fas fa-undo" size="small" @click="undoHistory" :disabled="!historyList.length"></el-button>
+                        <el-button size="small" @click="undoHistory" :disabled="!historyList.length">
+                            <i class="fas fa-undo"></i>
+                        </el-button>
                         <el-popconfirm title="是否清空画板？" @confirm="clearPixelArt">
                             <template #reference>
-                                <el-button type="danger" icon="fas fa-trash" size="small"></el-button>
+                                <el-button type="danger" size="small">
+                                    <i class="fas fa-trash"></i>
+                                </el-button>
                             </template>
                         </el-popconfirm>
                     </el-button-group>
@@ -80,7 +84,7 @@
 <script>
     import Page from '@/components/page/Page';
     import PageForm from '@/components/page/PageForm';
-    import {computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref, watch} from 'vue';
+    import { computed, getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
     import html2canvas from 'html2canvas';
     import _ from 'lodash';
     import usePixel from './use-pixel';
@@ -92,7 +96,7 @@
             PageForm
         },
         setup() {
-            const {proxy} = getCurrentInstance();
+            const { proxy } = getCurrentInstance();
             const canvas = ref(null);
             const context = ref(null);
             const hoverCanvas = ref(null);
@@ -259,8 +263,8 @@
                 if (colIndex < 0 || rowIndex < 0) {
                     return;
                 }
-                lastDot.value = Object.keys(currentDot.value).length ? _.cloneDeep(currentDot.value) : {x: rowIndex, y: colIndex};
-                currentDot.value = {x: rowIndex, y: colIndex};
+                lastDot.value = Object.keys(currentDot.value).length ? _.cloneDeep(currentDot.value) : { x: rowIndex, y: colIndex };
+                currentDot.value = { x: rowIndex, y: colIndex };
                 if (!_.isEqual(lastDot.value, currentDot.value)) {
                     usePixel(usePixelKey, form.type);
                 }
@@ -304,7 +308,7 @@
                     return;
                 }
 
-                const {ctrlKey, key} = e;
+                const { ctrlKey, key } = e;
                 if (ctrlKey && key === 'z') {
                     undoHistory();
                     e.preventDefault();
@@ -330,7 +334,7 @@
                     form,
                     dotList: dotList.value
                 });
-                let blob = new Blob([data], {type: 'application/json'});
+                let blob = new Blob([data], { type: 'application/json' });
                 proxy.downloadBlob(blob, '像素画');
             };
 
@@ -346,8 +350,8 @@
             };
 
             watch(() => {
-                const {heightPixel, widthPixel, shape, monochrome, grid, size} = form;
-                return {heightPixel, widthPixel, shape, monochrome, grid, size};
+                const { heightPixel, widthPixel, shape, monochrome, grid, size } = form;
+                return { heightPixel, widthPixel, shape, monochrome, grid, size };
             }, () => {
                 createDotList();
             });
