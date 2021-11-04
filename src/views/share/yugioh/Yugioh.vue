@@ -3,6 +3,9 @@
         <el-scrollbar>
             <YugiohCard v-if="dataLoaded" :data="form" :refreshKey="refreshKey"></YugiohCard>
         </el-scrollbar>
+        <div class="font-loading" v-if="fontLoading">
+            <el-alert title="字体加载中..." effect="dark" center :closable="false"></el-alert>
+        </div>
     </div>
 </template>
 
@@ -17,6 +20,7 @@
         data() {
             return {
                 refreshKey: 0,
+                fontLoading: false,
                 form: {
                     language: 'sc',
                     descriptionZoom: 1,
@@ -49,7 +53,9 @@
             // 刷新字体
             refreshFont() {
                 setTimeout(() => {
+                    this.fontLoading = true;
                     document.fonts.ready.then(() => {
+                        this.fontLoading = false;
                         this.refreshKey++;
                     });
                 });
@@ -85,5 +91,17 @@
     .share-yugioh-container {
         height: 100vh;
         text-align: center;
+        position: relative;
+
+        .font-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+
+            .el-alert {
+                background: $primary-color;
+            }
+        }
     }
 </style>

@@ -21,6 +21,7 @@
     import AppHeader from '@/layout/app-layout/components/AppHeader';
     import AppLeft from '@/layout/app-layout/components/AppLeft';
     import { mapState } from 'vuex';
+    import mobile from 'is-mobile';
 
     export default {
         name: 'AppLayout',
@@ -29,10 +30,20 @@
             AppLeft
         },
         mounted() {
+            this.mobileTip();
             document.onkeydown = this.disableKey;
             document.onkeypress = this.disableKey;
         },
         methods: {
+            mobileTip() {
+                if (mobile()) {
+                    this.$confirm('<p>若功能异常，请使用 PC Chrome 浏览器。</p>' +
+                        '<p>移动端异常问题不再回复，请谅解！</p>', '移动端提示', {
+                        type: 'warning',
+                        dangerouslyUseHTMLString: true
+                    });
+                }
+            },
             // 屏蔽某些键
             disableKey(e) {
                 if (e.key === 'Backspace' && !['text', 'textarea', 'password', 'number'].includes(e.target.type)) {

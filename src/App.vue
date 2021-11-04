@@ -3,24 +3,8 @@
 </template>
 
 <script>
-    import mobile from 'is-mobile';
-
     export default {
-        name: 'App',
-        mounted() {
-            this.mobileTip();
-        },
-        methods: {
-            mobileTip() {
-                if (mobile()) {
-                    this.$confirm('<p>若功能异常，请使用 PC Chrome 浏览器。</p>' +
-                        '<p>移动端异常问题不再回复，请谅解！</p>', '移动端提示', {
-                        type: 'warning',
-                        dangerouslyUseHTMLString: true
-                    });
-                }
-            }
-        }
+        name: 'App'
     };
 </script>
 
