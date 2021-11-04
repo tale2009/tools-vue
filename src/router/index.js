@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
     {
@@ -45,6 +45,21 @@ const routes = [
                 component: () => import(/* webpackChunkName: "yugioh" */ '../views/yugioh/Yugioh.vue'),
                 meta: {
                     title: '游戏王卡片生成器'
+                }
+            }
+        ]
+    },
+    {
+        path: '/share',
+        name: 'share',
+        component: () => import(/* webpackChunkName: "blank-layout" */ '../layout/blank-layout/BlankLayout.vue'),
+        children: [
+            {
+                path: 'yugioh',
+                name: 'shareYugioh',
+                component: () => import(/* webpackChunkName: "share-yugioh" */ '../views/share/yugioh/Yugioh.vue'),
+                meta: {
+                    title: '游戏王卡片分享'
                 }
             }
         ]

@@ -1,0 +1,88 @@
+<template>
+    <div class="share-yugioh-container">
+        <el-scrollbar>
+            <YugiohCard v-if="dataLoaded" :data="form" :refreshKey="refreshKey"></YugiohCard>
+        </el-scrollbar>
+    </div>
+</template>
+
+<script>
+    import YugiohCard from '@/views/yugioh/components/YugiohCard';
+
+    export default {
+        name: 'ShareYugioh',
+        components: {
+            YugiohCard
+        },
+        data() {
+            return {
+                refreshKey: 0,
+                form: {
+                    language: 'sc',
+                    descriptionZoom: 1,
+                    radius: true,
+                    scale: 0.5
+                    // 更多字段参照：@/views/yugioh/Yugioh.vue
+                },
+                dataLoaded: false
+            };
+        },
+        created() {
+            const query = this.$route.query;
+            this.form.password = query.password || '';
+            this.form.language = query.language || 'sc';
+            this.form.width = query.width || '';
+            this.updateScale();
+            if (this.form.password) {
+                this.searchCardByPassword();
+            }
+        },
+        mounted() {
+            this.refreshFont();
+            addEventListener('resize', this.updateScale);
+        },
+        beforeUnmount() {
+            removeEventListener('resize', this.updateScale);
+        },
+        methods: {
+            // 刷新字体
+            refreshFont() {
+                setTimeout(() => {
+                    document.fonts.ready.then(() => {
+                        this.refreshKey++;
+                    });
+                });
+            },
+            searchCardByPassword(lang) {
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/card/' + this.form.password,
+                    params: {
+                        lang: lang || this.form.language
+                    }
+                }).then(res => {
+                    this.refreshFont();
+                    let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+                    Object.assign(this.form, cardInfo);
+                    this.dataLoaded = true;
+                });
+            },
+            // 把卡片宽度转换成scale
+            updateScale() {
+                const width = this.form.width;
+                if (width) {
+                    this.form.scale = width / 1393;
+                } else {
+                    this.form.scale = Math.min((document.body.offsetWidth / 1393), 1);
+                }
+            }
+        }
+    };
+</script>
+
+<style lang="scss" scoped>
+    .share-yugioh-container {
+        height: 100vh;
+        text-align: center;
+    }
+</style>

@@ -2,144 +2,7 @@
     <div class="yugioh-container">
         <Page>
             <template #default>
-                <div class="yugioh-card" :class="cardClass" :style="cardStyle" ondragstart="return false">
-                    <div class="card-name" v-name-color="form.color">
-                        <CompressText :text="form.name" :refreshKey="refreshKey" :width="1030" :height="200"></CompressText>
-                    </div>
-
-                    <div class="card-attribute" v-if="form.attribute">
-                        <el-image :src="attributeSrc"></el-image>
-                    </div>
-
-                    <div class="card-level" v-if="showLevel" :style="levelStyle">
-                        <el-image v-for="item in form.level" :src="baseImage + '/level.png'"></el-image>
-                    </div>
-
-                    <div class="card-rank" v-if="showRank" :style="rankStyle">
-                        <el-image v-for="item in form.rank" :src="baseImage + '/rank.png'"></el-image>
-                    </div>
-
-                    <div class="spell-trap" v-if="['spell','trap'].includes(form.type)">
-                        <span>{{ ['en', 'kr'].includes(form.language) ? '[' : '【' }}</span>
-                        <CompressText :text="spellTrapName" :refreshKey="refreshKey"></CompressText>
-                        <el-image class="spell-trap-icon" v-if="form.icon" :src="`${baseImage}/icon-${form.icon}.png`"></el-image>
-                        <span>{{ ['en', 'kr'].includes(form.language) ? ']' : '】' }}</span>
-                    </div>
-
-                    <div class="card-image" v-if="form.image" :style="imageStyle">
-                        <el-image :src="form.image">
-                            <template #placeholder>
-                                <div class="image-slot">
-                                    <i class="fal fa-spinner fa-pulse"></i>
-                                </div>
-                            </template>
-                            <template #error>
-                                <div class="image-slot">
-                                    <i class="fal fa-image"></i>
-                                </div>
-                            </template>
-                        </el-image>
-                    </div>
-
-                    <div class="card-mask" :style="maskStyle">
-                        <el-image v-if="form.type==='pendulum'" :src="baseImage + '/card-mask-pendulum.png'" fit="cover"></el-image>
-                        <el-image v-else :src="baseImage + '/card-mask.png'" fit="cover"></el-image>
-                    </div>
-
-                    <div class="left-pendulum" v-if="form.type==='pendulum'">
-                        <span>{{ form.pendulumScale }}</span>
-                    </div>
-
-                    <div class="right-pendulum" v-if="form.type==='pendulum'">
-                        <span>{{ form.pendulumScale }}</span>
-                    </div>
-
-                    <div class="pendulum-description" v-if="form.type==='pendulum'">
-                        <CompressText :text="form.pendulumDescription" :width="950" :height="230" :refreshKey="refreshKey"></CompressText>
-                    </div>
-
-                    <div class="card-package" :style="packageStyle">
-                        <span>{{ form.package }}</span>
-                    </div>
-
-                    <div class="link-arrow" v-if="form.type==='monster'&&form.cardType==='link'">
-                        <el-image :src="baseImage + '/arrow-up-on.png'" style="top: 293px;left: 569px" v-show="form.arrowList.includes(1)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-up-on.png'" style="top: 313px;left: 1141px" v-show="form.arrowList.includes(2)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-on.png'" style="top: 774px;left: 1221px" v-show="form.arrowList.includes(3)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-down-on.png'" style="top: 1347px;left: 1141px" v-show="form.arrowList.includes(4)"></el-image>
-                        <el-image :src="baseImage + '/arrow-down-on.png'" style="top: 1427px;left: 569px" v-show="form.arrowList.includes(5)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-down-on.png'" style="top: 1347px;left: 109px" v-show="form.arrowList.includes(6)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-on.png'" style="top: 774px;left: 88px" v-show="form.arrowList.includes(7)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-up-on.png'" style="top: 313px;left: 109px" v-show="form.arrowList.includes(8)"></el-image>
-
-                        <el-image :src="baseImage + '/arrow-up-off.png'" style="top: 293px;left: 569px" v-show="!form.arrowList.includes(1)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-up-off.png'" style="top: 313px;left: 1141px" v-show="!form.arrowList.includes(2)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-off.png'" style="top: 774px;left: 1221px" v-show="!form.arrowList.includes(3)"></el-image>
-                        <el-image :src="baseImage + '/arrow-right-down-off.png'" style="top: 1347px;left: 1141px" v-show="!form.arrowList.includes(4)"></el-image>
-                        <el-image :src="baseImage + '/arrow-down-off.png'" style="top: 1427px;left: 569px" v-show="!form.arrowList.includes(5)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-down-off.png'" style="top: 1347px;left: 109px" v-show="!form.arrowList.includes(6)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-off.png'" style="top: 771px;left: 87px" v-show="!form.arrowList.includes(7)"></el-image>
-                        <el-image :src="baseImage + '/arrow-left-up-off.png'" style="top: 313px;left: 109px" v-show="!form.arrowList.includes(8)"></el-image>
-                    </div>
-
-                    <div class="card-description" v-card-description>
-                        <div v-if="['monster','pendulum'].includes(form.type) && form.monsterType" class="card-effect">
-                            <CompressText :text="monsterType" :refreshKey="refreshKey"></CompressText>
-                        </div>
-
-                        <div class="description-info" :style="descriptionStyle">
-                            <template v-for="(item,index) in form.description.split('\n')">
-                                <!--判断首行是否压缩-->
-                                <div v-if="index === 0 && form.firstLineCompress">
-                                    <CompressText :text="item" :width="1170" :height="70" :refreshKey="refreshKey"></CompressText>
-                                </div>
-                                <!--单行不压缩-->
-                                <div v-else-if="index < form.description.split('\n').length - 1">
-                                    <CompressText :text="item" :refreshKey="refreshKey"></CompressText>
-                                </div>
-                                <!--最后一行压缩-->
-                                <div v-else-if="index === form.description.split('\n').length - 1" class="last-description">
-                                    <CompressText :text="item" :width="1170" :height="lastDescriptionHeight" :refreshKey="refreshKey"
-                                                  :language="form.language" autoSizeElement=".card-description"></CompressText>
-                                </div>
-                                <!--item为空提供换行-->
-                                <br v-if="!item">
-                            </template>
-                        </div>
-                    </div>
-
-                    <div class="atk-def-link">
-                        <el-image :src="baseImage + '/atk-def.svg'"
-                                  v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'"></el-image>
-                        <el-image :src="baseImage + '/atk-link.svg'" v-if="form.type==='monster'&&form.cardType==='link'"></el-image>
-                    </div>
-
-                    <div class="card-atk" v-if="['monster','pendulum'].includes(form.type)">
-                        <span v-if="form.atk >= 0">{{ form.atk }}</span>
-                        <span v-else-if="form.atk === -1">?</span>
-                    </div>
-
-                    <div class="card-def" v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'">
-                        <span v-if="form.def >= 0">{{ form.def }}</span>
-                        <span v-else-if="form.def === -1">?</span>
-                    </div>
-
-                    <div class="card-link" v-if="form.type==='monster'&&form.cardType==='link'">
-                        <span>{{ form.arrowList.length }}</span>
-                    </div>
-
-                    <div class="card-password" :style="passwordStyle">
-                        <span>{{ form.password }}</span>
-                    </div>
-
-                    <div class="card-copyright" v-if="form.copyright">
-                        <el-image :src="copyrightSrc"></el-image>
-                    </div>
-
-                    <div class="card-laser" v-if="form.laser">
-                        <el-image :src="baseImage + '/laser.png'"></el-image>
-                    </div>
-                </div>
+                <YugiohCard :data="form" :refreshKey="refreshKey"></YugiohCard>
             </template>
 
             <template #form>
@@ -354,7 +217,7 @@
 <script>
     import Page from '@/components/page/Page';
     import PageForm from '@/components/page/PageForm';
-    import CompressText from '@/views/yugioh/components/CompressText';
+    import YugiohCard from '@/views/yugioh/components/YugiohCard';
     import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
     import html2canvas from 'html2canvas';
     import loadImage from 'blueimp-load-image';
@@ -364,21 +227,20 @@
     import jpDemo from './demo/jp-demo';
     import krDemo from './demo/kr-demo';
     import enDemo from './demo/en-demo';
-    import { mapState } from 'vuex';
 
     export default {
         name: 'Yugioh',
         components: {
             Page,
             PageForm,
-            CompressText,
+            YugiohCard,
             KanjiKanaDialog,
             InfoFilled
         },
         data() {
             return {
                 refreshKey: 0,
-                fontLoading: true,
+                fontLoading: false,
                 randomLoading: false,
                 exportLoading: false,
                 form: {
@@ -417,7 +279,6 @@
                     { label: '韩文', value: 'kr' },
                     { label: '英文', value: 'en' }
                 ],
-                lastDescriptionHeight: 300,   // 最后一行效果压缩高度
                 kanjiKanaDialog: false,
                 config: {}
             };
@@ -427,10 +288,7 @@
         },
         mounted() {
             this.getConfig();
-            document.fonts.ready.then(() => {
-                this.fontLoading = false;
-                this.refreshKey++;
-            });
+            this.refreshFont();
         },
         methods: {
             getConfig() {
@@ -512,22 +370,6 @@
                     color: color,
                     visibility: item === 9 ? 'hidden' : ''
                 };
-            },
-            // 获取最后一行效果的压缩高度
-            getLastDescriptionHeight() {
-                let lastDescription = document.querySelector('.last-description');
-                if (lastDescription) {
-                    if (['monster', 'pendulum'].includes(this.form.type)) {
-                        this.lastDescriptionHeight = 330 - lastDescription.offsetTop;
-                    } else {
-                        this.lastDescriptionHeight = 380 - lastDescription.offsetTop;
-                    }
-                    if (this.lastDescriptionHeight <= 40) {
-                        this.$message.warning('文本超过可压缩高度');
-                    }
-                } else {
-                    this.lastDescriptionHeight = 0;
-                }
             },
             fetchCardName(value, callback) {
                 if (value) {
@@ -621,83 +463,6 @@
             }
         },
         computed: {
-            ...mapState(['staticURL']),
-            baseImage() {
-                return `${this.staticURL}/yugioh/image`;
-            },
-            cardClass() {
-                return `${this.form.language}-class ${this.form.cardBack ? 'card-back' : ''}`;
-            },
-            cardStyle() {
-                let background;
-                if (this.form.cardBack) {
-                    background = `url(${this.baseImage}/card-back.png) no-repeat center/cover`;
-                } else if (this.form.type === 'monster') {
-                    background = `url(${this.baseImage}/card-${this.form.cardType}.png) no-repeat center/cover`;
-                } else if (this.form.type === 'pendulum') {
-                    background = `url(${this.baseImage}/card-${this.form.pendulumType}.png) no-repeat center/cover`;
-                } else {
-                    background = `url(${this.baseImage}/card-${this.form.type}.png) no-repeat center/cover`;
-                }
-                return {
-                    transform: `scale(${this.form.scale})`,
-                    background: background,
-                    borderRadius: this.form.radius ? '24px' : '',
-                    marginRight: `${(this.form.scale - 1) * 1393}px`,
-                    marginBottom: `${(this.form.scale - 1) * 2031}px`,
-                    '--descriptionZoom': this.form.descriptionZoom
-                };
-            },
-            attributeSrc() {
-                let suffix = '';
-                if (this.form.language === 'jp') {
-                    suffix = '-jp';
-                } else if (this.form.language === 'kr') {
-                    suffix = '-kr';
-                } else if (this.form.language === 'en') {
-                    suffix = '-en';
-                }
-                if (['monster', 'pendulum'].includes(this.form.type)) {
-                    return `${this.baseImage}/attribute-${this.form.attribute}${suffix}.png`;
-                } else {
-                    return `${this.baseImage}/attribute-${this.form.type}${suffix}.png`;
-                }
-            },
-            spellTrapName() {
-                let name = '';
-                if (this.form.language === 'sc') {
-                    if (this.form.type === 'spell') {
-                        name = '魔法卡';
-                    } else if (this.form.type === 'trap') {
-                        name = '陷阱卡';
-                    }
-                } else if (this.form.language === 'tc') {
-                    if (this.form.type === 'spell') {
-                        name = '魔法卡';
-                    } else if (this.form.type === 'trap') {
-                        name = '陷阱卡';
-                    }
-                } else if (this.form.language === 'jp') {
-                    if (this.form.type === 'spell') {
-                        name = '[魔(ま)][法(ほう)]カード';
-                    } else if (this.form.type === 'trap') {
-                        name = '[罠(トラップ)]カード';
-                    }
-                } else if (this.form.language === 'kr') {
-                    if (this.form.type === 'spell') {
-                        name = '마법 카드';
-                    } else if (this.form.type === 'trap') {
-                        name = '함정 카드';
-                    }
-                } else if (this.form.language === 'en') {
-                    if (this.form.type === 'spell') {
-                        name = 'Spell Card';
-                    } else if (this.form.type === 'trap') {
-                        name = 'Trap Card';
-                    }
-                }
-                return name;
-            },
             showLevel() {
                 let flag = false;
                 if (this.form.type === 'monster') {
@@ -716,131 +481,8 @@
                 }
                 return flag;
             },
-            levelStyle() {
-                let right;
-                if (this.form.level < 13) {
-                    right = '146px';
-                } else {
-                    right = '100px';
-                }
-                return {
-                    right: right
-                };
-            },
-            rankStyle() {
-                let left;
-                if (this.form.rank < 13) {
-                    left = '147px';
-                } else {
-                    left = '100px';
-                }
-                return {
-                    left: left
-                };
-            },
-            imageStyle() {
-                let left, top, width, height;
-                if (this.form.type === 'pendulum') {
-                    left = '96px';
-                    top = '367px';
-                    width = '1201px';
-                    height = '1201px';
-                } else {
-                    left = '171px';
-                    top = '376px';
-                    width = '1051px';
-                    height = '1051px';
-                }
-                return {
-                    left: left,
-                    top: top,
-                    width: width,
-                    height: height
-                };
-            },
-            maskStyle() {
-                let left, top;
-                if (this.form.type === 'pendulum') {
-                    left = '81px';
-                    top = '1254px';
-                } else {
-                    left = '168px';
-                    top = '373px';
-                }
-                return {
-                    left: left,
-                    top: top
-                };
-            },
-            packageStyle() {
-                let top, left, right;
-                if (this.form.type === 'pendulum') {
-                    top = '1854px';
-                    left = '116px';
-                } else if (this.form.type === 'monster' && this.form.cardType === 'link') {
-                    top = '1455px';
-                    right = '252px';
-                } else {
-                    top = '1455px';
-                    right = '148px';
-                }
-                return {
-                    color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black',
-                    top: top,
-                    left: left,
-                    right: right
-                };
-            },
-            descriptionStyle() {
-                let fontFamily;
-                if (this.form.language === 'en') {
-                    if ((this.form.type === 'monster' && this.form.cardType === 'normal') ||
-                        (this.form.type === 'pendulum' && this.form.pendulumType === 'normal-pendulum')) {
-                        fontFamily = 'ygo-en-italic';
-                    }
-                }
-                return {
-                    fontFamily: fontFamily
-                };
-            },
-            passwordStyle() {
-                return {
-                    color: this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black'
-                };
-            },
-            monsterType() {
-                const leftBracket = ['en', 'kr'].includes(this.form.language) ? '[' : '【';
-                const rightBracket = ['en', 'kr'].includes(this.form.language) ? ']' : '】';
-                return `${leftBracket}${this.form.monsterType}${rightBracket}`;
-
-            },
-            copyrightSrc() {
-                let color = this.form.type === 'monster' && this.form.cardType === 'xyz' ? 'white' : 'black';
-                return `${this.baseImage}/copyright-${this.form.copyright}-${color}.svg`;
-            },
             cardName() {
                 return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
-            }
-        },
-        directives: {
-            nameColor(el, binding) {
-                let that = binding.instance;
-                // 文本和注音颜色分开控制
-                let color = 'black';
-                // 自动颜色
-                if ((that.form.type === 'monster' && ['xyz', 'link'].includes(that.form.cardType)) || ['spell', 'trap'].includes(that.form.type) ||
-                    (that.form.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.form.pendulumType))) {
-                    color = 'white';
-                }
-                el.style.color = binding.value || color;
-                let rtList = el.querySelectorAll('.rt');
-                rtList.forEach(rt => {
-                    rt.style.color = color;
-                });
-            },
-            cardDescription(el, binding) {
-                let that = binding.instance;
-                that.getLastDescriptionHeight();
             }
         },
         watch: {
@@ -862,5 +504,59 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "./style";
+    .yugioh-container {
+        .form-main {
+            .font-loading {
+                margin-bottom: 20px;
+            }
+
+            .arrow-form {
+                width: 130px;
+                display: flex;
+                flex-wrap: wrap;
+                margin-right: -10px;
+                margin-bottom: -10px;
+
+                .arrow-item {
+                    width: 32px;
+                    height: 32px;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                    border: 1px solid $border-color;
+                    border-radius: 4px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    color: $placeholder-color;
+                    font-size: 18px;
+                }
+            }
+
+            .attribute-radio-group {
+                ::v-deep(.el-radio-button__inner) {
+                    padding: 9px 12px;
+                }
+            }
+
+            .button-group {
+                .el-row {
+                    margin-top: -20px;
+
+                    .el-col {
+                        margin-top: 20px;
+
+                        ::v-deep(.el-upload) {
+                            width: 100%;
+                        }
+
+                        .el-button {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 </style>
