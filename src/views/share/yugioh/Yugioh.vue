@@ -31,6 +31,7 @@
             const query = this.$route.query;
             this.form.password = query.password || '';
             this.form.language = query.language || 'sc';
+            this.form.radius = query.radius !== 'false';
             this.form.width = query.width || '';
             this.updateScale();
             if (this.form.password) {
