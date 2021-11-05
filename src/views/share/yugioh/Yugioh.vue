@@ -71,6 +71,7 @@
                     this.refreshFont();
                     let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
                     Object.assign(this.form, cardInfo);
+                    document.title = `${this.$route.meta.title} - ${this.cardName}`;
                     this.dataLoaded = true;
                 });
             },
@@ -82,6 +83,11 @@
                 } else {
                     this.form.scale = Math.min((document.body.offsetWidth / 1393), 1);
                 }
+            }
+        },
+        computed: {
+            cardName() {
+                return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
             }
         }
     };
