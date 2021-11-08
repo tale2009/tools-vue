@@ -40,6 +40,8 @@
             this.updateScale();
             if (this.form.password) {
                 this.searchCardByPassword();
+            } else {
+                this.getRandomCard();
             }
         },
         mounted() {
@@ -60,15 +62,28 @@
                     });
                 });
             },
-            searchCardByPassword(lang) {
+            searchCardByPassword() {
                 this.axios({
                     method: 'get',
                     url: '/yugioh/card/' + this.form.password,
                     params: {
-                        lang: lang || this.form.language
+                        lang: this.form.language
                     }
                 }).then(res => {
-                    this.refreshFont();
+                    let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+                    Object.assign(this.form, cardInfo);
+                    document.title = `${this.$route.meta.title} - ${this.cardName}`;
+                    this.dataLoaded = true;
+                });
+            },
+            getRandomCard() {
+                this.axios({
+                    method: 'get',
+                    url: '/yugioh/random-card',
+                    params: {
+                        lang: this.form.language
+                    }
+                }).then(res => {
                     let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
                     Object.assign(this.form, cardInfo);
                     document.title = `${this.$route.meta.title} - ${this.cardName}`;
