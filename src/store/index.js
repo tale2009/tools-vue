@@ -4,15 +4,11 @@ import { ElNotification } from 'element-plus';
 
 export default createStore({
     state: {
-        devicePixelRatio: 1,    // 设备缩放比率
         leftCollapse: false,
         rightCollapse: false,
         staticURL: ''
     },
     mutations: {
-        setDevicePixelRatio(state) {
-            state.devicePixelRatio = devicePixelRatio;
-        },
         setLeftCollapse(state, value) {
             state.leftCollapse = value;
         },

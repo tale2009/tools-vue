@@ -227,7 +227,6 @@
     import jpDemo from './demo/jp-demo';
     import krDemo from './demo/kr-demo';
     import enDemo from './demo/en-demo';
-    import { mapState } from 'vuex';
 
     export default {
         name: 'Yugioh',
@@ -452,8 +451,8 @@
                 html2canvas(element, {
                     useCORS: true,
                     backgroundColor: 'transparent',
-                    width: this.form.scale * 1393 / this.devicePixelRatio,
-                    height: this.form.scale * 2031 / this.devicePixelRatio
+                    width: this.form.scale * 1393,
+                    height: this.form.scale * 2031
                 }).then(canvas => {
                     canvas.toBlob(blob => {
                         this.downloadBlob(blob, this.cardName);
@@ -464,7 +463,6 @@
             }
         },
         computed: {
-            ...mapState(['devicePixelRatio']),
             showLevel() {
                 let flag = false;
                 if (this.form.type === 'monster') {

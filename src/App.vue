@@ -3,20 +3,8 @@
 </template>
 
 <script>
-    import { mapMutations } from 'vuex';
-
     export default {
-        name: 'App',
-        mounted() {
-            this.setDevicePixelRatio();
-            addEventListener('resize', this.setDevicePixelRatio);
-        },
-        beforeUnmount() {
-            removeEventListener('resize', this.setDevicePixelRatio);
-        },
-        methods: {
-            ...mapMutations(['setDevicePixelRatio'])
-        }
+        name: 'App'
     };
 </script>
 

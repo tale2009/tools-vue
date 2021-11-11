@@ -173,7 +173,7 @@
             }
         },
         computed: {
-            ...mapState(['devicePixelRatio', 'staticURL']),
+            ...mapState(['staticURL']),
             baseImage() {
                 return `${this.staticURL}/yugioh/image`;
             },
@@ -192,11 +192,11 @@
                     background = `url(${this.baseImage}/card-${this.data.type}.png) no-repeat center/cover`;
                 }
                 return {
-                    transform: `scale(${this.data.scale / this.devicePixelRatio})`,
+                    transform: `scale(${this.data.scale})`,
                     background: background,
                     borderRadius: this.data.radius ? '24px' : '',
-                    marginRight: `${(this.data.scale / this.devicePixelRatio - 1) * 1393}px`,
-                    marginBottom: `${(this.data.scale / this.devicePixelRatio - 1) * 2031}px`,
+                    marginRight: `${(this.data.scale - 1) * 1393}px`,
+                    marginBottom: `${(this.data.scale - 1) * 2031}px`,
                     '--descriptionZoom': this.data.descriptionZoom
                 };
             },
