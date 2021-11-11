@@ -11,7 +11,6 @@
 
 <script>
     import YugiohCard from '@/views/yugioh/components/YugiohCard';
-    import { mapState } from 'vuex';
 
     export default {
         name: 'ShareYugioh',
@@ -97,12 +96,11 @@
                 if (width) {
                     this.form.scale = width / 1393;
                 } else {
-                    this.form.scale = Math.min((document.body.offsetWidth * this.devicePixelRatio / 1393), 1);
+                    this.form.scale = Math.min((document.body.offsetWidth / 1393), 1);
                 }
             }
         },
         computed: {
-            ...mapState(['devicePixelRatio']),
             cardName() {
                 return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
             }
