@@ -2,7 +2,7 @@
     <div class="compress-text" v-compress-text="compressParams">
         <template v-for="item in textList">
             <span v-if="typeof item === 'object'" class="ruby">{{ item.ruby }}<span class="rt" v-compress-rt>{{ item.rt }}</span></span>
-            <span v-else>{{ item }}</span>
+            <span v-else v-no-compress="noCompressText.includes(item)">{{ item }}</span>
         </template>
     </div>
 </template>
@@ -13,6 +13,7 @@
         props: ['text', 'width', 'height', 'language', 'refreshKey', 'autoSizeElement'],
         data() {
             return {
+                noCompressText: '●①②③④⑤⑥⑦⑧⑨⑩',
                 textScale: 1
             };
         },
@@ -26,15 +27,16 @@
                 };
             },
             textList() {
-                return this.text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
-                    if (/\[.*?\(.*?\)]/g.test(value)) {
-                        return {
-                            ruby: value.replace(/\[(.*?)\((.*?)\)]/g, '$1'),
-                            rt: value.replace(/\[(.*?)\((.*?)\)]/g, '$2')
-                        };
-                    }
-                    return value;
-                });
+                return this.text.replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompressText}]`, 'g'), s => `|${s}|`)
+                    .split('|').filter(value => value).map(value => {
+                        if (/\[.*?\(.*?\)]/g.test(value)) {
+                            return {
+                                ruby: value.replace(/\[(.*?)\((.*?)\)]/g, '$1'),
+                                rt: value.replace(/\[(.*?)\((.*?)\)]/g, '$2')
+                            };
+                        }
+                        return value;
+                    });
             }
         },
         watch: {
@@ -44,10 +46,13 @@
                     this.$forceUpdate();
                 });
             },
-            textScale() {
-                setTimeout(() => {
-                    this.$forceUpdate();
-                });
+            textScale(newVal, oldVal) {
+                // 防止抖动
+                if (Math.abs(newVal - oldVal) > 0.01) {
+                    setTimeout(() => {
+                        this.$forceUpdate();
+                    });
+                }
             }
         },
         directives: {
@@ -132,6 +137,18 @@
                             }
                         }
                     }
+                }
+            },
+            // 不压缩的文本
+            noCompress(el, binding) {
+                el.style.display = '';
+                el.style.transform = '';
+                el.style.padding = '';
+                if (binding.value) {
+                    const that = binding.instance;
+                    el.style.display = 'inline-block';
+                    el.style.transform = `scaleX(${1 / that.textScale})`;
+                    el.style.padding = `0 ${(1 - that.textScale) * 36}px`;
                 }
             }
         }
