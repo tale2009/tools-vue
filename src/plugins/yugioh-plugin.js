@@ -217,7 +217,7 @@ function parseLevelRank(data) {
 
 function parsePendulumScale(data) {
     if (parseType(data) === 'pendulum') {
-        let list = data.desc.split(/【.*?】/);
+        let list = data.desc.split('【Pendulum Effect】');
         return parseInt(list[0]?.replace(/[^\d]/g, ''));
     } else {
         return 0;
@@ -226,14 +226,15 @@ function parsePendulumScale(data) {
 
 function parsePendulumDescription(data, lang) {
     if (parseType(data) === 'pendulum') {
-        let description = characterToHalf(data.desc);
-        const list = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n').split(/【.*?】/);
-        description = list[1]?.replace(/\d+→|\n/g, '').trim();
+        let description = characterToHalf(data.desc).replace(/'''/g, '')
+            .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
+        const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】/);
+        description = list[1]?.replace(/\d+→|\n/g, '') || '';
         if (['jp', 'sc'].includes(lang)) {
             // 效果数字全角，卡名数字半角
             description = numberToFull(description).replace(/(「.*?」)|(“.*?”)/g, s => numberToHalf(s));
         }
-        return description;
+        return description.trim();
     } else {
         return '';
     }
@@ -398,29 +399,27 @@ function parseArrowList(data) {
 }
 
 function parseDescription(data, lang) {
-    let description = characterToHalf(data.desc);
-    description = description.replace(/\r/g, '\n').replace(/\n\n/g, '\n');
+    let description = characterToHalf(data.desc).replace(/'''/g, '')
+        .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
     if (parseType(data) === 'pendulum') {
-        let list = description.split(/【.*?】/).filter(item => item && item !== '\n');
-        // 新版数据库不确定下标
-        description = list[3]?.replace(/\n/g, '') || list[2]?.replace(/\n/g, '');
-    } else {
-        // 融合、同调、超量、连接、衍生物保留一个换行
-        if (['fusion', 'synchro', 'xyz', 'link', 'token'].includes(parseCardType(data))) {
-            let lfCount = 0;
-            let charList = Array.from(description).map(char => {
-                if (char === '\n') {
-                    if (lfCount > 0) {
-                        return '';
-                    }
-                    lfCount++;
+        let list = description.split(/【Monster Effect】|【Flavor Text】/).filter(item => item && item !== '\n');
+        description = list[1]?.trim() || '';
+    }
+    // 融合、同调、超量、连接、衍生物保留一个换行
+    if (['fusion', 'synchro', 'xyz', 'link', 'token'].includes(parseCardType(data))) {
+        let lfCount = 0;
+        let charList = Array.from(description).map(char => {
+            if (char === '\n') {
+                if (lfCount > 0) {
+                    return '';
                 }
-                return char;
-            });
-            description = charList.join('');
-        } else {
-            description = description.replace(/\n/g, '');
-        }
+                lfCount++;
+            }
+            return char;
+        });
+        description = charList.join('');
+    } else {
+        description = description.replace(/\n/g, '');
     }
     if (['jp', 'sc'].includes(lang)) {
         // 效果数字全角，卡名数字半角
