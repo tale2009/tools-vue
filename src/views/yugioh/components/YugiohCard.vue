@@ -81,7 +81,7 @@
 
         <div class="card-description" v-card-description>
             <div v-if="['monster','pendulum'].includes(data.type) && data.monsterType" class="card-effect">
-                <CompressText :text="monsterType" :refreshKey="refreshKey"></CompressText>
+                <CompressText :text="monsterType" :refreshKey="refreshKey" :width="1170" :height="100"></CompressText>
             </div>
 
             <div class="description-info" :style="descriptionStyle">
@@ -413,6 +413,7 @@
         flex-wrap: wrap;
         flex-grow: 0;
         flex-shrink: 0;
+        white-space: pre-wrap;
         vertical-align: top;
         position: relative;
         user-select: none;
@@ -537,10 +538,6 @@
             width: 1170px;
             text-align: justify;
             z-index: 20;
-
-            .card-effect {
-                white-space: nowrap;
-            }
         }
 
         .atk-def-link {

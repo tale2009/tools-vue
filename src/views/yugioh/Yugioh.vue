@@ -36,7 +36,7 @@
                             <span class="tip">（自动选择清空）</span>
                         </el-form-item>
                         <el-form-item label="类型">
-                            <el-radio-group v-model="form.type">
+                            <el-radio-group v-model="form.type" @change="changeType">
                                 <el-radio-button label="monster">怪兽</el-radio-button>
                                 <el-radio-button label="spell">魔法</el-radio-button>
                                 <el-radio-button label="trap">陷阱</el-radio-button>
@@ -394,6 +394,9 @@
                 this.form.name = value.name;
                 this.form.password = value.id;
                 this.searchCardByPassword();
+            },
+            changeType() {
+                this.refreshKey++;
             },
             searchCardByPassword(lang) {
                 this.axios({

@@ -1,5 +1,5 @@
 <template>
-    <div class="compress-text" v-compress-text="compressParams">
+    <div class="compress-text" v-compress-text>
         <template v-for="item in textList">
             <span v-if="typeof item === 'object'" class="ruby">{{ item.ruby }}<span class="rt" v-compress-rt>{{ item.rt }}</span></span>
             <span v-else v-no-compress="noCompressText.includes(item)">{{ item }}</span>
@@ -18,14 +18,6 @@
             };
         },
         computed: {
-            compressParams() {
-                return {
-                    width: this.width,
-                    height: this.height,
-                    language: this.language,
-                    autoSizeElement: this.autoSizeElement   // 英文语言下压缩到一定程度，字体缩小的元素
-                };
-            },
             textList() {
                 return this.text.replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompressText}]`, 'g'), s => `|${s}|`)
                     .split('|').filter(value => value).map(value => {
@@ -96,41 +88,36 @@
             // 压缩文本文字
             compressText(el, binding) {
                 const that = binding.instance;
-                let params = binding.value;
-                if (params.width && params.height) {
-                    el.style.width = `${params.width}px`;
+                if (that.width && that.height) {
+                    el.style.width = `${that.width}px`;
                     el.style.transform = '';
                     el.style.textAlignLast = '';
                     that.textScale = 1;
                     const yugiohCardElement = document.querySelector('.yugioh-card');
                     const descriptionZoom = Number(yugiohCardElement.style.getPropertyValue('--descriptionZoom'));
-                    let autoSizeElement = document.querySelector(params.autoSizeElement);
+                    let autoSizeElement = document.querySelector(that.autoSizeElement);
                     autoSizeElement?.classList.remove('small-description');
 
-                    if (el.clientHeight > params.height) {
+                    if (el.clientHeight > that.height) {
                         // 用二分法获取最大的scale，精度0.01
                         let scale = 0.5;
                         let start = 0;
                         let end = 1;
                         while (scale > 0) {
                             scale = (start + end) / 2;
-                            el.style.width = `${params.width / scale}px`;
+                            el.style.width = `${that.width / scale}px`;
                             el.style.transform = `scaleX(${scale})`;
                             el.style.textAlignLast = 'justify';
                             that.textScale = scale;
-                            el.clientHeight > params.height ? end = scale : start = scale;
-                            if (el.clientHeight <= params.height && end - start <= 0.01) {
+                            el.clientHeight > that.height ? end = scale : start = scale;
+                            if (el.clientHeight <= that.height && end - start <= 0.01) {
                                 // 如果是英文，灵摆和效果栏字体判断缩小，当字号大于1不执行
-                                if (params.language === 'en' && params.autoSizeElement && scale < 0.7 && descriptionZoom === 1) {
-                                    // 防止死循环
-                                    if (autoSizeElement?.classList.contains('small-description')) {
-                                        break;
-                                    } else {
-                                        autoSizeElement?.classList.add('small-description');
-                                        scale = 0.5;
-                                        start = 0;
-                                        end = 1;
-                                    }
+                                if (that.language === 'en' && that.autoSizeElement && scale < 0.7 &&
+                                    descriptionZoom === 1 && !autoSizeElement?.classList.contains('small-description')) {
+                                    autoSizeElement?.classList.add('small-description');
+                                    scale = 0.5;
+                                    start = 0;
+                                    end = 1;
                                 } else {
                                     break;
                                 }
@@ -169,7 +156,7 @@
                 position: absolute;
                 left: 0;
                 text-align: center;
-                white-space: nowrap;
+                white-space: pre;
                 letter-spacing: 0;
                 transform-origin: 0 0;
             }
