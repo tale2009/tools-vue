@@ -437,8 +437,10 @@ function parseFirstLineCompress(data) {
 }
 
 function parsePackage(data, lang) {
-    const packageList = data.setid.split(',').reverse();
-    return packageList.find(value => value.includes(`-${lang.toUpperCase()}`)) || '';
+    // const packageList = data.setid.split(',').reverse();
+    // return packageList.find(value => value.includes(`-${lang.toUpperCase()}`)) || '';
+    // 数据库setid字段被删除了
+    return '';
 }
 
 function parsePassword(data) {
