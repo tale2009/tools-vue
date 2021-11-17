@@ -135,7 +135,7 @@
                     const that = binding.instance;
                     el.style.display = 'inline-block';
                     el.style.transform = `scaleX(${1 / that.textScale})`;
-                    el.style.padding = `0 ${(1 - that.textScale) * 36}px`;
+                    el.style.padding = `0 ${(1 - that.textScale) / 2 * 36}px`;
                 }
             }
         }
