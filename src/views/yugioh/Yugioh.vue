@@ -88,7 +88,7 @@
                 <el-button plain @click="deleteImage">删除</el-button>
               </el-space>
             </el-form-item>
-            <el-form-item v-if="form.type==='monster'" label="卡类">
+            <el-form-item v-if="form.type === 'monster'" label="卡类">
               <el-select v-model="form.cardType" placeholder="请选择卡类">
                 <el-option label="通常" value="normal" />
                 <el-option label="效果" value="effect" />
@@ -100,7 +100,7 @@
                 <el-option label="衍生物" value="token" />
               </el-select>
             </el-form-item>
-            <el-form-item v-if="form.type==='pendulum'" label="灵摆">
+            <el-form-item v-if="form.type === 'pendulum'" label="灵摆">
               <el-select v-model="form.pendulumType" placeholder="请选择灵摆">
                 <el-option label="通常 / 灵摆" value="normal-pendulum" />
                 <el-option label="效果 / 灵摆" value="effect-pendulum" />
@@ -126,7 +126,7 @@
                 :precision="0"
               />
             </el-form-item>
-            <el-form-item v-if="form.type==='pendulum'" label="刻度">
+            <el-form-item v-if="form.type === 'pendulum'" label="刻度">
               <el-input-number
                 v-model="form.pendulumScale"
                 :min="0"
@@ -134,7 +134,7 @@
                 :precision="0"
               />
             </el-form-item>
-            <el-form-item v-if="form.type==='pendulum'" label="灵摆效果" label-width="40px">
+            <el-form-item v-if="form.type === 'pendulum'" label="灵摆效果" label-width="40px">
               <el-input
                 v-model="form.pendulumDescription"
                 type="textarea"
@@ -155,7 +155,7 @@
               />
               <span class="tip">（? 输入 -1）</span>
             </el-form-item>
-            <el-form-item v-if="(form.type==='monster'&&form.cardType!=='link')||form.type==='pendulum'" label="DEF">
+            <el-form-item v-if="(form.type === 'monster' && form.cardType!=='link') || form.type === 'pendulum'" label="DEF">
               <el-input-number
                 v-model="form.def"
                 :min="-1"
@@ -164,7 +164,7 @@
               />
               <span class="tip">（? 输入 -1）</span>
             </el-form-item>
-            <el-form-item v-if="form.type==='monster'&&form.cardType==='link'" label="箭头">
+            <el-form-item v-if="form.type === 'monster' && form.cardType === 'link'" label="箭头">
               <div class="arrow-form">
                 <div
                   v-for="item in [8,1,2,7,9,3,6,5,4]"
@@ -172,14 +172,14 @@
                   :style="arrowItemStyle(item)"
                   @click="toggleArrow(item)"
                 >
-                  <i v-if="item===1" class="fas fa-arrow-alt-up" />
-                  <i v-if="item===2" class="fas fa-arrow-alt-up" style="transform: rotate(45deg)" />
-                  <i v-if="item===3" class="fas fa-arrow-alt-right" />
-                  <i v-if="item===4" class="fas fa-arrow-alt-right" style="transform: rotate(45deg)" />
-                  <i v-if="item===5" class="fas fa-arrow-alt-down" />
-                  <i v-if="item===6" class="fas fa-arrow-alt-down" style="transform: rotate(45deg)" />
-                  <i v-if="item===7" class="fas fa-arrow-alt-left" />
-                  <i v-if="item===8" class="fas fa-arrow-alt-left" style="transform: rotate(45deg)" />
+                  <i v-if="item === 1" class="fas fa-arrow-alt-up" />
+                  <i v-if="item === 2" class="fas fa-arrow-alt-up" style="transform: rotate(45deg)" />
+                  <i v-if="item === 3" class="fas fa-arrow-alt-right" />
+                  <i v-if="item === 4" class="fas fa-arrow-alt-right" style="transform: rotate(45deg)" />
+                  <i v-if="item === 5" class="fas fa-arrow-alt-down" />
+                  <i v-if="item === 6" class="fas fa-arrow-alt-down" style="transform: rotate(45deg)" />
+                  <i v-if="item === 7" class="fas fa-arrow-alt-left" />
+                  <i v-if="item === 8" class="fas fa-arrow-alt-left" style="transform: rotate(45deg)" />
                 </div>
               </div>
             </el-form-item>

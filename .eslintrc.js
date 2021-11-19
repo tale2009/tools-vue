@@ -46,4 +46,4 @@ module.exports = defineConfig({
     'vue/valid-v-for': 'off',
     'vue/no-unused-vars': 'off',
   },
-})
+});

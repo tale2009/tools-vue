@@ -30,7 +30,6 @@
       AppLeft,
     },
     mounted() {
-      this.mobileTip();
       document.onkeydown = this.disableKey;
       document.onkeypress = this.disableKey;
     },

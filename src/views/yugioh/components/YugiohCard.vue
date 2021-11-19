@@ -49,19 +49,19 @@
     </div>
 
     <div class="card-mask" :style="maskStyle">
-      <el-image v-if="data.type==='pendulum'" :src="baseImage + '/card-mask-pendulum.png'" fit="cover" />
+      <el-image v-if="data.type === 'pendulum'" :src="baseImage + '/card-mask-pendulum.png'" fit="cover" />
       <el-image v-else :src="baseImage + '/card-mask.png'" fit="cover" />
     </div>
 
-    <div v-if="data.type==='pendulum'" class="left-pendulum">
+    <div v-if="data.type === 'pendulum'" class="left-pendulum">
       <span>{{ data.pendulumScale }}</span>
     </div>
 
-    <div v-if="data.type==='pendulum'" class="right-pendulum">
+    <div v-if="data.type === 'pendulum'" class="right-pendulum">
       <span>{{ data.pendulumScale }}</span>
     </div>
 
-    <div v-if="data.type==='pendulum'" class="pendulum-description">
+    <div v-if="data.type === 'pendulum'" class="pendulum-description">
       <CompressText
         :text="data.pendulumDescription"
         :width="950"
@@ -74,7 +74,7 @@
       <span>{{ data.package }}</span>
     </div>
 
-    <div v-if="data.type==='monster'&&data.cardType==='link'" class="link-arrow">
+    <div v-if="data.type === 'monster' && data.cardType === 'link'" class="link-arrow">
       <el-image v-show="data.arrowList.includes(1)" :src="baseImage + '/arrow-up-on.png'" style="top: 293px;left: 569px" />
       <el-image v-show="data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-on.png'" style="top: 313px;left: 1141px" />
       <el-image v-show="data.arrowList.includes(3)" :src="baseImage + '/arrow-right-on.png'" style="top: 774px;left: 1221px" />
@@ -137,8 +137,8 @@
     </div>
 
     <div class="atk-def-link">
-      <el-image v-if="(data.type==='monster'&&data.cardType!=='link')||data.type==='pendulum'" :src="baseImage + '/atk-def.svg'" />
-      <el-image v-if="data.type==='monster'&&data.cardType==='link'" :src="baseImage + '/atk-link.svg'" />
+      <el-image v-if="(data.type === 'monster' && data.cardType!=='link') || data.type === 'pendulum'" :src="baseImage + '/atk-def.svg'" />
+      <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="baseImage + '/atk-link.svg'" />
     </div>
 
     <div v-if="['monster','pendulum'].includes(data.type)" class="card-atk">
@@ -146,12 +146,12 @@
       <span v-else-if="data.atk === -1">?</span>
     </div>
 
-    <div v-if="(data.type==='monster'&&data.cardType!=='link')||data.type==='pendulum'" class="card-def">
+    <div v-if="(data.type === 'monster' && data.cardType!=='link') || data.type === 'pendulum'" class="card-def">
       <span v-if="data.def >= 0">{{ data.def }}</span>
       <span v-else-if="data.def === -1">?</span>
     </div>
 
-    <div v-if="data.type==='monster'&&data.cardType==='link'" class="card-link">
+    <div v-if="data.type === 'monster' && data.cardType === 'link'" class="card-link">
       <span>{{ data.arrowList.length }}</span>
     </div>
 
@@ -579,20 +579,20 @@
 
     .card-atk {
       position: absolute;
-      right: 395px;
-      top: 1845px;
+      right: 394px;
+      top: 1844px;
       font-family: ygo-atk-def, serif;
-      font-size: 61px;
+      font-size: 62px;
       letter-spacing: 2px;
       z-index: 20;
     }
 
     .card-def {
       position: absolute;
-      right: 124px;
-      top: 1845px;
+      right: 122px;
+      top: 1844px;
       font-family: ygo-atk-def, serif;
-      font-size: 61px;
+      font-size: 62px;
       letter-spacing: 2px;
       z-index: 20;
     }
