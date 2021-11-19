@@ -18,7 +18,7 @@ const app = createApp(App);
 app.config.globalProperties.dayjs = dayjs;
 
 app.use(ElementPlus, {
-    locale: zhCn
+  locale: zhCn,
 });
 app.use(httpService);
 app.use(base);
@@ -34,9 +34,9 @@ loadCSS(`${staticURL}/yugioh/font/ygo-font.css`);
 
 // 接口请求地址配置
 if (process.env.NODE_ENV === 'production') {
-    // 上线环境
-    app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
+  // 上线环境
+  app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 } else {
-    // 本地环境
-    app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
+  // 本地环境
+  app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 }
