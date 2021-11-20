@@ -89,6 +89,9 @@
         } else if (value === 'white') {
           this.form.gradientColor1 = '#ffffff';
           this.form.gradientColor2 = '#ffffff';
+        } else if (value === 'black') {
+          this.form.gradientColor1 = '#000000';
+          this.form.gradientColor2 = '#999999';
         } else if (value === 'blue') {
           this.form.gradientColor1 = '#009999';
           this.form.gradientColor2 = '#00ffff';

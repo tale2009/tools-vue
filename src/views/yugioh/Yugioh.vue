@@ -413,6 +413,7 @@
           { label: '金字', value: 'gold' },
           { label: '红字', value: 'red' },
           { label: '白字', value: 'white' },
+          { label: '黑字', value: 'black' },
           { label: '蓝字', value: 'blue' },
           { label: '绿字', value: 'green' },
         ],
@@ -473,6 +474,9 @@
         } else if (value === 'white') {
           this.form.gradientColor1 = '#ffffff';
           this.form.gradientColor2 = '#ffffff';
+        } else if (value === 'black') {
+          this.form.gradientColor1 = '#000000';
+          this.form.gradientColor2 = '#999999';
         } else if (value === 'blue') {
           this.form.gradientColor1 = '#009999';
           this.form.gradientColor2 = '#00ffff';
