@@ -1,8 +1,21 @@
 <template>
   <div v-compress-text class="compress-text">
     <template v-for="item in textList">
-      <span v-if="typeof item === 'object'" class="ruby">{{ item.ruby }}<span v-compress-rt class="rt">{{ item.rt }}</span></span>
-      <span v-else v-no-compress="noCompressText.includes(item)">{{ item }}</span>
+      <span
+        v-if="typeof item === 'object'"
+        class="ruby"
+        :class="{'text-gradient': gradient}"
+        :style="textStyle"
+        :data-card-name="item.ruby"
+      >{{ item.ruby }}<span v-compress-rt class="rt">{{ item.rt }}</span></span>
+      <span
+        v-else
+        v-no-compress="noCompressText.includes(item)"
+        class="ruby"
+        :class="{'text-gradient': gradient}"
+        :style="textStyle"
+        :data-card-name="item"
+      >{{ item }}</span>
     </template>
   </div>
 </template>
@@ -10,7 +23,7 @@
 <script>
   export default {
     name: 'CompressText',
-    props: ['text', 'width', 'height', 'language', 'refreshKey', 'autoSizeElement'],
+    props: ['text', 'gradient', 'gradientColor1', 'gradientColor2', 'width', 'height', 'language', 'refreshKey', 'autoSizeElement'],
     data() {
       return {
         noCompressText: '●①②③④⑤⑥⑦⑧⑨⑩',
@@ -19,7 +32,7 @@
     },
     computed: {
       textList() {
-        return this.text.replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompressText}]`, 'g'), s => `|${s}|`)
+        return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompressText}]`, 'g'), s => `|${s}|`)
           .split('|').filter(value => value).map(value => {
             if (/\[.*?\(.*?\)]/g.test(value)) {
               return {
@@ -29,6 +42,16 @@
             }
             return value;
           });
+      },
+      textStyle() {
+        if (this.gradient) {
+          const color1 = this.gradientColor1 || '#999999';
+          const color2 = this.gradientColor2 || '#ffffff';
+          return {
+            backgroundImage: `-webkit-linear-gradient(top, ${color1}, ${color2}, ${color1})`,
+          };
+        }
+        return {};
       },
     },
     watch: {
@@ -53,7 +76,7 @@
         const that = binding.instance;
         let ruby = el.parentNode;
         let rt = el;
-        ruby.style.padding = '';
+        ruby.style.margin = '';
         rt.style.textAlignLast = '';
         rt.style.transform = '';
         rt.style.left = '';
@@ -74,7 +97,8 @@
             // 防止过度压缩，加宽ruby
             // 公式：(rubyWidth + widen) / rtWidth = 0.6
             let widen = 0.6 * rtWidth - rubyWidth;
-            ruby.style.padding = `0 ${widen / 2}px`;
+            ruby.style.margin = `0 ${widen / 2}px`;
+            rt.style.left = `-${widen / 2}px`;
             rt.style.transform = `scaleX(${(rubyWidth + widen) / rtWidth / that.textScale})`;
           } else {
             rt.style.transform = `scaleX(${rubyWidth / rtWidth / that.textScale})`;
@@ -130,12 +154,12 @@
       noCompress(el, binding) {
         el.style.display = '';
         el.style.transform = '';
-        el.style.padding = '';
+        el.style.margin = '';
         if (binding.value) {
           const that = binding.instance;
           el.style.display = 'inline-block';
           el.style.transform = `scaleX(${1 / that.textScale})`;
-          el.style.padding = `0 ${(1 - that.textScale) / 2 * 36}px`;
+          el.style.margin = `0 ${(1 - that.textScale) / 2 * 36}px`;
         }
       },
     },
@@ -159,7 +183,49 @@
         white-space: pre;
         letter-spacing: 0;
         transform-origin: 0 0;
+        -webkit-background-clip: unset;
+        -webkit-text-fill-color: initial;
       }
+    }
+
+    .text-gradient {
+      display: inline-block;
+      position: relative;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      // 反光
+      &:before {
+        content: attr(data-card-name);
+        position: absolute;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: linear-gradient(135deg, transparent 48%, white 50%, transparent 52%);
+        background-size: 400% 100%;
+        animation: gradient-reflection 3s ease infinite;
+        top: 0;
+        left: 0;
+      }
+
+      // 阴影
+      &:after {
+        content: attr(data-card-name);
+        position: absolute;
+        -webkit-text-stroke: 6px rgba(0, 0, 0, 0.6);
+        text-shadow: 3px 5px 1px rgba(0, 0, 0, 0.6);
+        z-index: -10;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+
+  @keyframes gradient-reflection {
+    0% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0 50%;
     }
   }
 </style>

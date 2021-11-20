@@ -28,6 +28,10 @@
         fontLoading: false,
         form: {
           language: 'sc',
+          gradient: false,
+          gradientColor1: '#999999',
+          gradientColor2: '#ffffff',
+          gradientPreset: 'silver',
           descriptionZoom: 1,
           radius: true,
           scale: 0.5,
@@ -40,9 +44,14 @@
       const query = this.$route.query;
       this.form.password = query.password || '';
       this.form.language = query.language || 'sc';
+      this.form.gradient = query.gradient === 'true';
+      this.form.gradientPreset = query.gradientPreset || 'silver';
       this.form.radius = query.radius !== 'false';
       this.form.width = query.width || '';
       this.updateScale();
+      if (this.form.gradient) {
+        this.changeGradientPreset(this.form.gradientPreset);
+      }
       if (this.form.password) {
         this.searchCardByPassword();
       } else {
@@ -66,6 +75,27 @@
             this.refreshKey++;
           });
         });
+      },
+      changeGradientPreset(value) {
+        if (value === 'silver') {
+          this.form.gradientColor1 = '#999999';
+          this.form.gradientColor2 = '#ffffff';
+        } else if (value === 'gold') {
+          this.form.gradientColor1 = '#cc9900';
+          this.form.gradientColor2 = '#ffff00';
+        } else if (value === 'red') {
+          this.form.gradientColor1 = '#990000';
+          this.form.gradientColor2 = '#ff0000';
+        } else if (value === 'white') {
+          this.form.gradientColor1 = '#ffffff';
+          this.form.gradientColor2 = '#ffffff';
+        } else if (value === 'blue') {
+          this.form.gradientColor1 = '#009999';
+          this.form.gradientColor2 = '#00ffff';
+        } else if (value === 'green') {
+          this.form.gradientColor1 = '#009900';
+          this.form.gradientColor2 = '#00ff00';
+        }
       },
       searchCardByPassword() {
         this.axios({

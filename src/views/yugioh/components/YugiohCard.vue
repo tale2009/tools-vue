@@ -8,6 +8,9 @@
     <div v-name-color="data.color" class="card-name">
       <CompressText
         :text="data.name"
+        :gradient="data.gradient"
+        :gradient-color1="data.gradientColor1"
+        :gradient-color2="data.gradientColor2"
         :refresh-key="refreshKey"
         :width="1030"
         :height="200"
@@ -230,6 +233,15 @@
           '--descriptionZoom': this.data.descriptionZoom,
         };
       },
+      autoNameColor() {
+        let color = 'black';
+        // 自动颜色
+        if ((this.data.type === 'monster' && ['xyz', 'link'].includes(this.data.cardType)) || ['spell', 'trap'].includes(this.data.type) ||
+          (this.data.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(this.data.pendulumType))) {
+          color = 'white';
+        }
+        return color;
+      },
       attributeSrc() {
         let suffix = '';
         if (this.data.language === 'jp') {
@@ -406,18 +418,13 @@
     },
     directives: {
       nameColor(el, binding) {
-        let that = binding.instance;
+        const that = binding.instance;
         // 文本和注音颜色分开控制
-        let color = 'black';
-        // 自动颜色
-        if ((that.data.type === 'monster' && ['xyz', 'link'].includes(that.data.cardType)) || ['spell', 'trap'].includes(that.data.type) ||
-          (that.data.type === 'pendulum' && ['xyz-pendulum', 'link-pendulum'].includes(that.data.pendulumType))) {
-          color = 'white';
-        }
-        el.style.color = binding.value || color;
+        const autoNameColor = that.autoNameColor;
+        el.style.color = binding.value || autoNameColor;
         let rtList = el.querySelectorAll('.rt');
         rtList.forEach(rt => {
-          rt.style.color = color;
+          rt.style.color = autoNameColor;
         });
       },
       cardDescription(el, binding) {
@@ -443,7 +450,6 @@
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
-    white-space: pre-wrap;
     vertical-align: top;
     position: relative;
     user-select: none;

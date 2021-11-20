@@ -42,8 +42,35 @@
               />
             </el-form-item>
             <el-form-item label="颜色">
-              <el-color-picker v-model="form.color" />
-              <span class="tip">（自动选择清空）</span>
+              <el-tooltip content="暂不支持导出" placement="top">
+                <el-switch v-model="form.gradient" active-text="渐变色" />
+              </el-tooltip>
+              <div v-if="form.gradient" style="margin-top: 10px">
+                <el-row :gutter="gutter">
+                  <el-col :span="8">
+                    <el-space :size="10" wrap>
+                      <el-color-picker v-model="form.gradientColor1" />
+                      <el-color-picker v-model="form.gradientColor2" />
+                    </el-space>
+                  </el-col>
+                  <el-col :span="16">
+                    <el-form-item style="margin-bottom: 0" label="预设">
+                      <el-select
+                        v-model="form.gradientPreset"
+                        placeholder="请选择预设"
+                        clearable
+                        @change="changeGradientPreset"
+                      >
+                        <el-option v-for="item in gradientList" :label="item.label" :value="item.value" />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+              <div v-else style="margin-top: 10px">
+                <el-color-picker v-model="form.color" />
+                <span class="tip">（自动选择清空）</span>
+              </div>
             </el-form-item>
             <el-form-item label="类型">
               <el-radio-group v-model="form.type" @change="changeType">
@@ -235,7 +262,7 @@
                 <el-option label="©1996 KAZUKI TAKAHASHI" value="en" />
               </el-select>
             </el-form-item>
-            <el-row :gutter="10">
+            <el-row :gutter="gutter">
               <el-col :span="8">
                 <el-form-item label="角标">
                   <el-switch v-model="form.laser" />
@@ -263,7 +290,7 @@
           </el-form>
 
           <div class="button-group">
-            <el-row :gutter="10">
+            <el-row :gutter="gutter">
               <el-col :span="12">
                 <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
               </el-col>
@@ -323,6 +350,7 @@
   import jpDemo from './demo/jp-demo';
   import krDemo from './demo/kr-demo';
   import enDemo from './demo/en-demo';
+  import { nextTick } from 'vue';
 
   export default {
     name: 'Yugioh',
@@ -335,6 +363,7 @@
     },
     data() {
       return {
+        gutter: 10,
         refreshKey: 0,
         fontLoading: false,
         randomLoading: false,
@@ -343,6 +372,10 @@
           language: 'sc',
           name: '',
           color: '',
+          gradient: false,
+          gradientColor1: '#999999',
+          gradientColor2: '#ffffff',
+          gradientPreset: 'silver',
           type: 'monster',
           attribute: 'dark',
           icon: '',
@@ -374,6 +407,14 @@
           { label: '日文', value: 'jp' },
           { label: '韩文', value: 'kr' },
           { label: '英文', value: 'en' },
+        ],
+        gradientList: [
+          { label: '银字', value: 'silver' },
+          { label: '金字', value: 'gold' },
+          { label: '红字', value: 'red' },
+          { label: '白字', value: 'white' },
+          { label: '蓝字', value: 'blue' },
+          { label: '绿字', value: 'green' },
         ],
         kanjiKanaDialog: false,
         config: {},
@@ -418,6 +459,27 @@
           Object.assign(this.form, enDemo);
         }
         this.refreshFont();
+      },
+      changeGradientPreset(value) {
+        if (value === 'silver') {
+          this.form.gradientColor1 = '#999999';
+          this.form.gradientColor2 = '#ffffff';
+        } else if (value === 'gold') {
+          this.form.gradientColor1 = '#cc9900';
+          this.form.gradientColor2 = '#ffff00';
+        } else if (value === 'red') {
+          this.form.gradientColor1 = '#990000';
+          this.form.gradientColor2 = '#ff0000';
+        } else if (value === 'white') {
+          this.form.gradientColor1 = '#ffffff';
+          this.form.gradientColor2 = '#ffffff';
+        } else if (value === 'blue') {
+          this.form.gradientColor1 = '#009999';
+          this.form.gradientColor2 = '#00ffff';
+        } else if (value === 'green') {
+          this.form.gradientColor1 = '#009900';
+          this.form.gradientColor2 = '#00ff00';
+        }
       },
       beforeUpload(file) {
         let flag = file.type.includes('image');
@@ -545,19 +607,25 @@
         this.downloadBlob(blob, this.cardName);
       },
       exportImage() {
-        this.exportLoading = true;
-        let element = document.querySelector('.yugioh-card');
-        html2canvas(element, {
-          useCORS: true,
-          backgroundColor: 'transparent',
-          width: this.form.scale * 1393,
-          height: this.form.scale * 2031,
-        }).then(canvas => {
-          canvas.toBlob(blob => {
-            this.downloadBlob(blob, this.cardName);
+        if (this.form.gradient) {
+          this.form.gradient = false;
+          this.$message.warning('暂不支持导出渐变色卡名');
+        }
+        nextTick(() => {
+          this.exportLoading = true;
+          let element = document.querySelector('.yugioh-card');
+          html2canvas(element, {
+            useCORS: true,
+            backgroundColor: 'transparent',
+            width: this.form.scale * 1393,
+            height: this.form.scale * 2031,
+          }).then(canvas => {
+            canvas.toBlob(blob => {
+              this.downloadBlob(blob, this.cardName);
+            });
+          }).finally(() => {
+            this.exportLoading = false;
           });
-        }).finally(() => {
-          this.exportLoading = false;
         });
       },
     },
