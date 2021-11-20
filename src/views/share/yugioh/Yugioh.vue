@@ -109,6 +109,7 @@
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;
+          this.refreshFont();
         });
       },
       getRandomCard() {
@@ -123,6 +124,7 @@
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;
+          this.refreshFont();
         });
       },
       // 把卡片宽度转换成scale
