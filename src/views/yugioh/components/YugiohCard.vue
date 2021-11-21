@@ -450,6 +450,7 @@
     flex-wrap: wrap;
     flex-grow: 0;
     flex-shrink: 0;
+    white-space: pre-wrap;
     vertical-align: top;
     position: relative;
     user-select: none;
