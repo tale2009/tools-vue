@@ -23,6 +23,7 @@ export default createStore({
         setTimeout(() => {
           ElNotification.success({
             title: '已进入神秘模式',
+            position: 'bottom-left',
           });
         }, 1000);
       }
