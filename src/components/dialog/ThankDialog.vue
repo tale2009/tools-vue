@@ -9,10 +9,11 @@
       <div class="thank-main">
         <p>😃以下为赞助列表，感谢大家的支持！😄（按时间排序）</p>
         <div class="thank-list">
-          <el-scrollbar>
-            <p v-for="item in thankList" class="thank-item">
-              <span>{{ item.name }}（￥{{ item.money?.toFixed(2) }}）</span>
-              <span>{{ item.time }}</span>
+          <el-scrollbar :max-height="300">
+            <p v-for="(item, index) in thankList" class="thank-item">
+              <span class="sort">{{ index + 1 }}.</span>
+              <span class="name">{{ item.name }}（￥{{ item.money?.toFixed(2) }}）</span>
+              <span class="time">{{ item.time }}</span>
             </p>
           </el-scrollbar>
         </div>
@@ -60,15 +61,23 @@
       }
 
       .thank-list {
-        ::v-deep(.el-scrollbar) {
-          .el-scrollbar__wrap {
-            max-height: 300px;
-          }
-        }
-
         .thank-item {
           display: flex;
           justify-content: space-between;
+
+          .sort {
+            margin-right: 10px;
+            flex-shrink: 0;
+          }
+
+          .name {
+            flex-grow: 1;
+            margin-right: 10px;
+          }
+
+          .time {
+            flex-shrink: 0;
+          }
         }
       }
     }
