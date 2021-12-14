@@ -30,6 +30,7 @@
       AppLeft,
     },
     mounted() {
+      this.chromeTip();
       document.onkeydown = this.disableKey;
       document.onkeypress = this.disableKey;
     },
@@ -40,6 +41,15 @@
             '<p>移动端异常问题不再回复，请谅解！</p>', '移动端提示', {
             type: 'warning',
             dangerouslyUseHTMLString: true,
+          });
+        }
+      },
+      chromeTip() {
+        const isChrome = navigator.userAgent.toLowerCase().includes('chrome');
+        if (!isChrome) {
+          this.$notify.warning({
+            title: '检测到不是 Chrome 浏览器',
+            message: '如有功能异常，或者显示错位的情况，请使用 Chrome 内核的浏览器',
           });
         }
       },
