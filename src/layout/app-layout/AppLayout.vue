@@ -45,7 +45,7 @@
         }
       },
       chromeTip() {
-        const isChrome = navigator.userAgent.toLowerCase().includes('chrome');
+        const isChrome = !!navigator.userAgent.match(/Chrome/);
         if (!isChrome) {
           this.$notify.warning({
             title: '检测到不是 Chrome 浏览器',
