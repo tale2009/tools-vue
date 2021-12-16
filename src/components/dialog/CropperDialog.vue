@@ -10,7 +10,9 @@
     >
       <vue-cropper
         ref="cropper"
+        drag-mode="none"
         :zoomable="false"
+        :toggle-drag-mode-on-dblclick="false"
         :aspect-ratio="1"
         :auto-crop-area="1"
         :view-mode="2"
