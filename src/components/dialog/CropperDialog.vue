@@ -49,7 +49,7 @@
     computed: {
       dialogWidth() {
         const offsetWidth = document.body.offsetWidth;
-        return offsetWidth > 840 ? offsetWidth : offsetWidth - 40;
+        return offsetWidth > 840 ? 800 : offsetWidth - 40;
       },
     },
     watch: {
