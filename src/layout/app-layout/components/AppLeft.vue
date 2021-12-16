@@ -18,6 +18,7 @@
       data-ad-client="ca-pub-3947645219032140"
       data-ad-slot="8053647660"
       data-full-width-responsive="false"
+      data-html2canvas-ignore="true"
     />
   </div>
 </template>

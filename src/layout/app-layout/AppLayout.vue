@@ -21,7 +21,6 @@
   import AppHeader from '@/layout/app-layout/components/AppHeader';
   import AppLeft from '@/layout/app-layout/components/AppLeft';
   import { mapState } from 'vuex';
-  import mobile from 'is-mobile';
 
   export default {
     name: 'AppLayout',
@@ -30,23 +29,20 @@
       AppLeft,
     },
     mounted() {
-      this.chromeTip();
+      this.browserTip();
       document.onkeydown = this.disableKey;
       document.onkeypress = this.disableKey;
     },
     methods: {
-      mobileTip() {
-        if (mobile()) {
-          this.$confirm('<p>若功能异常，请使用 PC Chrome 浏览器。</p>' +
-            '<p>移动端异常问题不再回复，请谅解！</p>', '移动端提示', {
-            type: 'warning',
-            dangerouslyUseHTMLString: true,
-          });
-        }
-      },
-      chromeTip() {
+      browserTip() {
         const isChrome = !!navigator.userAgent.match(/Chrome/i);
-        if (!isChrome) {
+        const isFirefox = !!navigator.userAgent.match(/Firefox/i);
+        if (isFirefox) {
+          this.$notify.error({
+            title: '检测到是 Firefox 浏览器',
+            message: '此浏览器存在已知问题，请使用 Chrome 内核的浏览器',
+          });
+        } else if (!isChrome) {
           this.$notify.warning({
             title: '检测到不是 Chrome 浏览器',
             message: '如有功能异常，或者显示错位的情况，请使用 Chrome 内核的浏览器',
