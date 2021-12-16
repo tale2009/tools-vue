@@ -331,6 +331,7 @@
           </div>
 
           <KanjiKanaDialog v-model="kanjiKanaDialog" />
+          <CropperDialog v-model="cropperDialogDialog" :image="cropperImage" @get-data="setImage" />
         </PageForm>
       </template>
     </Page>
@@ -342,6 +343,7 @@
   import PageForm from '@/components/page/PageForm';
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
+  import CropperDialog from '@/components/dialog/CropperDialog';
   import html2canvas from './html2canvas';
   import loadImage from 'blueimp-load-image';
   import { InfoFilled } from '@element-plus/icons';
@@ -359,6 +361,7 @@
       PageForm,
       YugiohCard,
       KanjiKanaDialog,
+      CropperDialog,
       InfoFilled,
     },
     data() {
@@ -417,7 +420,9 @@
           { label: '蓝字', value: 'blue' },
           { label: '绿字', value: 'green' },
         ],
+        cropperImage: '',
         kanjiKanaDialog: false,
+        cropperDialogDialog: false,
         config: {},
       };
     },
@@ -490,15 +495,17 @@
         if (flag) {
           loadImage(file, {
             canvas: true,
-            top: 0,
-            aspectRatio: 1,
           }).then(data => {
-            this.form.image = data.image.toDataURL('image/png', 1);
+            this.cropperImage = data.image.toDataURL('image/png', 1);
+            this.cropperDialogDialog = true;
           });
         } else {
           this.$message.warning('请选择正确图片格式');
         }
         return false;
+      },
+      setImage(image) {
+        this.form.image = image;
       },
       deleteImage() {
         this.form.image = '';
