@@ -12,14 +12,6 @@
         </div>
       </el-col>
     </el-row>
-    <!-- 自适应正方形 -->
-    <ins
-      class="adsbygoogle google-ad"
-      data-ad-client="ca-pub-3947645219032140"
-      data-ad-slot="8053647660"
-      data-full-width-responsive="false"
-      data-html2canvas-ignore="true"
-    />
   </div>
 </template>
 
@@ -76,24 +68,6 @@
           }
         }
       }
-    }
-  }
-
-  .google-ad {
-    margin-top: 50px;
-    display: block;
-    height: 540px;
-  }
-
-  @media screen and (max-height: 900px) {
-    .google-ad {
-      height: 360px;
-    }
-  }
-
-  @media screen and (max-height: 600px) {
-    .google-ad {
-      height: 180px;
     }
   }
 </style>
