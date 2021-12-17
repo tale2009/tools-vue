@@ -25,9 +25,6 @@
         toolList: toolList,
       };
     },
-    mounted() {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    },
     methods: {
       toPath(item) {
         this.$router.push(item.path);
