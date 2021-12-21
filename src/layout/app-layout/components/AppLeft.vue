@@ -11,6 +11,13 @@
           </div>
         </div>
       </el-col>
+      <el-col :span="24">
+        <div class="ad-rent">
+          <el-tooltip content="微信号：kooriookami" placement="top">
+            <span>广告位招租</span>
+          </el-tooltip>
+        </div>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -63,6 +70,19 @@
           &:hover {
             background: #ecf5ff;
           }
+        }
+
+        .ad-rent {
+          margin-top: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 90px;
+          border-radius: 8px;
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+          background-image: linear-gradient(135deg, #40efff, #4059ff);
         }
       }
     }
