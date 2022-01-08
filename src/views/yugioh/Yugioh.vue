@@ -27,7 +27,7 @@
             </el-progress>
           </div>
 
-          <el-form :model="form" label-width="auto" size="small">
+          <el-form :model="form" label-width="auto">
             <el-form-item label="语言">
               <el-select v-model="form.language" placeholder="请选择语言" @change="changeLanguage">
                 <el-option v-for="item in languageList" :label="item.label" :value="item.value" />
@@ -45,7 +45,7 @@
               <el-tooltip content="暂不支持导出" placement="top">
                 <el-switch v-model="form.gradient" active-text="渐变色" />
               </el-tooltip>
-              <div v-if="form.gradient" style="margin-top: 10px">
+              <div v-if="form.gradient" style="width: 100%;margin-top: 10px">
                 <el-row :gutter="gutter">
                   <el-col :span="8">
                     <el-space :size="10" wrap>
@@ -67,7 +67,7 @@
                   </el-col>
                 </el-row>
               </div>
-              <div v-else style="margin-top: 10px">
+              <div v-else style="width: 100%;margin-top: 10px">
                 <el-color-picker v-model="form.color" />
                 <span class="tip">（自动选择清空）</span>
               </div>
@@ -233,7 +233,7 @@
               <el-input v-model="form.package" placeholder="请输入卡包" />
             </el-form-item>
             <el-form-item label="密码">
-              <div style="display: flex;align-items: center">
+              <div style="display: flex;align-items: center;flex: 1">
                 <el-input v-model="form.password" placeholder="请输入密码" />
                 <el-dropdown
                   style="margin-left: 10px;flex-shrink: 0"
@@ -292,12 +292,11 @@
           <div class="button-group">
             <el-row :gutter="gutter">
               <el-col :span="12">
-                <el-button plain size="medium" @click="kanjiKanaDialog = true">一键注音</el-button>
+                <el-button plain @click="kanjiKanaDialog = true">一键注音</el-button>
               </el-col>
               <el-col :span="12">
                 <el-button
                   plain
-                  size="medium"
                   :loading="randomLoading"
                   @click="getRandomCard"
                 >
@@ -311,16 +310,15 @@
                   accept="application/json"
                   :before-upload="importJson"
                 >
-                  <el-button plain size="medium">导入数据</el-button>
+                  <el-button plain>导入数据</el-button>
                 </el-upload>
               </el-col>
               <el-col :span="12">
-                <el-button plain size="medium" @click="exportJson">导出数据</el-button>
+                <el-button plain @click="exportJson">导出数据</el-button>
               </el-col>
               <el-col :span="24">
                 <el-button
                   type="primary"
-                  size="medium"
                   :loading="exportLoading"
                   @click="exportImage"
                 >
@@ -713,7 +711,7 @@
 
       .attribute-radio-group {
         ::v-deep(.el-radio-button__inner) {
-          padding: 9px 12px;
+          padding: 8px 11px;
         }
       }
 

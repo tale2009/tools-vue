@@ -9,7 +9,7 @@
 
       <template #form>
         <PageForm title="点阵图生成器">
-          <el-form :model="form" label-width="auto" size="small">
+          <el-form :model="form" label-width="auto">
             <el-form-item label="图片">
               <el-upload
                 action="/"
@@ -47,14 +47,7 @@
             </el-form-item>
           </el-form>
 
-          <el-button
-            style="width: 100%"
-            type="primary"
-            size="medium"
-            @click="exportImage"
-          >
-            导出图片
-          </el-button>
+          <el-button style="width: 100%" type="primary" @click="exportImage">导出图片</el-button>
         </PageForm>
       </template>
     </Page>

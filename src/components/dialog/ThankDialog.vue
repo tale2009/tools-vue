@@ -20,7 +20,7 @@
       </div>
       <template #footer>
         <span class="sum-money">￥{{ sumMoney }}</span>
-        <el-button plain size="medium" @click="closeDialog">关闭</el-button>
+        <el-button plain @click="closeDialog">关闭</el-button>
       </template>
     </el-dialog>
   </div>

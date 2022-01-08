@@ -12,19 +12,19 @@
       <template #form>
         <PageForm title="像素画">
           <el-button-group class="form-bar">
-            <el-button size="small" :disabled="!historyList.length" @click="undoHistory">
+            <el-button :disabled="!historyList.length" @click="undoHistory">
               <i class="fas fa-undo" />
             </el-button>
             <el-popconfirm title="是否清空画板？" @confirm="clearPixelArt">
               <template #reference>
-                <el-button type="danger" size="small">
+                <el-button type="danger">
                   <i class="fas fa-trash" />
                 </el-button>
               </template>
             </el-popconfirm>
           </el-button-group>
 
-          <el-form :model="form" label-width="auto" size="small">
+          <el-form :model="form" label-width="auto">
             <el-form-item label="宽度">
               <el-input-number
                 v-model="form.widthPixel"
@@ -79,14 +79,14 @@
                   accept="application/json"
                   :before-upload="importJson"
                 >
-                  <el-button plain size="medium">导入数据</el-button>
+                  <el-button plain>导入数据</el-button>
                 </el-upload>
               </el-col>
               <el-col :span="12">
-                <el-button plain size="medium" @click="exportJson">导出数据</el-button>
+                <el-button plain @click="exportJson">导出数据</el-button>
               </el-col>
               <el-col :span="24">
-                <el-button type="primary" size="medium" @click="exportImage">导出图片</el-button>
+                <el-button type="primary" @click="exportImage">导出图片</el-button>
               </el-col>
             </el-row>
           </div>

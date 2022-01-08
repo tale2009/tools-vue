@@ -57,10 +57,6 @@
           & > .el-input, .el-cascader, .el-select, .el-date-editor, .el-autocomplete {
             width: 100%;
           }
-
-          .el-color-picker, .el-input, .el-cascader, .el-select, .el-button, .el-radio-group, .el-checkbox-group, .el-input-number {
-            vertical-align: top;
-          }
         }
       }
     }

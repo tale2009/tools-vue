@@ -10,11 +10,11 @@
     />
 
     <el-space class="text-operate" :size="5">
-      <el-select v-model="form.editFontSize" style="width: 90px" size="mini">
+      <el-select v-model="form.editFontSize" style="width: 90px" size="small">
         <el-option v-for="item in fontSizeList" :label="`${item} px`" :value="item" />
       </el-select>
-      <el-button plain size="mini" @click="cancelInput">取消</el-button>
-      <el-button type="primary" size="mini" @click="confirmInput">完成</el-button>
+      <el-button plain size="small" @click="cancelInput">取消</el-button>
+      <el-button type="primary" size="small" @click="confirmInput">完成</el-button>
     </el-space>
   </div>
 </template>

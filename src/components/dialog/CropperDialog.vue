@@ -18,8 +18,8 @@
         :view-mode="2"
       />
       <template #footer>
-        <el-button plain size="medium" @click="closeDialog">关闭</el-button>
-        <el-button type="primary" size="medium" @click="confirm">确定</el-button>
+        <el-button plain @click="closeDialog">关闭</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
       </template>
     </el-dialog>
   </div>

@@ -31,7 +31,7 @@
         <p>更新时间：{{ formatTime(config.updateTime) }}</p>
       </div>
       <template #footer>
-        <el-button plain size="medium" @click="closeDialog">关闭</el-button>
+        <el-button plain @click="closeDialog">关闭</el-button>
       </template>
     </el-dialog>
   </div>

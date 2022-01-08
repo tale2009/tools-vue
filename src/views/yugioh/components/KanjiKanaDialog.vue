@@ -12,7 +12,6 @@
         ref="form"
         :model="form"
         label-position="top"
-        size="small"
       >
         <el-form-item label="注音只支持 OCG 常用语" prop="text">
           <el-input
@@ -24,8 +23,8 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button plain size="medium" @click="closeDialog">关闭</el-button>
-        <el-button type="primary" size="medium" @click="addKana">注音</el-button>
+        <el-button plain @click="closeDialog">关闭</el-button>
+        <el-button type="primary" @click="addKana">注音</el-button>
       </template>
     </el-dialog>
   </div>

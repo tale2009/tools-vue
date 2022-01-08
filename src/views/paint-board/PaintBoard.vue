@@ -18,7 +18,6 @@
           <el-button-group class="form-bar">
             <el-button
               plain
-              size="small"
               :disabled="!historyList.length"
               @click="undoHistory"
             >
@@ -26,14 +25,14 @@
             </el-button>
             <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
               <template #reference>
-                <el-button type="danger" size="small">
+                <el-button type="danger">
                   <i class="fas fa-trash" />
                 </el-button>
               </template>
             </el-popconfirm>
           </el-button-group>
 
-          <el-form :model="form" label-width="auto" size="small">
+          <el-form :model="form" label-width="auto">
             <el-form-item label="宽度">
               <el-input-number
                 v-model="form.width"
@@ -98,7 +97,6 @@
           <el-button
             style="width: 100%"
             type="primary"
-            size="medium"
             @click="exportImage"
           >
             导出图片
