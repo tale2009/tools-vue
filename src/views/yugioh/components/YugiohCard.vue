@@ -40,12 +40,12 @@
       <el-image :src="data.image">
         <template #placeholder>
           <div class="image-slot">
-            <i class="fal fa-spinner fa-pulse" />
+            <i class="fa-light fa-spinner fa-pulse" />
           </div>
         </template>
         <template #error>
           <div class="image-slot">
-            <i class="fal fa-image" />
+            <i class="fa-light fa-image" />
           </div>
         </template>
       </el-image>

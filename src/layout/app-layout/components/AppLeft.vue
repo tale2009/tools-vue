@@ -4,7 +4,7 @@
       <el-col v-for="(item,index) in toolList" :key="index" :span="12">
         <div class="item-main" :style="itemStyle(item)" @click="toPath(item)">
           <div class="item-icon">
-            <i :class="`fal ${item.icon}`" />
+            <i :class="`fa-light ${item.icon}`" />
           </div>
           <div class="item-title">
             <span>{{ item.title }}</span>

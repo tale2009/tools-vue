@@ -13,12 +13,12 @@
         <PageForm title="像素画">
           <el-button-group class="form-bar">
             <el-button :disabled="!historyList.length" @click="undoHistory">
-              <i class="fas fa-undo" />
+              <i class="fa-solid fa-undo" />
             </el-button>
             <el-popconfirm title="是否清空画板？" @confirm="clearPixelArt">
               <template #reference>
                 <el-button type="danger">
-                  <i class="fas fa-trash" />
+                  <i class="fa-solid fa-trash" />
                 </el-button>
               </template>
             </el-popconfirm>

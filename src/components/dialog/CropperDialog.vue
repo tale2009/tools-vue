@@ -1,28 +1,26 @@
 <template>
-  <div class="cropper-dialog-container">
-    <el-dialog
-      title="图片裁切"
-      :model-value="modelValue"
-      :width="dialogWidth"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :show-close="false"
-    >
-      <vue-cropper
-        ref="cropper"
-        drag-mode="none"
-        :zoomable="false"
-        :toggle-drag-mode-on-dblclick="false"
-        :aspect-ratio="1"
-        :auto-crop-area="1"
-        :view-mode="2"
-      />
-      <template #footer>
-        <el-button plain @click="closeDialog">关闭</el-button>
-        <el-button type="primary" @click="confirm">确定</el-button>
-      </template>
-    </el-dialog>
-  </div>
+  <el-dialog
+    title="图片裁切"
+    :model-value="modelValue"
+    :width="dialogWidth"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+  >
+    <vue-cropper
+      ref="cropper"
+      drag-mode="none"
+      :zoomable="false"
+      :toggle-drag-mode-on-dblclick="false"
+      :aspect-ratio="1"
+      :auto-crop-area="1"
+      :view-mode="2"
+    />
+    <template #footer>
+      <el-button plain @click="closeDialog">关闭</el-button>
+      <el-button type="primary" @click="confirm">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -65,7 +63,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .cropper-dialog-container {
 
-  }
 </style>

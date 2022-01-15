@@ -199,14 +199,14 @@
                   :style="arrowItemStyle(item)"
                   @click="toggleArrow(item)"
                 >
-                  <i v-if="item === 1" class="fas fa-arrow-alt-up" />
-                  <i v-if="item === 2" class="fas fa-arrow-alt-up" style="transform: rotate(45deg)" />
-                  <i v-if="item === 3" class="fas fa-arrow-alt-right" />
-                  <i v-if="item === 4" class="fas fa-arrow-alt-right" style="transform: rotate(45deg)" />
-                  <i v-if="item === 5" class="fas fa-arrow-alt-down" />
-                  <i v-if="item === 6" class="fas fa-arrow-alt-down" style="transform: rotate(45deg)" />
-                  <i v-if="item === 7" class="fas fa-arrow-alt-left" />
-                  <i v-if="item === 8" class="fas fa-arrow-alt-left" style="transform: rotate(45deg)" />
+                  <i v-if="item === 1" class="fa-solid fa-up" />
+                  <i v-if="item === 2" class="fa-solid fa-up-right" />
+                  <i v-if="item === 3" class="fa-solid fa-right" />
+                  <i v-if="item === 4" class="fa-solid fa-down-right" />
+                  <i v-if="item === 5" class="fa-solid fa-down" />
+                  <i v-if="item === 6" class="fa-solid fa-down-left" />
+                  <i v-if="item === 7" class="fa-solid fa-left" />
+                  <i v-if="item === 8" class="fa-solid fa-up-left" />
                 </div>
               </div>
             </el-form-item>
@@ -248,6 +248,9 @@
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
+                <el-tooltip content="仅分享搜索结果" placement="top">
+                  <el-button style="margin-left: 10px;flex-shrink: 0" type="success" @click="shareCard">分享</el-button>
+                </el-tooltip>
               </div>
             </el-form-item>
             <el-form-item label="版权">
@@ -329,7 +332,7 @@
           </div>
 
           <KanjiKanaDialog v-model="kanjiKanaDialog" />
-          <CropperDialog v-model="cropperDialogDialog" :image="cropperImage" @get-data="setImage" />
+          <CropperDialog v-model="cropperDialog" :image="cropperImage" @get-data="setImage" />
         </PageForm>
       </template>
     </Page>
@@ -420,7 +423,7 @@
         ],
         cropperImage: '',
         kanjiKanaDialog: false,
-        cropperDialogDialog: false,
+        cropperDialog: false,
         config: {},
       };
     },
@@ -495,7 +498,7 @@
             canvas: true,
           }).then(data => {
             this.cropperImage = data.image.toDataURL('image/png', 1);
-            this.cropperDialogDialog = true;
+            this.cropperDialog = true;
           });
         } else {
           this.$message.warning('请选择正确图片格式');
@@ -595,6 +598,19 @@
         }).finally(() => {
           this.randomLoading = false;
         });
+      },
+      shareCard() {
+        const { href } = this.$router.resolve({
+          path: '/share/yugioh',
+          query: {
+            password: this.form.password,
+            language: this.form.language,
+            gradient: this.form.gradient,
+            gradientPreset: this.form.gradientPreset,
+            radius: this.form.radius,
+          },
+        });
+        open(href, '_blank');
       },
       importJson(file) {
         let reader = new FileReader();

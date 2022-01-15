@@ -21,12 +21,12 @@
               :disabled="!historyList.length"
               @click="undoHistory"
             >
-              <i class="fas fa-undo" />
+              <i class="fa-solid fa-undo" />
             </el-button>
             <el-popconfirm title="是否清空画板？" @confirm="clearPaintBoard">
               <template #reference>
                 <el-button type="danger">
-                  <i class="fas fa-trash" />
+                  <i class="fa-solid fa-trash" />
                 </el-button>
               </template>
             </el-popconfirm>

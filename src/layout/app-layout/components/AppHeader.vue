@@ -2,13 +2,13 @@
   <div class="app-header-container">
     <div class="header-left">
       <el-button class="collapse-icon" type="text" @click="setLeftCollapse(!leftCollapse)">
-        <i class="fal fa-arrow-to-left" :style="leftCollapseIconStyle" />
+        <i class="fa-light fa-arrow-to-left" :style="leftCollapseIconStyle" />
       </el-button>
     </div>
 
     <div class="header-center">
       <el-button class="mystery-icon" type="text" @dblclick="openMysteryBox">
-        <i class="fal fa-dog" />
+        <i class="fa-light fa-dog" />
       </el-button>
     </div>
 
@@ -18,11 +18,11 @@
         <el-button type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
         <el-button type="text" @click="thankDialog = true">感谢</el-button>
         <el-button class="collapse-icon" type="text" @click="toggleFullscreen">
-          <i v-if="!isFullscreen" class="fal fa-expand" />
-          <i v-else class="fal fa-compress" />
+          <i v-if="!isFullscreen" class="fa-light fa-expand" />
+          <i v-else class="fa-light fa-compress" />
         </el-button>
         <el-button class="collapse-icon" type="text" @click="setRightCollapse(!rightCollapse)">
-          <i class="fal fa-arrow-to-right" :style="rightCollapseIconStyle" />
+          <i class="fa-light fa-arrow-to-right" :style="rightCollapseIconStyle" />
         </el-button>
       </el-space>
 
