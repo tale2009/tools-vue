@@ -4,7 +4,6 @@
   .card-name {
     top: 95px;
     font-size: 108px;
-    letter-spacing: -2px;
 
     ::v-deep(.ruby) {
       .rt {
@@ -24,7 +23,6 @@
     top: 250px;
     font-size: 80px;
     right: 130px;
-    letter-spacing: -2px;
 
     ::v-deep(.ruby) {
       .rt {
@@ -42,7 +40,6 @@
     top: 1286px;
     font-size: calc(36px * var(--descriptionZoom));
     line-height: 1.18;
-    letter-spacing: -2px;
 
     ::v-deep(.ruby) {
       .rt {
@@ -72,7 +69,6 @@
 
     .description-info {
       margin-top: 16px;
-      letter-spacing: -2px;
 
       ::v-deep(.ruby) {
         .rt {
