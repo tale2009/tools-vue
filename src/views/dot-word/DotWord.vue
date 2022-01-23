@@ -2,8 +2,8 @@
   <div class="dot-word-container">
     <Page>
       <template #default>
-        <div class="word-list">
-          <canvas v-for="(word,index) in wordList" :ref="el => canvasRefList[index] = el" />
+        <div class="word-list" :style="wordListStyle">
+          <canvas v-for="(word,index) in wordList" :ref="el => canvasRefList[index] = el" :style="canvasStyle" />
         </div>
       </template>
 
@@ -227,6 +227,20 @@
             this.downloadBlob(blob, this.form.text);
           });
         });
+      },
+    },
+    computed: {
+      wordListStyle() {
+        return {
+          paddingRight: this.form.grid ? `${this.form.gridWidth}px` : 0,
+          paddingBottom: this.form.grid ? `${this.form.gridWidth}px` : 0,
+        };
+      },
+      canvasStyle() {
+        return {
+          marginRight: this.form.grid ? `${-this.form.gridWidth}px` : 0,
+          marginBottom: this.form.grid ? `${-this.form.gridWidth}px` : 0,
+        };
       },
     },
     watch: {
