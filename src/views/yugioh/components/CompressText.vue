@@ -7,7 +7,10 @@
         :class="{'text-gradient': gradient}"
         :style="textStyle"
         :data-card-name="item.ruby"
-      >{{ item.ruby }}<span v-compress-rt class="rt">{{ item.rt }}</span></span>
+      >
+        <span>{{ item.ruby }}</span>
+        <span v-compress-rt class="rt">{{ item.rt }}</span>
+      </span>
       <span
         v-else
         v-no-compress="noCompressText.includes(item)"
@@ -85,10 +88,13 @@
         let text = ruby.innerText.split('\n')[0];
         let rubyWidth = ruby.offsetWidth;
         let rtWidth = rt.offsetWidth / that.textScale;
-        if (rtWidth / rubyWidth < 0.9 && text.length > 1) {
+        if (rtWidth / rubyWidth < 0.95 && text.length > 1) {
+          const rtGap = 3.7;
+          const widthPercent = Math.min(rtWidth / rubyWidth * rtGap * 100, 95);
+          const leftPercent = (100 - widthPercent) / 2;
           // 拉伸两端对齐
-          rt.style.width = `${that.textScale * 90}%`;
-          rt.style.left = '5%';
+          rt.style.width = `${that.textScale * widthPercent}%`;
+          rt.style.left = `${leftPercent}%`;
           rt.style.textAlignLast = 'justify';
           rt.style.transform = `scaleX(${1 / that.textScale})`;
         } else if (rtWidth > rubyWidth) {
@@ -152,11 +158,11 @@
       },
       // 不压缩的文本
       noCompress(el, binding) {
+        const that = binding.instance;
         el.style.display = '';
         el.style.transform = '';
         el.style.margin = '';
         if (binding.value) {
-          const that = binding.instance;
           el.style.display = 'inline-block';
           el.style.transform = `scaleX(${1 / that.textScale})`;
           el.style.margin = `0 ${(1 - that.textScale) / 2 * 36}px`;

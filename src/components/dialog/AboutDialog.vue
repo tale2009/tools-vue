@@ -73,4 +73,10 @@
       }
     }
   }
+
+  .el-popover {
+    .el-image {
+      vertical-align: top;
+    }
+  }
 </style>

@@ -11,7 +11,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="24">
+      <el-col :span="24" v-if="false">
         <div class="ad-rent">
           <el-tooltip content="微信号：kooriookami" placement="top">
             <span>广告位招租</span>

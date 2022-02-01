@@ -27,6 +27,7 @@ module.exports = defineConfig({
     'object-curly-spacing': ['error', 'always'],
     'arrow-parens': ['error', 'as-needed'],
     'spaced-comment': ['error', 'always'],
+    'semi': [2, 'always'],
     // vue
     'vue/no-v-html': 'off',
     'vue/singleline-html-element-content-newline': 'off',

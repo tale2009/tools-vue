@@ -114,7 +114,7 @@
   import html2canvas from 'html2canvas';
   import usePaint from '@/views/paint-board/use-paint';
   import TextEditor from '@/views/paint-board/components/TextEditor';
-  import { InfoFilled } from '@element-plus/icons';
+  import { InfoFilled } from '@element-plus/icons-vue';
 
   export default {
     name: 'PaintBoard',

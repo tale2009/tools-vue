@@ -347,7 +347,7 @@
   import CropperDialog from '@/components/dialog/CropperDialog';
   import html2canvas from './html2canvas';
   import loadImage from 'blueimp-load-image';
-  import { InfoFilled } from '@element-plus/icons';
+  import { InfoFilled } from '@element-plus/icons-vue';
   import scDemo from './demo/sc-demo';
   import tcDemo from './demo/tc-demo';
   import jpDemo from './demo/jp-demo';
