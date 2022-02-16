@@ -12,8 +12,8 @@
         </div>
       </el-col>
       <el-col :span="24">
-        <div class="ad-list">
-          <el-image :src="ad1" @click="toAd1" />
+        <div class="poster-list">
+          <el-image :src="poster1" @click="toPoster1" />
         </div>
       </el-col>
     </el-row>
@@ -22,14 +22,14 @@
 
 <script>
   import toolList from '@/assets/json/tool-list.json';
-  import ad1 from '@/assets/image/ad1.jpg';
+  import poster1 from '@/assets/image/poster1.jpg';
 
   export default {
     name: 'AppLeft',
     data() {
       return {
         toolList: toolList,
-        ad1: ad1,
+        poster1: poster1,
       };
     },
     methods: {
@@ -42,7 +42,7 @@
           color: isRoute ? '#409eff' : '',
         };
       },
-      toAd1() {
+      toPoster1() {
         open('https://item.taobao.com/item.htm?id=665501436781');
       },
     },
@@ -75,7 +75,7 @@
           }
         }
 
-        .ad-list {
+        .poster-list {
           margin-top: 10px;
 
           .el-image {
