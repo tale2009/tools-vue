@@ -11,11 +11,9 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="24" v-if="false">
-        <div class="ad-rent">
-          <el-tooltip content="微信号：kooriookami" placement="top">
-            <span>广告位招租</span>
-          </el-tooltip>
+      <el-col :span="24">
+        <div class="ad-list">
+          <el-image :src="ad1" @click="toAd1" />
         </div>
       </el-col>
     </el-row>
@@ -24,12 +22,14 @@
 
 <script>
   import toolList from '@/assets/json/tool-list.json';
+  import ad1 from '@/assets/image/ad1.jpg';
 
   export default {
     name: 'AppLeft',
     data() {
       return {
         toolList: toolList,
+        ad1: ad1,
       };
     },
     methods: {
@@ -41,6 +41,9 @@
         return {
           color: isRoute ? '#409eff' : '',
         };
+      },
+      toAd1() {
+        open('https://item.taobao.com/item.htm?id=665501436781');
       },
     },
   };
@@ -72,17 +75,13 @@
           }
         }
 
-        .ad-rent {
+        .ad-list {
           margin-top: 10px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 90px;
-          border-radius: 8px;
-          color: white;
-          font-size: 16px;
-          font-weight: bold;
-          background-image: linear-gradient(135deg, #40efff, #4059ff);
+
+          .el-image {
+            cursor: pointer;
+            border-radius: 4px;
+          }
         }
       }
     }
