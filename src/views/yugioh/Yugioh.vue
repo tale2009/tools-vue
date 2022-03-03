@@ -433,6 +433,10 @@
     mounted() {
       this.getConfig();
       this.refreshFont();
+      this.$notify.warning({
+        title: '卡图加载异常说明',
+        message: '部分用户加载不出卡图，据统计大多为广东用户，目前原因不明。卡图是外网资源，有条件的用户建议使用梯子。',
+      });
     },
     methods: {
       getConfig() {
