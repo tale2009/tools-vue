@@ -29,7 +29,7 @@ app.mount('#app');
 
 store.commit('setStaticURL');
 const staticURL = store.state.staticURL;
-loadCSS(`${staticURL}/font/fontawesome-pro-6.0.0-beta2/css/all.css`);
+loadCSS(`${staticURL}/font/fontawesome-pro-6.1.0/css/all.css`);
 loadCSS(`${staticURL}/yugioh/font/ygo-font.css`);
 
 // 接口请求地址配置
