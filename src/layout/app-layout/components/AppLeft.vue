@@ -45,7 +45,7 @@
       toPoster1() {
         gtag('event', 'click', {
           event_category: 'ad',
-          event_label: 'shuangyi',
+          event_label: '霜灷',
           value: 1,
         });
         open('https://item.taobao.com/item.htm?id=665501436781');
