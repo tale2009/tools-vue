@@ -43,6 +43,11 @@
         };
       },
       toPoster1() {
+        gtag('event', 'click', {
+          event_category: 'ad',
+          event_label: 'shuangyi',
+          value: 1,
+        });
         open('https://item.taobao.com/item.htm?id=665501436781');
       },
     },
