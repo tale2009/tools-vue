@@ -43,11 +43,7 @@
         };
       },
       toPoster1() {
-        gtag('event', 'click', {
-          event_category: 'ad',
-          event_label: '霜灷',
-          value: 1,
-        });
+        gtag('event', '霜灷卡牌');
         open('https://item.taobao.com/item.htm?id=665501436781');
       },
     },
