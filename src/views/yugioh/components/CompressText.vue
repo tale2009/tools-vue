@@ -89,7 +89,7 @@
         let rubyWidth = ruby.offsetWidth;
         let rtWidth = rt.offsetWidth / that.textScale;
         if (rtWidth / rubyWidth < 0.95 && text.length > 1) {
-          const rtGap = 3.7;
+          const rtGap = 3;
           const widthPercent = Math.min(rtWidth / rubyWidth * rtGap * 100, 95);
           const leftPercent = (100 - widthPercent) / 2;
           // 拉伸两端对齐
