@@ -69,6 +69,7 @@
 
       .el-button--text {
         height: auto;
+        line-height: 1.7;
         padding: 0;
       }
     }

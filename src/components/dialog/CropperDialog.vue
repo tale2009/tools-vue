@@ -31,6 +31,7 @@
   export default {
     name: 'CropperDialog',
     props: ['modelValue', 'image'],
+    emits: ['get-data'],
     components: {
       VueCropper,
     },

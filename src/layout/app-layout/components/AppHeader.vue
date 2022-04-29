@@ -15,6 +15,7 @@
     <div class="header-right">
       <el-space :size="10">
         <i class="fab fa-github" @click="toGithub" />
+        <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
         <el-button type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
         <el-button type="text" @click="thankDialog = true">感谢</el-button>
         <el-button class="collapse-icon" type="text" @click="toggleFullscreen">
@@ -26,6 +27,7 @@
         </el-button>
       </el-space>
 
+      <QADialog v-model="qADialog" />
       <AboutDialog v-model="aboutDialog" />
       <ThankDialog v-model="thankDialog" />
     </div>
@@ -34,6 +36,7 @@
 
 <script>
   import screenfull from 'screenfull';
+  import QADialog from '@/components/dialog/QADialog';
   import AboutDialog from '@/components/dialog/AboutDialog';
   import ThankDialog from '@/components/dialog/ThankDialog';
   import { mapMutations, mapState } from 'vuex';
@@ -41,12 +44,14 @@
   export default {
     name: 'AppHeader',
     components: {
+      QADialog,
       AboutDialog,
       ThankDialog,
     },
     data() {
       return {
         isFullscreen: false,
+        qADialog: false,
         aboutDialog: false,
         thankDialog: false,
       };
