@@ -35,6 +35,10 @@
           <p class="q">游戏王卡片数据、卡图什么时候更新？</p>
           <p class="a">数据与卡图是三方资源，本人不参与维护，不确定更新时间。一般来说，新卡发布后卡图会陆续更新，请耐心等待。</p>
         </div>
+        <div class="q-a">
+          <p class="q">为什么浏览器有时候访问不了？</p>
+          <p class="a">网页更新后，浏览器存在旧资源缓存。可以使用 Ctrl + F5 强制刷新页面。</p>
+        </div>
       </el-scrollbar>
     </div>
     <template #footer>

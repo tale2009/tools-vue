@@ -2,7 +2,7 @@
   <el-dialog
     title="一键注音"
     :model-value="modelValue"
-    width="500px"
+    width="800px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
@@ -12,14 +12,29 @@
       :model="form"
       label-position="top"
     >
-      <el-form-item label="注音只支持 OCG 常用语" prop="text">
-        <el-input
-          v-model="form.text"
-          type="textarea"
-          :autosize="{minRows: 3}"
-          placeholder="请输入文本"
-        />
-      </el-form-item>
+      <el-row :gutter="gutter">
+        <el-col :span="12">
+          <el-form-item label="注音只支持 OCG 常用语" prop="text">
+            <el-input
+              v-model="form.text"
+              type="textarea"
+              :autosize="{minRows: 6}"
+              placeholder="请输入文本"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="常用注音表（点击可插入）" prop="filter">
+            <el-input v-model="form.filter" clearable placeholder="请输入筛选文字" />
+            <div class="kanji-kana-list">
+              <el-scrollbar :max-height="400">
+                <p v-for="(v,k) in filteredKanjiKanaMap" @click="addKanjiKana(v)">{{ k }}：{{ v }}</p>
+              </el-scrollbar>
+            </div>
+            <el-empty v-if="!Object.keys(filteredKanjiKanaMap).length" style="width: 100%" />
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <template #footer>
       <el-button plain @click="closeDialog">关闭</el-button>
@@ -29,13 +44,17 @@
 </template>
 
 <script>
+  import kanjiKanaMap from '@/assets/json/kanji-kana.json';
+
   export default {
     name: 'KanjiKanaDialog',
     props: ['modelValue'],
     data() {
       return {
+        gutter: 20,
         form: {
           text: '',
+          filter: '',
         },
       };
     },
@@ -47,10 +66,39 @@
       addKana() {
         this.form.text = this.kanjiToKana(this.form.text);
       },
+      addKanjiKana(value) {
+        this.form.text += value;
+      },
+    },
+    computed: {
+      filteredKanjiKanaMap() {
+        const filter = this.form.filter.trim();
+        if (filter) {
+          const map = {};
+          const list = Object.keys(kanjiKanaMap).filter(value => value.includes(filter));
+          list.forEach(value => {
+            map[value] = kanjiKanaMap[value];
+          });
+          return map;
+        }
+        return kanjiKanaMap;
+      },
     },
   };
 </script>
 
 <style lang="scss" scoped>
+  .kanji-kana-list {
+    font-size: 14px;
 
+    p {
+      line-height: 1.7;
+      margin: 10px 0;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
 </style>

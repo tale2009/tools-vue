@@ -17,7 +17,6 @@ export default createStore({
     },
     setStaticURL(state) {
       const mysteryCode = localStorage.getItem('mystery-code') || '';
-      // 防君子不防小人
       const prefix = md5(mysteryCode) === '21232f297a57a5a743894a0e4a801fc3' ? '' : 'v-';
       if (!prefix) {
         setTimeout(() => {
