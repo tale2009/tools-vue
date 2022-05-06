@@ -714,13 +714,13 @@
           height: 32px;
           margin-right: 10px;
           margin-bottom: 10px;
-          border: 1px solid $border-color;
+          border: 1px solid var(--border-color);
           border-radius: 4px;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          color: $placeholder-color;
+          color: var(--placeholder-color);
           font-size: 18px;
         }
       }

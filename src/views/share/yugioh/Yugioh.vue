@@ -161,7 +161,7 @@
       right: 0;
 
       .el-alert {
-        background: $primary-color;
+        background: var(--primary-color);
       }
     }
   }

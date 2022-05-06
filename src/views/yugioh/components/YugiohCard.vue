@@ -436,11 +436,11 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../style/sc";
-  @import "../style/tc";
-  @import "../style/jp";
-  @import "../style/kr";
-  @import "../style/en";
+  @use "../style/sc" as *;
+  @use "../style/tc" as *;
+  @use "../style/jp" as *;
+  @use "../style/kr" as *;
+  @use "../style/en" as *;
 
   .yugioh-card {
     width: 1393px;
@@ -513,7 +513,7 @@
           justify-content: center;
           align-items: center;
           font-size: 120px;
-          color: $normal-color;
+          color: var(--normal-color);
         }
       }
     }

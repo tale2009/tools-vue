@@ -32,13 +32,6 @@ export default defineConfig({
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'], // 扩展了.vue后缀
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import './src/styles/variable.scss';`,
-      },
-    },
-  },
   server: {
     host: '0.0.0.0',
     port: 8010,

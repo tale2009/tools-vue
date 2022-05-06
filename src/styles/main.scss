@@ -1,4 +1,4 @@
-@import "variable";
+@use "variable" as *;
 
 // dialog样式
 .el-dialog {

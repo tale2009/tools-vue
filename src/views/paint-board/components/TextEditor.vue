@@ -92,7 +92,7 @@
     textarea {
       display: block;
       white-space: nowrap;
-      border: 1px dashed $primary-color;
+      border: 1px dashed var(--primary-color);
       padding: 5px;
       outline: none;
       line-height: 1.5;

@@ -59,7 +59,7 @@
       height: 100%;
       width: 400px;
       flex-shrink: 0;
-      border-left: 1px solid $border-color;
+      border-left: 1px solid var(--border-color);
       transition: all 0.3s;
     }
   }

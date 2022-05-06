@@ -28,7 +28,7 @@
       padding: 30px 20px;
       font-size: 18px;
       font-weight: bold;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid var(--border-color);
 
       .form-title {
         display: flex;
@@ -40,7 +40,7 @@
         margin-top: 20px;
         font-size: 12px;
         font-weight: normal;
-        color: $info-color;
+        color: var(--info-color);
       }
     }
 
@@ -51,7 +51,7 @@
         .el-form-item {
           .tip {
             margin-left: 10px;
-            color: $normal-color;
+            color: var(--normal-color);
           }
 
           & > .el-input, .el-cascader, .el-select, .el-date-editor, .el-autocomplete {

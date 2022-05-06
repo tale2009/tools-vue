@@ -6,6 +6,7 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import 'normalize.css';
+import '@/styles/main.scss';
 import '@/router/router-hooks';
 import httpService from './plugins/http-service';
 import dayjs from 'dayjs';
