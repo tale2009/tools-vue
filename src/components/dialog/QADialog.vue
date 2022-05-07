@@ -11,7 +11,7 @@
           <p class="q">如何使用这个网站？</p>
           <p class="a">
             可以参考
-            <el-button type="text" @click="toCourse">B站文集</el-button>
+            <el-link type="primary" :underline="false" @click="toCourse">B站文集</el-link>
             ，评论区回答也可以多留意。
           </p>
         </div>
@@ -77,10 +77,8 @@
         line-height: 1.7;
         margin: 10px 0;
 
-        .el-button--text {
-          height: auto;
-          line-height: 1.7;
-          padding: 0;
+        .el-link {
+          vertical-align: top;
         }
       }
 

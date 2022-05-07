@@ -14,8 +14,8 @@
     "axios": "^0.27.2",
     "blueimp-load-image": "^5.16.0",
     "color": "^4.2.3",
-    "dayjs": "^1.11.1",
-    "element-plus": "^2.1.11",
+    "dayjs": "^1.11.2",
+    "element-plus": "npm:@element-plus/nightly@^0.0.20220506",
     "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
@@ -25,16 +25,16 @@
     "screenfull": "^6.0.1",
     "vue": "^3.2.33",
     "vue-cropperjs": "^5.0.0",
-    "vue-router": "^4.0.14",
+    "vue-router": "^4.0.15",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.1",
-    "eslint": "^8.14.0",
+    "@vitejs/plugin-vue": "^2.3.2",
+    "eslint": "^8.15.0",
     "eslint-define-config": "^1.4.0",
     "eslint-plugin-vue": "^8.7.1",
     "sass": "^1.51.0",
-    "vite": "^2.9.6",
+    "vite": "^2.9.8",
     "vite-plugin-compression": "^0.5.1"
   },
   "browserslist": [

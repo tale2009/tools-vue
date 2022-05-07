@@ -13,19 +13,19 @@
         <el-popover width="400" trigger="hover">
           <el-image :src="aliQr" />
           <template #reference>
-            <el-button type="text">支付宝</el-button>
+            <el-link type="primary" :underline="false">支付宝</el-link>
           </template>
         </el-popover>
         <el-popover width="400" trigger="hover">
           <el-image :src="wxQr" />
           <template #reference>
-            <el-button type="text">微信</el-button>
+            <el-link type="primary" :underline="false">微信</el-link>
           </template>
         </el-popover>
       </p>
       <p>
         使用教程：
-        <el-button type="text" @click="toCourse">B站文集</el-button>
+        <el-link type="primary" :underline="false" @click="toCourse">B站文集</el-link>
       </p>
       <p>更新时间：{{ formatTime(config.updateTime) }}</p>
     </div>
@@ -67,10 +67,9 @@
       line-height: 1.7;
       margin: 10px 0;
 
-      .el-button--text {
-        height: auto;
-        line-height: 1.7;
-        padding: 0;
+      .el-link {
+        margin-right: 10px;
+        vertical-align: top;
       }
     }
   }

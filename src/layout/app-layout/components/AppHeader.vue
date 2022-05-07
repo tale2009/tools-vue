@@ -1,30 +1,50 @@
 <template>
   <div class="app-header-container">
     <div class="header-left">
-      <el-button class="collapse-icon" type="text" @click="setLeftCollapse(!leftCollapse)">
+      <el-link
+        class="collapse-icon"
+        type="primary"
+        :underline="false"
+        @click="setLeftCollapse(!leftCollapse)"
+      >
         <i class="fa-light fa-arrow-to-left" :style="leftCollapseIconStyle" />
-      </el-button>
+      </el-link>
     </div>
 
     <div class="header-center">
-      <el-button class="mystery-icon" type="text" @dblclick="openMysteryBox">
+      <el-link
+        class="mystery-icon"
+        type="primary"
+        :underline="false"
+        @dblclick="openMysteryBox"
+      >
         <i class="fa-light fa-dog" />
-      </el-button>
+      </el-link>
     </div>
 
     <div class="header-right">
       <el-space :size="10">
         <i class="fab fa-github" @click="toGithub" />
         <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
-        <el-button type="text" @click="aboutDialog = true">关于 & 赞助</el-button>
-        <el-button type="text" @click="thankDialog = true">感谢</el-button>
-        <el-button class="collapse-icon" type="text" @click="toggleFullscreen">
+        <el-link type="primary" :underline="false" @click="aboutDialog = true">关于 & 赞助</el-link>
+        <el-link type="primary" :underline="false" @click="thankDialog = true">感谢</el-link>
+        <el-link
+          class="collapse-icon"
+          type="primary"
+          :underline="false"
+          @click="toggleFullscreen"
+        >
           <i v-if="!isFullscreen" class="fa-light fa-expand" />
           <i v-else class="fa-light fa-compress" />
-        </el-button>
-        <el-button class="collapse-icon" type="text" @click="setRightCollapse(!rightCollapse)">
+        </el-link>
+        <el-link
+          class="collapse-icon"
+          type="primary"
+          :underline="false"
+          @click="setRightCollapse(!rightCollapse)"
+        >
           <i class="fa-light fa-arrow-to-right" :style="rightCollapseIconStyle" />
-        </el-button>
+        </el-link>
       </el-space>
 
       <QADialog v-model="qADialog" />
