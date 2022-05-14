@@ -1,25 +1,19 @@
 <template>
-  <div v-compress-text class="compress-text">
-    <template v-for="item in textList">
-      <span
-        v-if="typeof item === 'object'"
-        class="ruby"
-        :class="{'text-gradient': gradient}"
-        :style="textStyle"
-        :data-card-name="item.ruby"
-      >
+  <div v-compress-text class="compress-text" :style="textStyle">
+    <!--非渐变色文本-->
+    <span v-for="item in textList">
+      <span v-if="typeof item === 'object'" class="ruby">
         <span>{{ item.ruby }}</span>
         <span v-compress-rt class="rt">{{ item.rt }}</span>
       </span>
-      <span
-        v-else
-        v-no-compress="noCompressText.includes(item)"
-        class="ruby"
-        :class="{'text-gradient': gradient}"
-        :style="textStyle"
-        :data-card-name="item"
-      >{{ item }}</span>
-    </template>
+      <span v-else v-no-compress="noCompressText.includes(item)" class="ruby">{{ item }}</span>
+    </span>
+    <!--渐变色文本（依赖于非渐变色文本的压缩）-->
+    <span v-if="gradient" class="text-gradient">
+      <span class="gradient" :style="gradientStyle">{{ textRuby }}</span>
+      <span class="reflection">{{ textRuby }}</span>
+      <span class="shadow">{{ textRuby }}</span>
+    </span>
   </div>
 </template>
 
@@ -46,7 +40,18 @@
             return value;
           });
       },
+      textRuby() {
+        return this.text.replace(/\[(.*?)\(.*?\)]/g, '$1');
+      },
       textStyle() {
+        if (this.gradient) {
+          return {
+            color: 'transparent',
+          };
+        }
+        return {};
+      },
+      gradientStyle() {
         if (this.gradient) {
           const color1 = this.gradientColor1 || '#999999';
           const color2 = this.gradientColor2 || '#ffffff';
@@ -175,6 +180,7 @@
 <style lang="scss" scoped>
   .compress-text {
     transform-origin: 0 0;
+    position: relative;
 
     .ruby {
       position: relative;
@@ -195,14 +201,22 @@
     }
 
     .text-gradient {
-      display: inline-block;
-      position: relative;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
 
-      // 反光
-      &:before {
-        content: attr(data-card-name);
+      .gradient {
+        position: absolute;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+      }
+
+      .reflection {
         position: absolute;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -211,17 +225,20 @@
         animation: gradient-reflection 3s ease infinite;
         top: 0;
         left: 0;
+        right: 0;
+        z-index: 20;
       }
 
-      // 阴影
-      &:after {
-        content: attr(data-card-name);
+      .shadow {
         position: absolute;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         -webkit-text-stroke: 6px rgba(0, 0, 0, 0.6);
         text-shadow: 3px 5px 1px rgba(0, 0, 0, 0.6);
-        z-index: -10;
         top: 0;
         left: 0;
+        right: 0;
+        z-index: 0;
       }
     }
   }
