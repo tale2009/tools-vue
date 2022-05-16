@@ -134,9 +134,9 @@
       updateScale() {
         const width = this.form.width;
         if (width) {
-          this.form.scale = width / 1393;
+          this.form.scale = width / 1394;
         } else {
-          this.form.scale = Math.min((document.body.offsetWidth / 1393), 1);
+          this.form.scale = Math.min((document.body.offsetWidth / 1394), 1);
         }
       },
     },

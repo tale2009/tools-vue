@@ -12,7 +12,7 @@
         :gradient-color1="data.gradientColor1"
         :gradient-color2="data.gradientColor2"
         :refresh-key="refreshKey"
-        :width="1030"
+        :width="1033"
         :height="200"
       />
     </div>
@@ -51,9 +51,8 @@
       </el-image>
     </div>
 
-    <div class="card-mask" :style="maskStyle">
-      <el-image v-if="data.type === 'pendulum'" :src="baseImage + '/card-mask-pendulum.png'" fit="cover" />
-      <el-image v-else :src="baseImage + '/card-mask.png'" fit="cover" />
+    <div v-if="data.type === 'pendulum'" class="pendulum-mask">
+      <el-image :src="baseImage + '/card-mask-pendulum.png'" fit="cover" />
     </div>
 
     <div v-if="data.type === 'pendulum'" class="left-pendulum">
@@ -78,23 +77,23 @@
     </div>
 
     <div v-if="data.type === 'monster' && data.cardType === 'link'" class="link-arrow">
-      <el-image v-show="data.arrowList.includes(1)" :src="baseImage + '/arrow-up-on.png'" style="top: 293px;left: 569px" />
-      <el-image v-show="data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-on.png'" style="top: 313px;left: 1141px" />
-      <el-image v-show="data.arrowList.includes(3)" :src="baseImage + '/arrow-right-on.png'" style="top: 774px;left: 1221px" />
-      <el-image v-show="data.arrowList.includes(4)" :src="baseImage + '/arrow-right-down-on.png'" style="top: 1347px;left: 1141px" />
-      <el-image v-show="data.arrowList.includes(5)" :src="baseImage + '/arrow-down-on.png'" style="top: 1427px;left: 569px" />
-      <el-image v-show="data.arrowList.includes(6)" :src="baseImage + '/arrow-left-down-on.png'" style="top: 1347px;left: 109px" />
-      <el-image v-show="data.arrowList.includes(7)" :src="baseImage + '/arrow-left-on.png'" style="top: 774px;left: 88px" />
-      <el-image v-show="data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-on.png'" style="top: 313px;left: 109px" />
+      <el-image v-show="data.arrowList.includes(1)" :src="baseImage + '/arrow-up-on.png'" style="top: 278px;left: 555px" />
+      <el-image v-show="data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-on.png'" style="top: 299px;left: 1130px" />
+      <el-image v-show="data.arrowList.includes(3)" :src="baseImage + '/arrow-right-on.png'" style="top: 761px;left: 1223px" />
+      <el-image v-show="data.arrowList.includes(4)" :src="baseImage + '/arrow-right-down-on.png'" style="top: 1336px;left: 1130px" />
+      <el-image v-show="data.arrowList.includes(5)" :src="baseImage + '/arrow-down-on.png'" style="top: 1428px;left: 555px" />
+      <el-image v-show="data.arrowList.includes(6)" :src="baseImage + '/arrow-left-down-on.png'" style="top: 1336px;left: 95px" />
+      <el-image v-show="data.arrowList.includes(7)" :src="baseImage + '/arrow-left-on.png'" style="top: 758px;left: 71px" />
+      <el-image v-show="data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-on.png'" style="top: 299px;left: 95px" />
 
-      <el-image v-show="!data.arrowList.includes(1)" :src="baseImage + '/arrow-up-off.png'" style="top: 293px;left: 569px" />
-      <el-image v-show="!data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-off.png'" style="top: 313px;left: 1141px" />
-      <el-image v-show="!data.arrowList.includes(3)" :src="baseImage + '/arrow-right-off.png'" style="top: 774px;left: 1221px" />
-      <el-image v-show="!data.arrowList.includes(4)" :src="baseImage + '/arrow-right-down-off.png'" style="top: 1347px;left: 1141px" />
-      <el-image v-show="!data.arrowList.includes(5)" :src="baseImage + '/arrow-down-off.png'" style="top: 1427px;left: 569px" />
-      <el-image v-show="!data.arrowList.includes(6)" :src="baseImage + '/arrow-left-down-off.png'" style="top: 1347px;left: 109px" />
-      <el-image v-show="!data.arrowList.includes(7)" :src="baseImage + '/arrow-left-off.png'" style="top: 771px;left: 87px" />
-      <el-image v-show="!data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-off.png'" style="top: 313px;left: 109px" />
+      <el-image v-show="!data.arrowList.includes(1)" :src="baseImage + '/arrow-up-off.png'" style="top: 278px;left: 555px" />
+      <el-image v-show="!data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-off.png'" style="top: 299px;left: 1130px" />
+      <el-image v-show="!data.arrowList.includes(3)" :src="baseImage + '/arrow-right-off.png'" style="top: 761px;left: 1223px" />
+      <el-image v-show="!data.arrowList.includes(4)" :src="baseImage + '/arrow-right-down-off.png'" style="top: 1336px;left: 1130px" />
+      <el-image v-show="!data.arrowList.includes(5)" :src="baseImage + '/arrow-down-off.png'" style="top: 1428px;left: 555px" />
+      <el-image v-show="!data.arrowList.includes(6)" :src="baseImage + '/arrow-left-down-off.png'" style="top: 1336px;left: 95px" />
+      <el-image v-show="!data.arrowList.includes(7)" :src="baseImage + '/arrow-left-off.png'" style="top: 758px;left: 71px" />
+      <el-image v-show="!data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-off.png'" style="top: 299px;left: 95px" />
     </div>
 
     <div v-card-description class="card-description">
@@ -228,7 +227,7 @@
           transform: `scale(${this.data.scale})`,
           background: background,
           borderRadius: this.data.radius ? '24px' : '',
-          marginRight: `${(this.data.scale - 1) * 1393}px`,
+          marginRight: `${(this.data.scale - 1) * 1394}px`,
           marginBottom: `${(this.data.scale - 1) * 2031}px`,
           '--descriptionZoom': this.data.descriptionZoom,
         };
@@ -313,9 +312,9 @@
       levelStyle() {
         let right;
         if (this.data.level < 13) {
-          right = '146px';
+          right = '147px';
         } else {
-          right = '100px';
+          right = '101px';
         }
         return {
           right: right,
@@ -335,15 +334,15 @@
       imageStyle() {
         let left, top, width, height;
         if (this.data.type === 'pendulum') {
-          left = '96px';
-          top = '367px';
-          width = '1201px';
-          height = '1201px';
+          left = '93px';
+          top = '364px';
+          width = '1204px';
+          height = '1204px';
         } else {
           left = '171px';
           top = '376px';
-          width = '1051px';
-          height = '1051px';
+          width = '1052px';
+          height = '1052px';
         }
         return {
           left: left,
@@ -352,24 +351,10 @@
           height: height,
         };
       },
-      maskStyle() {
-        let left, top;
-        if (this.data.type === 'pendulum') {
-          left = '81px';
-          top = '1254px';
-        } else {
-          left = '168px';
-          top = '373px';
-        }
-        return {
-          left: left,
-          top: top,
-        };
-      },
       packageStyle() {
         let top, left, right;
         if (this.data.type === 'pendulum') {
-          top = '1854px';
+          top = '1859px';
           left = '116px';
         } else if (this.data.type === 'monster' && this.data.cardType === 'link') {
           top = '1455px';
@@ -443,7 +428,7 @@
   @use "../style/en" as *;
 
   .yugioh-card {
-    width: 1393px;
+    width: 1394px;
     height: 2031px;
     display: inline-flex;
     text-align: left;
@@ -466,16 +451,16 @@
 
     .card-attribute {
       position: absolute;
-      left: 1159px;
+      left: 1163px;
       top: 96px;
     }
 
     .card-level {
       position: absolute;
-      top: 250px;
+      top: 247px;
 
       .el-image {
-        margin-left: 3px;
+        margin-left: 4px;
       }
     }
 
@@ -518,8 +503,10 @@
       }
     }
 
-    .card-mask {
+    .pendulum-mask {
       position: absolute;
+      left: 80px;
+      top: 1250px;
       z-index: 10;
     }
 
@@ -586,7 +573,7 @@
 
     .card-atk {
       position: absolute;
-      right: 394px;
+      right: 397px;
       top: 1844px;
       font-family: ygo-atk-def, serif;
       font-size: 62px;
@@ -596,7 +583,7 @@
 
     .card-def {
       position: absolute;
-      right: 122px;
+      right: 114px;
       top: 1844px;
       font-family: ygo-atk-def, serif;
       font-size: 62px;
@@ -606,7 +593,7 @@
 
     .card-link {
       position: absolute;
-      right: 124px;
+      right: 120px;
       top: 1854px;
       font-family: ygo-link, serif;
       font-size: 44px;
@@ -619,7 +606,7 @@
     .card-password {
       position: absolute;
       left: 66px;
-      top: 1929px;
+      top: 1932px;
       font-family: ygo-password, serif;
       font-size: 40px;
       z-index: 20;
