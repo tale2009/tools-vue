@@ -325,7 +325,7 @@
         if (this.data.rank < 13) {
           left = '147px';
         } else {
-          left = '100px';
+          left = '101px';
         }
         return {
           left: left,
@@ -466,10 +466,10 @@
 
     .card-rank {
       position: absolute;
-      top: 250px;
+      top: 247px;
 
       .el-image {
-        margin-right: 3px;
+        margin-right: 4px;
       }
     }
 

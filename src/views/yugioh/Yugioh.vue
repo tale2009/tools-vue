@@ -6,7 +6,7 @@
       </template>
 
       <template #form>
-        <PageForm description="最大尺寸 1394 px * 2031 px，卡模素材 by 怀特索尔">
+        <PageForm description="最大尺寸 1394 px * 2031 px，卡模素材 by 白羽幸鳥">
           <template #title>
             <span>游戏王卡片生成器</span>
             <el-tooltip :content="`数据库同步时间：${formatTime(config.updateTime)}`" placement="top">
