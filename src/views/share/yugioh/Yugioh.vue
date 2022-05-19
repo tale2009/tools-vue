@@ -33,6 +33,7 @@
           gradientColor2: '#ffffff',
           gradientPreset: 'silver',
           descriptionZoom: 1,
+          rare: '',
           radius: true,
           scale: 0.5,
           // 更多字段参照：@/views/yugioh/Yugioh.vue
@@ -46,6 +47,7 @@
       this.form.language = query.language || 'sc';
       this.form.gradient = query.gradient === 'true';
       this.form.gradientPreset = query.gradientPreset || 'silver';
+      this.form.rare = query.rare || '';
       this.form.radius = query.radius !== 'false';
       this.form.width = query.width || '';
       this.updateScale();
@@ -90,7 +92,7 @@
           this.form.gradientColor1 = '#ffffff';
           this.form.gradientColor2 = '#ffffff';
         } else if (value === 'black') {
-          this.form.gradientColor1 = '#000000';
+          this.form.gradientColor1 = '#333333';
           this.form.gradientColor2 = '#999999';
         } else if (value === 'blue') {
           this.form.gradientColor1 = '#009999';

@@ -265,6 +265,15 @@
                 <el-option label="©1996 KAZUKI TAKAHASHI" value="en" />
               </el-select>
             </el-form-item>
+            <el-form-item label="罕贵">
+              <el-select
+                v-model="form.rare"
+                placeholder="请选择罕贵"
+                clearable
+              >
+                <el-option label="PSER" value="pser" />
+              </el-select>
+            </el-form-item>
             <el-row :gutter="gutter">
               <el-col :span="8">
                 <el-form-item label="角标">
@@ -401,6 +410,7 @@
           password: '',
           copyright: '',
           laser: false,
+          rare: '',
           radius: true,
           cardBack: false,
           scale: 0.5,
@@ -481,7 +491,7 @@
           this.form.gradientColor1 = '#ffffff';
           this.form.gradientColor2 = '#ffffff';
         } else if (value === 'black') {
-          this.form.gradientColor1 = '#000000';
+          this.form.gradientColor1 = '#333333';
           this.form.gradientColor2 = '#999999';
         } else if (value === 'blue') {
           this.form.gradientColor1 = '#009999';
@@ -607,6 +617,7 @@
             language: this.form.language,
             gradient: this.form.gradient,
             gradientPreset: this.form.gradientPreset,
+            rare: this.form.rare,
             radius: this.form.radius,
           },
         });

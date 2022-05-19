@@ -56,7 +56,7 @@
           const color1 = this.gradientColor1 || '#999999';
           const color2 = this.gradientColor2 || '#ffffff';
           return {
-            backgroundImage: `-webkit-linear-gradient(top, ${color1}, ${color2}, ${color1})`,
+            backgroundImage: `-webkit-linear-gradient(top, ${color1} 0%, ${color2} 40%, ${color2} 55%, ${color1} 60%, ${color2} 75%)`,
           };
         }
         return {};

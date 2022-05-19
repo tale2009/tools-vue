@@ -168,6 +168,10 @@
     <div v-if="data.laser" class="card-laser">
       <el-image :src="baseImage + '/laser.png'" />
     </div>
+
+    <div v-if="data.rare" class="card-rare">
+      <el-image :src="rareSrc" />
+    </div>
   </div>
 </template>
 
@@ -334,10 +338,10 @@
       imageStyle() {
         let left, top, width, height;
         if (this.data.type === 'pendulum') {
-          left = '93px';
-          top = '364px';
-          width = '1204px';
-          height = '1204px';
+          left = '94px';
+          top = '366px';
+          width = '1206px';
+          height = '1206px';
         } else {
           left = '171px';
           top = '376px';
@@ -396,6 +400,10 @@
       copyrightSrc() {
         let color = this.data.type === 'monster' && this.data.cardType === 'xyz' ? 'white' : 'black';
         return `${this.baseImage}/copyright-${this.data.copyright}-${color}.svg`;
+      },
+      rareSrc() {
+        const suffix = this.data.type === 'pendulum' ? '-pendulum' : '';
+        return `${this.baseImage}/rare-${this.data.rare}${suffix}.png`;
       },
       cardName() {
         return this.data.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
@@ -505,8 +513,8 @@
 
     .pendulum-mask {
       position: absolute;
-      left: 80px;
-      top: 1250px;
+      left: 60px;
+      top: 335px;
       z-index: 10;
     }
 
@@ -624,6 +632,14 @@
       left: 1276px;
       top: 1913px;
       z-index: 20;
+    }
+
+    .card-rare {
+      position: absolute;
+      mix-blend-mode: lighten;
+      top: 0;
+      left: 0;
+      z-index: 30;
     }
 
     &.card-back {
