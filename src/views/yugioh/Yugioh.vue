@@ -245,7 +245,12 @@
                   <span>搜索</span>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item v-for="item in languageList" @click="searchCardByPassword(item.value)">{{ item.label }}</el-dropdown-item>
+                      <el-dropdown-item
+                        v-for="item in languageList.filter(item => item.value !== 'astral')"
+                        @click="searchCardByPassword(item.value)"
+                      >
+                        {{ item.label }}
+                      </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
