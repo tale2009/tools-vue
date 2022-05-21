@@ -11,7 +11,6 @@ import '@/router/router-hooks';
 import httpService from './plugins/http-service';
 import dayjs from 'dayjs';
 import base from '@/plugins/base';
-import yugiohPlugin from '@/plugins/yugioh-plugin';
 import { loadCSS } from '@/utils';
 
 const app = createApp(App);
@@ -23,7 +22,6 @@ app.use(ElementPlus, {
 });
 app.use(httpService);
 app.use(base);
-app.use(yugiohPlugin);
 app.use(router);
 app.use(store);
 app.mount('#app');

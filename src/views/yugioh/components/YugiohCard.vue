@@ -139,22 +139,27 @@
     </div>
 
     <div class="atk-def-link">
-      <el-image v-if="(data.type === 'monster' && data.cardType!=='link') || data.type === 'pendulum'" :src="baseImage + '/atk-def.svg'" />
-      <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="baseImage + '/atk-link.svg'" />
+      <template v-if="['monster', 'pendulum'].includes(data.type) && data.language === 'astral'">
+        <el-image :src="baseImage + '/atk-def-astral.svg'" />
+      </template>
+      <template v-else>
+        <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="baseImage + '/atk-def.svg'" />
+        <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="baseImage + '/atk-link.svg'" />
+      </template>
     </div>
 
-    <div v-if="['monster','pendulum'].includes(data.type)" class="card-atk">
-      <span v-if="data.atk >= 0">{{ data.atk }}</span>
+    <div v-if="['monster','pendulum'].includes(data.type)" class="card-atk" :style="atkStyle">
+      <span v-if="data.atk >= 0">{{ data.language === 'astral' ? numberToFull(data.atk) : data.atk }}</span>
       <span v-else-if="data.atk === -1">?</span>
     </div>
 
-    <div v-if="(data.type === 'monster' && data.cardType!=='link') || data.type === 'pendulum'" class="card-def">
-      <span v-if="data.def >= 0">{{ data.def }}</span>
+    <div v-if="(data.type === 'monster' && data.cardType!=='link') || data.type === 'pendulum'" class="card-def" :style="defStyle">
+      <span v-if="data.def >= 0">{{ data.language === 'astral' ? numberToFull(data.def) : data.def }}</span>
       <span v-else-if="data.def === -1">?</span>
     </div>
 
-    <div v-if="data.type === 'monster' && data.cardType === 'link'" class="card-link">
-      <span>{{ data.arrowList.length }}</span>
+    <div v-if="data.type === 'monster' && data.cardType === 'link'" class="card-link" :style="linkStyle">
+      <span>{{ data.language === 'astral' ? numberToFull(data.arrowList.length) : data.arrowList.length }}</span>
     </div>
 
     <div class="card-password" :style="passwordStyle">
@@ -178,6 +183,7 @@
 <script>
   import { mapState } from 'vuex';
   import CompressText from '@/views/yugioh/components/CompressText';
+  import { numberToFull } from '@/views/yugioh/yugioh';
 
   export default {
     name: 'YugiohCard',
@@ -191,6 +197,7 @@
       };
     },
     methods: {
+      numberToFull,
       // 获取最后一行效果的压缩高度
       getLastDescriptionHeight() {
         let lastDescription = document.querySelector('.last-description');
@@ -253,6 +260,8 @@
           suffix = '-kr';
         } else if (this.data.language === 'en') {
           suffix = '-en';
+        } else if (this.data.language === 'astral') {
+          suffix = '-astral';
         }
         if (['monster', 'pendulum'].includes(this.data.type)) {
           return `${this.baseImage}/attribute-${this.data.attribute}${suffix}.png`;
@@ -291,6 +300,12 @@
             name = 'Spell Card';
           } else if (this.data.type === 'trap') {
             name = 'Trap Card';
+          }
+        } else if (this.data.language === 'astral') {
+          if (this.data.type === 'spell') {
+            name = 'まほうカード';
+          } else if (this.data.type === 'trap') {
+            name = 'トラップカード';
           }
         }
         return name;
@@ -386,6 +401,78 @@
           fontFamily: fontFamily,
         };
       },
+      atkStyle() {
+        let top, right, fontFamily, fontSize, letterSpacing;
+        if (this.data.language === 'astral') {
+          top = '1847px';
+          right = '496px';
+          fontFamily = 'ygo-astral, serif';
+          fontSize = '49px';
+          letterSpacing = '0';
+        } else {
+          top = '1844px';
+          right = '397px';
+          fontFamily = 'ygo-atk-def, serif';
+          fontSize = '62px';
+          letterSpacing = '2px';
+        }
+        return {
+          top,
+          right,
+          fontFamily,
+          fontSize,
+          letterSpacing,
+        };
+      },
+      defStyle() {
+        let top, right, fontFamily, fontSize, letterSpacing;
+        if (this.data.language === 'astral') {
+          top = '1847px';
+          right = '115px';
+          fontFamily = 'ygo-astral, serif';
+          fontSize = '49px';
+          letterSpacing = '0';
+        } else {
+          top = '1844px';
+          right = '114px';
+          fontFamily = 'ygo-atk-def, serif';
+          fontSize = '62px';
+          letterSpacing = '2px';
+        }
+        return {
+          top,
+          right,
+          fontFamily,
+          fontSize,
+          letterSpacing,
+        };
+      },
+      linkStyle() {
+        let top, right, fontFamily, fontSize, letterSpacing, transform;
+        if (this.data.language === 'astral') {
+          top = '1847px';
+          right = '115px';
+          fontFamily = 'ygo-astral, serif';
+          fontSize = '49px';
+          letterSpacing = '0';
+          transform = '';
+        } else {
+          top = '1854px';
+          right = '120px';
+          fontFamily = 'ygo-link, serif';
+          fontSize = '44px';
+          letterSpacing = '2px';
+          transform = 'scaleX(1.3)';
+        }
+        return {
+          top,
+          right,
+          fontFamily,
+          fontSize,
+          letterSpacing,
+          transform,
+        };
+      },
       passwordStyle() {
         return {
           color: this.data.type === 'monster' && this.data.cardType === 'xyz' ? 'white' : 'black',
@@ -434,6 +521,7 @@
   @use "../style/jp" as *;
   @use "../style/kr" as *;
   @use "../style/en" as *;
+  @use "../style/astral" as *;
 
   .yugioh-card {
     width: 1394px;
@@ -581,33 +669,17 @@
 
     .card-atk {
       position: absolute;
-      right: 397px;
-      top: 1844px;
-      font-family: ygo-atk-def, serif;
-      font-size: 62px;
-      letter-spacing: 2px;
       z-index: 20;
     }
 
     .card-def {
       position: absolute;
-      right: 114px;
-      top: 1844px;
-      font-family: ygo-atk-def, serif;
-      font-size: 62px;
-      letter-spacing: 2px;
       z-index: 20;
     }
 
     .card-link {
       position: absolute;
-      right: 120px;
-      top: 1854px;
-      font-family: ygo-link, serif;
-      font-size: 44px;
-      transform: scaleX(1.3);
       transform-origin: 50% 50%;
-      letter-spacing: 2px;
       z-index: 20;
     }
 

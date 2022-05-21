@@ -45,6 +45,7 @@
 
 <script>
   import kanjiKanaMap from '@/assets/json/kanji-kana.json';
+  import { kanjiToKana } from '@/views/yugioh/yugioh';
 
   export default {
     name: 'KanjiKanaDialog',
@@ -64,7 +65,7 @@
         this.$emit('update:modelValue', false);
       },
       addKana() {
-        this.form.text = this.kanjiToKana(this.form.text);
+        this.form.text = kanjiToKana(this.form.text);
       },
       addKanjiKana(value) {
         this.form.text += value;

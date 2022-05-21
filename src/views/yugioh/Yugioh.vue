@@ -75,9 +75,9 @@
             <el-form-item label="类型">
               <el-radio-group v-model="form.type" @change="changeType">
                 <el-radio-button label="monster">怪兽</el-radio-button>
-                <el-radio-button label="spell">魔法</el-radio-button>
-                <el-radio-button label="trap">陷阱</el-radio-button>
-                <el-radio-button label="pendulum">灵摆</el-radio-button>
+                <el-radio-button label="spell" :disabled="form.language === 'astral'">魔法</el-radio-button>
+                <el-radio-button label="trap" :disabled="form.language === 'astral'">陷阱</el-radio-button>
+                <el-radio-button label="pendulum" :disabled="form.language === 'astral'">灵摆</el-radio-button>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="['monster','pendulum'].includes(form.type)" label="属性">
@@ -86,9 +86,9 @@
                 <el-radio-button label="light">光</el-radio-button>
                 <el-radio-button label="earth">地</el-radio-button>
                 <el-radio-button label="water">水</el-radio-button>
-                <el-radio-button label="fire">炎</el-radio-button>
-                <el-radio-button label="wind">风</el-radio-button>
-                <el-radio-button label="divine">神</el-radio-button>
+                <el-radio-button label="fire" :disabled="form.language === 'astral'">炎</el-radio-button>
+                <el-radio-button label="wind" :disabled="form.language === 'astral'">风</el-radio-button>
+                <el-radio-button label="divine" :disabled="form.language === 'astral'">神</el-radio-button>
                 <el-radio-button label="">无</el-radio-button>
               </el-radio-group>
             </el-form-item>
@@ -239,6 +239,7 @@
                   style="margin-left: 10px;flex-shrink: 0"
                   type="primary"
                   split-button
+                  :disabled="form.language === 'astral'"
                   @click="searchCardByPassword('')"
                 >
                   <span>搜索</span>
@@ -249,7 +250,14 @@
                   </template>
                 </el-dropdown>
                 <el-tooltip content="仅分享搜索结果" placement="top">
-                  <el-button style="margin-left: 10px;flex-shrink: 0" type="success" @click="shareCard">分享</el-button>
+                  <el-button
+                    style="margin-left: 10px;flex-shrink: 0"
+                    type="success"
+                    :disabled="form.language === 'astral'"
+                    @click="shareCard"
+                  >
+                    分享
+                  </el-button>
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -310,6 +318,7 @@
                 <el-button
                   plain
                   :loading="randomLoading"
+                  :disabled="form.language === 'astral'"
                   @click="getRandomCard"
                 >
                   随机生成
@@ -362,7 +371,9 @@
   import jpDemo from './demo/jp-demo';
   import krDemo from './demo/kr-demo';
   import enDemo from './demo/en-demo';
+  import astralDemo from './demo/astral-demo';
   import { nextTick } from 'vue';
+  import { parseYugiohCard } from '@/views/yugioh/yugioh';
 
   export default {
     name: 'Yugioh',
@@ -421,6 +432,7 @@
           { label: '日文', value: 'jp' },
           { label: '韩文', value: 'kr' },
           { label: '英文', value: 'en' },
+          { label: '星光界文', value: 'astral' },
         ],
         gradientList: [
           { label: '银字', value: 'silver' },
@@ -474,6 +486,8 @@
           Object.assign(this.form, krDemo);
         } else if (value === 'en') {
           Object.assign(this.form, enDemo);
+        } else if (value === 'astral') {
+          Object.assign(this.form, astralDemo);
         }
         this.refreshFont();
       },
@@ -552,6 +566,10 @@
         };
       },
       fetchCardName(value, callback) {
+        if (this.form.language === 'astral') {
+          callback([]);
+          return;
+        }
         if (value) {
           this.axios({
             method: 'get',
@@ -567,8 +585,9 @@
             });
             callback(data);
           });
+        } else {
+          callback([]);
         }
-        callback([]);
       },
       selectCardName(value) {
         this.form.name = value.name;
@@ -590,7 +609,7 @@
             this.form.language = lang;
             this.refreshFont();
           }
-          let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
           Object.assign(this.form, cardInfo);
         });
       },
@@ -603,7 +622,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
           Object.assign(this.form, cardInfo);
         }).finally(() => {
           this.randomLoading = false;

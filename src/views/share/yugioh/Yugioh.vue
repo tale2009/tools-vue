@@ -16,6 +16,7 @@
 
 <script>
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
+  import { parseYugiohCard } from '@/views/yugioh/yugioh';
 
   export default {
     name: 'ShareYugioh',
@@ -110,7 +111,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;
@@ -125,7 +126,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = this.parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;

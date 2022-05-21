@@ -1,0 +1,31 @@
+.astral-class {
+  font-family: ygo-astral, serif;
+
+  .card-name {
+    top: 101px;
+    font-size: 103px;
+  }
+
+  .spell-trap {
+    top: 254px;
+    font-size: 76px;
+    right: 144px;
+  }
+
+  .pendulum-description {
+    top: 1282px;
+    font-size: calc(42px * var(--descriptionZoom));
+    line-height: 1.04;
+  }
+
+  .card-description {
+    top: 1531px;
+    font-size: calc(42px * var(--descriptionZoom));
+    line-height: 1.04;
+
+    .card-effect {
+      font-size: 44px;
+      //margin: 0 -0.5em;
+    }
+  }
+}

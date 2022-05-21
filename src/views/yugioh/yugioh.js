@@ -1,62 +1,59 @@
 import kanjiKanaMap from '@/assets/json/kanji-kana.json';
 import monsterTypeList from '@/assets/json/monster-type-list.json';
 
-export default {
-  install(app, options) {
-    // 解析游戏王卡片
-    app.config.globalProperties.parseYugiohCard = function (data, lang) {
-      let card = {
-        name: parseName(data),
-        type: parseType(data),
-        attribute: parseAttribute(data),
-        icon: parseIcon(data),
-        image: parseImage(data),
-        cardType: parseCardType(data),
-        pendulumType: parsePendulumType(data),
-        level: parseLevelRank(data),
-        rank: parseLevelRank(data),
-        pendulumScale: parsePendulumScale(data),
-        pendulumDescription: parsePendulumDescription(data, lang),
-        monsterType: parseMonsterType(data, lang),
-        atk: parseAtk(data),
-        def: parseDef(data),
-        arrowList: parseArrowList(data),
-        description: parseDescription(data, lang),
-        firstLineCompress: parseFirstLineCompress(data),
-        package: parsePackage(data, lang),
-        password: parsePassword(data),
-      };
-      if (lang === 'jp') {
-        // 添加注音
-        card.name = app.config.globalProperties.kanjiToKana(card.name);
-        card.pendulumDescription = app.config.globalProperties.kanjiToKana(card.pendulumDescription);
-        card.monsterType = app.config.globalProperties.kanjiToKana(card.monsterType);
-        card.description = app.config.globalProperties.kanjiToKana(card.description);
-      }
-      return card;
-    };
-    // 添加假名
-    app.config.globalProperties.kanjiToKana = function (text = '') {
-      // 重新排序kanjiKanaMap，最长key的放在最前
-      let kanjiKanaReg = new RegExp(Object.keys(kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
-      return text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
-        if (!/\[.*?\(.*?\)]/g.test(value)) {
-          return value.replace(kanjiKanaReg, s => kanjiKanaMap[s]);
-        }
-        return value;
-      }).join('');
-    };
-  },
-};
+// 解析游戏王卡片
+export function parseYugiohCard(data, lang) {
+  let card = {
+    name: parseName(data),
+    type: parseType(data),
+    attribute: parseAttribute(data),
+    icon: parseIcon(data),
+    image: parseImage(data),
+    cardType: parseCardType(data),
+    pendulumType: parsePendulumType(data),
+    level: parseLevelRank(data),
+    rank: parseLevelRank(data),
+    pendulumScale: parsePendulumScale(data),
+    pendulumDescription: parsePendulumDescription(data, lang),
+    monsterType: parseMonsterType(data, lang),
+    atk: parseAtk(data),
+    def: parseDef(data),
+    arrowList: parseArrowList(data),
+    description: parseDescription(data, lang),
+    firstLineCompress: parseFirstLineCompress(data),
+    package: parsePackage(data, lang),
+    password: parsePassword(data),
+  };
+  if (lang === 'jp') {
+    // 添加注音
+    card.name = kanjiToKana(card.name);
+    card.pendulumDescription = kanjiToKana(card.pendulumDescription);
+    card.monsterType = kanjiToKana(card.monsterType);
+    card.description = kanjiToKana(card.description);
+  }
+  return card;
+}
+
+// 添加假名
+export function kanjiToKana(text = '') {
+  // 重新排序kanjiKanaMap，最长key的放在最前
+  let kanjiKanaReg = new RegExp(Object.keys(kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
+  return text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
+    if (!/\[.*?\(.*?\)]/g.test(value)) {
+      return value.replace(kanjiKanaReg, s => kanjiKanaMap[s]);
+    }
+    return value;
+  }).join('');
+}
 
 // 英文字母全角转半角
-function characterToHalf(value) {
+export function characterToHalf(value) {
   // 全角A：65313，半角A：65
   // 全角Z：65338，半角Z：90
   // 全角a：65345，半角a：97
   // 全角z：65370，半角z：122
   // 全角-半角=65248
-  let charList = Array.from(value).map(char => {
+  let charList = Array.from(String(value)).map(char => {
     let code = char.charCodeAt(0);
     if (char === '　') {
       return ' ';
@@ -74,8 +71,8 @@ function characterToHalf(value) {
 }
 
 // 数字转半角
-function numberToHalf(value) {
-  let charList = Array.from(value).map(char => {
+export function numberToHalf(value) {
+  let charList = Array.from(String(value)).map(char => {
     let code = char.charCodeAt();
     if (code >= 65296 && code <= 65305) {
       return String.fromCharCode(code - 65248);
@@ -86,8 +83,8 @@ function numberToHalf(value) {
 }
 
 // 数字转全角
-function numberToFull(value) {
-  let charList = Array.from(value).map(char => {
+export function numberToFull(value) {
+  let charList = Array.from(String(value)).map(char => {
     let code = char.charCodeAt();
     if (code >= 48 && code <= 57) {
       return String.fromCharCode(code + 65248);
@@ -97,7 +94,7 @@ function numberToFull(value) {
   return charList.join('');
 }
 
-function parseName(data) {
+export function parseName(data) {
   let name = characterToHalf(data.name);
   // 名字的数字要转半角
   name = numberToHalf(name);
@@ -105,7 +102,7 @@ function parseName(data) {
 }
 
 // 解析type
-function parseType(data) {
+export function parseType(data) {
   if (data.type & 0x1000000) {
     return 'pendulum';
   } else if (data.type & 0x4) {
@@ -120,7 +117,7 @@ function parseType(data) {
 }
 
 // 解析attribute
-function parseAttribute(data) {
+export function parseAttribute(data) {
   if (data.attribute & 0x40) {
     return 'divine';
   } else if (data.attribute & 0x20) {
@@ -140,7 +137,7 @@ function parseAttribute(data) {
   }
 }
 
-function parseIcon(data) {
+export function parseIcon(data) {
   if (data.type & 0x100000) {
     return 'counter';
   } else if (data.type & 0x80000) {
@@ -158,11 +155,11 @@ function parseIcon(data) {
   }
 }
 
-function parseImage(data) {
+export function parseImage(data) {
   return `https://storage.googleapis.com/ygoprodeck.com/pics_artgame/${data.id}.jpg`;
 }
 
-function parseCardType(data) {
+export function parseCardType(data) {
   if (data.type & 0x4000000) {
     return 'link';
   } else if (data.type & 0x800000) {
@@ -184,7 +181,7 @@ function parseCardType(data) {
   }
 }
 
-function parsePendulumType(data) {
+export function parsePendulumType(data) {
   if (parseType(data) === 'pendulum') {
     if (data.type & 0x800000) {
       return 'xyz-pendulum';
@@ -206,7 +203,7 @@ function parsePendulumType(data) {
   }
 }
 
-function parseLevelRank(data) {
+export function parseLevelRank(data) {
   let number = parseInt(data.level.toString(16).substr(-1), 16);
   if (number <= 13) {
     return number;
@@ -215,7 +212,7 @@ function parseLevelRank(data) {
   }
 }
 
-function parsePendulumScale(data) {
+export function parsePendulumScale(data) {
   if (parseType(data) === 'pendulum') {
     let list = data.desc.split('【Pendulum Effect】');
     return parseInt(list[0]?.replace(/[^\d]/g, ''));
@@ -224,7 +221,7 @@ function parsePendulumScale(data) {
   }
 }
 
-function parsePendulumDescription(data, lang) {
+export function parsePendulumDescription(data, lang) {
   if (parseType(data) === 'pendulum') {
     let description = characterToHalf(data.desc).replace(/'''/g, '')
       .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
@@ -240,7 +237,7 @@ function parsePendulumDescription(data, lang) {
   }
 }
 
-function parseMonsterType(data, lang) {
+export function parseMonsterType(data, lang) {
   let list = [];
   // 先判断种族
   if (data.race & 0x1000000) {
@@ -347,7 +344,7 @@ function parseMonsterType(data, lang) {
   return list.join(separator);
 }
 
-function parseAtk(data) {
+export function parseAtk(data) {
   if (data.atk === -2) {
     return -1;
   } else {
@@ -355,7 +352,7 @@ function parseAtk(data) {
   }
 }
 
-function parseDef(data) {
+export function parseDef(data) {
   if (parseCardType(data) !== 'link') {
     if (data.def === -2) {
       return -1;
@@ -367,7 +364,7 @@ function parseDef(data) {
   }
 }
 
-function parseArrowList(data) {
+export function parseArrowList(data) {
   let arrowList = [];
   if (parseCardType(data) === 'link') {
     if (data.def & 0x100) {
@@ -398,7 +395,7 @@ function parseArrowList(data) {
   return arrowList;
 }
 
-function parseDescription(data, lang) {
+export function parseDescription(data, lang) {
   let description = characterToHalf(data.desc).replace(/'''/g, '')
     .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
   if (parseType(data) === 'pendulum') {
@@ -428,7 +425,7 @@ function parseDescription(data, lang) {
   return description.trim();
 }
 
-function parseFirstLineCompress(data) {
+export function parseFirstLineCompress(data) {
   // 首行压缩，换行符至少要有1个
   const hasLf = parseDescription(data).includes('\n');
   const hasType = ['monster', 'pendulum'].includes(parseType(data));
@@ -436,14 +433,14 @@ function parseFirstLineCompress(data) {
   return hasLf && hasType && hasCardType;
 }
 
-function parsePackage(data, lang) {
+export function parsePackage(data, lang) {
   // const packageList = data.setid.split(',').reverse();
   // return packageList.find(value => value.includes(`-${lang.toUpperCase()}`)) || '';
   // 数据库setid字段被删除了
   return '';
 }
 
-function parsePassword(data) {
+export function parsePassword(data) {
   let password = data.id.toString();
   if (password.length < 8) {
     password = '0'.repeat(8 - password.length) + password;
