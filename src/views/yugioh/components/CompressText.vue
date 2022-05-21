@@ -85,23 +85,26 @@
         let ruby = el.parentNode;
         let rt = el;
         ruby.style.margin = '';
-        rt.style.textAlignLast = '';
         rt.style.transform = '';
         rt.style.left = '';
         rt.style.width = '';
+        rt.style.letterSpacing = '';
 
         let text = ruby.innerText.split('\n')[0];
         let rubyWidth = ruby.offsetWidth;
         let rtWidth = rt.offsetWidth / that.textScale;
         if (rtWidth / rubyWidth < 0.95 && text.length > 1) {
+          const textLength = rt.innerText.length;
+          const oldRtWidth = rt.offsetWidth;
           const rtGap = 3;
           const widthPercent = Math.min(rtWidth / rubyWidth * rtGap * 100, 95);
           const leftPercent = (100 - widthPercent) / 2;
           // 拉伸两端对齐
           rt.style.width = `${that.textScale * widthPercent}%`;
           rt.style.left = `${leftPercent}%`;
-          rt.style.textAlignLast = 'justify';
           rt.style.transform = `scaleX(${1 / that.textScale})`;
+          const newRtWidth = rt.offsetWidth;
+          rt.style.letterSpacing = `${(newRtWidth - oldRtWidth) / (textLength - 1)}px`;
         } else if (rtWidth > rubyWidth) {
           // 压缩
           if (rubyWidth / rtWidth < 0.6) {
