@@ -225,8 +225,12 @@ export function parsePendulumDescription(data, lang) {
   if (parseType(data) === 'pendulum') {
     let description = characterToHalf(data.desc).replace(/'''/g, '')
       .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
-    const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】/);
-    description = list[1]?.replace(/\d+→|\n/g, '') || '';
+    const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】|【怪獸敘述】|【怪獸效果】/).filter(item => item && item !== '\n');
+    if (lang === 'tc') {
+      description = list[2]?.replace(/\d+→|\n/g, '') || '';
+    } else {
+      description = list[1]?.replace(/\d+→|\n/g, '') || '';
+    }
     if (['jp', 'sc'].includes(lang)) {
       // 效果数字全角，卡名数字半角
       description = numberToFull(description).replace(/(「.*?」)|(“.*?”)/g, s => numberToHalf(s));
@@ -399,8 +403,12 @@ export function parseDescription(data, lang) {
   let description = characterToHalf(data.desc).replace(/'''/g, '')
     .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
   if (parseType(data) === 'pendulum') {
-    let list = description.split(/【Monster Effect】|【Flavor Text】/).filter(item => item && item !== '\n');
-    description = list[1]?.trim() || '';
+    const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】|【怪獸敘述】|【怪獸效果】/).filter(item => item && item !== '\n');
+    if (lang === 'tc') {
+      description = list[3] || '';
+    } else {
+      description = list[2] || '';
+    }
   }
   // 融合、同调、超量、连接、衍生物保留一个换行
   if (['fusion', 'synchro', 'xyz', 'link', 'token'].includes(parseCardType(data))) {
