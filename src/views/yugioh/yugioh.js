@@ -73,7 +73,7 @@ export function characterToHalf(value) {
 // 数字转半角
 export function numberToHalf(value) {
   let charList = Array.from(String(value)).map(char => {
-    let code = char.charCodeAt();
+    let code = char.charCodeAt(0);
     if (code >= 65296 && code <= 65305) {
       return String.fromCharCode(code - 65248);
     }
@@ -85,7 +85,7 @@ export function numberToHalf(value) {
 // 数字转全角
 export function numberToFull(value) {
   let charList = Array.from(String(value)).map(char => {
-    let code = char.charCodeAt();
+    let code = char.charCodeAt(0);
     if (code >= 48 && code <= 57) {
       return String.fromCharCode(code + 65248);
     }

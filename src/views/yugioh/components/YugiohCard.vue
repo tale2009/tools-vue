@@ -46,6 +46,7 @@
         <template #error>
           <div class="image-slot">
             <i class="fa-light fa-image" />
+            <p class="image-tip">暂无卡图</p>
           </div>
         </template>
       </el-image>
@@ -589,12 +590,20 @@
 
         .image-slot {
           display: flex;
+          flex-direction: column;
           height: 100%;
           width: 100%;
           justify-content: center;
           align-items: center;
           font-size: 120px;
           color: var(--normal-color);
+
+          .image-tip {
+            font-family: var(--default-font-family);
+            font-size: 28px;
+            margin: 20px 0 0;
+            line-height: 1.7;
+          }
         }
       }
     }
