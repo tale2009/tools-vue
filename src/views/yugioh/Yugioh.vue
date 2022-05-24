@@ -75,9 +75,9 @@
             <el-form-item label="类型">
               <el-radio-group v-model="form.type" @change="changeType">
                 <el-radio-button label="monster">怪兽</el-radio-button>
-                <el-radio-button label="spell" :disabled="form.language === 'astral'">魔法</el-radio-button>
-                <el-radio-button label="trap" :disabled="form.language === 'astral'">陷阱</el-radio-button>
-                <el-radio-button label="pendulum" :disabled="form.language === 'astral'">灵摆</el-radio-button>
+                <el-radio-button label="spell">魔法</el-radio-button>
+                <el-radio-button label="trap">陷阱</el-radio-button>
+                <el-radio-button label="pendulum">灵摆</el-radio-button>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="['monster','pendulum'].includes(form.type)" label="属性">
@@ -86,9 +86,9 @@
                 <el-radio-button label="light">光</el-radio-button>
                 <el-radio-button label="earth">地</el-radio-button>
                 <el-radio-button label="water">水</el-radio-button>
-                <el-radio-button label="fire" :disabled="form.language === 'astral'">炎</el-radio-button>
-                <el-radio-button label="wind" :disabled="form.language === 'astral'">风</el-radio-button>
-                <el-radio-button label="divine" :disabled="form.language === 'astral'">神</el-radio-button>
+                <el-radio-button label="fire">炎</el-radio-button>
+                <el-radio-button label="wind">风</el-radio-button>
+                <el-radio-button label="divine">神</el-radio-button>
                 <el-radio-button label="">无</el-radio-button>
               </el-radio-group>
             </el-form-item>

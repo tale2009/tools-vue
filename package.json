@@ -15,7 +15,7 @@
     "blueimp-load-image": "^5.16.0",
     "color": "^4.2.3",
     "dayjs": "^1.11.2",
-    "element-plus": "^2.2.1",
+    "element-plus": "^2.2.2",
     "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
@@ -23,7 +23,7 @@
     "normalize.css": "^8.0.1",
     "qs": "^6.10.3",
     "screenfull": "^6.0.1",
-    "vue": "^3.2.35",
+    "vue": "^3.2.36",
     "vue-cropperjs": "^5.0.0",
     "vue-router": "^4.0.15",
     "vuex": "^4.0.2"

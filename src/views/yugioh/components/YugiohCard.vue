@@ -56,11 +56,11 @@
       <el-image :src="baseImage + '/card-mask-pendulum.png'" fit="cover" />
     </div>
 
-    <div v-if="data.type === 'pendulum'" class="left-pendulum">
+    <div v-if="data.type === 'pendulum'" class="left-pendulum" :style="leftPendulumStyle">
       <span>{{ data.pendulumScale }}</span>
     </div>
 
-    <div v-if="data.type === 'pendulum'" class="right-pendulum">
+    <div v-if="data.type === 'pendulum'" class="right-pendulum" :style="rightPendulumStyle">
       <span>{{ data.pendulumScale }}</span>
     </div>
 
@@ -140,8 +140,9 @@
     </div>
 
     <div class="atk-def-link">
-      <template v-if="['monster', 'pendulum'].includes(data.type) && data.language === 'astral'">
-        <el-image :src="baseImage + '/atk-def-astral.svg'" />
+      <template v-if="data.language === 'astral'">
+        <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="baseImage + '/atk-def-astral.svg'" />
+        <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="baseImage + '/atk-link-astral.svg'" />
       </template>
       <template v-else>
         <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="baseImage + '/atk-def.svg'" />
@@ -304,9 +305,9 @@
           }
         } else if (this.data.language === 'astral') {
           if (this.data.type === 'spell') {
-            name = 'まほうカード';
+            name = 'マホウカアド';
           } else if (this.data.type === 'trap') {
-            name = 'トラップカード';
+            name = 'トラププカアド';
           }
         }
         return name;
@@ -369,6 +370,52 @@
           top: top,
           width: width,
           height: height,
+        };
+      },
+      leftPendulumStyle() {
+        let top, left, fontSize, fontFamily, letterSpacing;
+        if (this.data.language === 'astral') {
+          top = '1385px';
+          left = '86px';
+          fontSize = '84px';
+          fontFamily = 'ygo-astral, serif';
+          letterSpacing = '';
+        } else {
+          top = '1379px';
+          left = '83px';
+          fontSize = '98px';
+          fontFamily = 'ygo-atk-def, serif';
+          letterSpacing = '-10px';
+        }
+        return {
+          top,
+          left,
+          fontSize,
+          fontFamily,
+          letterSpacing,
+        };
+      },
+      rightPendulumStyle() {
+        let top, right, fontSize, fontFamily, letterSpacing;
+        if (this.data.language === 'astral') {
+          top = '1385px';
+          right = '86px';
+          fontSize = '84px';
+          fontFamily = 'ygo-astral, serif';
+          letterSpacing = '';
+        } else {
+          top = '1379px';
+          right = '94px';
+          fontSize = '98px';
+          fontFamily = 'ygo-atk-def, serif';
+          letterSpacing = '-10px';
+        }
+        return {
+          top,
+          right,
+          fontSize,
+          fontFamily,
+          letterSpacing,
         };
       },
       packageStyle() {
@@ -617,25 +664,15 @@
 
     .left-pendulum {
       position: absolute;
-      top: 1379px;
-      left: 93px;
-      width: 95px;
-      font-family: ygo-atk-def, serif;
-      font-size: 98px;
+      width: 115px;
       text-align: center;
-      letter-spacing: -10px;
       z-index: 20;
     }
 
     .right-pendulum {
       position: absolute;
-      top: 1379px;
-      right: 104px;
-      width: 95px;
-      font-family: ygo-atk-def, serif;
-      font-size: 98px;
+      width: 115px;
       text-align: center;
-      letter-spacing: -10px;
       z-index: 20;
     }
 
