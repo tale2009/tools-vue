@@ -72,6 +72,19 @@
                 <span class="tip">（自动选择清空）</span>
               </div>
             </el-form-item>
+            <el-form-item label="对齐">
+              <el-radio-group v-model="form.align">
+                <el-radio-button label="left">
+                  <i class="fa-solid fa-align-left" />
+                </el-radio-button>
+                <el-radio-button label="center">
+                  <i class="fa-solid fa-align-center" />
+                </el-radio-button>
+                <el-radio-button label="right">
+                  <i class="fa-solid fa-align-right" />
+                </el-radio-button>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="类型">
               <el-radio-group v-model="form.type" @change="changeType">
                 <el-radio-button label="monster">怪兽</el-radio-button>
@@ -401,6 +414,7 @@
           language: 'sc',
           name: '',
           color: '',
+          align: 'left',
           gradient: false,
           gradientColor1: '#999999',
           gradientColor2: '#ffffff',

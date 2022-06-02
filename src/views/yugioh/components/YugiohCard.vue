@@ -5,14 +5,14 @@
     :style="cardStyle"
     ondragstart="return false"
   >
-    <div v-name-color="data.color" class="card-name">
+    <div v-name-color="data.color" class="card-name" :style="nameStyle">
       <CompressText
         :text="data.name"
         :gradient="data.gradient"
         :gradient-color1="data.gradientColor1"
         :gradient-color2="data.gradientColor2"
         :refresh-key="refreshKey"
-        :width="1033"
+        :width="data.attribute ? 1033 : 1161"
         :height="200"
       />
     </div>
@@ -102,7 +102,7 @@
         <CompressText
           :text="monsterType"
           :refresh-key="refreshKey"
-          :width="1170"
+          :width="1175"
           :height="100"
         />
       </div>
@@ -113,7 +113,7 @@
           <div v-if="index === 0 && data.firstLineCompress">
             <CompressText
               :text="item"
-              :width="1170"
+              :width="1175"
               :height="70"
               :refresh-key="refreshKey"
             />
@@ -126,7 +126,7 @@
           <div v-else-if="index === data.description.split('\n').length - 1" class="last-description">
             <CompressText
               :text="item"
-              :width="1170"
+              :width="1175"
               :height="lastDescriptionHeight"
               :refresh-key="refreshKey"
               :language="data.language"
@@ -253,6 +253,11 @@
           color = 'white';
         }
         return color;
+      },
+      nameStyle() {
+        return {
+          textAlign: this.data.align || 'left',
+        };
       },
       attributeSrc() {
         let suffix = '';
@@ -701,7 +706,7 @@
     .card-description {
       position: absolute;
       left: 109px;
-      width: 1170px;
+      width: 1175px;
       text-align: justify;
       z-index: 20;
     }

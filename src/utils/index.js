@@ -55,3 +55,20 @@ export const loadCSS = url => {
   css.rel = 'stylesheet';
   document.head.appendChild(css);
 };
+
+// 获取电脑和手机的client坐标
+export const getClientXY = e => {
+  let clientX;
+  let clientY;
+  if (e.type.startsWith('touch')) {
+    clientY = e.touches[0].clientY;
+    clientX = e.touches[0].clientX;
+  } else {
+    clientY = e.clientY;
+    clientX = e.clientX;
+  }
+  return {
+    clientX,
+    clientY,
+  };
+};
