@@ -132,6 +132,7 @@
 
     .collapse-icon {
       font-size: 24px;
+      height: auto;
 
       i {
         transition: all 0.3s;
