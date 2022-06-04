@@ -90,6 +90,7 @@
 
 <style lang="scss" scoped>
   .kanji-kana-list {
+    width: 100%;
     font-size: 14px;
 
     p {
