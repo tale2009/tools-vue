@@ -368,7 +368,12 @@
           </div>
 
           <KanjiKanaDialog v-model="kanjiKanaDialog" />
-          <CropperDialog v-model="cropperDialog" :image="cropperImage" @get-data="setImage" />
+          <CropperDialog
+            v-model="cropperDialog"
+            :image="cropperImage"
+            :aspect-ratio="1"
+            @get-data="setImage"
+          />
         </PageForm>
       </template>
     </Page>

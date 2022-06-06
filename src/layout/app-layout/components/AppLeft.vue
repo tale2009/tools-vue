@@ -1,7 +1,10 @@
 <template>
   <div class="app-left-container">
-    <el-row>
-      <el-col v-for="(item,index) in toolList" :key="index" :span="12">
+    <el-row v-for="(group, index) in toolList" :key="index">
+      <el-col :span="24">
+        <h3 class="group-title">{{ group.title }}</h3>
+      </el-col>
+      <el-col v-for="(item, index) in group.children" :key="index" :span="12">
         <div class="item-main" :style="itemStyle(item)" @click="toPath(item)">
           <div class="item-icon">
             <i :class="`fa-light ${item.icon}`" />
@@ -11,6 +14,9 @@
           </div>
         </div>
       </el-col>
+    </el-row>
+
+    <el-row>
       <el-col :span="24">
         <div class="poster-list">
           <el-image :src="poster1" @click="toPoster1" />
@@ -56,6 +62,13 @@
 
     .el-row {
       .el-col {
+        .group-title {
+          margin: 10px 0;
+          text-align: center;
+          font-size: 14px;
+          font-weight: bold;
+        }
+
         .item-main {
           padding: 10px;
           border-radius: 8px;

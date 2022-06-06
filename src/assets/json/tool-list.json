@@ -1,27 +1,42 @@
 [
   {
-    "title": "点阵字",
-    "path": "/dot-word",
-    "icon": "fa-text"
-  },
-  {
-    "title": "点阵图",
-    "path": "/dot-image",
-    "icon": "fa-image"
-  },
-  {
-    "title": "画图板",
-    "path": "/paint-board",
-    "icon": "fa-paint-brush"
-  },
-  {
-    "title": "像素画",
-    "path": "/pixel-art",
-    "icon": "fa-th"
+    "title": "图像处理",
+    "children": [
+      {
+        "title": "点阵字",
+        "path": "/dot-word",
+        "icon": "fa-text"
+      },
+      {
+        "title": "点阵图",
+        "path": "/dot-image",
+        "icon": "fa-image"
+      },
+      {
+        "title": "画图板",
+        "path": "/paint-board",
+        "icon": "fa-paint-brush"
+      },
+      {
+        "title": "像素画",
+        "path": "/pixel-art",
+        "icon": "fa-th"
+      }
+    ]
   },
   {
     "title": "游戏王卡片",
-    "path": "/yugioh",
-    "icon": "fa-rectangle-portrait"
+    "children": [
+      {
+        "title": "游戏王卡片",
+        "path": "/yugioh",
+        "icon": "fa-rectangle-portrait"
+      },
+      {
+        "title": "场地中心卡",
+        "path": "/field-center",
+        "icon": "fa-card-diamond"
+      }
+    ]
   }
 ]

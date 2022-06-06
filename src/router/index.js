@@ -4,13 +4,13 @@ const routes = [
   {
     path: '/',
     name: 'app',
-    component: () => import(/* webpackChunkName: "app-layout" */ '../layout/app-layout/AppLayout.vue'),
+    component: () => import('../layout/app-layout/AppLayout.vue'),
     redirect: '/dot-word',
     children: [
       {
         path: 'dot-word',
         name: 'dotWord',
-        component: () => import(/* webpackChunkName: "dotWord" */ '../views/dot-word/DotWord.vue'),
+        component: () => import('../views/dot-word/DotWord.vue'),
         meta: {
           title: '点阵字生成器',
         },
@@ -18,7 +18,7 @@ const routes = [
       {
         path: 'dot-image',
         name: 'dotImage',
-        component: () => import(/* webpackChunkName: "dotImage" */ '../views/dot-image/DotImage.vue'),
+        component: () => import('../views/dot-image/DotImage.vue'),
         meta: {
           title: '点阵图生成器',
         },
@@ -26,7 +26,7 @@ const routes = [
       {
         path: 'paint-board',
         name: 'paintBoard',
-        component: () => import(/* webpackChunkName: "paintBoard" */ '../views/paint-board/PaintBoard.vue'),
+        component: () => import('../views/paint-board/PaintBoard.vue'),
         meta: {
           title: '画图板',
         },
@@ -34,7 +34,7 @@ const routes = [
       {
         path: 'pixel-art',
         name: 'pixelArt',
-        component: () => import(/* webpackChunkName: "pixelArt" */ '../views/pixel-art/PixelArt'),
+        component: () => import('../views/pixel-art/PixelArt'),
         meta: {
           title: '像素画',
         },
@@ -42,9 +42,17 @@ const routes = [
       {
         path: 'yugioh',
         name: 'yugioh',
-        component: () => import(/* webpackChunkName: "yugioh" */ '../views/yugioh/Yugioh.vue'),
+        component: () => import('../views/yugioh/Yugioh.vue'),
         meta: {
           title: '游戏王卡片生成器',
+        },
+      },
+      {
+        path: 'field-center',
+        name: 'fieldCenter',
+        component: () => import('../views/field-center/FieldCenter.vue'),
+        meta: {
+          title: '游戏王场地中心卡',
         },
       },
     ],
@@ -52,12 +60,12 @@ const routes = [
   {
     path: '/share',
     name: 'share',
-    component: () => import(/* webpackChunkName: "blank-layout" */ '../layout/blank-layout/BlankLayout.vue'),
+    component: () => import('../layout/blank-layout/BlankLayout.vue'),
     children: [
       {
         path: 'yugioh',
         name: 'shareYugioh',
-        component: () => import(/* webpackChunkName: "share-yugioh" */ '../views/share/yugioh/Yugioh.vue'),
+        component: () => import('../views/share/yugioh/Yugioh.vue'),
         meta: {
           title: '游戏王卡片分享',
         },

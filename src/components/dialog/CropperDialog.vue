@@ -12,7 +12,7 @@
       drag-mode="none"
       :zoomable="false"
       :toggle-drag-mode-on-dblclick="false"
-      :aspect-ratio="1"
+      :aspect-ratio="aspectRatio"
       :auto-crop-area="1"
       :view-mode="2"
     />
@@ -30,7 +30,7 @@
 
   export default {
     name: 'CropperDialog',
-    props: ['modelValue', 'image'],
+    props: ['modelValue', 'image', 'aspectRatio'],
     emits: ['get-data'],
     components: {
       VueCropper,

@@ -10,12 +10,12 @@
     "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts,.jsx,.tsx"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.1",
+    "@element-plus/icons-vue": "^2.0.4",
     "axios": "^0.27.2",
     "blueimp-load-image": "^5.16.0",
     "color": "^4.2.3",
     "dayjs": "^1.11.2",
-    "element-plus": "^2.2.2",
+    "element-plus": "2.2.2",
     "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
-    "eslint": "^8.16.0",
+    "eslint": "^8.17.0",
     "eslint-define-config": "^1.5.0",
     "eslint-plugin-vue": "^9.1.0",
     "sass": "^1.52.2",

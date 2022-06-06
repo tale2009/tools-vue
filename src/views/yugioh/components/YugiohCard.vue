@@ -176,7 +176,7 @@
       <el-image :src="baseImage + '/laser.png'" />
     </div>
 
-    <div v-if="data.rare" class="card-rare">
+    <div v-if="data.rare" class="card-rare" :style="rareStyle">
       <el-image :src="rareSrc" />
     </div>
   </div>
@@ -545,6 +545,11 @@
         const suffix = this.data.type === 'pendulum' ? '-pendulum' : '';
         return `${this.baseImage}/rare-${this.data.rare}${suffix}.png`;
       },
+      rareStyle() {
+        return {
+          borderRadius: this.data.radius ? '24px' : '',
+        };
+      },
       cardName() {
         return this.data.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
       },
@@ -590,7 +595,6 @@
     user-select: none;
     color: black;
     transform-origin: 0 0;
-    overflow: hidden;
 
     .card-name {
       position: absolute;
@@ -762,7 +766,10 @@
       mix-blend-mode: lighten;
       top: 0;
       left: 0;
+      width: 1394px;
+      height: 2031px;
       z-index: 30;
+      overflow: hidden;
     }
 
     &.card-back {
