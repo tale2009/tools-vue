@@ -28,7 +28,7 @@
             <el-input v-model="form.filter" clearable placeholder="请输入筛选文字" />
             <div class="kanji-kana-list">
               <el-scrollbar :max-height="400">
-                <p v-for="(v,k) in filteredKanjiKanaMap" @click="addKanjiKana(v)">{{ k }}：{{ v }}</p>
+                <p v-for="(v,k) in filteredKanjiKanaMap" @click="insertKanjiKana(v)">{{ k }}：{{ v }}</p>
               </el-scrollbar>
             </div>
             <el-empty v-if="!Object.keys(filteredKanjiKanaMap).length" style="width: 100%" />
@@ -38,14 +38,15 @@
     </el-form>
     <template #footer>
       <el-button plain @click="closeDialog">关闭</el-button>
-      <el-button type="primary" @click="addKana">注音</el-button>
+      <el-button plain @click="removeKana">移除注音</el-button>
+      <el-button type="primary" @click="addKana">一键注音</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script>
   import kanjiKanaMap from '@/assets/json/kanji-kana.json';
-  import { kanjiToKana } from '@/views/yugioh/yugioh';
+  import { kanjiToKana, removeKanjiKana } from '@/views/yugioh/yugioh';
 
   export default {
     name: 'KanjiKanaDialog',
@@ -67,7 +68,10 @@
       addKana() {
         this.form.text = kanjiToKana(this.form.text);
       },
-      addKanjiKana(value) {
+      removeKana() {
+        this.form.text = removeKanjiKana(this.form.text);
+      },
+      insertKanjiKana(value) {
         this.form.text += value;
       },
     },

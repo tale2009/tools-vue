@@ -2,6 +2,14 @@
   <div class="yugioh-container">
     <Page>
       <template #default>
+        <div v-if="fontLoading" class="font-loading">
+          <el-alert
+            title="字体加载中..."
+            effect="dark"
+            center
+            :closable="false"
+          />
+        </div>
         <YugiohCard :data="form" :refresh-key="refreshKey" />
       </template>
 
@@ -15,17 +23,6 @@
               </el-icon>
             </el-tooltip>
           </template>
-
-          <div v-if="fontLoading" class="font-loading">
-            <el-progress
-              :percentage="100"
-              text-inside
-              :stroke-width="16"
-              indeterminate
-            >
-              <span>字体加载中...</span>
-            </el-progress>
-          </div>
 
           <el-form :model="form" label-width="auto">
             <el-form-item label="语言">
@@ -386,15 +383,15 @@
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
   import CropperDialog from '@/components/dialog/CropperDialog';
-  import html2canvas from './html2canvas';
-  import loadImage from 'blueimp-load-image';
-  import { InfoFilled } from '@element-plus/icons-vue';
   import scDemo from './demo/sc-demo';
   import tcDemo from './demo/tc-demo';
   import jpDemo from './demo/jp-demo';
   import krDemo from './demo/kr-demo';
   import enDemo from './demo/en-demo';
   import astralDemo from './demo/astral-demo';
+  import html2canvas from './html2canvas';
+  import loadImage from 'blueimp-load-image';
+  import { InfoFilled } from '@element-plus/icons-vue';
   import { nextTick } from 'vue';
   import { parseYugiohCard } from '@/views/yugioh/yugioh';
 
@@ -656,12 +653,20 @@
         const { href } = this.$router.resolve({
           path: '/share/yugioh',
           query: {
-            password: this.form.password,
             language: this.form.language,
+            color: this.form.color,
+            align: this.form.align,
             gradient: this.form.gradient,
+            gradientColor1: this.form.gradientColor1,
+            gradientColor2: this.form.gradientColor2,
             gradientPreset: this.form.gradientPreset,
+            descriptionZoom: this.form.descriptionZoom,
+            password: this.form.password,
+            copyright: this.form.copyright,
+            laser: this.form.laser,
             rare: this.form.rare,
             radius: this.form.radius,
+            cardBack: this.form.cardBack,
           },
         });
         open(href, '_blank');
@@ -751,11 +756,21 @@
 
 <style lang="scss" scoped>
   .yugioh-container {
-    .form-main {
+    .page-main {
       .font-loading {
-        margin-bottom: 20px;
-      }
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
 
+        .el-alert {
+          background: var(--primary-color);
+        }
+      }
+    }
+
+    .form-main {
       .arrow-form {
         width: 130px;
         display: flex;

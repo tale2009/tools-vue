@@ -20,6 +20,7 @@
       <el-col :span="24">
         <div class="poster-list">
           <el-image :src="poster1" @click="toPoster1" />
+          <el-image :src="poster2" @click="toPoster2" />
         </div>
       </el-col>
     </el-row>
@@ -29,6 +30,7 @@
 <script>
   import toolList from '@/assets/json/tool-list.json';
   import poster1 from '@/assets/image/poster1.jpg';
+  import poster2 from '@/assets/image/poster2.jpg';
 
   export default {
     name: 'AppLeft',
@@ -36,6 +38,7 @@
       return {
         toolList: toolList,
         poster1: poster1,
+        poster2: poster2,
       };
     },
     methods: {
@@ -51,6 +54,10 @@
       toPoster1() {
         gtag('event', '霜灷卡牌');
         open('https://item.taobao.com/item.htm?id=665501436781');
+      },
+      toPoster2() {
+        gtag('event', 'Xirsx');
+        open('https://item.taobao.com/item.htm?id=677056042758');
       },
     },
   };
@@ -90,9 +97,12 @@
         }
 
         .poster-list {
-          margin-top: 10px;
+          display: flex;
+          flex-wrap: wrap;
 
           .el-image {
+            margin-top: 10px;
+            width: 100%;
             cursor: pointer;
             border-radius: 4px;
           }

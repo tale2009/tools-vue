@@ -29,14 +29,20 @@
         fontLoading: false,
         form: {
           language: 'sc',
+          color: '',
+          align: 'left',
           gradient: false,
           gradientColor1: '#999999',
           gradientColor2: '#ffffff',
-          gradientPreset: 'silver',
           descriptionZoom: 1,
+          password: '',
+          copyright: '',
+          laser: false,
           rare: '',
           radius: true,
           scale: 0.5,
+          cardBack: false,
+          width: '',
           // 更多字段参照：@/views/yugioh/Yugioh.vue
         },
         dataLoaded: false,
@@ -44,17 +50,21 @@
     },
     created() {
       const query = this.$route.query;
-      this.form.password = query.password || '';
       this.form.language = query.language || 'sc';
+      this.form.color = query.color || '';
+      this.form.align = query.align || 'left';
       this.form.gradient = query.gradient === 'true';
-      this.form.gradientPreset = query.gradientPreset || 'silver';
+      this.form.gradientColor1 = query.gradientColor1;
+      this.form.gradientColor2 = query.gradientColor2;
+      this.form.descriptionZoom = Number(query.descriptionZoom) || 1;
+      this.form.password = query.password || '';
+      this.form.copyright = query.copyright || '';
+      this.form.laser = query.laser === 'true';
       this.form.rare = query.rare || '';
-      this.form.radius = query.radius !== 'false';
-      this.form.width = query.width || '';
+      this.form.radius = query.radius === 'true';
+      this.form.cardBack = query.cardBack === 'true';
+      this.form.width = Number(query.width) || 0;
       this.updateScale();
-      if (this.form.gradient) {
-        this.changeGradientPreset(this.form.gradientPreset);
-      }
       if (this.form.password) {
         this.searchCardByPassword();
       } else {
@@ -78,30 +88,6 @@
             this.refreshKey++;
           });
         });
-      },
-      changeGradientPreset(value) {
-        if (value === 'silver') {
-          this.form.gradientColor1 = '#999999';
-          this.form.gradientColor2 = '#ffffff';
-        } else if (value === 'gold') {
-          this.form.gradientColor1 = '#cc9900';
-          this.form.gradientColor2 = '#ffff00';
-        } else if (value === 'red') {
-          this.form.gradientColor1 = '#990000';
-          this.form.gradientColor2 = '#ff0000';
-        } else if (value === 'white') {
-          this.form.gradientColor1 = '#ffffff';
-          this.form.gradientColor2 = '#ffffff';
-        } else if (value === 'black') {
-          this.form.gradientColor1 = '#333333';
-          this.form.gradientColor2 = '#999999';
-        } else if (value === 'blue') {
-          this.form.gradientColor1 = '#009999';
-          this.form.gradientColor2 = '#00ffff';
-        } else if (value === 'green') {
-          this.form.gradientColor1 = '#009900';
-          this.form.gradientColor2 = '#00ff00';
-        }
       },
       searchCardByPassword() {
         this.axios({
@@ -136,7 +122,7 @@
       // 把卡片宽度转换成scale
       updateScale() {
         const width = this.form.width;
-        if (width) {
+        if (width > 0) {
           this.form.scale = width / 1394;
         } else {
           this.form.scale = Math.min((document.body.offsetWidth / 1394), 1);
@@ -156,12 +142,14 @@
     height: 100vh;
     text-align: center;
     position: relative;
+    overflow: hidden;
 
     .font-loading {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
+      z-index: 100;
 
       .el-alert {
         background: var(--primary-color);

@@ -46,6 +46,11 @@ export function kanjiToKana(text = '') {
   }).join('');
 }
 
+// 移除假名
+export function removeKanjiKana(text = '') {
+  return text.replace(/\[(.*?)\(.*?\)]/g, '$1');
+}
+
 // 英文字母全角转半角
 export function characterToHalf(value) {
   // 全角A：65313，半角A：65

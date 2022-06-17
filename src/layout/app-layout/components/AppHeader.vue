@@ -142,10 +142,10 @@
     .header-center {
       .mystery-icon {
         font-size: 24px;
-        color: white;
+        color: transparent;
 
         &:hover {
-          color: whitesmoke;
+          color: rgba(0, 0, 0, 0.1);
         }
       }
     }

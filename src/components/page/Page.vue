@@ -126,6 +126,7 @@
       height: 100%;
       overflow: auto;
       flex-grow: 1;
+      position: relative;
 
       .page-slot {
         display: inline-flex;
