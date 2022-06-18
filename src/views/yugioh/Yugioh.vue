@@ -456,13 +456,13 @@
           { label: '星光界文', value: 'astral' },
         ],
         gradientList: [
-          { label: '银字', value: 'silver' },
-          { label: '金字', value: 'gold' },
-          { label: '红字', value: 'red' },
-          { label: '白字', value: 'white' },
-          { label: '黑字', value: 'black' },
-          { label: '蓝字', value: 'blue' },
-          { label: '绿字', value: 'green' },
+          { label: '银字', value: 'silver', color1: '#999999', color2: '#ffffff' },
+          { label: '金字', value: 'gold', color1: '#cc9900', color2: '#ffff00' },
+          { label: '红字', value: 'red', color1: '#990000', color2: '#ff0000' },
+          { label: '白字', value: 'white', color1: '#ffffff', color2: '#ffffff' },
+          { label: '黑字', value: 'black', color1: '#333333', color2: '#999999' },
+          { label: '蓝字', value: 'blue', color1: '#009999', color2: '#00ffff' },
+          { label: '绿字', value: 'green', color1: '#009900', color2: '#00ff00' },
         ],
         cropperImage: '',
         kanjiKanaDialog: false,
@@ -513,27 +513,10 @@
         this.refreshFont();
       },
       changeGradientPreset(value) {
-        if (value === 'silver') {
-          this.form.gradientColor1 = '#999999';
-          this.form.gradientColor2 = '#ffffff';
-        } else if (value === 'gold') {
-          this.form.gradientColor1 = '#cc9900';
-          this.form.gradientColor2 = '#ffff00';
-        } else if (value === 'red') {
-          this.form.gradientColor1 = '#990000';
-          this.form.gradientColor2 = '#ff0000';
-        } else if (value === 'white') {
-          this.form.gradientColor1 = '#ffffff';
-          this.form.gradientColor2 = '#ffffff';
-        } else if (value === 'black') {
-          this.form.gradientColor1 = '#333333';
-          this.form.gradientColor2 = '#999999';
-        } else if (value === 'blue') {
-          this.form.gradientColor1 = '#009999';
-          this.form.gradientColor2 = '#00ffff';
-        } else if (value === 'green') {
-          this.form.gradientColor1 = '#009900';
-          this.form.gradientColor2 = '#00ff00';
+        const gradient = this.gradientList.find(item => item.value === value);
+        if (gradient) {
+          this.form.gradientColor1 = gradient.color1;
+          this.form.gradientColor2 = gradient.color2;
         }
       },
       beforeUpload(file) {
