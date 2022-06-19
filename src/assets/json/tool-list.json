@@ -33,6 +33,11 @@
         "icon": "fa-rectangle-portrait"
       },
       {
+        "title": "超速决斗",
+        "path": "/rush-duel",
+        "icon": "fa-rectangle-portrait"
+      },
+      {
         "title": "场地中心卡",
         "path": "/field-center",
         "icon": "fa-card-diamond"

@@ -48,6 +48,12 @@
             message: '如有功能异常，或者显示错位的情况，请使用 Chrome 内核的浏览器',
           });
         }
+        if (devicePixelRatio !== 1) {
+          this.$notify.warning({
+            title: `当前浏览器缩放比为 ${Math.round(devicePixelRatio * 100)}%`,
+            message: '推荐缩放比 100%，否则导出的图片尺寸会缩放',
+          });
+        }
       },
       // 屏蔽某些键
       disableKey(e) {

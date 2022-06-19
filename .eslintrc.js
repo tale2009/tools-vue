@@ -46,5 +46,6 @@ module.exports = defineConfig({
     'vue/require-v-for-key': 'off',
     'vue/valid-v-for': 'off',
     'vue/no-unused-vars': 'off',
+    'vue/no-v-model-argument': 'off',
   },
 });

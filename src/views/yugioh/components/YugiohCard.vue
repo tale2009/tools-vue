@@ -535,7 +535,6 @@
         const leftBracket = ['en', 'kr'].includes(this.data.language) ? '[' : '【';
         const rightBracket = ['en', 'kr'].includes(this.data.language) ? ']' : '】';
         return `${leftBracket}${this.data.monsterType}${rightBracket}`;
-
       },
       copyrightSrc() {
         let color = this.data.type === 'monster' && this.data.cardType === 'xyz' ? 'white' : 'black';

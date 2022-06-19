@@ -34,7 +34,7 @@ const routes = [
       {
         path: 'pixel-art',
         name: 'pixelArt',
-        component: () => import('../views/pixel-art/PixelArt'),
+        component: () => import('../views/pixel-art/PixelArt.vue'),
         meta: {
           title: '像素画',
         },
@@ -45,6 +45,14 @@ const routes = [
         component: () => import('../views/yugioh/Yugioh.vue'),
         meta: {
           title: '游戏王卡片生成器',
+        },
+      },
+      {
+        path: 'rush-duel',
+        name: 'rushDuel',
+        component: () => import('../views/rush-duel/RushDuel.vue'),
+        meta: {
+          title: '游戏王超速决斗',
         },
       },
       {

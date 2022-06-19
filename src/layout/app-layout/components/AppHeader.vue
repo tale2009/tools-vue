@@ -21,7 +21,18 @@
       <el-space :size="10">
         <i class="fab fa-github" @click="toGithub" />
         <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
-        <el-button type="primary" link @click="aboutDialog = true">关于 & 赞助</el-button>
+        <el-popconfirm
+          v-model:visible="showSponsorTip"
+          title="点击这里可以赞助哦！"
+          :icon="BellFilled"
+          cancel-button-text="不再提示"
+          confirm-button-text="知道啦"
+          @cancel="cancelSponsorTip"
+        >
+          <template #reference>
+            <el-button type="primary" link @click="aboutDialog = true">关于 & 赞助</el-button>
+          </template>
+        </el-popconfirm>
         <el-button type="primary" link @click="thankDialog = true">感谢</el-button>
         <el-button
           class="collapse-icon"
@@ -54,6 +65,7 @@
   import QADialog from '@/components/dialog/QADialog';
   import AboutDialog from '@/components/dialog/AboutDialog';
   import ThankDialog from '@/components/dialog/ThankDialog';
+  import { BellFilled } from '@element-plus/icons-vue';
   import { mapMutations, mapState } from 'vuex';
 
   export default {
@@ -69,6 +81,8 @@
         qADialog: false,
         aboutDialog: false,
         thankDialog: false,
+        showSponsorTip: localStorage.getItem('showSponsorTip') !== 'false',
+        BellFilled,
       };
     },
     mounted() {
@@ -105,6 +119,10 @@
           localStorage.setItem('mystery-code', value);
           location.reload();
         });
+      },
+      cancelSponsorTip() {
+        // 不再提示
+        localStorage.setItem('showSponsorTip', 'false');
       },
     },
     computed: {

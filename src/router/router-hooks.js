@@ -7,7 +7,7 @@ import { nextTick } from 'vue';
 router.beforeEach((to, from, next) => {
   if (!router.resolve(to.path).matched.length) {
     ElMessage.warning('页面不存在');
-    next(from.path);
+    next(from.fullPath);
   } else {
     setDocumentTitle(to);
     next();

@@ -57,7 +57,7 @@
       },
       toPoster2() {
         gtag('event', 'Xirsx');
-        open('https://item.taobao.com/item.htm?id=677056042758');
+        open('https://space.bilibili.com/8202433');
       },
     },
   };

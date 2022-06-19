@@ -1,0 +1,31 @@
+.sc-class {
+  font-family: rd-sc, sans-serif;
+
+  .card-name {
+    font-family: rd-sc-name, sans-serif;
+    top: 76px;
+    font-size: 92px;
+  }
+
+  .spell-trap {
+    top: 1471px;
+    font-size: 46px;
+    letter-spacing: 2px;
+
+    .spell-trap-icon {
+      margin-left: 5px;
+    }
+  }
+
+  .card-effect {
+    top: 1471px;
+    font-size: 46px;
+    letter-spacing: 2px;
+  }
+
+  .card-description {
+    top: 1560px;
+    font-size: calc(39px * var(--descriptionZoom));
+    line-height: 1.39;
+  }
+}
