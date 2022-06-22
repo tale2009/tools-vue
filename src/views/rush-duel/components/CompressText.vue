@@ -28,7 +28,7 @@
     },
     computed: {
       textList() {
-        return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]]`, 'g'), s => `|${s}|`)
+        return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]`, 'g'), s => `|${s}|`)
           .split('|').filter(value => value).map(value => {
             if (/\[.*?\(.*?\)]/g.test(value)) {
               return {

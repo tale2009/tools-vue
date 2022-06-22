@@ -1,6 +1,6 @@
 <template>
   <div
-    class="yugioh-card"
+    class="yugioh-card notranslate"
     :class="cardClass"
     :style="cardStyle"
     ondragstart="return false"

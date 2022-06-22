@@ -10,7 +10,7 @@
     "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts,.jsx,.tsx"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.4",
+    "@element-plus/icons-vue": "^2.0.6",
     "axios": "^0.27.2",
     "blueimp-load-image": "^5.16.0",
     "color": "^4.2.3",
@@ -23,7 +23,7 @@
     "mime": "^3.0.0",
     "normalize.css": "^8.0.1",
     "qs": "^6.10.5",
-    "screenfull": "^6.0.1",
+    "screenfull": "^6.0.2",
     "vue": "^3.2.37",
     "vue-cropperjs": "^5.0.0",
     "vue-router": "^4.0.16",

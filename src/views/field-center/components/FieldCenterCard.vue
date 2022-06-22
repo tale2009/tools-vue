@@ -1,6 +1,6 @@
 <template>
   <div
-    class="field-center-card"
+    class="field-center-card notranslate"
     :class="cardClass"
     :style="cardStyle"
     ondragstart="return false"

@@ -7,7 +7,7 @@
   >
     <div class="thank-main">
       <p>😃以下为赞助列表，感谢大家的支持！😄（按时间排序）</p>
-      <div class="thank-list">
+      <div class="thank-list notranslate">
         <el-scrollbar :max-height="300">
           <p v-for="(item, index) in thankList" class="thank-item">
             <span class="sort">{{ index + 1 }}.</span>

@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@element-plus/icons-vue': ^2.0.4
+  '@element-plus/icons-vue': ^2.0.6
   '@vitejs/plugin-vue': ^2.3.3
   axios: ^0.27.2
   blueimp-load-image: ^5.16.0
@@ -19,7 +19,7 @@ specifiers:
   normalize.css: ^8.0.1
   qs: ^6.10.5
   sass: ^1.52.3
-  screenfull: ^6.0.1
+  screenfull: ^6.0.2
   vite: ^2.9.12
   vite-plugin-compression: ^0.5.1
   vue: ^3.2.37
@@ -28,7 +28,7 @@ specifiers:
   vuex: ^4.0.2
 
 dependencies:
-  '@element-plus/icons-vue': 2.0.4_vue@3.2.37
+  '@element-plus/icons-vue': 2.0.6_vue@3.2.37
   axios: 0.27.2
   blueimp-load-image: 5.16.0
   color: 4.2.3
@@ -41,7 +41,7 @@ dependencies:
   mime: 3.0.0
   normalize.css: 8.0.1
   qs: 6.10.5
-  screenfull: 6.0.1
+  screenfull: 6.0.2
   vue: 3.2.37
   vue-cropperjs: 5.0.0_vue@3.2.37
   vue-router: 4.0.16_vue@3.2.37
@@ -81,16 +81,8 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /@element-plus/icons-vue/2.0.4_vue@3.2.37:
-    resolution: {integrity: sha512-UeBVBU3fuBsYa9mzM7DgkRztQ1Aftw3sMTI/1gZsqXq2NWiCOi16ZYXXGIc0jFDIu+k6SojzdlxOjv+rN/Y6FQ==}
-    peerDependencies:
-      vue: ^3.2.0
-    dependencies:
-      vue: 3.2.37
-    dev: false
-
-  /@element-plus/icons-vue/2.0.5_vue@3.2.37:
-    resolution: {integrity: sha512-jvNWyKcdvPvMDLTWjghrPY+bYHKqh7hbAFIPe+HWR073zilzt33csREzmKx3VwhdlJUW5u0nCqN+0rwI8jlH+w==}
+  /@element-plus/icons-vue/2.0.6_vue@3.2.37:
+    resolution: {integrity: sha512-lPpG8hYkjL/Z97DH5Ei6w6o22Z4YdNglWCNYOPcB33JCF2A4wye6HFgSI7hEt9zdLyxlSpiqtgf9XcYU+m5mew==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
@@ -521,7 +513,7 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@ctrl/tinycolor': 3.4.1
-      '@element-plus/icons-vue': 2.0.5_vue@3.2.37
+      '@element-plus/icons-vue': 2.0.6_vue@3.2.37
       '@floating-ui/dom': 0.5.3
       '@popperjs/core': /@sxzz/popperjs-es/2.11.7
       '@types/lodash': 4.14.182
@@ -1385,8 +1377,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /screenfull/6.0.1:
-    resolution: {integrity: sha512-yzQW+j4zMUBQC51xxWaoDYjxOtl8Kn+xvue3p6v/fv2pIi1jH4AldgVLU8TBfFVgH2x3VXlf3+YiA/AYIPlaew==}
+  /screenfull/6.0.2:
+    resolution: {integrity: sha512-AQdy8s4WhNvUZ6P8F6PB21tSPIYKniic+Ogx0AacBMjKP1GUHN2E9URxQHtCusiwxudnCKkdy4GrHXPPJSkCCw==}
     engines: {node: ^14.13.1 || >=16.0.0}
     dev: false
 

@@ -1,0 +1,61 @@
+.jp-class {
+  font-family: rd-jp, sans-serif;
+
+  .card-name {
+    font-family: rd-jp-name, sans-serif;
+    top: 75px;
+    font-size: 92px;
+
+    ::v-deep(.ruby) {
+      .rt {
+        font-size: 18px;
+        top: -17px;
+      }
+    }
+  }
+
+  .spell-trap {
+    font-family: rd-jp-effect, sans-serif;
+    top: 1474px;
+    font-size: 46px;
+    letter-spacing: 2px;
+
+    ::v-deep(.ruby) {
+      .rt {
+        font-size: 14px;
+        top: -10px;
+      }
+    }
+
+    .spell-trap-icon {
+      margin-left: 5px;
+    }
+  }
+
+  .card-effect {
+    font-family: rd-jp-effect, sans-serif;
+    top: 1474px;
+    font-size: 46px;
+    letter-spacing: 2px;
+
+    ::v-deep(.ruby) {
+      .rt {
+        font-size: 14px;
+        top: -10px;
+      }
+    }
+  }
+
+  .card-description {
+    top: 1560px;
+    font-size: calc(39px * var(--descriptionZoom));
+    line-height: 1.4;
+
+    ::v-deep(.ruby) {
+      .rt {
+        font-size: calc(12px * var(--descriptionZoom));
+        top: calc(-10px * var(--descriptionZoom));
+      }
+    }
+  }
+}

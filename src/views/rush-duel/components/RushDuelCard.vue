@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rush-duel-card"
+    class="rush-duel-card notranslate"
     :class="cardClass"
     :style="cardStyle"
     ondragstart="return false"
@@ -56,7 +56,12 @@
     </div>
 
     <div v-if="data.type === 'monster' && data.monsterType" class="card-effect">
-      <span>{{ monsterType }}</span>
+      <CompressText
+        :text="monsterType"
+        :refresh-key="refreshKey"
+        :width="1196"
+        :height="100"
+      />
     </div>
 
     <div v-card-description class="card-description">
@@ -165,6 +170,9 @@
       },
       attributeSrc() {
         let suffix = '';
+        if (this.data.language === 'jp') {
+          suffix = '-jp';
+        }
         if (this.data.type === 'monster') {
           return `${this.baseImage}/attribute-${this.data.attribute}${suffix}.png`;
         } else {
@@ -191,6 +199,25 @@
             name += '/永续';
           } else if (this.data.icon === 'counter') {
             name += '/反击';
+          }
+        } else if (this.data.language === 'jp') {
+          if (this.data.type === 'spell') {
+            name = '[魔(ま)][法(ほう)]カード';
+          } else if (this.data.type === 'trap') {
+            name = '[罠(トラップ)]カード';
+          }
+          if (this.data.icon === 'equip') {
+            name += '／[装(そう)][備(び)]';
+          } else if (this.data.icon === 'filed') {
+            name += '／フィールド';
+          } else if (this.data.icon === 'quick-play') {
+            name += '／[速(そっ)][攻(こう)]';
+          } else if (this.data.icon === 'ritual') {
+            name += '／[儀(ぎ)][式(しき)]';
+          } else if (this.data.icon === 'continuous') {
+            name += '／[永(えい)][続(ぞく)]';
+          } else if (this.data.icon === 'counter') {
+            name += '／カウンター';
           }
         }
         return name;
@@ -232,6 +259,7 @@
 
 <style lang="scss" scoped>
   @use "../style/sc" as *;
+  @use "../style/jp" as *;
 
   .rush-duel-card {
     width: 1394px;
@@ -250,7 +278,7 @@
 
     .card-name {
       position: absolute;
-      left: 73px;
+      left: 71px;
       width: 1030px;
     }
 
@@ -291,7 +319,6 @@
       position: absolute;
       left: 99px;
       height: 60px;
-      font-weight: bold;
       white-space: nowrap;
       display: flex;
       align-items: center;
@@ -358,7 +385,6 @@
       left: 99px;
       height: 60px;
       width: 1020px;
-      font-weight: bold;
       white-space: nowrap;
       display: flex;
       align-items: center;

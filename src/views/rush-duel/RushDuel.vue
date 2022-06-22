@@ -210,6 +210,7 @@
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import CropperDialog from '@/components/dialog/CropperDialog';
   import scDemo from '@/views/rush-duel/demo/sc-demo';
+  import jpDemo from '@/views/rush-duel/demo/jp-demo';
   import loadImage from 'blueimp-load-image';
   import { nextTick } from 'vue';
   import html2canvas from '@/views/yugioh/html2canvas';
@@ -253,6 +254,7 @@
         },
         languageList: [
           { label: '简体中文', value: 'sc' },
+          { label: '日文', value: 'jp' },
         ],
         cropperImage: '',
         cropperDialog: false,
@@ -278,6 +280,8 @@
       changeLanguage(value) {
         if (value === 'sc') {
           Object.assign(this.form, scDemo);
+        } else if (value === 'jp') {
+          Object.assign(this.form, jpDemo);
         }
         this.refreshFont();
       },

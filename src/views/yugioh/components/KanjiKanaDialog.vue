@@ -26,7 +26,7 @@
         <el-col :span="12">
           <el-form-item label="常用注音表（点击可插入）" prop="filter">
             <el-input v-model="form.filter" clearable placeholder="请输入筛选文字" />
-            <div class="kanji-kana-list">
+            <div class="kanji-kana-list notranslate">
               <el-scrollbar :max-height="400">
                 <p v-for="(v,k) in filteredKanjiKanaMap" @click="insertKanjiKana(v)">{{ k }}：{{ v }}</p>
               </el-scrollbar>
