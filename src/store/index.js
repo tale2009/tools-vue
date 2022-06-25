@@ -6,6 +6,7 @@ export default createStore({
   state: {
     leftCollapse: false,
     rightCollapse: false,
+    mysteryMode: false,
     staticURL: '',
   },
   mutations: {
@@ -17,7 +18,8 @@ export default createStore({
     },
     setStaticURL(state) {
       const mysteryCode = localStorage.getItem('mystery-code') || '';
-      const prefix = md5(mysteryCode) === '21232f297a57a5a743894a0e4a801fc3' ? '' : 'v-';
+      state.mysteryMode = md5(mysteryCode) === '21232f297a57a5a743894a0e4a801fc3';
+      const prefix = state.mysteryMode ? '' : 'v-';
       if (!prefix) {
         setTimeout(() => {
           ElNotification.success({

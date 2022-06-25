@@ -361,6 +361,21 @@
         return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
       },
     },
+    watch: {
+      // 图片转base64
+      'form.image'() {
+        if (this.form.image && !this.form.image.startsWith('data:image')) {
+          loadImage(this.form.image, {
+            canvas: true,
+            top: 0,
+            aspectRatio: 1,
+            crossOrigin: 'Anonymous',
+          }).then(data => {
+            this.form.image = data.image.toDataURL('image/png', 1);
+          });
+        }
+      },
+    },
   };
 </script>
 

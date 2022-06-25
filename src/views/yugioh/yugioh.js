@@ -138,7 +138,7 @@ export function parseAttribute(data) {
   } else if (data.attribute & 0x1) {
     return 'earth';
   } else {
-    return 'light';
+    return '';
   }
 }
 
@@ -247,6 +247,9 @@ export function parsePendulumDescription(data, lang) {
 }
 
 export function parseMonsterType(data, lang) {
+  if (!data.race) {
+    return '';
+  }
   let list = [];
   // 先判断种族
   if (data.race & 0x1000000) {

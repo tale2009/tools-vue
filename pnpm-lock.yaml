@@ -18,7 +18,7 @@ specifiers:
   mime: ^3.0.0
   normalize.css: ^8.0.1
   qs: ^6.10.5
-  sass: ^1.52.3
+  sass: ^1.53.0
   screenfull: ^6.0.2
   vite: ^2.9.12
   vite-plugin-compression: ^0.5.1
@@ -52,8 +52,8 @@ devDependencies:
   eslint: 8.18.0
   eslint-define-config: 1.5.1
   eslint-plugin-vue: 9.1.1_eslint@8.18.0
-  sass: 1.52.3
-  vite: 2.9.12_sass@1.52.3
+  sass: 1.53.0
+  vite: 2.9.12_sass@1.53.0
   vite-plugin-compression: 0.5.1_vite@2.9.12
 
 packages:
@@ -152,7 +152,7 @@ packages:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.12_sass@1.52.3
+      vite: 2.9.12_sass@1.53.0
       vue: 3.2.37
     dev: true
 
@@ -1367,8 +1367,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /sass/1.52.3:
-    resolution: {integrity: sha512-LNNPJ9lafx+j1ArtA7GyEJm9eawXN8KlA1+5dF6IZyoONg1Tyo/g+muOsENWJH/2Q1FHbbV4UwliU0cXMa/VIA==}
+  /sass/1.53.0:
+    resolution: {integrity: sha512-zb/oMirbKhUgRQ0/GFz8TSAwRq2IlR29vOUJZOx0l8sV+CkHUfHa4u5nqrG+1VceZp7Jfj59SVW9ogdhTvJDcQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -1517,12 +1517,12 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 2.9.12_sass@1.52.3
+      vite: 2.9.12_sass@1.53.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite/2.9.12_sass@1.52.3:
+  /vite/2.9.12_sass@1.53.0:
     resolution: {integrity: sha512-suxC36dQo9Rq1qMB2qiRorNJtJAdxguu5TMvBHOc/F370KvqAe9t48vYp+/TbPKRNrMh/J55tOUmkuIqstZaew==}
     engines: {node: '>=12.2.0'}
     hasBin: true
@@ -1542,7 +1542,7 @@ packages:
       postcss: 8.4.14
       resolve: 1.22.0
       rollup: 2.75.6
-      sass: 1.52.3
+      sass: 1.53.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
