@@ -244,6 +244,7 @@
             </el-row>
           </div>
 
+          <KanjiKanaDialog v-model="kanjiKanaDialog" />
           <CropperDialog
             v-model="cropperDialog"
             :image="cropperImage"
@@ -260,6 +261,7 @@
   import Page from '@/components/page/Page';
   import PageForm from '@/components/page/PageForm';
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
+  import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
   import CropperDialog from '@/components/dialog/CropperDialog';
   import scDemo from '@/views/rush-duel/demo/sc-demo';
   import jpDemo from '@/views/rush-duel/demo/jp-demo';
@@ -275,6 +277,7 @@
       Page,
       PageForm,
       RushDuelCard,
+      KanjiKanaDialog,
       CropperDialog,
       InfoFilled,
     },
