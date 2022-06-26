@@ -9,7 +9,7 @@
       <CompressText
         :text="data.name"
         :refresh-key="refreshKey"
-        :width="data.attribute ? 1025 : 1248"
+        :width="attributeSrc ? 1025 : 1248"
         :height="200"
       />
     </div>

@@ -12,7 +12,7 @@
         :gradient-color1="data.gradientColor1"
         :gradient-color2="data.gradientColor2"
         :refresh-key="refreshKey"
-        :width="data.attribute ? 1033 : 1161"
+        :width="attributeSrc ? 1033 : 1161"
         :height="200"
       />
     </div>
