@@ -213,7 +213,7 @@
                 <el-button
                   plain
                   :loading="randomLoading"
-                  :disabled="form.language === 'astral'"
+                  :disabled="form.language !== 'sc'"
                   @click="getRandomCard"
                 >
                   随机生成
