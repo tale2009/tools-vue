@@ -642,7 +642,6 @@
             gradient: this.form.gradient,
             gradientColor1: this.form.gradientColor1,
             gradientColor2: this.form.gradientColor2,
-            gradientPreset: this.form.gradientPreset,
             descriptionZoom: this.form.descriptionZoom,
             password: this.form.password,
             copyright: this.form.copyright,

@@ -229,7 +229,7 @@ export function parsePendulumScale(data) {
 export function parsePendulumDescription(data, lang) {
   if (parseType(data) === 'pendulum') {
     let description = characterToHalf(data.desc).replace(/'''/g, '')
-      .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
+      .replace(/\r/g, '\n').replace(/(\n)\1*/g, '\n');
     const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】|【怪獸敘述】|【怪獸效果】|【怪獸描述】/).filter(item => item && item !== '\n');
     if (lang === 'tc') {
       description = list[2]?.replace(/\d+→|\n/g, '') || '';
@@ -409,7 +409,7 @@ export function parseArrowList(data) {
 
 export function parseDescription(data, lang) {
   let description = characterToHalf(data.desc).replace(/'''/g, '')
-    .replace(/\r/g, '\n').replace(/\n\n/g, '\n');
+    .replace(/\r/g, '\n').replace(/(\n)\1*/g, '\n');
   if (parseType(data) === 'pendulum') {
     const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】|【怪獸敘述】|【怪獸效果】|【怪獸描述】/).filter(item => item && item !== '\n');
     if (lang === 'tc') {

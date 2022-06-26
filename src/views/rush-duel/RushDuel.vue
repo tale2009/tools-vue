@@ -14,7 +14,16 @@
       </template>
 
       <template #form>
-        <PageForm title="游戏王超速决斗" description="最大尺寸 1394 px * 2031 px，卡模素材 by 白羽幸鳥">
+        <PageForm description="最大尺寸 1394 px * 2031 px，卡模素材 by 白羽幸鳥">
+          <template #title>
+            <span>游戏王超速决斗</span>
+            <el-tooltip :content="`数据库同步时间：${formatTime(config.updateTime)}`" placement="top">
+              <el-icon style="margin-left: 5px" :size="18">
+                <info-filled />
+              </el-icon>
+            </el-tooltip>
+          </template>
+
           <el-form :model="form" label-width="auto">
             <el-form-item label="语言">
               <el-select v-model="form.language" placeholder="请选择语言" @change="changeLanguage">
@@ -22,7 +31,12 @@
               </el-select>
             </el-form-item>
             <el-form-item label="卡名">
-              <el-input v-model="form.name" placeholder="请输入卡名" />
+              <el-autocomplete
+                v-model="form.name"
+                :fetch-suggestions="fetchCardName"
+                placeholder="请输入卡名"
+                @select="selectCardName"
+              />
             </el-form-item>
             <el-form-item label="颜色">
               <el-color-picker v-model="form.color" />
@@ -116,8 +130,10 @@
               <span class="tip">（? 输入 -1）</span>
             </el-form-item>
             <el-form-item label="效果">
+              <el-switch v-model="form.firstLineCompress" active-text="首行压缩" />
               <el-input
                 v-model="form.description"
+                style="margin-top: 10px"
                 type="textarea"
                 :autosize="{minRows: 3}"
                 placeholder="请输入效果"
@@ -134,6 +150,29 @@
             </el-form-item>
             <el-form-item label="卡包">
               <el-input v-model="form.package" placeholder="请输入卡包" />
+            </el-form-item>
+            <el-form-item label="密码">
+              <div style="display: flex;align-items: center;flex: 1">
+                <el-input v-model="form.password" placeholder="请输入密码" />
+                <el-button
+                  style="margin-left: 10px;flex-shrink: 0"
+                  type="primary"
+                  :disabled="form.language !== 'sc'"
+                  @click="searchCardByPassword('')"
+                >
+                  <span>搜索</span>
+                </el-button>
+                <el-tooltip content="仅分享搜索结果" placement="top">
+                  <el-button
+                    style="margin-left: 10px;flex-shrink: 0"
+                    type="success"
+                    :disabled="form.language !== 'sc'"
+                    @click="shareCard"
+                  >
+                    分享
+                  </el-button>
+                </el-tooltip>
+              </div>
             </el-form-item>
             <el-form-item label="传说">
               <el-switch v-model="form.legend" />
@@ -167,6 +206,19 @@
 
           <div class="button-group">
             <el-row :gutter="gutter">
+              <el-col :span="12">
+                <el-button plain @click="kanjiKanaDialog = true">一键注音</el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button
+                  plain
+                  :loading="randomLoading"
+                  :disabled="form.language === 'astral'"
+                  @click="getRandomCard"
+                >
+                  随机生成
+                </el-button>
+              </el-col>
               <el-col :span="12">
                 <el-upload
                   action="/"
@@ -212,8 +264,10 @@
   import scDemo from '@/views/rush-duel/demo/sc-demo';
   import jpDemo from '@/views/rush-duel/demo/jp-demo';
   import loadImage from 'blueimp-load-image';
+  import { InfoFilled } from '@element-plus/icons-vue';
   import { nextTick } from 'vue';
   import html2canvas from '@/views/yugioh/html2canvas';
+  import { parseRushDuelCard } from '@/views/rush-duel/rush-duel';
 
   export default {
     name: 'RushDuel',
@@ -222,12 +276,14 @@
       PageForm,
       RushDuelCard,
       CropperDialog,
+      InfoFilled,
     },
     data() {
       return {
         gutter: 10,
         refreshKey: 0,
         fontLoading: false,
+        randomLoading: false,
         exportLoading: false,
         form: {
           language: 'sc',
@@ -244,8 +300,10 @@
           atk: 0,
           def: 0,
           description: '',
+          firstLineCompress: false,
           descriptionZoom: 1,
           package: '',
+          password: '',
           legend: false,
           laser: false,
           radius: true,
@@ -257,16 +315,27 @@
           { label: '日文', value: 'jp' },
         ],
         cropperImage: '',
+        kanjiKanaDialog: false,
         cropperDialog: false,
+        config: {},
       };
     },
     created() {
       Object.assign(this.form, scDemo);
     },
     mounted() {
+      this.getConfig();
       this.refreshFont();
     },
     methods: {
+      getConfig() {
+        this.axios({
+          method: 'get',
+          url: '/rush-duel/config',
+        }).then(res => {
+          this.config = res.data.data;
+        });
+      },
       // 刷新字体
       refreshFont() {
         setTimeout(() => {
@@ -310,6 +379,82 @@
       },
       changeDescriptionZoom() {
         this.refreshKey++;
+      },
+      fetchCardName(value, callback) {
+        if (this.form.language !== 'sc') {
+          callback([]);
+          return;
+        }
+        if (value) {
+          this.axios({
+            method: 'get',
+            url: '/rush-duel/card',
+            params: {
+              name: this.cardName,
+              lang: this.form.language,
+            },
+          }).then(res => {
+            let data = res.data.data;
+            data.forEach(value => {
+              value.value = `${value.name}（${value.id}）`;
+            });
+            callback(data);
+          });
+        } else {
+          callback([]);
+        }
+      },
+      selectCardName(value) {
+        this.form.name = value.name;
+        this.form.password = value.id;
+        this.searchCardByPassword();
+      },
+      searchCardByPassword(lang) {
+        this.axios({
+          method: 'get',
+          url: '/rush-duel/card/' + this.form.password,
+          params: {
+            lang: lang || this.form.language,
+          },
+        }).then(res => {
+          if (lang) {
+            this.form.language = lang;
+            this.refreshFont();
+          }
+          let cardInfo = parseRushDuelCard(res.data.data, this.form.language);
+          Object.assign(this.form, cardInfo);
+        });
+      },
+      getRandomCard() {
+        this.randomLoading = true;
+        this.axios({
+          method: 'get',
+          url: '/rush-duel/random-card',
+          params: {
+            lang: this.form.language,
+          },
+        }).then(res => {
+          let cardInfo = parseRushDuelCard(res.data.data, this.form.language);
+          Object.assign(this.form, cardInfo);
+        }).finally(() => {
+          this.randomLoading = false;
+        });
+      },
+      shareCard() {
+        const { href } = this.$router.resolve({
+          path: '/share/rush-duel',
+          query: {
+            language: this.form.language,
+            color: this.form.color,
+            descriptionZoom: this.form.descriptionZoom,
+            password: this.form.password,
+            copyright: this.form.copyright,
+            laser: this.form.laser,
+            radius: this.form.radius,
+            cardBack: this.form.cardBack,
+          },
+        });
+        open(href, '_blank');
       },
       importJson(file) {
         let reader = new FileReader();

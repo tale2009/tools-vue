@@ -12,5 +12,8 @@ export default {
   atk: 3000,
   def: 2500,
   description: '以高攻击力著称的传说之龙。任何对手都能将之粉碎，其破坏力不可估量。',
+  firstLineCompress: false,
   package: 'RD/KP01-SC000',
+  password: '120120000',
+  legend: true,
 };

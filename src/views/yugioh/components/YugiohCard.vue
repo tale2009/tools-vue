@@ -17,7 +17,7 @@
       />
     </div>
 
-    <div v-if="data.attribute" class="card-attribute">
+    <div v-if="attributeSrc" class="card-attribute">
       <el-image :src="attributeSrc" />
     </div>
 
@@ -271,6 +271,9 @@
           suffix = '-astral';
         }
         if (['monster', 'pendulum'].includes(this.data.type)) {
+          if (!this.data.attribute) {
+            return '';
+          }
           return `${this.baseImage}/attribute-${this.data.attribute}${suffix}.png`;
         } else {
           return `${this.baseImage}/attribute-${this.data.type}${suffix}.png`;

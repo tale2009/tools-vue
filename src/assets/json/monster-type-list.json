@@ -39,7 +39,13 @@
     "divineBeast": "幻神兽族",
     "creatorGod": "创造神族",
     "wyrm": "幻龙族",
-    "cyberse": "电子界族"
+    "cyberse": "电子界族",
+    "cyborg": "电子人族",
+    "magicalKnight": "魔导骑士族",
+    "hydragon": "多头龙族",
+    "celestialKnight": "天界骑士族",
+    "omegaPsycho": "欧米茄念动力族",
+    "galaxy": "银河族"
   },
   "tc": {
     "normal": "通常",
@@ -81,7 +87,13 @@
     "divineBeast": "幻神獸族",
     "creatorGod": "創造神族",
     "wyrm": "幻龍族",
-    "cyberse": "電子界族"
+    "cyberse": "電子界族",
+    "cyborg": "電子人族",
+    "magicalKnight": "魔導騎士族",
+    "hydragon": "多頭龍族",
+    "celestialKnight": "天界騎士族",
+    "omegaPsycho": "歐米茄念動力族",
+    "galaxy": "銀河族"
   },
   "jp": {
     "normal": "通常",
@@ -123,7 +135,13 @@
     "divineBeast": "幻神獣族",
     "creatorGod": "創造神族",
     "wyrm": "幻竜族",
-    "cyberse": "サイバース族"
+    "cyberse": "サイバース族",
+    "cyborg": "サイボーグ族",
+    "magicalKnight": "魔導騎士族",
+    "hydragon": "ハイドラゴン族",
+    "celestialKnight": "天界戦士族",
+    "omegaPsycho": "オメガサイキック族",
+    "galaxy": "ギャラクシー族"
   },
   "kr": {
     "normal": "일반",
@@ -165,7 +183,13 @@
     "divineBeast": "환신야수족",
     "creatorGod": "창조신족",
     "wyrm": "환룡족",
-    "cyberse": "사이버스족"
+    "cyberse": "사이버스족",
+    "cyborg": "사이보그족",
+    "magicalKnight": "마도 기사족",
+    "hydragon": "하이드래곤족",
+    "celestialKnight": "천계전사족",
+    "omegaPsycho": "오메가사이킥족",
+    "galaxy": "은하족"
   },
   "en": {
     "normal": "Normal",
@@ -207,6 +231,12 @@
     "divineBeast": "Divine-Beast",
     "creatorGod": "Creator God",
     "wyrm": "Wyrm",
-    "cyberse": "Cyberse"
+    "cyberse": "Cyberse",
+    "cyborg": "Cyborg",
+    "magicalKnight": "Magical Knight",
+    "hydragon": "Hydragon",
+    "celestialKnight": "Celestial Knight",
+    "omegaPsycho": "Omega Psycho",
+    "galaxy": "Galaxy"
   }
 }

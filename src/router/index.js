@@ -78,6 +78,14 @@ const routes = [
           title: '游戏王卡片分享',
         },
       },
+      {
+        path: 'rush-duel',
+        name: 'shareRushDuel',
+        component: () => import('../views/share/rush-duel/RushDuel.vue'),
+        meta: {
+          title: '游戏王超速决斗分享',
+        },
+      },
     ],
   },
 ];

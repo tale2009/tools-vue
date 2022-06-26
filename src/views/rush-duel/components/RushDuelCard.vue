@@ -14,7 +14,7 @@
       />
     </div>
 
-    <div v-if="data.attribute" class="card-attribute">
+    <div v-if="attributeSrc" class="card-attribute">
       <el-image :src="attributeSrc" />
     </div>
 
@@ -66,8 +66,17 @@
 
     <div v-card-description class="card-description">
       <template v-for="(item,index) in data.description.split('\n')">
+        <!--判断首行是否压缩-->
+        <div v-if="index === 0 && data.firstLineCompress">
+          <CompressText
+            :text="item"
+            :width="1196"
+            :height="70"
+            :refresh-key="refreshKey"
+          />
+        </div>
         <!--单行不压缩-->
-        <div v-if="index < data.description.split('\n').length - 1">
+        <div v-else-if="index < data.description.split('\n').length - 1">
           <CompressText :text="item" :refresh-key="refreshKey" />
         </div>
         <!--最后一行压缩-->
@@ -174,6 +183,9 @@
           suffix = '-jp';
         }
         if (this.data.type === 'monster') {
+          if (!this.data.attribute) {
+            return '';
+          }
           return `${this.baseImage}/attribute-${this.data.attribute}${suffix}.png`;
         } else {
           return `${this.baseImage}/attribute-${this.data.type}${suffix}.png`;
