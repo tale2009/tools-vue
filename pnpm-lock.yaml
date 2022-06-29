@@ -17,10 +17,10 @@ specifiers:
   md5: ^2.3.0
   mime: ^3.0.0
   normalize.css: ^8.0.1
-  qs: ^6.10.5
+  qs: ^6.11.0
   sass: ^1.53.0
   screenfull: ^6.0.2
-  vite: ^2.9.12
+  vite: ^2.9.13
   vite-plugin-compression: ^0.5.1
   vue: ^3.2.37
   vue-cropperjs: ^5.0.0
@@ -40,7 +40,7 @@ dependencies:
   md5: 2.3.0
   mime: 3.0.0
   normalize.css: 8.0.1
-  qs: 6.10.5
+  qs: 6.11.0
   screenfull: 6.0.2
   vue: 3.2.37
   vue-cropperjs: 5.0.0_vue@3.2.37
@@ -48,13 +48,13 @@ dependencies:
   vuex: 4.0.2_vue@3.2.37
 
 devDependencies:
-  '@vitejs/plugin-vue': 2.3.3_vite@2.9.12+vue@3.2.37
+  '@vitejs/plugin-vue': 2.3.3_vite@2.9.13+vue@3.2.37
   eslint: 8.18.0
   eslint-define-config: 1.5.1
   eslint-plugin-vue: 9.1.1_eslint@8.18.0
   sass: 1.53.0
-  vite: 2.9.12_sass@1.53.0
-  vite-plugin-compression: 0.5.1_vite@2.9.12
+  vite: 2.9.13_sass@1.53.0
+  vite-plugin-compression: 0.5.1_vite@2.9.13
 
 packages:
 
@@ -145,14 +145,14 @@ packages:
     resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
     dev: false
 
-  /@vitejs/plugin-vue/2.3.3_vite@2.9.12+vue@3.2.37:
+  /@vitejs/plugin-vue/2.3.3_vite@2.9.13+vue@3.2.37:
     resolution: {integrity: sha512-SmQLDyhz+6lGJhPELsBdzXGc+AcaT8stgkbiTFGpXPe8Tl1tJaBw1A6pxDqDuRsVkD8uscrkx3hA7QDOoKYtyw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.12_sass@1.53.0
+      vite: 2.9.13_sass@1.53.0
       vue: 3.2.37
     dev: true
 
@@ -1319,8 +1319,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /qs/6.10.5:
-    resolution: {integrity: sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==}
+  /qs/6.11.0:
+    resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
@@ -1509,7 +1509,7 @@ packages:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
     dev: true
 
-  /vite-plugin-compression/0.5.1_vite@2.9.12:
+  /vite-plugin-compression/0.5.1_vite@2.9.13:
     resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -1517,13 +1517,13 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 2.9.12_sass@1.53.0
+      vite: 2.9.13_sass@1.53.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite/2.9.12_sass@1.53.0:
-    resolution: {integrity: sha512-suxC36dQo9Rq1qMB2qiRorNJtJAdxguu5TMvBHOc/F370KvqAe9t48vYp+/TbPKRNrMh/J55tOUmkuIqstZaew==}
+  /vite/2.9.13_sass@1.53.0:
+    resolution: {integrity: sha512-AsOBAaT0AD7Mhe8DuK+/kE4aWYFMx/i0ZNi98hJclxb4e0OhQcZYUrvLjIaQ8e59Ui7txcvKMiJC1yftqpQoDw==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
