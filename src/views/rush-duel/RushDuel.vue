@@ -88,6 +88,7 @@
               <el-select v-model="form.cardType" placeholder="请选择卡类">
                 <el-option label="通常" value="normal" />
                 <el-option label="效果" value="effect" />
+                <el-option label="仪式" value="ritual" />
                 <el-option label="融合" value="fusion" />
               </el-select>
             </el-form-item>

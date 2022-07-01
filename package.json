@@ -16,7 +16,7 @@
     "color": "^4.2.3",
     "cropperjs": "^1.5.12",
     "dayjs": "^1.11.3",
-    "element-plus": "^2.2.6",
+    "element-plus": "^2.2.8",
     "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
