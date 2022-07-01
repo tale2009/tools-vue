@@ -7,6 +7,13 @@
     font-size: 106px;
     letter-spacing: 4px;
     word-spacing: -20px;
+
+    ::v-deep(.ruby) {
+      .rt {
+        font-size: 18px;
+        top: -7px;
+      }
+    }
   }
 
   .spell-trap {
