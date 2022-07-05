@@ -655,6 +655,7 @@
           align-items: center;
           font-size: 120px;
           color: var(--normal-color);
+          background: white;
 
           .image-tip {
             font-family: var(--default-font-family);

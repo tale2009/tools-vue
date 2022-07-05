@@ -12,6 +12,7 @@ import httpService from './plugins/http-service';
 import dayjs from 'dayjs';
 import base from '@/plugins/base';
 import { loadCSS } from '@/utils';
+import ElImageExtend from '@/extends/el-image-extend';
 
 const app = createApp(App);
 
@@ -20,6 +21,7 @@ app.config.globalProperties.dayjs = dayjs;
 app.use(ElementPlus, {
   locale: zhCn,
 });
+app._context.components['ElImage'] = ElImageExtend;
 app.use(httpService);
 app.use(base);
 app.use(router);
