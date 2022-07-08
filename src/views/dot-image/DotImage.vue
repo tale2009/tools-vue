@@ -71,11 +71,11 @@
       return {
         form: {
           image: myAvatar,
-          pixel: 48,
+          pixel: 16,
           shape: 'square',
           monochrome: false,
           grid: false,
-          size: 10,
+          size: 30,
         },
         dotList: [],
       };

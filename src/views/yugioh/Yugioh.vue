@@ -34,6 +34,7 @@
               <el-autocomplete
                 v-model="form.name"
                 :fetch-suggestions="fetchCardName"
+                fit-input-width
                 placeholder="请输入卡名"
                 @select="selectCardName"
               />

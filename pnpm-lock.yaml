@@ -8,10 +8,10 @@ specifiers:
   color: ^4.2.3
   cropperjs: ^1.5.12
   dayjs: ^1.11.3
-  element-plus: ^2.2.8
+  element-plus: ^2.2.9
   eslint: ^8.19.0
   eslint-define-config: ^1.5.1
-  eslint-plugin-vue: ^9.1.1
+  eslint-plugin-vue: ^9.2.0
   html2canvas: ^1.4.1
   lodash: ^4.17.21
   md5: ^2.3.0
@@ -20,11 +20,11 @@ specifiers:
   qs: ^6.11.0
   sass: ^1.53.0
   screenfull: ^6.0.2
-  vite: ^2.9.13
+  vite: ^2.9.14
   vite-plugin-compression: ^0.5.1
   vue: ^3.2.37
   vue-cropperjs: ^5.0.0
-  vue-router: ^4.1.0
+  vue-router: ^4.1.1
   vuex: ^4.0.2
 
 dependencies:
@@ -34,7 +34,7 @@ dependencies:
   color: 4.2.3
   cropperjs: 1.5.12
   dayjs: 1.11.3
-  element-plus: 2.2.8_vue@3.2.37
+  element-plus: 2.2.9_vue@3.2.37
   html2canvas: 1.4.1
   lodash: 4.17.21
   md5: 2.3.0
@@ -44,17 +44,17 @@ dependencies:
   screenfull: 6.0.2
   vue: 3.2.37
   vue-cropperjs: 5.0.0_vue@3.2.37
-  vue-router: 4.1.0_vue@3.2.37
+  vue-router: 4.1.1_vue@3.2.37
   vuex: 4.0.2_vue@3.2.37
 
 devDependencies:
-  '@vitejs/plugin-vue': 2.3.3_vite@2.9.13+vue@3.2.37
+  '@vitejs/plugin-vue': 2.3.3_vite@2.9.14+vue@3.2.37
   eslint: 8.19.0
   eslint-define-config: 1.5.1
-  eslint-plugin-vue: 9.1.1_eslint@8.19.0
+  eslint-plugin-vue: 9.2.0_eslint@8.19.0
   sass: 1.53.0
-  vite: 2.9.13_sass@1.53.0
-  vite-plugin-compression: 0.5.1_vite@2.9.13
+  vite: 2.9.14_sass@1.53.0
+  vite-plugin-compression: 0.5.1_vite@2.9.14
 
 packages:
 
@@ -149,14 +149,14 @@ packages:
     resolution: {integrity: sha512-5d2RhCard1nQUC3aHcq/gHzWYO6K0WJmAbjO7mQJgCQKtZpgXxv1rOM6O/dBDhDYYVutk1sciOgNSe+5YyfM8A==}
     dev: false
 
-  /@vitejs/plugin-vue/2.3.3_vite@2.9.13+vue@3.2.37:
+  /@vitejs/plugin-vue/2.3.3_vite@2.9.14+vue@3.2.37:
     resolution: {integrity: sha512-SmQLDyhz+6lGJhPELsBdzXGc+AcaT8stgkbiTFGpXPe8Tl1tJaBw1A6pxDqDuRsVkD8uscrkx3hA7QDOoKYtyw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.13_sass@1.53.0
+      vite: 2.9.14_sass@1.53.0
       vue: 3.2.37
     dev: true
 
@@ -512,8 +512,8 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /element-plus/2.2.8_vue@3.2.37:
-    resolution: {integrity: sha512-+cubFh1rgeGcc2LeBm7hv/1BKFJre/LIIdRntm9OLaIhysCxigjEwcxk9gbVT4KsbcjmoqZUr4/mwhIhQV6mvw==}
+  /element-plus/2.2.9_vue@3.2.37:
+    resolution: {integrity: sha512-jYbL0JkCdv95rkT6trZJjCAizLPySa0qcd2cgq+57SKQnCZAcNDDq4GbTuFRnNavdoeCJnuM3HIficTIUpsMOQ==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
@@ -759,8 +759,8 @@ packages:
     engines: {node: '>= 14.6.0', npm: '>= 6.0.0', pnpm: '>= 7.0.0'}
     dev: true
 
-  /eslint-plugin-vue/9.1.1_eslint@8.19.0:
-    resolution: {integrity: sha512-W9n5PB1X2jzC7CK6riG0oAcxjmKrjTF6+keL1rni8n57DZeilx/Fulz+IRJK3lYseLNAygN0I62L7DvioW40Tw==}
+  /eslint-plugin-vue/9.2.0_eslint@8.19.0:
+    resolution: {integrity: sha512-W2hc+NUXoce8sZtWgZ45miQTy6jNyuSdub5aZ1IBune4JDeAyzucYX0TzkrQ1jMO52sNUDYlCIHDoaNePe0p5g==}
     engines: {node: ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
@@ -1514,7 +1514,7 @@ packages:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
     dev: true
 
-  /vite-plugin-compression/0.5.1_vite@2.9.13:
+  /vite-plugin-compression/0.5.1_vite@2.9.14:
     resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -1522,13 +1522,13 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 2.9.13_sass@1.53.0
+      vite: 2.9.14_sass@1.53.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite/2.9.13_sass@1.53.0:
-    resolution: {integrity: sha512-AsOBAaT0AD7Mhe8DuK+/kE4aWYFMx/i0ZNi98hJclxb4e0OhQcZYUrvLjIaQ8e59Ui7txcvKMiJC1yftqpQoDw==}
+  /vite/2.9.14_sass@1.53.0:
+    resolution: {integrity: sha512-P/UCjSpSMcE54r4mPak55hWAZPlyfS369svib/gpmz8/01L822lMPOJ/RYW6tLCe1RPvMvOsJ17erf55bKp4Hw==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -1594,8 +1594,8 @@ packages:
       - supports-color
     dev: true
 
-  /vue-router/4.1.0_vue@3.2.37:
-    resolution: {integrity: sha512-A+dYO0ZXLJFZ40ebW3XtqehCW0Wv2xNH4lFddOByDja4NtItEdyirrShTlvD3UA4xc5a5mG2RRI30BusYpOb9g==}
+  /vue-router/4.1.1_vue@3.2.37:
+    resolution: {integrity: sha512-Wp1mEf2xCwT0ez7o9JvgpfBp9JGnVb+dPERzXDbugTatzJAJ60VWOhJKifQty85k+jOreoFHER4r5fu062PhPw==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
