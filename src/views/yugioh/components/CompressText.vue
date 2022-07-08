@@ -1,12 +1,9 @@
 <template>
   <div v-compress-text class="compress-text" :style="textStyle">
     <!--非渐变色文本-->
-    <span v-for="item in textList">
-      <span v-if="typeof item === 'object'" class="ruby">
-        <span>{{ item.ruby }}</span>
-        <span v-compress-rt class="rt">{{ item.rt }}</span>
-      </span>
-      <span v-else v-no-compress="noCompressText.includes(item)" class="ruby">{{ item }}</span>
+    <span v-for="item in textList" class="ruby">
+      <span v-no-compress="noCompressText.includes(item.ruby)">{{ item.ruby }}</span>
+      <span v-if="item.rt" v-compress-rt class="rt">{{ item.rt }}</span>
     </span>
     <!--渐变色文本（依赖于非渐变色文本的压缩）-->
     <span v-if="gradient" class="text-gradient">
@@ -31,13 +28,16 @@
       textList() {
         return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompressText}]`, 'g'), s => `|${s}|`)
           .split('|').filter(value => value).map(value => {
+            let ruby = value;
+            let rt = '';
             if (/\[.*?\(.*?\)]/g.test(value)) {
-              return {
-                ruby: value.replace(/\[(.*?)\((.*?)\)]/g, '$1'),
-                rt: value.replace(/\[(.*?)\((.*?)\)]/g, '$2'),
-              };
+              ruby = value.replace(/\[(.*?)\((.*?)\)]/g, '$1');
+              rt = value.replace(/\[(.*?)\((.*?)\)]/g, '$2');
             }
-            return value;
+            return {
+              ruby,
+              rt,
+            };
           });
       },
       textRuby() {

@@ -1,12 +1,9 @@
 <template>
   <div v-compress-text class="compress-text" :style="textStyle">
     <!--非渐变色文本-->
-    <span v-for="item in textList">
-      <span v-if="typeof item === 'object'" class="ruby">
-        <span>{{ item.ruby }}</span>
-        <span v-compress-rt class="rt">{{ item.rt }}</span>
-      </span>
-      <span v-else class="ruby">{{ item }}</span>
+    <span v-for="item in textList" class="ruby" :style="rubyStyle(item)">
+      <span>{{ item.ruby }}</span>
+      <span v-if="item.rt" v-compress-rt class="rt">{{ item.rt }}</span>
     </span>
     <!--渐变色文本（依赖于非渐变色文本的压缩）-->
     <span v-if="gradient" class="text-gradient">
@@ -26,18 +23,41 @@
         textScale: 1,
       };
     },
+    methods: {
+      rubyStyle(item) {
+        if (item.bold) {
+          return {
+            fontWeight: 'bold',
+          };
+        }
+        return {};
+      },
+    },
     computed: {
       textList() {
-        return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]`, 'g'), s => `|${s}|`)
+        let bold = false;
+        return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|<b>|</b>`, 'g'), s => `|${s}|`)
           .split('|').filter(value => value).map(value => {
+            let ruby = value;
+            let rt = '';
             if (/\[.*?\(.*?\)]/g.test(value)) {
-              return {
-                ruby: value.replace(/\[(.*?)\((.*?)\)]/g, '$1'),
-                rt: value.replace(/\[(.*?)\((.*?)\)]/g, '$2'),
-              };
+              ruby = value.replace(/\[(.*?)\((.*?)\)]/g, '$1');
+              rt = value.replace(/\[(.*?)\((.*?)\)]/g, '$2');
             }
-            return value;
-          });
+            if (value === '<b>') {
+              bold = true;
+              return null;
+            }
+            if (value === '</b>') {
+              bold = false;
+              return null;
+            }
+            return {
+              ruby,
+              rt,
+              bold,
+            };
+          }).filter(value => value);
       },
       textRuby() {
         return this.text.replace(/\[(.*?)\(.*?\)]/g, '$1');

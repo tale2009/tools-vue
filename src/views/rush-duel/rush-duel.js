@@ -238,6 +238,7 @@ export function parseDescription(data, lang) {
   description = description.replace(/(【.*?】)\n/g, '$1');
   description = description.replace(/极大攻击 \d*\n/g, '');
   description = description.replace(/《传说卡》\n/g, '');
+  description = description.replace(/(【.*?】)/g, '<b>$1</b>');
   if (['jp', 'sc'].includes(lang)) {
     // 效果数字全角，卡名数字半角
     description = numberToFull(description).replace(/(「.*?」)|(“.*?”)/g, s => numberToHalf(s));
