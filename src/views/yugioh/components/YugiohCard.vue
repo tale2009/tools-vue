@@ -552,9 +552,6 @@
           borderRadius: this.data.radius ? '24px' : '',
         };
       },
-      cardName() {
-        return this.data.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
-      },
     },
     directives: {
       nameColor(el, binding) {
@@ -771,7 +768,7 @@
       left: 0;
       width: 1394px;
       height: 2031px;
-      z-index: 30;
+      z-index: 100;
       overflow: hidden;
     }
 

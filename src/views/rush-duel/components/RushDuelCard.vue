@@ -115,6 +115,10 @@
     <div v-if="data.laser" class="card-laser">
       <el-image :src="baseImage + '/laser.png'" />
     </div>
+
+    <div v-if="data.rare" class="card-rare" :style="rareStyle">
+      <el-image :src="rareSrc" />
+    </div>
   </div>
 </template>
 
@@ -248,6 +252,14 @@
         const leftBracket = '【';
         const rightBracket = '】';
         return `${leftBracket}${this.data.monsterType}${rightBracket}`;
+      },
+      rareSrc() {
+        return `${this.baseImage}/rare-${this.data.rare}.png`;
+      },
+      rareStyle() {
+        return {
+          borderRadius: this.data.radius ? '24px' : '',
+        };
       },
     },
     directives: {
@@ -493,6 +505,17 @@
       left: 1276px;
       top: 1913px;
       z-index: 20;
+    }
+
+    .card-rare {
+      position: absolute;
+      mix-blend-mode: lighten;
+      top: 0;
+      left: 0;
+      width: 1394px;
+      height: 2031px;
+      z-index: 100;
+      overflow: hidden;
     }
 
     &.card-back {

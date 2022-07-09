@@ -34,6 +34,7 @@
           password: '',
           copyright: '',
           laser: false,
+          rare: '',
           radius: true,
           scale: 0.5,
           cardBack: false,
@@ -51,6 +52,7 @@
       this.form.password = query.password || '';
       this.form.copyright = query.copyright || '';
       this.form.laser = query.laser === 'true';
+      this.form.rare = query.rare || '';
       this.form.radius = query.radius === 'true';
       this.form.cardBack = query.cardBack === 'true';
       this.form.width = Number(query.width) || 0;

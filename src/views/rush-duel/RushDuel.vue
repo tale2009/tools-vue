@@ -176,6 +176,17 @@
                 </el-tooltip>
               </div>
             </el-form-item>
+            <el-form-item label="罕贵">
+              <el-select
+                v-model="form.rare"
+                placeholder="请选择罕贵"
+                clearable
+              >
+                <el-option label="SR" value="sr" />
+                <el-option label="RR" value="rr" />
+                <el-option label="PSER" value="pser" />
+              </el-select>
+            </el-form-item>
             <el-form-item label="传说">
               <el-switch v-model="form.legend" />
             </el-form-item>
@@ -311,6 +322,7 @@
           password: '',
           legend: false,
           laser: false,
+          rare: '',
           radius: true,
           cardBack: false,
           scale: 0.5,
@@ -455,6 +467,7 @@
             password: this.form.password,
             copyright: this.form.copyright,
             laser: this.form.laser,
+            rare: this.form.rare,
             radius: this.form.radius,
             cardBack: this.form.cardBack,
           },
