@@ -17,6 +17,7 @@ export default {
       a.download = `${fileName}.${extension}`;
       a.href = URL.createObjectURL(blob);
       a.click();
+      gtag('event', '文件下载');
     };
   },
 };
