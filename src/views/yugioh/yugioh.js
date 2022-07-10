@@ -1,5 +1,6 @@
 import kanjiKanaMap from '@/assets/json/kanji-kana.json';
 import monsterTypeList from '@/assets/json/monster-type-list.json';
+import escapeStringRegexp from 'escape-string-regexp';
 
 // 解析游戏王卡片
 export function parseYugiohCard(data, lang) {
@@ -37,7 +38,7 @@ export function parseYugiohCard(data, lang) {
 // 添加假名
 export function kanjiToKana(text = '') {
   // 重新排序kanjiKanaMap，最长key的放在最前
-  let kanjiKanaReg = new RegExp(Object.keys(kanjiKanaMap).sort((a, b) => b.length - a.length).join('|'), 'g');
+  let kanjiKanaReg = new RegExp(Object.keys(kanjiKanaMap).sort((a, b) => b.length - a.length).map(value => escapeStringRegexp(value)).join('|'), 'g');
   return text.replace(/\[.*?\(.*?\)]/g, s => `|${s}|`).split('|').filter(value => value).map(value => {
     if (!/\[.*?\(.*?\)]/g.test(value)) {
       return value.replace(kanjiKanaReg, s => kanjiKanaMap[s]);
