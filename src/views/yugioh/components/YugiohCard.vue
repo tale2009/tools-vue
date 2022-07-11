@@ -467,7 +467,7 @@
           letterSpacing = '0';
         } else {
           top = '1844px';
-          right = '397px';
+          right = '395px';
           fontFamily = 'ygo-atk-def, serif';
           fontSize = '62px';
           letterSpacing = '2px';
@@ -490,7 +490,7 @@
           letterSpacing = '0';
         } else {
           top = '1844px';
-          right = '114px';
+          right = '112px';
           fontFamily = 'ygo-atk-def, serif';
           fontSize = '62px';
           letterSpacing = '2px';
