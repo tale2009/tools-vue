@@ -1,16 +1,18 @@
 import { createStore } from 'vuex';
-import md5 from 'md5';
 import { ElNotification } from 'element-plus';
 import axios from 'axios';
+import { loadCSS } from '@/utils';
+import Cookies from 'js-cookie';
 
 export default createStore({
   state: {
     bodyOffsetWidth: 0,
     leftCollapse: false,
     rightCollapse: false,
-    mysteryMode: false,
     staticURL: '',
     userInfo: {},
+    isAdmin: false,
+    notification: null,
   },
   mutations: {
     setBodyOffsetWidth(state) {
@@ -23,18 +25,22 @@ export default createStore({
       state.rightCollapse = value;
     },
     setStaticURL(state) {
-      const mysteryCode = localStorage.getItem('mystery-code') || '';
-      state.mysteryMode = md5(mysteryCode) === '21232f297a57a5a743894a0e4a801fc3';
-      const prefix = state.mysteryMode ? '' : 'v-';
+      const role = state.userInfo.role;
+      let prefix = 'v-';
+      if (Array.isArray(role) && role.includes('admin')) {
+        prefix = '';
+      }
       if (!prefix) {
-        setTimeout(() => {
-          ElNotification.success({
-            title: '已进入神秘模式',
-            position: 'bottom-right',
-          });
-        }, 1000);
+        state.notification?.close();
+        state.notification = ElNotification.success({
+          title: '已进入加速模式',
+          position: 'bottom-right',
+        });
       }
       state.staticURL = `https://${prefix}static.kooriookami.top`;
+      loadCSS(`${state.staticURL}/font/fontawesome-pro-6.1.0/css/all.css`);
+      loadCSS(`${state.staticURL}/yugioh/font/ygo-font.css`);
+      loadCSS(`${state.staticURL}/rush-duel/font/rd-font.css`);
     },
     setUserInfo(state) {
       try {
@@ -42,6 +48,8 @@ export default createStore({
       } catch (e) {
         state.userInfo = {};
       }
+      const role = state.userInfo.role;
+      state.isAdmin = Array.isArray(role) && role.includes('admin');
     },
   },
   actions: {
@@ -52,6 +60,16 @@ export default createStore({
       }).then(res => {
         localStorage.setItem('userInfo', JSON.stringify(res.data.data));
         commit('setUserInfo');
+        commit('setStaticURL');
+      });
+    },
+    removeUserInfo({ commit }) {
+      return new Promise(resolve => {
+        Cookies.remove('token');
+        localStorage.removeItem('userInfo');
+        commit('setUserInfo');
+        commit('setStaticURL');
+        resolve();
       });
     },
   },

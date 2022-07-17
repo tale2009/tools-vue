@@ -42,15 +42,9 @@
       </el-space>
     </div>
 
-    <div class="header-center">
-      <el-button class="mystery-icon" link @dblclick="openMysteryBox">
-        <i class="fa-light fa-dog" />
-      </el-button>
-    </div>
-
     <div class="header-right">
       <el-space :size="10">
-        <SignAvatar v-if="false" />
+        <SignAvatar />
         <template v-if="!isSmallScreen">
           <i class="fab fa-github" @click="toGithub" />
           <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
@@ -136,12 +130,6 @@
           screenfull.toggle();
         }
       },
-      openMysteryBox() {
-        this.$messageBox.prompt('请输入神秘代码', '提示').then(({ value }) => {
-          localStorage.setItem('mystery-code', value);
-          location.reload();
-        });
-      },
     },
     computed: {
       ...mapState(['leftCollapse', 'rightCollapse', 'bodyOffsetWidth']),
@@ -175,17 +163,6 @@
 
       i {
         transition: all 0.3s;
-      }
-    }
-
-    .header-center {
-      .mystery-icon {
-        font-size: 24px;
-        color: transparent;
-
-        &:hover {
-          color: rgba(0, 0, 0, 0.1);
-        }
       }
     }
 

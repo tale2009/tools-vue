@@ -13,13 +13,42 @@
         <el-avatar class="user-avatar" :style="userAvatarStyle">{{ userInfo.nickname?.slice(0, 2) }}</el-avatar>
       </div>
     </template>
-    <div class="popover-content">
-      123
+    <div class="avatar-popover-content">
+      <p class="nickname">{{ userInfo.nickname }}</p>
+      <el-space class="tag-list" :size="10" wrap>
+        <el-tag v-if="isAdmin" effect="dark" size="small">管理员</el-tag>
+        <el-tag
+          effect="dark"
+          size="small"
+          color="darkorange"
+          style="border-color: darkorange"
+        >
+          月卡会员
+        </el-tag>
+      </el-space>
+      <div class="menu-list">
+        <div class="menu-item" @click="toMySpace">
+          <i class="fa-light fa-user fa-fw" />
+          <span>我的空间</span>
+          <i class="fa-light fa-angle-right" />
+        </div>
+        <div class="menu-item" @click="toMyOrder">
+          <i class="fa-light fa-rectangle-list fa-fw" />
+          <span>我的订单</span>
+          <i class="fa-light fa-angle-right" />
+        </div>
+        <el-divider />
+        <div class="menu-item" @click="logout">
+          <i class="fa-light fa-arrow-right-from-bracket fa-fw" />
+          <span>退出登录</span>
+        </div>
+      </div>
     </div>
   </el-popover>
   <!--未登录-->
   <el-popover
     v-else
+    ref="loginPopover"
     trigger="hover"
     placement="bottom"
     :width="300"
@@ -27,7 +56,7 @@
     <template #reference>
       <el-avatar class="login-avatar" @click="login">登录</el-avatar>
     </template>
-    <div class="popover-content">
+    <div class="login-popover-content">
       <p>
         <i style="color: darkorange; margin-right: 5px" class="fa-solid fa-fire" />
         现已推出
@@ -69,7 +98,7 @@
       :disabled="loading"
     >
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" />
+        <el-input v-model="form.username" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input
@@ -77,21 +106,22 @@
           type="password"
           autocomplete="new-password"
           show-password
+          placeholder="请输入密码"
           @keydown.enter="confirm"
         />
       </el-form-item>
       <template v-if="signTab === 'register'">
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="form.nickname" />
+          <el-input v-model="form.nickname" placeholder="请输入昵称" />
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
-          <el-input v-model="form.phone" type="tel">
+          <el-input v-model="form.phone" type="tel" placeholder="请输入手机号">
             <template #prepend>+86</template>
           </el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <div style="display: flex;align-items: center;flex: 1">
-            <el-input v-model="form.code" />
+            <el-input v-model="form.code" placeholder="请输入验证码" />
             <el-button
               style="margin-left: 10px;flex-shrink: 0"
               plain
@@ -125,7 +155,6 @@
   import { mapActions, mapState } from 'vuex';
   import { maxDialogWidth } from '@/utils';
   import md5 from 'md5';
-  import Cookies from 'js-cookie';
 
   export default {
     name: 'SignAvatar',
@@ -150,12 +179,12 @@
       };
     },
     mounted() {
-      if (Cookies.get('token')) {
-        this.getUserInfo();
-      }
+      setTimeout(() => {
+        this.$refs.loginPopover?.$refs.tooltipRef.onOpen();
+      });
     },
     methods: {
-      ...mapActions(['getUserInfo']),
+      ...mapActions(['getUserInfo', 'removeUserInfo']),
       maxDialogWidth,
       closeDialog() {
         this.$refs.form.resetFields();
@@ -164,13 +193,19 @@
       tabChange() {
         this.$refs.form.resetFields();
       },
-      login() {
+      async login() {
         this.signTab = 'login';
         this.signDialog = true;
+        setTimeout(() => {
+          this.$refs.loginPopover?.hide();
+        });
       },
       register() {
         this.signTab = 'register';
         this.signDialog = true;
+        setTimeout(() => {
+          this.$refs.loginPopover?.hide();
+        });
       },
       sendCode() {
         this.$refs.form.validateField('phone', valid => {
@@ -211,9 +246,7 @@
               if (this.signTab === 'register') {
                 this.$message.success('注册成功');
               }
-              this.getUserInfo().then(() => {
-                this.closeDialog();
-              });
+              location.reload();
             }).finally(() => {
               this.loading = false;
             });
@@ -225,9 +258,20 @@
           this.closeDialog();
         }, 1000);
       },
+      logout() {
+        this.removeUserInfo().then(() => {
+          location.reload();
+        });
+      },
+      toMySpace() {
+
+      },
+      toMyOrder() {
+
+      },
     },
     computed: {
-      ...mapState(['userInfo', 'bodyOffsetWidth']),
+      ...mapState(['userInfo', 'bodyOffsetWidth', 'isAdmin']),
       dialogWidth() {
         const offsetWidth = this.bodyOffsetWidth;
         return offsetWidth > 540 ? 500 : offsetWidth - 40;
@@ -280,11 +324,60 @@
     }
   }
 
+  .avatar-popover-content {
+    .nickname {
+      text-align: center;
+      line-height: 1.7;
+      margin: 20px 0 0;
+      font-size: 18px;
+    }
+
+    .tag-list {
+      margin-top: 5px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .menu-list {
+      margin-top: 10px;
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+
+        i {
+          font-size: 18px;
+
+          &:first-child {
+            margin-right: 10px;
+          }
+        }
+
+        span {
+          flex: 1;
+        }
+
+        &:hover {
+          background: whitesmoke;
+        }
+      }
+
+      .el-divider {
+        margin: 10px 0;
+      }
+    }
+  }
+
   .login-avatar {
     background: var(--primary-color);
   }
 
-  .popover-content {
+  .login-popover-content {
     p {
       line-height: 1.7;
       margin: 0 0 10px;

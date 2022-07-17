@@ -11,7 +11,6 @@ import '@/router/router-hooks';
 import httpService from './plugins/http-service';
 import dayjs from 'dayjs';
 import base from '@/plugins/base';
-import { loadCSS } from '@/utils';
 import ElImageExtend from '@/extends/el-image-extend';
 import Cookies from 'js-cookie';
 
@@ -29,15 +28,14 @@ app.use(router);
 app.use(store);
 app.mount('#app');
 
-store.commit('setStaticURL');
-if (!Cookies.get('token')) {
-  localStorage.removeItem('userInfo');
-}
 store.commit('setUserInfo');
-const staticURL = store.state.staticURL;
-loadCSS(`${staticURL}/font/fontawesome-pro-6.1.0/css/all.css`);
-loadCSS(`${staticURL}/yugioh/font/ygo-font.css`);
-loadCSS(`${staticURL}/rush-duel/font/rd-font.css`);
+store.commit('setStaticURL');
+
+if (Cookies.get('token')) {
+  store.dispatch('getUserInfo');
+} else {
+  store.dispatch('removeUserInfo');
+}
 
 // 接口请求地址配置
 if (process.env.NODE_ENV === 'production') {
@@ -45,5 +43,5 @@ if (process.env.NODE_ENV === 'production') {
   app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 } else {
   // 本地环境
-  app.config.globalProperties.baseURL = 'http://127.0.0.1:7010/api';
+  app.config.globalProperties.baseURL = 'http://192.168.0.107:7010/api';
 }

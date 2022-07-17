@@ -18,7 +18,7 @@
       </div>
     </div>
     <template #footer>
-      <span v-if="mysteryMode" class="sum-money">￥{{ sumMoney }}</span>
+      <span v-if="isAdmin" class="sum-money">￥{{ sumMoney }}</span>
       <el-button plain @click="closeDialog">关闭</el-button>
     </template>
   </el-dialog>
@@ -44,7 +44,7 @@
       },
     },
     computed: {
-      ...mapState(['mysteryMode']),
+      ...mapState(['isAdmin']),
       sumMoney() {
         return this.thankList.reduce((acc, current) => acc + current.money, 0).toFixed(2);
       },

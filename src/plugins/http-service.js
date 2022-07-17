@@ -34,9 +34,7 @@ export default {
         message: message,
       });
       if (error.response.status === 401) {
-        Cookies.remove('token');
-        localStorage.removeItem('userInfo');
-        store.commit('setUserInfo');
+        store.dispatch('removeUserInfo');
       }
       return Promise.reject(error);
     });
