@@ -20,7 +20,7 @@
 <script>
   import AppHeader from '@/layout/app-layout/components/AppHeader';
   import AppLeft from '@/layout/app-layout/components/AppLeft';
-  import { mapState } from 'vuex';
+  import { mapMutations, mapState } from 'vuex';
 
   export default {
     name: 'AppLayout',
@@ -32,8 +32,17 @@
       this.browserTip();
       document.onkeydown = this.disableKey;
       document.onkeypress = this.disableKey;
+      this.onResize();
+      addEventListener('resize', this.onResize);
+    },
+    beforeUnmount() {
+      removeEventListener('resize', this.onResize);
     },
     methods: {
+      ...mapMutations(['setBodyOffsetWidth']),
+      onResize() {
+        this.setBodyOffsetWidth();
+      },
       browserTip() {
         const isChrome = !!navigator.userAgent.match(/Chrome/i);
         const isFirefox = !!navigator.userAgent.match(/Firefox/i);
@@ -57,7 +66,7 @@
       },
       // 屏蔽某些键
       disableKey(e) {
-        if (e.key === 'Backspace' && !['text', 'textarea', 'password', 'number'].includes(e.target.type)) {
+        if (e.key === 'Backspace' && !['input', 'textarea'].includes(e.target?.tagName.toLowerCase())) {
           return false;
         }
       },

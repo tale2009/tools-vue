@@ -1,14 +1,45 @@
 <template>
   <div class="app-header-container">
     <div class="header-left">
-      <el-button
-        class="collapse-icon"
-        type="primary"
-        link
-        @click="setLeftCollapse(!leftCollapse)"
-      >
-        <i class="fa-light fa-arrow-to-left" :style="leftCollapseIconStyle" />
-      </el-button>
+      <el-space :size="10">
+        <el-button
+          class="collapse-icon"
+          type="primary"
+          link
+          @click="setLeftCollapse(!leftCollapse)"
+        >
+          <i class="fa-light fa-arrow-to-left" :style="leftCollapseIconStyle" />
+        </el-button>
+        <el-dropdown v-if="isSmallScreen" class="menu-dropdown">
+          <el-button
+            class="menu-icon"
+            type="primary"
+            link
+          >
+            <i class="fa-light fa-bars" />
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="toGithub">
+                <i class="fab fa-github fa-fw" />
+                Github
+              </el-dropdown-item>
+              <el-dropdown-item @click="qADialog = true">
+                <i class="fa-solid fa-square-q fa-fw" />
+                Q & A
+              </el-dropdown-item>
+              <el-dropdown-item @click="aboutDialog = true">
+                <i class="fa-solid fa-circle-dollar fa-fw" />
+                关于 & 赞助
+              </el-dropdown-item>
+              <el-dropdown-item @click="thankDialog = true">
+                <i class="fa-solid fa-money-check fa-fw" />
+                感谢
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </el-space>
     </div>
 
     <div class="header-center">
@@ -19,21 +50,13 @@
 
     <div class="header-right">
       <el-space :size="10">
-        <i class="fab fa-github" @click="toGithub" />
-        <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
-        <el-popconfirm
-          v-model:visible="showSponsorTip"
-          title="点击这里可以赞助哦！"
-          :icon="BellFilled"
-          cancel-button-text="不再提示"
-          confirm-button-text="知道啦"
-          @cancel="cancelSponsorTip"
-        >
-          <template #reference>
-            <el-button type="primary" link @click="aboutDialog = true">关于 & 赞助</el-button>
-          </template>
-        </el-popconfirm>
-        <el-button type="primary" link @click="thankDialog = true">感谢</el-button>
+        <SignAvatar v-if="false" />
+        <template v-if="!isSmallScreen">
+          <i class="fab fa-github" @click="toGithub" />
+          <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
+          <el-button type="primary" link @click="aboutDialog = true">关于 & 赞助</el-button>
+          <el-button type="primary" link @click="thankDialog = true">感谢</el-button>
+        </template>
         <el-button
           class="collapse-icon"
           type="primary"
@@ -62,15 +85,16 @@
 
 <script>
   import screenfull from 'screenfull';
+  import SignAvatar from '@/layout/app-layout/components/SignAvatar';
   import QADialog from '@/components/dialog/QADialog';
   import AboutDialog from '@/components/dialog/AboutDialog';
   import ThankDialog from '@/components/dialog/ThankDialog';
-  import { BellFilled } from '@element-plus/icons-vue';
   import { mapMutations, mapState } from 'vuex';
 
   export default {
     name: 'AppHeader',
     components: {
+      SignAvatar,
       QADialog,
       AboutDialog,
       ThankDialog,
@@ -81,8 +105,6 @@
         qADialog: false,
         aboutDialog: false,
         thankDialog: false,
-        showSponsorTip: localStorage.getItem('showSponsorTip') !== 'false',
-        BellFilled,
       };
     },
     mounted() {
@@ -120,13 +142,9 @@
           location.reload();
         });
       },
-      cancelSponsorTip() {
-        // 不再提示
-        localStorage.setItem('showSponsorTip', 'false');
-      },
     },
     computed: {
-      ...mapState(['leftCollapse', 'rightCollapse']),
+      ...mapState(['leftCollapse', 'rightCollapse', 'bodyOffsetWidth']),
       leftCollapseIconStyle() {
         return {
           transform: this.leftCollapse ? 'rotate(180deg)' : '',
@@ -136,6 +154,9 @@
         return {
           transform: this.rightCollapse ? 'rotate(-180deg)' : '',
         };
+      },
+      isSmallScreen() {
+        return this.bodyOffsetWidth < 500;
       },
     },
   };
@@ -148,7 +169,7 @@
     justify-content: space-between;
     align-items: center;
 
-    .collapse-icon {
+    .collapse-icon, .menu-icon {
       font-size: 24px;
       height: auto;
 

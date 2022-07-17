@@ -2,7 +2,7 @@
   <el-dialog
     title="Q & A"
     :model-value="modelValue"
-    width="500px"
+    :width="maxDialogWidth(500)"
     :before-close="closeDialog"
   >
     <div class="q-a-list">
@@ -48,10 +48,13 @@
 </template>
 
 <script>
+  import { maxDialogWidth } from '@/utils';
+
   export default {
     name: 'QADialog',
     props: ['modelValue'],
     methods: {
+      maxDialogWidth,
       closeDialog() {
         this.$emit('update:modelValue', false);
       },

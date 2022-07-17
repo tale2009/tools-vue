@@ -1,15 +1,21 @@
 import { createStore } from 'vuex';
 import md5 from 'md5';
 import { ElNotification } from 'element-plus';
+import axios from 'axios';
 
 export default createStore({
   state: {
+    bodyOffsetWidth: 0,
     leftCollapse: false,
     rightCollapse: false,
     mysteryMode: false,
     staticURL: '',
+    userInfo: {},
   },
   mutations: {
+    setBodyOffsetWidth(state) {
+      state.bodyOffsetWidth = document.body.offsetWidth;
+    },
     setLeftCollapse(state, value) {
       state.leftCollapse = value;
     },
@@ -30,6 +36,23 @@ export default createStore({
       }
       state.staticURL = `https://${prefix}static.kooriookami.top`;
     },
+    setUserInfo(state) {
+      try {
+        state.userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {};
+      } catch (e) {
+        state.userInfo = {};
+      }
+    },
   },
-  actions: {},
+  actions: {
+    getUserInfo({ commit }) {
+      return axios({
+        method: 'get',
+        url: '/profile',
+      }).then(res => {
+        localStorage.setItem('userInfo', JSON.stringify(res.data.data));
+        commit('setUserInfo');
+      });
+    },
+  },
 });

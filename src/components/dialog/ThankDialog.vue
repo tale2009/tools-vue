@@ -2,7 +2,7 @@
   <el-dialog
     title="感谢"
     :model-value="modelValue"
-    width="500px"
+    :width="maxDialogWidth(500)"
     :before-close="closeDialog"
   >
     <div class="thank-main">
@@ -27,6 +27,7 @@
 <script>
   import thankList from '@/assets/json/thank-list.json';
   import { mapState } from 'vuex';
+  import { maxDialogWidth } from '@/utils';
 
   export default {
     name: 'ThankDialog',
@@ -37,6 +38,7 @@
       };
     },
     methods: {
+      maxDialogWidth,
       closeDialog() {
         this.$emit('update:modelValue', false);
       },

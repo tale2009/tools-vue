@@ -1,4 +1,5 @@
 import Color from 'color';
+import store from '@/store';
 
 // 颜色系列
 export const colorToArray = (color, isAlpha) => {
@@ -71,4 +72,9 @@ export const getClientXY = e => {
     clientX,
     clientY,
   };
+};
+
+export const maxDialogWidth = (width, margin = 10) => {
+  const offsetWidth = store.state.bodyOffsetWidth;
+  return offsetWidth > width + margin * 2 ? width : offsetWidth - margin * 2;
 };

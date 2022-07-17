@@ -47,5 +47,6 @@ module.exports = defineConfig({
     'vue/valid-v-for': 'off',
     'vue/no-unused-vars': 'off',
     'vue/no-v-model-argument': 'off',
+    'vue/no-multiple-template-root': 'off',
   },
 });

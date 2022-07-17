@@ -2,7 +2,7 @@
   <el-dialog
     title="图片裁切"
     :model-value="modelValue"
-    :width="dialogWidth"
+    :width="maxDialogWidth(800)"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
@@ -27,6 +27,7 @@
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
   import { nextTick } from 'vue';
+  import { maxDialogWidth } from '@/utils';
 
   export default {
     name: 'CropperDialog',
@@ -36,6 +37,7 @@
       VueCropper,
     },
     methods: {
+      maxDialogWidth,
       closeDialog() {
         this.$emit('update:modelValue', false);
       },
@@ -43,12 +45,6 @@
         const image = this.$refs.cropper.getCroppedCanvas().toDataURL('image/png', 1);
         this.$emit('get-data', image);
         this.closeDialog();
-      },
-    },
-    computed: {
-      dialogWidth() {
-        const offsetWidth = document.body.offsetWidth;
-        return offsetWidth > 840 ? 800 : offsetWidth - 40;
       },
     },
     watch: {

@@ -2,7 +2,7 @@
   <el-dialog
     title="关于 & 赞助"
     :model-value="modelValue"
-    width="500px"
+    :width="maxDialogWidth(500)"
     :before-close="closeDialog"
   >
     <div class="about-main">
@@ -38,6 +38,7 @@
 <script>
   import aliQr from '@/assets/image/ali-qr.jpg';
   import wxQr from '@/assets/image/wx-qr.png';
+  import { maxDialogWidth } from '@/utils';
 
   export default {
     name: 'AboutDialog',
@@ -49,6 +50,7 @@
       };
     },
     methods: {
+      maxDialogWidth,
       closeDialog() {
         this.$emit('update:modelValue', false);
       },
