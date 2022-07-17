@@ -34,7 +34,9 @@ export default {
         message: message,
       });
       if (error.response.status === 401) {
-        store.dispatch('removeUserInfo');
+        store.dispatch('removeUserInfo').then(() => {
+          location.reload();
+        });
       }
       return Promise.reject(error);
     });

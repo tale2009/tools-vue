@@ -28,18 +28,18 @@
       </el-space>
       <div class="menu-list">
         <div class="menu-item" @click="toMySpace">
-          <i class="fa-light fa-user fa-fw" />
+          <i class="fa-duotone fa-user fa-fw" />
           <span>我的空间</span>
-          <i class="fa-light fa-angle-right" />
+          <i class="fa-duotone fa-angle-right" />
         </div>
         <div class="menu-item" @click="toMyOrder">
-          <i class="fa-light fa-rectangle-list fa-fw" />
+          <i class="fa-duotone fa-rectangle-list fa-fw" />
           <span>我的订单</span>
-          <i class="fa-light fa-angle-right" />
+          <i class="fa-duotone fa-angle-right" />
         </div>
         <el-divider />
         <div class="menu-item" @click="logout">
-          <i class="fa-light fa-arrow-right-from-bracket fa-fw" />
+          <i class="fa-duotone fa-arrow-right-from-bracket fa-fw" />
           <span>退出登录</span>
         </div>
       </div>

@@ -21,7 +21,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="toGithub">
-                <i class="fab fa-github fa-fw" />
+                <i class="fa-brands fa-github fa-fw" />
                 Github
               </el-dropdown-item>
               <el-dropdown-item @click="qADialog = true">
@@ -46,7 +46,7 @@
       <el-space :size="10">
         <SignAvatar />
         <template v-if="!isSmallScreen">
-          <i class="fab fa-github" @click="toGithub" />
+          <i class="fa-brands fa-github" @click="toGithub" />
           <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
           <el-button type="primary" link @click="aboutDialog = true">关于 & 赞助</el-button>
           <el-button type="primary" link @click="thankDialog = true">感谢</el-button>
