@@ -97,7 +97,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;
@@ -112,7 +112,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;

@@ -11,7 +11,14 @@
   >
     <template #reference>
       <div class="avatar-content">
-        <el-avatar class="user-avatar" :style="userAvatarStyle" @click="toAccountHome">{{ userInfo.nickname?.slice(0, 2) }}</el-avatar>
+        <el-avatar
+          class="user-avatar"
+          :style="userAvatarStyle"
+          :src="avatarSrc"
+          @click="toAccountHome"
+        >
+          {{ userInfo.nickname?.slice(0, 2) }}
+        </el-avatar>
       </div>
     </template>
     <div class="avatar-popover-content">
@@ -153,6 +160,7 @@
   import { mapActions, mapState } from 'vuex';
   import { maxDialogWidth } from '@/utils';
   import md5 from 'md5';
+  import store from '@/store';
 
   export default {
     name: 'SignAvatar',
@@ -182,7 +190,7 @@
       }
     },
     methods: {
-      ...mapActions(['getUserInfo', 'removeUserInfo']),
+      ...mapActions(['removeUserInfo']),
       maxDialogWidth,
       closeDialog() {
         this.$refs.form.resetFields();
@@ -279,7 +287,16 @@
       },
     },
     computed: {
-      ...mapState(['userInfo', 'bodyOffsetWidth', 'isAdmin']),
+      ...mapState(['userInfo', 'bodyOffsetWidth', 'isAdmin', 'staticURL']),
+      baseImage() {
+        return `${this.staticURL}/tools/image`;
+      },
+      avatarSrc() {
+        if (this.userInfo.avatar) {
+          return `${this.baseImage}/${this.userInfo.avatar}`;
+        }
+        return '';
+      },
       dialogWidth() {
         const offsetWidth = this.bodyOffsetWidth;
         return offsetWidth > 540 ? 500 : offsetWidth - 40;
@@ -338,6 +355,8 @@
       line-height: 1.7;
       margin: 20px 0 0;
       font-size: 18px;
+      font-weight: bold;
+      color: var(--main-color);
     }
 
     .tag-list {

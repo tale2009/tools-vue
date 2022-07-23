@@ -484,7 +484,7 @@
           method: 'get',
           url: '/yugioh/config',
         }).then(res => {
-          this.config = res.data.data;
+          this.config = res.data;
         });
       },
       // 刷新字体
@@ -584,7 +584,7 @@
               lang: this.form.language,
             },
           }).then(res => {
-            let data = res.data.data;
+            let data = res.data;
             data.forEach(value => {
               value.value = `${value.name}（${value.id}）`;
             });
@@ -614,7 +614,7 @@
             this.form.language = lang;
             this.refreshFont();
           }
-          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
         });
       },
@@ -627,7 +627,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = parseYugiohCard(res.data.data, this.form.language);
+          let cardInfo = parseYugiohCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
         }).finally(() => {
           this.randomLoading = false;

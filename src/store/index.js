@@ -13,7 +13,6 @@ export default createStore({
     staticURL: '',
     userInfo: {},
     isAdmin: false,
-    notification: null,
   },
   mutations: {
     setBodyOffsetWidth(state) {
@@ -35,8 +34,7 @@ export default createStore({
         prefix = '';
       }
       if (!prefix) {
-        state.notification?.close();
-        state.notification = ElNotification.success({
+        ElNotification.success({
           title: '已进入加速模式',
           position: 'bottom-right',
         });
@@ -62,9 +60,8 @@ export default createStore({
         method: 'get',
         url: '/profile',
       }).then(res => {
-        localStorage.setItem('userInfo', JSON.stringify(res.data.data));
+        localStorage.setItem('userInfo', JSON.stringify(res.data));
         commit('setUserInfo');
-        commit('setStaticURL');
       });
     },
     removeUserInfo({ commit }) {
@@ -72,7 +69,6 @@ export default createStore({
         Cookies.remove('token');
         localStorage.removeItem('userInfo');
         commit('setUserInfo');
-        commit('setStaticURL');
         resolve();
       });
     },

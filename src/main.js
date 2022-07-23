@@ -29,12 +29,15 @@ app.use(store);
 app.mount('#app');
 
 store.commit('setUserInfo');
-store.commit('setStaticURL');
 
 if (Cookies.get('token')) {
-  store.dispatch('getUserInfo');
+  store.dispatch('getUserInfo').finally(() => {
+    store.commit('setStaticURL');
+  });
 } else {
-  store.dispatch('removeUserInfo');
+  store.dispatch('removeUserInfo').finally(() => {
+    store.commit('setStaticURL');
+  });
 }
 
 // 接口请求地址配置

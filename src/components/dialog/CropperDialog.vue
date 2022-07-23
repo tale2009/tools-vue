@@ -31,8 +31,25 @@
 
   export default {
     name: 'CropperDialog',
-    props: ['modelValue', 'image', 'aspectRatio'],
-    emits: ['get-data'],
+    props: {
+      modelValue: {
+        type: Boolean,
+        default: false,
+      },
+      image: {
+        type: String,
+        default: '',
+      },
+      aspectRatio: {
+        type: Number,
+        default: 1,
+      },
+      lowQuality: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    emits: ['update:modelValue', 'get-data'],
     components: {
       VueCropper,
     },
@@ -42,7 +59,12 @@
         this.$emit('update:modelValue', false);
       },
       confirm() {
-        const image = this.$refs.cropper.getCroppedCanvas().toDataURL('image/png', 1);
+        let image = '';
+        if (this.lowQuality) {
+          image = this.$refs.cropper.getCroppedCanvas().toDataURL('image/jpeg');
+        } else {
+          image = this.$refs.cropper.getCroppedCanvas().toDataURL('image/png', 1);
+        }
         this.$emit('get-data', image);
         this.closeDialog();
       },

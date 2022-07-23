@@ -25,7 +25,7 @@ export default {
       if (token) {
         Cookies.set('token', token, { expires: 30 });
       }
-      return response;
+      return response.data;
     }, error => {
       // 对响应错误做点什么
       let message = error.response?.data?.message ?? error.message;

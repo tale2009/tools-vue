@@ -350,7 +350,7 @@
           method: 'get',
           url: '/rush-duel/config',
         }).then(res => {
-          this.config = res.data.data;
+          this.config = res.data;
         });
       },
       // 刷新字体
@@ -411,7 +411,7 @@
               lang: this.form.language,
             },
           }).then(res => {
-            let data = res.data.data;
+            let data = res.data;
             data.forEach(value => {
               value.value = `${value.name}（${value.id}）`;
             });
@@ -438,7 +438,7 @@
             this.form.language = lang;
             this.refreshFont();
           }
-          let cardInfo = parseRushDuelCard(res.data.data, this.form.language);
+          let cardInfo = parseRushDuelCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
         });
       },
@@ -451,7 +451,7 @@
             lang: this.form.language,
           },
         }).then(res => {
-          let cardInfo = parseRushDuelCard(res.data.data, this.form.language);
+          let cardInfo = parseRushDuelCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
         }).finally(() => {
           this.randomLoading = false;
