@@ -9,6 +9,7 @@ export default createStore({
     bodyOffsetWidth: 0,
     leftCollapse: false,
     rightCollapse: false,
+    accountCollapse: false,
     staticURL: '',
     userInfo: {},
     isAdmin: false,
@@ -23,6 +24,9 @@ export default createStore({
     },
     setRightCollapse(state, value) {
       state.rightCollapse = value;
+    },
+    setAccountCollapse(state, value) {
+      state.accountCollapse = value;
     },
     setStaticURL(state) {
       const role = state.userInfo.role;

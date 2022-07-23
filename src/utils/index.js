@@ -74,7 +74,7 @@ export const getClientXY = e => {
   };
 };
 
-export const maxDialogWidth = (width, margin = 10) => {
+export const maxDialogWidth = (width, margin = 16) => {
   const offsetWidth = store.state.bodyOffsetWidth;
   return offsetWidth > width + margin * 2 ? width : offsetWidth - margin * 2;
 };

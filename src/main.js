@@ -43,5 +43,5 @@ if (process.env.NODE_ENV === 'production') {
   app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
 } else {
   // 本地环境
-  app.config.globalProperties.baseURL = 'http://192.168.0.107:7010/api';
+  app.config.globalProperties.baseURL = 'http://127.0.0.1:7010/api';
 }

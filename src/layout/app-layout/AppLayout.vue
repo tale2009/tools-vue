@@ -39,9 +39,13 @@
       removeEventListener('resize', this.onResize);
     },
     methods: {
-      ...mapMutations(['setBodyOffsetWidth']),
+      ...mapMutations(['setBodyOffsetWidth', 'setLeftCollapse', 'setAccountCollapse']),
       onResize() {
         this.setBodyOffsetWidth();
+        if (this.isSmallScreen) {
+          this.setLeftCollapse(true);
+          this.setAccountCollapse(true);
+        }
       },
       browserTip() {
         const isChrome = !!navigator.userAgent.match(/Chrome/i);
@@ -72,11 +76,14 @@
       },
     },
     computed: {
-      ...mapState(['leftCollapse']),
+      ...mapState(['leftCollapse', 'bodyOffsetWidth']),
       leftStyle() {
         return {
           marginLeft: this.leftCollapse ? '-200px' : '0',
         };
+      },
+      isSmallScreen() {
+        return this.bodyOffsetWidth < 500;
       },
     },
   };

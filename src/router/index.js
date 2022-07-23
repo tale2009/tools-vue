@@ -88,6 +88,33 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/account',
+    name: 'account',
+    component: () => import('../layout/app-layout/AppLayout.vue'),
+    redirect: '/account/home',
+    meta: {
+      auth: true,
+    },
+    children: [
+      {
+        path: 'home',
+        name: 'accountHome',
+        component: () => import('../views/account/home/Home.vue'),
+        meta: {
+          title: '首页',
+        },
+      },
+      {
+        path: 'order',
+        name: 'accountOrder',
+        component: () => import('../views/account/order/Order.vue'),
+        meta: {
+          title: '我的订单',
+        },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

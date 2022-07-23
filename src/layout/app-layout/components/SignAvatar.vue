@@ -2,6 +2,7 @@
   <!--已登录-->
   <el-popover
     v-if="Object.keys(userInfo).length"
+    ref="avatarPopover"
     trigger="hover"
     placement="bottom"
     :width="300"
@@ -10,7 +11,7 @@
   >
     <template #reference>
       <div class="avatar-content">
-        <el-avatar class="user-avatar" :style="userAvatarStyle">{{ userInfo.nickname?.slice(0, 2) }}</el-avatar>
+        <el-avatar class="user-avatar" :style="userAvatarStyle" @click="toAccountHome">{{ userInfo.nickname?.slice(0, 2) }}</el-avatar>
       </div>
     </template>
     <div class="avatar-popover-content">
@@ -27,12 +28,12 @@
         </el-tag>
       </el-space>
       <div class="menu-list">
-        <div class="menu-item" @click="toMySpace">
+        <div class="menu-item" @click="toAccountHome">
           <i class="fa-duotone fa-user fa-fw" />
-          <span>我的空间</span>
+          <span>个人中心</span>
           <i class="fa-duotone fa-angle-right" />
         </div>
-        <div class="menu-item" @click="toMyOrder">
+        <div class="menu-item" @click="toAccountOrder">
           <i class="fa-duotone fa-rectangle-list fa-fw" />
           <span>我的订单</span>
           <i class="fa-duotone fa-angle-right" />
@@ -72,8 +73,8 @@
         戳此登录
       </el-button>
       <el-space :size="10">
-        <span>暂无账号？</span>
         <el-button type="primary" text @click="register">立即注册</el-button>
+        <el-button text @click="closeTip">不再提示</el-button>
       </el-space>
     </div>
   </el-popover>
@@ -119,22 +120,21 @@
             <template #prepend>+86</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="验证码" prop="code">
+        <el-form-item label="验证码" prop="captcha">
           <div style="display: flex;align-items: center;flex: 1">
-            <el-input v-model="form.code" placeholder="请输入验证码" />
+            <el-input v-model="form.captcha" placeholder="请输入验证码" />
             <el-button
               style="margin-left: 10px;flex-shrink: 0"
               plain
-              :loading="codeLoading"
-              @click="sendCode"
+              :loading="captchaLoading"
+              @click="sendCaptcha"
             >
-              {{ codeLoading ? `剩余 ${codeCountdown} 秒` : '发送验证码' }}
+              {{ captchaLoading ? `剩余 ${captchaCountdown} 秒` : '发送验证码' }}
             </el-button>
           </div>
         </el-form-item>
       </template>
     </el-form>
-    <slide-verify v-if="false" slider-text="向右滑动" @success="sliderSuccess" />
     <template #footer>
       <el-button
         type="primary"
@@ -150,38 +150,36 @@
 </template>
 
 <script>
-  import SlideVerify from 'vue3-slide-verify';
-  import 'vue3-slide-verify/dist/style.css';
   import { mapActions, mapState } from 'vuex';
   import { maxDialogWidth } from '@/utils';
   import md5 from 'md5';
 
   export default {
     name: 'SignAvatar',
-    components: {
-      SlideVerify,
-    },
     data() {
       return {
         signTab: 'login',
         loading: false,
-        codeLoading: false,
-        codeCountdown: 0,
+        captchaLoading: false,
+        captchaCountdown: 0,
         form: {
           username: '',
           nickname: '',
           password: '',
           phone: '',
-          code: '',
+          captcha: '',
         },
         popoverShow: false,
         signDialog: false,
       };
     },
     mounted() {
-      setTimeout(() => {
-        this.$refs.loginPopover?.$refs.tooltipRef.onOpen();
-      });
+      const loginTip = localStorage.getItem('loginTip');
+      if (loginTip !== 'false') {
+        setTimeout(() => {
+          this.$refs.loginPopover?.$refs.tooltipRef.onOpen();
+        });
+      }
     },
     methods: {
       ...mapActions(['getUserInfo', 'removeUserInfo']),
@@ -193,7 +191,7 @@
       tabChange() {
         this.$refs.form.resetFields();
       },
-      async login() {
+      login() {
         this.signTab = 'login';
         this.signDialog = true;
         setTimeout(() => {
@@ -207,7 +205,11 @@
           this.$refs.loginPopover?.hide();
         });
       },
-      sendCode() {
+      closeTip() {
+        localStorage.setItem('loginTip', 'false');
+        this.$refs.loginPopover?.hide();
+      },
+      sendCaptcha() {
         this.$refs.form.validateField('phone', valid => {
           if (valid) {
             this.axios({
@@ -217,16 +219,25 @@
                 phone: this.form.phone,
               },
             }).then(() => {
-              this.codeCountdown = 60;
-              this.codeLoading = true;
-              const timer = setInterval(() => {
-                if (this.codeCountdown === 0) {
-                  clearInterval(timer);
-                  this.codeLoading = false;
-                } else {
-                  this.codeCountdown--;
-                }
-              }, 1000);
+              this.axios({
+                method: 'post',
+                url: '/captcha/send',
+                data: {
+                  phone: this.form.phone,
+                },
+              }).then(() => {
+                this.$message.success('发送成功，验证码 5 分钟内有效');
+                this.captchaCountdown = 60;
+                this.captchaLoading = true;
+                const timer = setInterval(() => {
+                  if (this.captchaCountdown === 0) {
+                    clearInterval(timer);
+                    this.captchaLoading = false;
+                  } else {
+                    this.captchaCountdown--;
+                  }
+                }, 1000);
+              });
             });
           }
         });
@@ -253,21 +264,18 @@
           }
         });
       },
-      sliderSuccess() {
-        setTimeout(() => {
-          this.closeDialog();
-        }, 1000);
-      },
       logout() {
         this.removeUserInfo().then(() => {
           location.reload();
         });
       },
-      toMySpace() {
-
+      toAccountHome() {
+        this.$router.push('/account/home');
+        this.$refs.avatarPopover?.hide();
       },
-      toMyOrder() {
-
+      toAccountOrder() {
+        this.$router.push('/account/order');
+        this.$refs.avatarPopover?.hide();
       },
     },
     computed: {
@@ -288,7 +296,7 @@
             { required: true, message: '请输入手机号', trigger: 'blur' },
             { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: ['blur', 'change'] },
           ],
-          code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+          captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
         };
       },
       userAvatarStyle() {
