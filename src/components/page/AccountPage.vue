@@ -14,7 +14,7 @@
             </template>
           </el-menu-item>
           <el-menu-item index="/account/order">
-            <i class="fa-duotone fa-users fa-fw" />
+            <i class="fa-duotone fa-rectangle-list fa-fw" />
             <template #title>
               <span>我的订单</span>
             </template>

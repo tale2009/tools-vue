@@ -3,6 +3,7 @@ import { ElNotification } from 'element-plus';
 import axios from 'axios';
 import { loadCSS } from '@/utils';
 import Cookies from 'js-cookie';
+import dayjs from 'dayjs';
 
 export default createStore({
   state: {
@@ -13,6 +14,7 @@ export default createStore({
     staticURL: '',
     userInfo: {},
     isAdmin: false,
+    isMember: false,
   },
   mutations: {
     setBodyOffsetWidth(state) {
@@ -30,7 +32,7 @@ export default createStore({
     setStaticURL(state) {
       const role = state.userInfo.role;
       let prefix = 'v-';
-      if (Array.isArray(role) && role.includes('admin')) {
+      if (state.isAdmin || state.isMember) {
         prefix = '';
       }
       if (!prefix) {
@@ -52,6 +54,15 @@ export default createStore({
       }
       const role = state.userInfo.role;
       state.isAdmin = Array.isArray(role) && role.includes('admin');
+      const member = state.userInfo.member;
+      if (member) {
+        const { type, expireDate } = member;
+        if (type === 'permanent') {
+          state.isMember = true;
+        } else {
+          state.isMember = dayjs().isBefore(expireDate);
+        }
+      }
     },
   },
   actions: {

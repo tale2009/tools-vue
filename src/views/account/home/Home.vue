@@ -8,13 +8,14 @@
           accept="image/*"
           :before-upload="beforeUpload"
         >
-          <el-avatar class="user-avatar" :size="80" :src="avatarSrc">{{ userInfo.nickname?.slice(0, 2) }}</el-avatar>
+          <el-avatar class="user-avatar" :size="100" :src="avatarSrc">{{ userInfo.nickname?.slice(0, 2) }}</el-avatar>
         </el-upload>
         <div class="user-other">
           <p class="nickname">{{ userInfo.nickname }}</p>
           <el-space class="tag-list" :size="10" wrap>
             <el-tag v-if="isAdmin" effect="dark" size="small">管理员</el-tag>
             <el-tag
+              v-if="isMember && userInfo.member?.type === 'monthly'"
               effect="dark"
               size="small"
               color="darkorange"
@@ -22,7 +23,19 @@
             >
               月卡会员
             </el-tag>
+            <el-tag
+              v-if="isMember && userInfo.member?.type === 'permanent'"
+              effect="dark"
+              size="small"
+              color="orangered"
+              style="border-color: orangered"
+            >
+              永久会员
+            </el-tag>
           </el-space>
+          <p v-if="isMember" class="expire-date">
+            有效期至：{{ userInfo.member?.type === 'permanent' ? '永久' : formatTime(userInfo.member.expireDate) }}
+          </p>
         </div>
       </div>
 
@@ -92,7 +105,7 @@
       },
     },
     computed: {
-      ...mapState(['userInfo', 'staticURL', 'isAdmin']),
+      ...mapState(['userInfo', 'staticURL', 'isAdmin', 'isMember']),
       baseImage() {
         return `${this.staticURL}/tools/image`;
       },
@@ -147,6 +160,13 @@
 
         .tag-list {
           margin-top: 5px;
+        }
+
+        .expire-date {
+          line-height: 1.7;
+          margin: 5px 0 0;
+          font-size: 12px;
+          color: var(--info-color);
         }
       }
     }

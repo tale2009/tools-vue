@@ -26,12 +26,22 @@
       <el-space class="tag-list" :size="10" wrap>
         <el-tag v-if="isAdmin" effect="dark" size="small">管理员</el-tag>
         <el-tag
+          v-if="isMember && userInfo.member?.type === 'monthly'"
           effect="dark"
           size="small"
           color="darkorange"
           style="border-color: darkorange"
         >
           月卡会员
+        </el-tag>
+        <el-tag
+          v-if="isMember && userInfo.member?.type === 'permanent'"
+          effect="dark"
+          size="small"
+          color="orangered"
+          style="border-color: orangered"
+        >
+          永久会员
         </el-tag>
       </el-space>
       <div class="menu-list">
@@ -68,7 +78,7 @@
       <p>
         <i style="color: darkorange; margin-right: 5px" class="fa-solid fa-fire" />
         现已推出
-        <span style="font-size: 18px;font-weight: bold;color: darkorange">5</span>
+        <span style="font-size: 18px;font-weight: bold;color: darkorange">6</span>
         元月卡，快来体验全站加速吧！
       </p>
       <el-button
@@ -287,7 +297,7 @@
       },
     },
     computed: {
-      ...mapState(['userInfo', 'bodyOffsetWidth', 'isAdmin', 'staticURL']),
+      ...mapState(['userInfo', 'bodyOffsetWidth', 'isAdmin', 'isMember', 'staticURL']),
       baseImage() {
         return `${this.staticURL}/tools/image`;
       },
