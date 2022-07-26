@@ -55,6 +55,7 @@
   import CropperDialog from '@/components/dialog/CropperDialog';
   import { mapActions, mapState } from 'vuex';
   import loadImage from 'blueimp-load-image';
+  import { getImageFileSize } from '@/utils';
 
   export default {
     name: 'Home',
@@ -74,11 +75,13 @@
     },
     methods: {
       ...mapActions(['getUserInfo']),
-      beforeUpload(file) {
+      async beforeUpload(file) {
         let flag = file.type.includes('image');
         if (flag) {
+          const { width, height } = await getImageFileSize(file);
           loadImage(file, {
-            maxWidth: 400,
+            maxWidth: height >= width ? 400 : 0,
+            maxHeight: width >= height ? 400 : 0,
             canvas: true,
           }).then(data => {
             this.cropperImage = data.image.toDataURL('image/png', 1);

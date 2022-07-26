@@ -78,3 +78,26 @@ export const maxDialogWidth = (width, margin = 16) => {
   const offsetWidth = store.state.bodyOffsetWidth;
   return offsetWidth > width + margin * 2 ? width : offsetWidth - margin * 2;
 };
+
+export const getImageFileSize = file => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = e => {
+      const image = new Image();
+      image.src = e.target.result;
+      image.onload = e => {
+        resolve({
+          width: e.target.naturalWidth,
+          height: e.target.naturalHeight,
+        });
+      };
+      image.onerror = e => {
+        reject(e);
+      };
+    };
+    fileReader.onerror = e => {
+      reject(e);
+    };
+  });
+};
