@@ -11,7 +11,7 @@
         </el-scrollbar>
       </el-aside>
       <el-main>
-        <router-view />
+        <router-view :key="$route.fullPath" />
       </el-main>
     </el-container>
   </div>
