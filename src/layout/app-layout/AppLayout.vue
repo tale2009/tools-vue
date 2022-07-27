@@ -28,15 +28,25 @@
       AppHeader,
       AppLeft,
     },
+    data() {
+      return {
+        pingTimer: '',
+      };
+    },
     mounted() {
       this.browserTip();
       document.onkeydown = this.disableKey;
       document.onkeypress = this.disableKey;
       this.onResize();
       addEventListener('resize', this.onResize);
+      this.sendPing();
+      this.pingTimer = setInterval(() => {
+        this.sendPing();
+      }, 10000);
     },
     beforeUnmount() {
       removeEventListener('resize', this.onResize);
+      clearInterval(this.pingTimer);
     },
     methods: {
       ...mapMutations(['setBodyOffsetWidth', 'setLeftCollapse', 'setAccountCollapse']),
@@ -73,6 +83,13 @@
         if (e.key === 'Backspace' && !['input', 'textarea'].includes(e.target?.tagName.toLowerCase())) {
           return false;
         }
+      },
+      // 发送ping包
+      sendPing() {
+        this.axios({
+          method: 'get',
+          url: '/ping',
+        });
       },
     },
     computed: {
