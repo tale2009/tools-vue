@@ -64,7 +64,7 @@
         this.$router.push(item.path);
       },
       initActiveTitle() {
-        const tool = toolList.find(group => group.children.find(tool => this.$route.path.includes(tool.path)));
+        const tool = toolList.find(group => group.children.find(tool => this.$route.path === tool.path));
         if (tool) {
           this.activeTitle = tool.title;
         }
@@ -82,7 +82,7 @@
         return item.title === this.activeTitle;
       },
       itemStyle(item) {
-        const isRoute = this.$route.path.includes(item.path);
+        const isRoute = this.$route.path === item.path;
         return {
           color: isRoute ? '#409eff' : '',
         };

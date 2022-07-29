@@ -173,11 +173,15 @@
     </div>
 
     <div v-if="data.laser" class="card-laser">
-      <el-image :src="baseImage + '/laser.png'" />
+      <el-image :src="laserSrc" />
     </div>
 
     <div v-if="data.rare" class="card-rare" :style="rareStyle">
       <el-image :src="rareSrc" />
+    </div>
+
+    <div v-if="data.twentieth" class="card-twentieth">
+      <el-image :src="baseImage + '/twentieth.png'" />
     </div>
   </div>
 </template>
@@ -223,13 +227,11 @@
         return `${this.staticURL}/yugioh/image`;
       },
       cardClass() {
-        return `${this.data.language}-class ${this.data.cardBack ? 'card-back' : ''}`;
+        return `${this.data.language}-class`;
       },
       cardStyle() {
         let background;
-        if (this.data.cardBack) {
-          background = `url(${this.baseImage}/card-back.png) no-repeat center/cover`;
-        } else if (this.data.type === 'monster') {
+        if (this.data.type === 'monster') {
           background = `url(${this.baseImage}/card-${this.data.cardType}.png) no-repeat center/cover`;
         } else if (this.data.type === 'pendulum') {
           background = `url(${this.baseImage}/card-${this.data.pendulumType}.png) no-repeat center/cover`;
@@ -543,6 +545,9 @@
         let color = this.data.type === 'monster' && this.data.cardType === 'xyz' ? 'white' : 'black';
         return `${this.baseImage}/copyright-${this.data.copyright}-${color}.svg`;
       },
+      laserSrc() {
+        return `${this.baseImage}/${this.data.laser}.png`;
+      },
       rareSrc() {
         const suffix = this.data.type === 'pendulum' ? '-pendulum' : '';
         return `${this.baseImage}/rare-${this.data.rare}${suffix}.png`;
@@ -703,7 +708,7 @@
     .link-arrow {
       .el-image {
         position: absolute;
-        z-index: 20;
+        z-index: 120;
       }
     }
 
@@ -772,10 +777,11 @@
       overflow: hidden;
     }
 
-    &.card-back {
-      * {
-        display: none;
-      }
+    .card-twentieth {
+      position: absolute;
+      top: 1531px;
+      left: 472px;
+      z-index: 120;
     }
   }
 </style>

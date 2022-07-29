@@ -38,6 +38,11 @@
         "icon": "fa-rectangle-portrait"
       },
       {
+        "title": "游戏王卡背",
+        "path": "/yugioh-back",
+        "icon": "fa-rectangle-portrait"
+      },
+      {
         "title": "场地中心卡",
         "path": "/field-center",
         "icon": "fa-card-diamond"

@@ -56,6 +56,14 @@ const routes = [
         },
       },
       {
+        path: 'yugioh-back',
+        name: 'yugiohBack',
+        component: () => import('../views/yugioh-back/YugiohBack.vue'),
+        meta: {
+          title: '游戏王卡背',
+        },
+      },
+      {
         path: 'field-center',
         name: 'fieldCenter',
         component: () => import('../views/field-center/FieldCenter.vue'),

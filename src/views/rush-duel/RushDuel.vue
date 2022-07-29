@@ -187,23 +187,27 @@
                 <el-option label="PSER" value="pser" />
               </el-select>
             </el-form-item>
-            <el-form-item label="传说">
-              <el-switch v-model="form.legend" />
+            <el-form-item label="角标">
+              <el-select
+                v-model="form.laser"
+                placeholder="请选择角标"
+                clearable
+              >
+                <el-option label="样式一" value="laser1" />
+                <el-option label="样式二" value="laser2" />
+                <el-option label="样式三" value="laser3" />
+                <el-option label="样式四" value="laser4" />
+              </el-select>
             </el-form-item>
             <el-row :gutter="gutter">
-              <el-col :span="8">
-                <el-form-item label="角标">
-                  <el-switch v-model="form.laser" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="圆角">
                   <el-switch v-model="form.radius" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="卡背">
-                  <el-switch v-model="form.cardBack" />
+              <el-col :span="12">
+                <el-form-item label="传说">
+                  <el-switch v-model="form.legend" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -321,10 +325,9 @@
           package: '',
           password: '',
           legend: false,
-          laser: false,
+          laser: '',
           rare: '',
           radius: true,
-          cardBack: false,
           scale: 0.5,
         },
         languageList: [
@@ -469,7 +472,6 @@
             laser: this.form.laser,
             rare: this.form.rare,
             radius: this.form.radius,
-            cardBack: this.form.cardBack,
           },
         });
         open(href, '_blank');

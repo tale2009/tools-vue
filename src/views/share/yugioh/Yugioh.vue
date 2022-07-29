@@ -37,11 +37,10 @@
           descriptionZoom: 1,
           password: '',
           copyright: '',
-          laser: false,
+          laser: '',
           rare: '',
           radius: true,
           scale: 0.5,
-          cardBack: false,
           width: '',
           // 更多字段参照：@/views/yugioh/Yugioh.vue
         },
@@ -59,10 +58,9 @@
       this.form.descriptionZoom = Number(query.descriptionZoom) || 1;
       this.form.password = query.password || '';
       this.form.copyright = query.copyright || '';
-      this.form.laser = query.laser === 'true';
+      this.form.laser = query.laser || '';
       this.form.rare = query.rare || '';
       this.form.radius = query.radius === 'true';
-      this.form.cardBack = query.cardBack === 'true';
       this.form.width = Number(query.width) || 0;
       this.updateScale();
       if (this.form.password) {
