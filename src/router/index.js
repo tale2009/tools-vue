@@ -113,6 +113,14 @@ const routes = [
           title: '我的订单',
         },
       },
+      {
+        path: 'password',
+        name: 'accountPassword',
+        component: () => import('../views/account/password/Password.vue'),
+        meta: {
+          title: '修改密码',
+        },
+      },
     ],
   },
 ];

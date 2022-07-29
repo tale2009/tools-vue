@@ -128,6 +128,11 @@
           @keydown.enter="confirm"
         />
       </el-form-item>
+      <template v-if="signTab === 'login'">
+        <div class="forgot-password">
+          <el-button type="primary" link @click="forgotPassword">忘记密码</el-button>
+        </div>
+      </template>
       <template v-if="signTab === 'register'">
         <el-form-item label="昵称" prop="nickname">
           <el-input v-model="form.nickname" placeholder="请输入昵称" />
@@ -164,16 +169,21 @@
       </el-button>
     </template>
   </el-dialog>
+
+  <ForgotPasswordDialog v-model="forgotPasswordDialog" />
 </template>
 
 <script>
   import { mapActions, mapState } from 'vuex';
   import { maxDialogWidth } from '@/utils';
   import md5 from 'md5';
-  import store from '@/store';
+  import ForgotPasswordDialog from '@/layout/app-layout/components/ForgotPasswordDialog';
 
   export default {
     name: 'SignAvatar',
+    components: {
+      ForgotPasswordDialog,
+    },
     data() {
       return {
         signTab: 'login',
@@ -189,6 +199,7 @@
         },
         popoverShow: false,
         signDialog: false,
+        forgotPasswordDialog: false,
       };
     },
     mounted() {
@@ -294,6 +305,10 @@
       toAccountOrder() {
         this.$router.push('/account/order');
         this.$refs.avatarPopover?.hide();
+      },
+      forgotPassword() {
+        this.closeDialog();
+        this.forgotPasswordDialog = true;
       },
     },
     computed: {
@@ -425,5 +440,10 @@
       width: 100%;
       justify-content: center;
     }
+  }
+
+  .forgot-password {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

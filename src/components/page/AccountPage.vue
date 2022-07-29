@@ -19,6 +19,12 @@
               <span>我的订单</span>
             </template>
           </el-menu-item>
+          <el-menu-item index="/account/password">
+            <i class="fa-duotone fa-lock-keyhole fa-fw" />
+            <template #title>
+              <span>修改密码</span>
+            </template>
+          </el-menu-item>
         </el-menu>
       </el-scrollbar>
     </div>
