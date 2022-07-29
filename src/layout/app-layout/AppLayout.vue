@@ -42,7 +42,7 @@
       this.sendPing();
       this.pingTimer = setInterval(() => {
         this.sendPing();
-      }, 10000);
+      }, 60000);
     },
     beforeUnmount() {
       removeEventListener('resize', this.onResize);
