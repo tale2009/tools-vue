@@ -295,6 +295,12 @@
                 placeholder="请选择罕贵"
                 clearable
               >
+                <el-option label="DT" value="dt" />
+                <el-option label="UR" value="ur" />
+                <el-option label="GR" value="gr" />
+                <el-option label="HR" value="hr" />
+                <el-option label="SER" value="ser" />
+                <el-option label="GSER" value="gser" />
                 <el-option label="PSER" value="pser" />
               </el-select>
             </el-form-item>
@@ -655,6 +661,7 @@
             copyright: this.form.copyright,
             laser: this.form.laser,
             rare: this.form.rare,
+            twentieth: this.form.twentieth,
             radius: this.form.radius,
           },
         });

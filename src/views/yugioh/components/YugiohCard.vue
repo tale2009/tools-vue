@@ -21,6 +21,10 @@
       <el-image :src="attributeSrc" />
     </div>
 
+    <div v-if="showAttributeRare" class="attribute-rare">
+      <el-image :src="`${baseImage}/attribute-rare.png`" />
+    </div>
+
     <div v-if="showLevel" class="card-level" :style="levelStyle">
       <el-image v-for="item in data.level" :src="baseImage + '/level.png'" />
     </div>
@@ -52,8 +56,8 @@
       </el-image>
     </div>
 
-    <div v-if="data.type === 'pendulum'" class="pendulum-mask">
-      <el-image :src="baseImage + '/card-mask-pendulum.png'" fit="cover" />
+    <div class="card-mask" :style="maskStyle">
+      <el-image :src="maskSrc" fit="cover" />
     </div>
 
     <div v-if="data.type === 'pendulum'" class="left-pendulum" :style="leftPendulumStyle">
@@ -322,6 +326,9 @@
         }
         return name;
       },
+      showAttributeRare() {
+        return this.attributeSrc && ['hr', 'ser', 'gser', 'pser'].includes(this.data.rare);
+      },
       showLevel() {
         let flag = false;
         if (this.data.type === 'monster') {
@@ -366,20 +373,41 @@
         let left, top, width, height;
         if (this.data.type === 'pendulum') {
           left = '94px';
-          top = '366px';
-          width = '1206px';
-          height = '1206px';
+          top = '364px';
+          width = '1205px';
+          height = '1205px';
         } else {
-          left = '171px';
-          top = '376px';
-          width = '1052px';
-          height = '1052px';
+          left = '170px';
+          top = '375px';
+          width = '1054px';
+          height = '1054px';
         }
         return {
           left: left,
           top: top,
           width: width,
           height: height,
+        };
+      },
+      maskSrc() {
+        if (this.data.type === 'pendulum') {
+          return `${this.baseImage}/card-mask-pendulum.png`;
+        } else {
+          return `${this.baseImage}/card-mask.png`;
+        }
+      },
+      maskStyle() {
+        let top, left;
+        if (this.data.type === 'pendulum') {
+          top = '342px';
+          left = '68px';
+        } else {
+          top = '322px';
+          left = '117px';
+        }
+        return {
+          top,
+          left,
         };
       },
       leftPendulumStyle() {
@@ -612,6 +640,13 @@
       top: 96px;
     }
 
+    .attribute-rare {
+      position: absolute;
+      left: 1163px;
+      top: 96px;
+      z-index: 10;
+    }
+
     .card-level {
       position: absolute;
       top: 247px;
@@ -669,10 +704,8 @@
       }
     }
 
-    .pendulum-mask {
+    .card-mask {
       position: absolute;
-      left: 60px;
-      top: 335px;
       z-index: 10;
     }
 
@@ -763,12 +796,11 @@
       position: absolute;
       left: 1276px;
       top: 1913px;
-      z-index: 20;
+      z-index: 120;
     }
 
     .card-rare {
       position: absolute;
-      mix-blend-mode: lighten;
       top: 0;
       left: 0;
       width: 1394px;
@@ -779,7 +811,7 @@
 
     .card-twentieth {
       position: absolute;
-      top: 1531px;
+      top: 1532px;
       left: 472px;
       z-index: 120;
     }

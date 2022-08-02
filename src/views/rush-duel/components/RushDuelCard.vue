@@ -510,7 +510,6 @@
 
     .card-rare {
       position: absolute;
-      mix-blend-mode: lighten;
       top: 0;
       left: 0;
       width: 1394px;

@@ -39,6 +39,7 @@
           copyright: '',
           laser: '',
           rare: '',
+          twentieth: false,
           radius: true,
           scale: 0.5,
           width: '',
@@ -60,6 +61,7 @@
       this.form.copyright = query.copyright || '';
       this.form.laser = query.laser || '';
       this.form.rare = query.rare || '';
+      this.form.twentieth = query.twentieth === 'true';
       this.form.radius = query.radius === 'true';
       this.form.width = Number(query.width) || 0;
       this.updateScale();
