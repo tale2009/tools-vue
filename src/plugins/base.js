@@ -8,6 +8,16 @@ export default {
 
     app.config.globalProperties.formatTime = value => dayjs(value).format('YYYY-MM-DD HH:mm:ss');
 
+    app.config.globalProperties.timeFormatter = (row, column, cellValue, index) => dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss');
+
+    app.config.globalProperties.formatList = (value, list, listLabel = 'label', listValue = 'value') => {
+      const item = list.find(item => value === item[listValue]);
+      if (item) {
+        return item[listLabel];
+      }
+      return '';
+    };
+
     app.config.globalProperties.downloadBlob = function (blob, fileName) {
       if (!fileName) {
         fileName = new Date().getTime();

@@ -53,10 +53,6 @@
             margin-left: 10px;
             color: var(--normal-color);
           }
-
-          & > .el-input, .el-cascader, .el-select, .el-date-editor, .el-autocomplete {
-            width: 100%;
-          }
         }
       }
     }
