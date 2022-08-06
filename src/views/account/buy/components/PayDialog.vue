@@ -72,7 +72,7 @@
     },
     computed: {
       payWayImage() {
-        return this.formatList(this.data.type, this.payWayList, 'image', 'type');
+        return this.formatList(this.data.payWay, this.payWayList, 'image', 'payWay');
       },
     },
     watch: {
