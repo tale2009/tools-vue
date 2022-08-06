@@ -13,6 +13,18 @@
               <span>首页</span>
             </template>
           </el-menu-item>
+          <el-menu-item index="/account/info">
+            <i class="fa-duotone fa-user fa-fw" />
+            <template #title>
+              <span>我的信息</span>
+            </template>
+          </el-menu-item>
+          <el-menu-item index="/account/buy">
+            <i class="fa-duotone fa-user-crown fa-fw" />
+            <template #title>
+              <span>购买会员</span>
+            </template>
+          </el-menu-item>
           <el-menu-item index="/account/order">
             <i class="fa-duotone fa-rectangle-list fa-fw" />
             <template #title>

@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 export default createStore({
   state: {
     bodyOffsetWidth: 0,
+    isSmallScreen: false,
     leftCollapse: false,
     rightCollapse: false,
     accountCollapse: false,
@@ -19,6 +20,7 @@ export default createStore({
   mutations: {
     setBodyOffsetWidth(state) {
       state.bodyOffsetWidth = document.body.offsetWidth;
+      state.isSmallScreen = state.bodyOffsetWidth < 800;
     },
     setLeftCollapse(state, value) {
       state.leftCollapse = value;

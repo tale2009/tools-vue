@@ -43,6 +43,15 @@
         >
           永久会员
         </el-tag>
+        <el-button
+          v-if="!isMember"
+          type="primary"
+          link
+          size="small"
+          @click="toAccountBuy"
+        >
+          购买会员
+        </el-button>
       </el-space>
       <div class="menu-list">
         <div class="menu-item" @click="toAccountHome">
@@ -78,7 +87,7 @@
       <p>
         <i style="color: darkorange; margin-right: 5px" class="fa-solid fa-fire" />
         现已推出
-        <span style="font-size: 18px;font-weight: bold;color: darkorange">6</span>
+        <span style="font-size: 18px;font-weight: bold;color: darkorange">8</span>
         元月卡，快来体验全站加速吧！
       </p>
       <el-button
@@ -116,7 +125,7 @@
       :disabled="loading"
     >
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" placeholder="请输入用户名" />
+        <el-input v-model="form.username" :maxlength="32" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input
@@ -135,10 +144,15 @@
       </template>
       <template v-if="signTab === 'register'">
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="form.nickname" placeholder="请输入昵称" />
+          <el-input v-model="form.nickname" :maxlength="16" placeholder="请输入昵称" />
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
-          <el-input v-model="form.phone" type="tel" placeholder="请输入手机号">
+          <el-input
+            v-model="form.phone"
+            type="tel"
+            :maxlength="11"
+            placeholder="请输入手机号"
+          >
             <template #prepend>+86</template>
           </el-input>
         </el-form-item>
@@ -302,6 +316,10 @@
         this.$router.push('/account/home');
         this.$refs.avatarPopover?.hide();
       },
+      toAccountBuy() {
+        this.$router.push('/account/buy');
+        this.$refs.avatarPopover?.hide();
+      },
       toAccountOrder() {
         this.$router.push('/account/order');
         this.$refs.avatarPopover?.hide();
@@ -321,10 +339,6 @@
           return `${this.baseImage}/${this.userInfo.avatar}`;
         }
         return '';
-      },
-      dialogWidth() {
-        const offsetWidth = this.bodyOffsetWidth;
-        return offsetWidth > 540 ? 500 : offsetWidth - 40;
       },
       rules() {
         return {

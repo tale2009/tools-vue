@@ -32,6 +32,15 @@
             >
               永久会员
             </el-tag>
+            <el-button
+              v-if="!isMember"
+              type="primary"
+              link
+              size="small"
+              @click="toAccountBuy"
+            >
+              购买会员
+            </el-button>
           </el-space>
           <p v-if="isMember" class="expire-date">
             有效期至：{{ userInfo.member?.type === 'permanent' ? '永久' : formatTime(userInfo.member.expireDate) }}
@@ -105,6 +114,9 @@
           this.$message.success('上传成功');
           this.getUserInfo();
         });
+      },
+      toAccountBuy() {
+        this.$router.push('/account/buy');
       },
     },
     computed: {

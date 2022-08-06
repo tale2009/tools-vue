@@ -25,7 +25,7 @@
       </p>
       <p>
         使用教程：
-        <el-button type="primary" link @click="toCourse">B站文集</el-button>
+        <el-button type="primary" link @click="toCourse">B 站文集</el-button>
       </p>
       <p>更新时间：{{ formatTime(config.updateTime) }}</p>
     </div>

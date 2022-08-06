@@ -19,6 +19,7 @@ specifiers:
   md5: ^2.3.0
   mime: ^3.0.0
   normalize.css: ^8.0.1
+  qrcode.vue: ^3.3.3
   qs: ^6.11.0
   sass: ^1.54.0
   screenfull: ^6.0.2
@@ -44,6 +45,7 @@ dependencies:
   md5: 2.3.0
   mime: 3.0.0
   normalize.css: 8.0.1
+  qrcode.vue: 3.3.3_vue@3.2.37
   qs: 6.11.0
   screenfull: 6.0.2
   vue: 3.2.37
@@ -1486,6 +1488,14 @@ packages:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
     dev: true
+
+  /qrcode.vue/3.3.3_vue@3.2.37:
+    resolution: {integrity: sha512-OsD4tQjIbxg/K6D5ZkWjBdYI9eg9K2i8qeYILdEAX5mdAydSAxV7xKmmZSP/hA12olLqEMZ9ryqDQrwa9jEMgw==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.2.37
+    dev: false
 
   /qs/6.11.0:
     resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}

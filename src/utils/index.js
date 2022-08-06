@@ -101,11 +101,3 @@ export const getImageFileSize = file => {
     };
   });
 };
-
-// 手机号加密
-export const encryptPhone = phone => {
-  if (phone?.length === 11) {
-    return phone.substring(0, 3) + '****' + phone.substring(7, 11);
-  }
-  return phone;
-};

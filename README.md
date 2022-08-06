@@ -27,7 +27,7 @@ pnpm run dev
 
 ## 使用说明
 
-[B站文集](https://www.bilibili.com/read/readlist/rl314448)
+[B 站文集](https://www.bilibili.com/read/readlist/rl314448)
 
 ## 小工具列表
 

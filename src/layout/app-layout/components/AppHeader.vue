@@ -136,7 +136,7 @@
       },
     },
     computed: {
-      ...mapState(['leftCollapse', 'rightCollapse', 'bodyOffsetWidth']),
+      ...mapState(['leftCollapse', 'rightCollapse', 'bodyOffsetWidth', 'isSmallScreen']),
       leftCollapseIconStyle() {
         return {
           transform: this.leftCollapse ? 'rotate(180deg)' : '',
@@ -146,9 +146,6 @@
         return {
           transform: this.rightCollapse ? 'rotate(-180deg)' : '',
         };
-      },
-      isSmallScreen() {
-        return this.bodyOffsetWidth < 500;
       },
     },
   };

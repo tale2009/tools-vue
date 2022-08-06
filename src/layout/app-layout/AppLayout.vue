@@ -33,7 +33,7 @@
         pingTimer: '',
       };
     },
-    mounted() {
+    created() {
       this.browserTip();
       document.onkeydown = this.disableKey;
       document.onkeypress = this.disableKey;
@@ -93,14 +93,11 @@
       },
     },
     computed: {
-      ...mapState(['leftCollapse', 'bodyOffsetWidth']),
+      ...mapState(['leftCollapse', 'bodyOffsetWidth', 'isSmallScreen']),
       leftStyle() {
         return {
           marginLeft: this.leftCollapse ? '-200px' : '0',
         };
-      },
-      isSmallScreen() {
-        return this.bodyOffsetWidth < 500;
       },
     },
   };

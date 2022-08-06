@@ -15,7 +15,12 @@
       :disabled="loading"
     >
       <el-form-item label="手机号" prop="phone">
-        <el-input v-model="form.phone" type="tel" placeholder="请输入手机号">
+        <el-input
+          v-model="form.phone"
+          type="tel"
+          :maxlength="11"
+          placeholder="请输入手机号"
+        >
           <template #prepend>+86</template>
         </el-input>
       </el-form-item>

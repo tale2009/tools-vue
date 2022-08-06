@@ -114,6 +114,22 @@ const routes = [
         },
       },
       {
+        path: 'info',
+        name: 'accountInfo',
+        component: () => import('../views/account/info/Info.vue'),
+        meta: {
+          title: '我的信息',
+        },
+      },
+      {
+        path: 'buy',
+        name: 'accountBuy',
+        component: () => import('../views/account/buy/Buy.vue'),
+        meta: {
+          title: '购买会员',
+        },
+      },
+      {
         path: 'order',
         name: 'accountOrder',
         component: () => import('../views/account/order/Order.vue'),

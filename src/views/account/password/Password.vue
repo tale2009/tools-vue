@@ -11,8 +11,9 @@
         >
           <el-form-item label="手机号" prop="phone">
             <el-input
-              :value="encryptPhone(userInfo.phone)"
+              :value="userInfo.phone"
               type="tel"
+              :maxlength="11"
               placeholder="请输入手机号"
               disabled
             >
@@ -62,7 +63,6 @@
   import AccountPage from '@/components/page/AccountPage';
   import { mapState } from 'vuex';
   import md5 from 'md5';
-  import { encryptPhone } from '@/utils';
 
   export default {
     name: 'Password',
@@ -81,7 +81,6 @@
       };
     },
     methods: {
-      encryptPhone,
       sendCaptcha() {
         this.$refs.form.validateField('phone', valid => {
           if (valid) {
