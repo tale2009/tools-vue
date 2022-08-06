@@ -73,9 +73,10 @@
     height: calc(100vh - 60px);
     overflow: hidden;
     display: flex;
-    align-items: stretch;
 
     .account-menu {
+      height: 100%;
+      overflow: auto;
       flex-shrink: 0;
       border-right: 1px solid var(--border-color);
 
@@ -111,6 +112,8 @@
     }
 
     .account-main {
+      height: 100%;
+      overflow: auto;
       flex-grow: 1;
 
       .account-slot {

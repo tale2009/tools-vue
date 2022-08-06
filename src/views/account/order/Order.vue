@@ -1,19 +1,19 @@
 <template>
   <div class="order-container">
     <AccountPage>
-      <div class="search-form">
+      <div ref="searchForm" class="search-form" :style="searchFormStyle">
         <el-form
           ref="form"
           :model="form"
           label-width="auto"
         >
           <el-row :gutter="gutter">
-            <el-col :span="6">
+            <el-col :span="span">
               <el-form-item label="订单号" prop="orderNumber">
                 <el-input v-model="form.orderNumber" clearable placeholder="请输入订单号" />
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="span">
               <el-form-item label="支付方式" prop="payWay">
                 <el-select
                   v-model="form.payWay"
@@ -24,7 +24,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="span">
               <el-form-item label="状态" prop="status">
                 <el-select
                   v-model="form.status"
@@ -35,7 +35,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="span">
               <el-form-item label="创建时间" prop="createDate">
                 <el-date-picker
                   v-model="form.createDate"
@@ -49,7 +49,7 @@
           </el-row>
         </el-form>
 
-        <div>
+        <div class="search-button" :style="searchButtonStyle">
           <el-button
             plain
             :icon="RefreshLeft"
@@ -75,21 +75,21 @@
             :index="indexMethod"
             width="80"
           />
-          <el-table-column label="订单号" prop="orderNumber" min-width="160" />
-          <el-table-column label="金额" prop="amount" min-width="160" />
+          <el-table-column label="订单号" prop="orderNumber" min-width="180" />
+          <el-table-column label="金额" prop="amount" min-width="80" />
           <el-table-column
             label="类型"
             prop="type"
-            min-width="160"
+            min-width="80"
             :formatter="typeFormatter"
           />
           <el-table-column
             label="支付方式"
             prop="payWay"
-            min-width="160"
+            min-width="100"
             :formatter="payWayFormatter"
           />
-          <el-table-column label="状态" prop="status" min-width="160">
+          <el-table-column label="状态" prop="status" min-width="100">
             <template #default="scope">
               <el-tag v-if="scope.row.status === 'incomplete'">未完成</el-tag>
               <el-tag v-if="scope.row.status === 'completed'" type="success">已完成</el-tag>
@@ -102,7 +102,7 @@
             min-width="160"
             :formatter="timeFormatter"
           />
-          <el-table-column label="操作" width="160" fixed="right">
+          <el-table-column label="操作" width="80" fixed="right">
             <template #default="scope">
               <el-popconfirm v-if="scope.row.status === 'incomplete'" title="是否确认取消?" @confirm="cancelOrder(scope.row)">
                 <template #reference>
@@ -131,6 +131,7 @@
   import AccountPage from '@/components/page/AccountPage';
   import { RefreshLeft, Search } from '@element-plus/icons-vue';
   import { shallowRef } from 'vue';
+  import { useResizeObserver } from '@vueuse/core';
 
   export default {
     name: 'Order',
@@ -142,6 +143,8 @@
         RefreshLeft: shallowRef(RefreshLeft),
         Search: shallowRef(Search),
         gutter: 20,
+        span: 6,
+        isSmallForm: false,
         loading: false,
         btnLoading: false,
         form: {
@@ -173,7 +176,27 @@
     created() {
       this.getOrderList();
     },
+    mounted() {
+      useResizeObserver(this.$refs.searchForm, entries => {
+        const entry = entries[0];
+        const { width } = entry.contentRect;
+        const formWidth = width - 172;
+        this.isSmallForm = formWidth < 360;
+        this.setSpan(formWidth);
+      });
+    },
     methods: {
+      setSpan(formWidth) {
+        if (formWidth > 360 * 4) {
+          this.span = 6;
+        } else if (formWidth > 360 * 3) {
+          this.span = 8;
+        } else if (formWidth > 360 * 2) {
+          this.span = 12;
+        } else {
+          this.span = 24;
+        }
+      },
       getOrderList() {
         this.loading = true;
         this.axios({
@@ -228,6 +251,24 @@
         this.getOrderList();
       },
     },
+    computed: {
+      searchFormStyle() {
+        if (this.isSmallForm) {
+          return {
+            flexDirection: 'column',
+          };
+        }
+        return {};
+      },
+      searchButtonStyle() {
+        if (this.isSmallForm) {
+          return {
+            marginTop: '18px',
+          };
+        }
+        return {};
+      },
+    },
   };
 </script>
 
@@ -238,8 +279,13 @@
 
       ::v-deep(.el-form) {
         flex: 1;
-        margin-right: 20px;
         margin-bottom: -18px;
+      }
+
+      .search-button {
+        display: flex;
+        margin-left: 20px;
+        justify-content: flex-end;
       }
     }
 
