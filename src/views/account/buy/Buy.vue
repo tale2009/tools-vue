@@ -30,7 +30,7 @@
           <el-button type="primary" :loading="btnLoading" @click="scanPay">扫码支付</el-button>
         </div>
 
-        <p class="but-tip">
+        <p class="buy-tip">
           如果你曾经赞助过，可以折算成相应时长的会员哦！
           <el-button type="primary" link @click="toBilibili">B 站私信</el-button>
           发送你的账号信息，以及当时赞助的付款信息即可。
@@ -211,7 +211,7 @@
         margin-top: 20px;
       }
 
-      .but-tip {
+      .buy-tip {
         margin: 20px 0 0;
         line-height: 1.7;
         color: var(--normal-color);
