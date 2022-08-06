@@ -30,17 +30,17 @@
           <el-button type="primary" :loading="btnLoading" @click="scanPay">扫码支付</el-button>
         </div>
 
-        <p class="buy-tip">
-          如果你曾经赞助过，可以折算成相应时长的会员哦！
-          <el-button type="primary" link @click="toBilibili">B 站私信</el-button>
-          发送你的账号信息，以及当时赞助的付款信息即可。
-        </p>
+        <div class="buy-article">
+          <p class="title">赞助返利</p>
+          <p class="content">
+            如果你曾经赞助过，赞助费可以折算成相应时长的会员哦！
+            <el-button type="primary" link @click="toBilibili">B 站私信</el-button>
+            发送你的账号信息，以及当时赞助的付款信息即可。
+          </p>
 
-        <p class="benefits-title">会员权益</p>
-
-        <ol class="member-benefits">
-          <li>会员可享受全站加速，包含图片、字体等资源加载提速，平均提速 10 倍以上。</li>
-        </ol>
+          <p class="title">会员权益</p>
+          <p class="content">会员可享受全站加速，包含图片、字体等资源加载提速，平均提速 10 倍以上。</p>
+        </div>
 
         <div class="buy-notify">
           <el-alert
@@ -211,35 +211,29 @@
         margin-top: 20px;
       }
 
-      .buy-tip {
-        margin: 20px 0 0;
-        line-height: 1.7;
-        color: var(--normal-color);
+      .buy-article {
+        margin-top: 40px;
 
-        .el-button {
-          padding: 0;
-          height: auto;
-          border: none;
-          line-height: 1.7;
-          vertical-align: top;
+        .title {
+          margin: 20px 0 0;
+          font-size: 18px;
+          font-weight: bold;
+          color: var(--primary-color);
         }
-      }
 
-      .benefits-title {
-        margin: 40px 0 0;
-        font-size: 18px;
-        font-weight: bold;
-        color: var(--primary-color);
-      }
-
-      .member-benefits {
-        margin: 10px 0 0;
-
-        li {
-          margin-top: 10px;
+        .content {
+          margin: 10px 0 0;
+          padding-left: 2em;
           line-height: 1.7;
-          font-size: 14px;
           color: var(--normal-color);
+
+          .el-button {
+            padding: 0;
+            height: auto;
+            border: none;
+            line-height: 1.7;
+            vertical-align: top;
+          }
         }
       }
 
