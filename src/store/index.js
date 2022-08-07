@@ -32,7 +32,6 @@ export default createStore({
       state.accountCollapse = value;
     },
     setStaticURL(state) {
-      const role = state.userInfo.role;
       let prefix = 'v-';
       if (state.isAdmin || state.isMember) {
         prefix = '';

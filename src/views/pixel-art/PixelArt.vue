@@ -190,7 +190,7 @@
           const colIndex = currentDot.value.y;
           hoverContext.value.lineWidth = lineWidth.value;
           hoverContext.value.fillStyle = 'rgba(64, 158, 255, 0.2)';
-          hoverContext.value.strokeStyle = '#409eff';
+          hoverContext.value.strokeStyle = 'var(--primary-color)';
 
           if (form.shape === 'square') {
             const x = colIndex * pixel.value + lineWidth.value / 2;

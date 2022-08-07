@@ -258,6 +258,16 @@
                   导出图片
                 </el-button>
               </el-col>
+              <el-col v-if="isAdmin || isMember" :span="24">
+                <el-button
+                  type="primary"
+                  :disabled="form.language !== 'sc'"
+                  :loading="exportLoading"
+                  @click="batchExportDialog = true"
+                >
+                  批量导出图片
+                </el-button>
+              </el-col>
             </el-row>
           </div>
 
@@ -267,6 +277,13 @@
             :image="cropperImage"
             :aspect-ratio="1"
             @get-data="setImage"
+          />
+          <BatchExportDialog
+            v-model="batchExportDialog"
+            v-model:password="form.password"
+            :font-loading="fontLoading"
+            :search-card-by-password="searchCardByPassword"
+            :export-image="exportImage"
           />
         </PageForm>
       </template>
@@ -280,6 +297,7 @@
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
   import CropperDialog from '@/components/dialog/CropperDialog';
+  import BatchExportDialog from '@/views/yugioh/components/BatchExportDialog';
   import scDemo from '@/views/rush-duel/demo/sc-demo';
   import jpDemo from '@/views/rush-duel/demo/jp-demo';
   import loadImage from 'blueimp-load-image';
@@ -287,6 +305,7 @@
   import { nextTick } from 'vue';
   import html2canvas from '@/views/yugioh/html2canvas';
   import { parseRushDuelCard } from '@/views/rush-duel/rush-duel';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'RushDuel',
@@ -296,6 +315,7 @@
       RushDuelCard,
       KanjiKanaDialog,
       CropperDialog,
+      BatchExportDialog,
       InfoFilled,
     },
     data() {
@@ -337,6 +357,7 @@
         cropperImage: '',
         kanjiKanaDialog: false,
         cropperDialog: false,
+        batchExportDialog: false,
         config: {},
       };
     },
@@ -430,7 +451,7 @@
         this.searchCardByPassword();
       },
       searchCardByPassword(lang) {
-        this.axios({
+        return this.axios({
           method: 'get',
           url: '/rush-duel/card/' + this.form.password,
           params: {
@@ -496,25 +517,29 @@
         this.downloadBlob(blob, this.cardName);
       },
       exportImage() {
-        nextTick(() => {
-          this.exportLoading = true;
-          let element = document.querySelector('.rush-duel-card');
-          html2canvas(element, {
-            useCORS: true,
-            backgroundColor: 'transparent',
-            width: this.form.scale * 1394,
-            height: this.form.scale * 2031,
-          }).then(canvas => {
-            canvas.toBlob(blob => {
-              this.downloadBlob(blob, this.cardName);
+        return new Promise(resolve => {
+          nextTick(() => {
+            this.exportLoading = true;
+            let element = document.querySelector('.rush-duel-card');
+            html2canvas(element, {
+              useCORS: true,
+              backgroundColor: 'transparent',
+              width: this.form.scale * 1394,
+              height: this.form.scale * 2031,
+            }).then(canvas => {
+              canvas.toBlob(blob => {
+                this.downloadBlob(blob, this.cardName);
+                resolve();
+              });
+            }).finally(() => {
+              this.exportLoading = false;
             });
-          }).finally(() => {
-            this.exportLoading = false;
           });
         });
       },
     },
     computed: {
+      ...mapState(['isAdmin', 'isMember']),
       showLevel() {
         let flag = false;
         if (this.form.type === 'monster') {

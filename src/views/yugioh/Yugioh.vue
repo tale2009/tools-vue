@@ -375,6 +375,16 @@
                   导出图片
                 </el-button>
               </el-col>
+              <el-col v-if="isAdmin || isMember" :span="24">
+                <el-button
+                  type="primary"
+                  :disabled="form.language === 'astral'"
+                  :loading="exportLoading"
+                  @click="batchExportDialog = true"
+                >
+                  批量导出图片
+                </el-button>
+              </el-col>
             </el-row>
           </div>
 
@@ -384,6 +394,13 @@
             :image="cropperImage"
             :aspect-ratio="1"
             @get-data="setImage"
+          />
+          <BatchExportDialog
+            v-model="batchExportDialog"
+            v-model:password="form.password"
+            :font-loading="fontLoading"
+            :search-card-by-password="searchCardByPassword"
+            :export-image="exportImage"
           />
         </PageForm>
       </template>
@@ -397,6 +414,7 @@
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import KanjiKanaDialog from '@/views/yugioh/components/KanjiKanaDialog';
   import CropperDialog from '@/components/dialog/CropperDialog';
+  import BatchExportDialog from '@/views/yugioh/components/BatchExportDialog';
   import scDemo from './demo/sc-demo';
   import tcDemo from './demo/tc-demo';
   import jpDemo from './demo/jp-demo';
@@ -408,6 +426,7 @@
   import { InfoFilled } from '@element-plus/icons-vue';
   import { nextTick } from 'vue';
   import { parseYugiohCard } from '@/views/yugioh/yugioh';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'Yugioh',
@@ -417,6 +436,7 @@
       YugiohCard,
       KanjiKanaDialog,
       CropperDialog,
+      BatchExportDialog,
       InfoFilled,
     },
     data() {
@@ -481,6 +501,7 @@
         cropperImage: '',
         kanjiKanaDialog: false,
         cropperDialog: false,
+        batchExportDialog: false,
         config: {},
       };
     },
@@ -616,7 +637,7 @@
         this.refreshKey++;
       },
       searchCardByPassword(lang) {
-        this.axios({
+        return this.axios({
           method: 'get',
           url: '/yugioh/card/' + this.form.password,
           params: {
@@ -687,29 +708,33 @@
         this.downloadBlob(blob, this.cardName);
       },
       exportImage() {
-        if (this.form.gradient) {
-          this.form.gradient = false;
-          this.$message.warning('暂不支持导出渐变色卡名');
-        }
-        nextTick(() => {
-          this.exportLoading = true;
-          let element = document.querySelector('.yugioh-card');
-          html2canvas(element, {
-            useCORS: true,
-            backgroundColor: 'transparent',
-            width: this.form.scale * 1394,
-            height: this.form.scale * 2031,
-          }).then(canvas => {
-            canvas.toBlob(blob => {
-              this.downloadBlob(blob, this.cardName);
+        return new Promise(resolve => {
+          if (this.form.gradient) {
+            this.form.gradient = false;
+            this.$message.warning('暂不支持导出渐变色卡名');
+          }
+          nextTick(() => {
+            this.exportLoading = true;
+            let element = document.querySelector('.yugioh-card');
+            html2canvas(element, {
+              useCORS: true,
+              backgroundColor: 'transparent',
+              width: this.form.scale * 1394,
+              height: this.form.scale * 2031,
+            }).then(canvas => {
+              canvas.toBlob(blob => {
+                this.downloadBlob(blob, this.cardName);
+                resolve();
+              });
+            }).finally(() => {
+              this.exportLoading = false;
             });
-          }).finally(() => {
-            this.exportLoading = false;
           });
         });
       },
     },
     computed: {
+      ...mapState(['isAdmin', 'isMember']),
       showLevel() {
         let flag = false;
         if (this.form.type === 'monster') {

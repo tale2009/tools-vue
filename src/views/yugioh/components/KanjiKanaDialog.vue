@@ -2,7 +2,7 @@
   <el-dialog
     title="一键注音"
     :model-value="modelValue"
-    width="800px"
+    :width="maxDialogWidth(800)"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
@@ -13,7 +13,7 @@
       label-position="top"
     >
       <el-row :gutter="gutter">
-        <el-col :span="12">
+        <el-col :span="span">
           <el-form-item label="注音只支持 OCG 常用语" prop="text">
             <el-input
               v-model="form.text"
@@ -23,7 +23,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="span">
           <el-form-item label="常用注音表（点击可插入）" prop="filter">
             <el-input v-model="form.filter" clearable placeholder="请输入筛选文字" />
             <div class="kanji-kana-list notranslate">
@@ -47,6 +47,8 @@
 <script>
   import kanjiKanaMap from '@/assets/json/kanji-kana.json';
   import { kanjiToKana, removeKanjiKana } from '@/views/yugioh/yugioh';
+  import { mapState } from 'vuex';
+  import { maxDialogWidth } from '@/utils';
 
   export default {
     name: 'KanjiKanaDialog',
@@ -61,6 +63,7 @@
       };
     },
     methods: {
+      maxDialogWidth,
       closeDialog() {
         this.$refs.form.resetFields();
         this.$emit('update:modelValue', false);
@@ -76,6 +79,13 @@
       },
     },
     computed: {
+      ...mapState(['bodyOffsetWidth']),
+      span() {
+        if (this.bodyOffsetWidth > 600) {
+          return 12;
+        }
+        return 24;
+      },
       filteredKanjiKanaMap() {
         const filter = this.form.filter.trim();
         if (filter) {

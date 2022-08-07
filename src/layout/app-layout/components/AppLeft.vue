@@ -84,7 +84,7 @@
       itemStyle(item) {
         const isRoute = this.$route.path === item.path;
         return {
-          color: isRoute ? '#409eff' : '',
+          color: isRoute ? 'var(--primary-color)' : '',
         };
       },
       toPoster1() {

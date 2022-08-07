@@ -48,9 +48,9 @@
       mouseenterSplit() {
         const pageFormRef = this.$refs.pageForm;
         const splitButton = this.$refs.splitButton;
-        pageFormRef.style.borderLeft = '1px solid #409eff';
-        splitButton.style.color = '#409eff';
-        splitButton.style.border = '1px solid #409eff';
+        pageFormRef.style.borderLeft = '1px solid var(--primary-color)';
+        splitButton.style.color = 'var(--primary-color)';
+        splitButton.style.border = '1px solid var(--primary-color)';
       },
       mouseleaveSplit() {
         const pageFormRef = this.$refs.pageForm;
@@ -65,11 +65,11 @@
         e.preventDefault();
         const pageFormRef = this.$refs.pageForm;
         const splitButton = this.$refs.splitButton;
-        pageFormRef.style.borderLeft = '1px solid #409eff';
+        pageFormRef.style.borderLeft = '1px solid var(--primary-color)';
         pageFormRef.style.transition = 'none';
         splitButton.classList.add('active');
-        splitButton.style.color = '#409eff';
-        splitButton.style.border = '1px solid #409eff';
+        splitButton.style.color = 'var(--primary-color)';
+        splitButton.style.border = '1px solid var(--primary-color)';
         const oldPageFormWidth = this.pageFormWidth;
         const mousedownClientX = getClientXY(e).clientX;
 
