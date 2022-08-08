@@ -187,20 +187,20 @@
             <el-form-item v-if="['monster','pendulum'].includes(form.type)" label="ATK">
               <el-input-number
                 v-model="form.atk"
-                :min="-1"
+                :min="-2"
                 :max="9999"
                 :precision="0"
               />
-              <span class="tip">（? 输入 -1）</span>
+              <span class="tip">（?：-1，∞：-2）</span>
             </el-form-item>
-            <el-form-item v-if="(form.type === 'monster' && form.cardType!=='link') || form.type === 'pendulum'" label="DEF">
+            <el-form-item v-if="(form.type === 'monster' && form.cardType !== 'link') || form.type === 'pendulum'" label="DEF">
               <el-input-number
                 v-model="form.def"
-                :min="-1"
+                :min="-2"
                 :max="9999"
                 :precision="0"
               />
-              <span class="tip">（? 输入 -1）</span>
+              <span class="tip">（?：-1，∞：-2）</span>
             </el-form-item>
             <el-form-item v-if="form.type === 'monster' && form.cardType === 'link'" label="箭头">
               <div class="arrow-form">

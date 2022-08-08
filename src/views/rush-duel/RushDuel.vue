@@ -120,7 +120,7 @@
                 :max="9999"
                 :precision="0"
               />
-              <span class="tip">（? 输入 -1）</span>
+              <span class="tip">（?：-1）</span>
             </el-form-item>
             <el-form-item v-if="form.type === 'monster'" label="DEF">
               <el-input-number
@@ -129,7 +129,7 @@
                 :max="9999"
                 :precision="0"
               />
-              <span class="tip">（? 输入 -1）</span>
+              <span class="tip">（?：-1）</span>
             </el-form-item>
             <el-form-item label="效果">
               <el-switch v-model="form.firstLineCompress" active-text="首行压缩" />

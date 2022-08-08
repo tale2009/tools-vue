@@ -92,7 +92,7 @@
         this.searchCardByPassword().then(() => {
           const imageList = document.querySelectorAll('img');
           this.timer = setInterval(() => {
-            const flag = Array.from(imageList).every(item => item.complete);
+            const flag = Array.from(imageList).every(item => item.complete) && !this.fontLoading;
             if (flag) {
               clearInterval(this.timer);
               this.exportImage().finally(() => {

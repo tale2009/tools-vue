@@ -157,11 +157,13 @@
     <div v-if="['monster','pendulum'].includes(data.type)" class="card-atk" :style="atkStyle">
       <span v-if="data.atk >= 0">{{ data.language === 'astral' ? numberToFull(data.atk) : data.atk }}</span>
       <span v-else-if="data.atk === -1">?</span>
+      <span v-else-if="data.atk === -2">∞</span>
     </div>
 
-    <div v-if="(data.type === 'monster' && data.cardType!=='link') || data.type === 'pendulum'" class="card-def" :style="defStyle">
+    <div v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" class="card-def" :style="defStyle">
       <span v-if="data.def >= 0">{{ data.language === 'astral' ? numberToFull(data.def) : data.def }}</span>
       <span v-else-if="data.def === -1">?</span>
+      <span v-else-if="data.def === -2">∞</span>
     </div>
 
     <div v-if="data.type === 'monster' && data.cardType === 'link'" class="card-link" :style="linkStyle">
