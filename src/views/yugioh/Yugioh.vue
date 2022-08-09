@@ -237,6 +237,7 @@
                 :min="0.5"
                 :max="1.5"
                 :step="0.02"
+                :marks="descriptionZoomMarks"
                 @input="changeDescriptionZoom"
               />
             </el-form-item>
@@ -498,6 +499,15 @@
           { label: '蓝字', value: 'blue', color1: '#009999', color2: '#00ffff' },
           { label: '绿字', value: 'green', color1: '#009900', color2: '#00ff00' },
         ],
+        descriptionZoomMarks: {
+          1: {
+            style: {
+              color: 'var(--primary-color)',
+              marginTop: '5px',
+            },
+            label: '1',
+          },
+        },
         cropperImage: '',
         kanjiKanaDialog: false,
         cropperDialog: false,

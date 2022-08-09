@@ -30,9 +30,7 @@
     <el-row>
       <el-col :span="24">
         <div class="poster-list">
-          <el-image :src="poster1" @click="toPoster1" />
-          <el-image :src="poster2" @click="toPoster2" />
-          <el-image :src="poster3" @click="toPoster3" />
+          <el-image v-for="item in posterList" :src="item.image" @click="toPoster(item)" />
         </div>
       </el-col>
     </el-row>
@@ -42,7 +40,6 @@
 <script>
   import toolList from '@/assets/json/tool-list.json';
   import poster1 from '@/assets/image/poster1.jpg';
-  import poster2 from '@/assets/image/poster2.jpg';
   import poster3 from '@/assets/image/poster3.jpg';
 
   export default {
@@ -50,10 +47,19 @@
     data() {
       return {
         toolList,
-        poster1,
-        poster2,
-        poster3,
         activeTitle: '',
+        posterList: [
+          {
+            name: '霜灷卡牌',
+            image: poster1,
+            url: 'https://item.taobao.com/item.htm?id=665501436781',
+          },
+          {
+            name: '铭振天下',
+            image: poster3,
+            url: 'https://item.taobao.com/item.htm?id=674640080866',
+          },
+        ],
       };
     },
     created() {
@@ -87,17 +93,9 @@
           color: isRoute ? 'var(--primary-color)' : '',
         };
       },
-      toPoster1() {
-        gtag('event', '霜灷卡牌');
-        open('https://item.taobao.com/item.htm?id=665501436781');
-      },
-      toPoster2() {
-        gtag('event', 'Xirsx');
-        open('https://space.bilibili.com/8202433');
-      },
-      toPoster3() {
-        gtag('event', '铭振天下');
-        open('https://item.taobao.com/item.htm?id=674640080866');
+      toPoster(item) {
+        gtag('event', item.name);
+        open(item.url);
       },
     },
     watch: {

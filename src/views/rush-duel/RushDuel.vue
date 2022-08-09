@@ -147,6 +147,7 @@
                 :min="0.5"
                 :max="1.5"
                 :step="0.02"
+                :marks="descriptionZoomMarks"
                 @input="changeDescriptionZoom"
               />
             </el-form-item>
@@ -354,6 +355,15 @@
           { label: '简体中文', value: 'sc' },
           { label: '日文', value: 'jp' },
         ],
+        descriptionZoomMarks: {
+          1: {
+            style: {
+              color: 'var(--primary-color)',
+              marginTop: '5px',
+            },
+            label: '1',
+          },
+        },
         cropperImage: '',
         kanjiKanaDialog: false,
         cropperDialog: false,
