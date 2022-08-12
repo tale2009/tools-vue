@@ -95,10 +95,12 @@
             const flag = Array.from(imageList).every(item => item.complete) && !this.fontLoading;
             if (flag) {
               clearInterval(this.timer);
-              this.exportImage().finally(() => {
-                if (this.btnLoading) {
-                  this.exportNext();
-                }
+              setTimeout(() => {
+                this.exportImage().finally(() => {
+                  if (this.btnLoading) {
+                    this.exportNext();
+                  }
+                });
               });
             }
           }, 100);

@@ -246,6 +246,8 @@
     .disabled-buy {
       font-size: 14px;
       color: var(--danger-color);
+      line-height: 1.7;
+      white-space: pre-wrap;
     }
   }
 </style>

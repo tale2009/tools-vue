@@ -89,11 +89,6 @@
         this.axios({
           method: 'get',
           url: '/ping',
-        }).then(res => {
-          // todo
-          if (res.data.ip === '49.73.59.179') {
-            localStorage.setItem('test', 'test');
-          }
         });
       },
     },

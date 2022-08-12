@@ -44,7 +44,7 @@
 
     <div class="header-right">
       <el-space :size="10">
-        <SignAvatar v-if="test" />
+        <SignAvatar />
         <template v-if="!isSmallScreen">
           <i class="fa-brands fa-github" @click="toGithub" />
           <el-button color="#626aef" size="small" @click="qADialog = true">Q & A</el-button>
@@ -99,11 +99,7 @@
         qADialog: false,
         aboutDialog: false,
         thankDialog: false,
-        test: false, // 测试
       };
-    },
-    created() {
-      this.test = localStorage.getItem('test') === 'test';
     },
     mounted() {
       this.updateIsFullscreen();
