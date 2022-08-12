@@ -88,7 +88,7 @@
         <i style="color: darkorange; margin-right: 5px" class="fa-solid fa-fire" />
         现已推出
         <span style="font-size: 18px;font-weight: bold;color: darkorange">8</span>
-        元月卡，快来体验全站加速吧！
+        元月卡，快来体验全站加速与批量导出功能吧！
       </p>
       <el-button
         style="width: 100%;"
