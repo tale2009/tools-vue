@@ -170,9 +170,12 @@
           el.style.textAlignLast = '';
           that.textScale = 1;
           const rubyList = Array.from(el.querySelectorAll('.ruby'));
-          rubyList.forEach(ruby => {
-            ruby.style.margin = '';
-          });
+          const rtList = Array.from(el.querySelectorAll('.rt'));
+          if (!rtList.length) {
+            rubyList.forEach(ruby => {
+              ruby.style.margin = '';
+            });
+          }
 
           if (el.clientHeight > that.height) {
             // 用二分法获取最大的scale，精度0.01
