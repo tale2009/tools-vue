@@ -12,6 +12,7 @@ export default createStore({
     leftCollapse: false,
     rightCollapse: false,
     accountCollapse: false,
+    fontLoading: false,
     staticURL: '',
     userInfo: {},
     isAdmin: false,
@@ -30,6 +31,9 @@ export default createStore({
     },
     setAccountCollapse(state, value) {
       state.accountCollapse = value;
+    },
+    setFontLoading(state, value) {
+      state.fontLoading = value;
     },
     setStaticURL(state) {
       let prefix = 'v-';

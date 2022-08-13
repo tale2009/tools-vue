@@ -8,7 +8,6 @@
     <div v-name-color="data.color" class="card-name">
       <CompressText
         :text="data.name"
-        :refresh-key="refreshKey"
         :width="attributeSrc ? 1025 : 1248"
         :height="200"
       />
@@ -26,7 +25,7 @@
 
     <div v-if="['spell','trap'].includes(data.type)" class="spell-trap">
       <span>【</span>
-      <CompressText :text="spellTrapName" :refresh-key="refreshKey" />
+      <CompressText :text="spellTrapName" />
       <el-image v-if="data.icon" class="spell-trap-icon" :src="`${baseImage}/icon-${data.icon}.png`" />
       <span>】</span>
     </div>
@@ -58,7 +57,6 @@
     <div v-if="data.type === 'monster' && data.monsterType" class="card-effect">
       <CompressText
         :text="monsterType"
-        :refresh-key="refreshKey"
         :width="1196"
         :height="100"
       />
@@ -72,12 +70,12 @@
             :text="item"
             :width="1196"
             :height="70"
-            :refresh-key="refreshKey"
+            :description-zoom="data.descriptionZoom"
           />
         </div>
         <!--单行不压缩-->
         <div v-else-if="index < data.description.split('\n').length - 1">
-          <CompressText :text="item" :refresh-key="refreshKey" />
+          <CompressText :text="item" :description-zoom="data.descriptionZoom" />
         </div>
         <!--最后一行压缩-->
         <div v-else-if="index === data.description.split('\n').length - 1" class="last-description">
@@ -85,8 +83,8 @@
             :text="item"
             :width="1196"
             :height="lastDescriptionHeight"
-            :refresh-key="refreshKey"
             :language="data.language"
+            :description-zoom="data.descriptionZoom"
           />
         </div>
         <!--item为空提供换行-->
@@ -131,7 +129,7 @@
     components: {
       CompressText,
     },
-    props: ['data', 'refreshKey'],
+    props: ['data'],
     data() {
       return {
         lastDescriptionHeight: 300, // 最后一行效果压缩高度

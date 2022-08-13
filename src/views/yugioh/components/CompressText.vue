@@ -15,9 +15,11 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+
   export default {
     name: 'CompressText',
-    props: ['text', 'gradient', 'gradientColor1', 'gradientColor2', 'width', 'height', 'language', 'refreshKey', 'autoSizeElement'],
+    props: ['text', 'gradient', 'gradientColor1', 'gradientColor2', 'width', 'height', 'language', 'descriptionZoom', 'autoSizeElement'],
     data() {
       return {
         noCompressText: '●①②③④⑤⑥⑦⑧⑨⑩',
@@ -25,6 +27,7 @@
       };
     },
     computed: {
+      ...mapState(['fontLoading']),
       textList() {
         return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|[${this.noCompressText}]`, 'g'), s => `|${s}|`)
           .split('|').filter(value => value).map(value => {
@@ -63,8 +66,24 @@
       },
     },
     watch: {
-      refreshKey() {
-        // 强制刷新
+      fontLoading() {
+        if (!this.fontLoading) {
+          setTimeout(() => {
+            this.$forceUpdate();
+          });
+        }
+      },
+      width() {
+        setTimeout(() => {
+          this.$forceUpdate();
+        });
+      },
+      height() {
+        setTimeout(() => {
+          this.$forceUpdate();
+        });
+      },
+      descriptionZoom() {
         setTimeout(() => {
           this.$forceUpdate();
         });
@@ -131,10 +150,12 @@
           el.style.transform = '';
           el.style.textAlignLast = '';
           that.textScale = 1;
-          const yugiohCardElement = document.querySelector('.yugioh-card');
-          const descriptionZoom = Number(yugiohCardElement.style.getPropertyValue('--descriptionZoom'));
           let autoSizeElement = document.querySelector(that.autoSizeElement);
           autoSizeElement?.classList.remove('small-description');
+          const rubyList = Array.from(el.querySelectorAll('.ruby'));
+          rubyList.forEach(ruby => {
+            ruby.style.margin = '';
+          });
 
           if (el.clientHeight > that.height) {
             // 用二分法获取最大的scale，精度0.01
@@ -151,7 +172,7 @@
               if (el.clientHeight <= that.height && end - start <= 0.01) {
                 // 如果是英文，灵摆和效果栏字体判断缩小，当字号大于1不执行
                 if (that.language === 'en' && that.autoSizeElement && scale < 0.7 &&
-                  descriptionZoom <= 1 && !autoSizeElement?.classList.contains('small-description')) {
+                  that.descriptionZoom <= 1 && !autoSizeElement?.classList.contains('small-description')) {
                   autoSizeElement?.classList.add('small-description');
                   scale = 0.5;
                   start = 0;

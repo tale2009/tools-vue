@@ -130,7 +130,7 @@
 <script>
   import AccountPage from '@/components/page/AccountPage';
   import { RefreshLeft, Search } from '@element-plus/icons-vue';
-  import { shallowRef } from 'vue';
+  import { markRaw } from 'vue';
   import { useResizeObserver } from '@vueuse/core';
 
   export default {
@@ -140,8 +140,8 @@
     },
     data() {
       return {
-        RefreshLeft: shallowRef(RefreshLeft),
-        Search: shallowRef(Search),
+        RefreshLeft: markRaw(RefreshLeft),
+        Search: markRaw(Search),
         gutter: 20,
         span: 6,
         isSmallForm: false,

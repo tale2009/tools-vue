@@ -15,9 +15,11 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+
   export default {
     name: 'CompressText',
-    props: ['text', 'gradient', 'gradientColor1', 'gradientColor2', 'width', 'height', 'language', 'refreshKey'],
+    props: ['text', 'gradient', 'gradientColor1', 'gradientColor2', 'width', 'height', 'language', 'descriptionZoom'],
     data() {
       return {
         textScale: 1,
@@ -34,6 +36,7 @@
       },
     },
     computed: {
+      ...mapState(['fontLoading']),
       textList() {
         let bold = false;
         return this.text.trimEnd().replace(new RegExp(`\\[(.*?)\\((.*?)\\)]|<b>|</b>`, 'g'), s => `|${s}|`)
@@ -82,8 +85,24 @@
       },
     },
     watch: {
-      refreshKey() {
-        // 强制刷新
+      fontLoading() {
+        if (!this.fontLoading) {
+          setTimeout(() => {
+            this.$forceUpdate();
+          });
+        }
+      },
+      width() {
+        setTimeout(() => {
+          this.$forceUpdate();
+        });
+      },
+      height() {
+        setTimeout(() => {
+          this.$forceUpdate();
+        });
+      },
+      descriptionZoom() {
         setTimeout(() => {
           this.$forceUpdate();
         });
@@ -150,6 +169,10 @@
           el.style.transform = '';
           el.style.textAlignLast = '';
           that.textScale = 1;
+          const rubyList = Array.from(el.querySelectorAll('.ruby'));
+          rubyList.forEach(ruby => {
+            ruby.style.margin = '';
+          });
 
           if (el.clientHeight > that.height) {
             // 用二分法获取最大的scale，精度0.01

@@ -40,6 +40,16 @@ if (Cookies.get('token')) {
   });
 }
 
+document.fonts.onloading = () => {
+  store.commit('setFontLoading', true);
+};
+document.fonts.onloadingdone = () => {
+  store.commit('setFontLoading', false);
+};
+document.fonts.onloadingerror = () => {
+  store.commit('setFontLoading', false);
+};
+
 // 接口请求地址配置
 if (process.env.NODE_ENV === 'production') {
   // 上线环境

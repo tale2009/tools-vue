@@ -10,7 +10,7 @@
             :closable="false"
           />
         </div>
-        <RushDuelCard :data="form" :refresh-key="refreshKey" />
+        <RushDuelCard :data="form" />
       </template>
 
       <template #form>
@@ -44,7 +44,7 @@
               <span class="tip">（自动选择清空）</span>
             </el-form-item>
             <el-form-item label="类型">
-              <el-radio-group v-model="form.type" @change="changeType">
+              <el-radio-group v-model="form.type">
                 <el-radio-button label="monster">怪兽</el-radio-button>
                 <el-radio-button label="spell">魔法</el-radio-button>
                 <el-radio-button label="trap">陷阱</el-radio-button>
@@ -148,7 +148,6 @@
                 :max="1.5"
                 :step="0.02"
                 :marks="descriptionZoomMarks"
-                @input="changeDescriptionZoom"
               />
             </el-form-item>
             <el-form-item label="卡包">
@@ -282,7 +281,6 @@
           <BatchExportDialog
             v-model="batchExportDialog"
             v-model:password="form.password"
-            :font-loading="fontLoading"
             :search-card-by-password="searchCardByPassword"
             :export-image="exportImage"
           />
@@ -322,8 +320,6 @@
     data() {
       return {
         gutter: 10,
-        refreshKey: 0,
-        fontLoading: false,
         randomLoading: false,
         exportLoading: false,
         form: {
@@ -376,7 +372,6 @@
     },
     mounted() {
       this.getConfig();
-      this.refreshFont();
     },
     methods: {
       getConfig() {
@@ -387,26 +382,12 @@
           this.config = res.data;
         });
       },
-      // 刷新字体
-      refreshFont() {
-        setTimeout(() => {
-          this.fontLoading = true;
-          document.fonts.ready.then(() => {
-            this.fontLoading = false;
-            this.refreshKey++;
-          });
-        });
-      },
       changeLanguage(value) {
         if (value === 'sc') {
           Object.assign(this.form, scDemo);
         } else if (value === 'jp') {
           Object.assign(this.form, jpDemo);
         }
-        this.refreshFont();
-      },
-      changeType() {
-        this.refreshKey++;
       },
       beforeUpload(file) {
         let flag = file.type.includes('image');
@@ -427,9 +408,6 @@
       },
       deleteImage() {
         this.form.image = '';
-      },
-      changeDescriptionZoom() {
-        this.refreshKey++;
       },
       fetchCardName(value, callback) {
         if (this.form.language !== 'sc') {
@@ -470,7 +448,6 @@
         }).then(res => {
           if (lang) {
             this.form.language = lang;
-            this.refreshFont();
           }
           let cardInfo = parseRushDuelCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
@@ -514,8 +491,6 @@
           try {
             let data = JSON.parse(e.target?.result);
             this.form = Object.assign(this.form, data);
-            // 字体可能加载
-            this.refreshFont();
           } catch (e) {
             this.$message.error('数据导入失败');
           }
@@ -549,7 +524,7 @@
       },
     },
     computed: {
-      ...mapState(['isAdmin', 'isMember']),
+      ...mapState(['fontLoading', 'isAdmin', 'isMember']),
       showLevel() {
         let flag = false;
         if (this.form.type === 'monster') {

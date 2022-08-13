@@ -60,10 +60,11 @@
 
 <script>
   import { maxDialogWidth } from '@/utils';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'BatchExportDialog',
-    props: ['modelValue', 'fontLoading', 'password', 'searchCardByPassword', 'exportImage'],
+    props: ['modelValue', 'password', 'searchCardByPassword', 'exportImage'],
     emits: ['update:password'],
     data() {
       return {
@@ -132,6 +133,7 @@
       },
     },
     computed: {
+      ...mapState(['fontLoading']),
       exportDisabled() {
         return this.fontLoading || !this.passwordList.length || this.passwordList.length > 100;
       },

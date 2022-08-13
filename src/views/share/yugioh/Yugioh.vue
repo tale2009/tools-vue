@@ -1,7 +1,7 @@
 <template>
   <div class="share-yugioh-container">
     <el-scrollbar>
-      <YugiohCard v-if="dataLoaded" :data="form" :refresh-key="refreshKey" />
+      <YugiohCard v-if="dataLoaded" :data="form" />
     </el-scrollbar>
     <div v-if="fontLoading" class="font-loading">
       <el-alert
@@ -17,6 +17,7 @@
 <script>
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import { parseYugiohCard } from '@/views/yugioh/yugioh';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'ShareYugioh',
@@ -25,8 +26,6 @@
     },
     data() {
       return {
-        refreshKey: 0,
-        fontLoading: false,
         form: {
           language: 'sc',
           color: '',
@@ -72,23 +71,12 @@
       }
     },
     mounted() {
-      this.refreshFont();
       addEventListener('resize', this.updateScale);
     },
     beforeUnmount() {
       removeEventListener('resize', this.updateScale);
     },
     methods: {
-      // 刷新字体
-      refreshFont() {
-        setTimeout(() => {
-          this.fontLoading = true;
-          document.fonts.ready.then(() => {
-            this.fontLoading = false;
-            this.refreshKey++;
-          });
-        });
-      },
       searchCardByPassword() {
         this.axios({
           method: 'get',
@@ -101,7 +89,6 @@
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;
-          this.refreshFont();
         });
       },
       getRandomCard() {
@@ -116,7 +103,6 @@
           Object.assign(this.form, cardInfo);
           document.title = `${this.$route.meta.title} - ${this.cardName}`;
           this.dataLoaded = true;
-          this.refreshFont();
         });
       },
       // 把卡片宽度转换成scale
@@ -130,6 +116,7 @@
       },
     },
     computed: {
+      ...mapState(['fontLoading']),
       cardName() {
         return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
       },

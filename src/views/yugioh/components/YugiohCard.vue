@@ -11,7 +11,6 @@
         :gradient="data.gradient"
         :gradient-color1="data.gradientColor1"
         :gradient-color2="data.gradientColor2"
-        :refresh-key="refreshKey"
         :width="attributeSrc ? 1033 : 1161"
         :height="200"
       />
@@ -35,7 +34,7 @@
 
     <div v-if="['spell','trap'].includes(data.type)" class="spell-trap">
       <span>{{ ['en', 'kr'].includes(data.language) ? '[' : '【' }}</span>
-      <CompressText :text="spellTrapName" :refresh-key="refreshKey" />
+      <CompressText :text="spellTrapName" />
       <el-image v-if="data.icon" class="spell-trap-icon" :src="`${baseImage}/icon-${data.icon}.png`" />
       <span>{{ ['en', 'kr'].includes(data.language) ? ']' : '】' }}</span>
     </div>
@@ -73,7 +72,7 @@
         :text="data.pendulumDescription"
         :width="950"
         :height="230"
-        :refresh-key="refreshKey"
+        :description-zoom="data.descriptionZoom"
       />
     </div>
 
@@ -105,7 +104,6 @@
       <div v-if="['monster','pendulum'].includes(data.type) && data.monsterType" class="card-effect">
         <CompressText
           :text="monsterType"
-          :refresh-key="refreshKey"
           :width="1175"
           :height="100"
         />
@@ -119,12 +117,12 @@
               :text="item"
               :width="1175"
               :height="70"
-              :refresh-key="refreshKey"
+              :description-zoom="data.descriptionZoom"
             />
           </div>
           <!--单行不压缩-->
           <div v-else-if="index < data.description.split('\n').length - 1">
-            <CompressText :text="item" :refresh-key="refreshKey" />
+            <CompressText :text="item" :description-zoom="data.descriptionZoom" />
           </div>
           <!--最后一行压缩-->
           <div v-else-if="index === data.description.split('\n').length - 1" class="last-description">
@@ -132,9 +130,9 @@
               :text="item"
               :width="1175"
               :height="lastDescriptionHeight"
-              :refresh-key="refreshKey"
               :language="data.language"
               auto-size-element=".card-description"
+              :description-zoom="data.descriptionZoom"
             />
           </div>
           <!--item为空提供换行-->
@@ -202,7 +200,7 @@
     components: {
       CompressText,
     },
-    props: ['data', 'refreshKey'],
+    props: ['data'],
     data() {
       return {
         lastDescriptionHeight: 300, // 最后一行效果压缩高度
