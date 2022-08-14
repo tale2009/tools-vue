@@ -5,7 +5,7 @@ const routes = [
     path: '/',
     name: 'app',
     component: () => import('../layout/app-layout/AppLayout.vue'),
-    redirect: '/dot-word',
+    redirect: '/yugioh',
     children: [
       {
         path: 'dot-word',

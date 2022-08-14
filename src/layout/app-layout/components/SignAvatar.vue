@@ -84,12 +84,21 @@
       <el-avatar class="login-avatar" @click="login">登录</el-avatar>
     </template>
     <div class="login-popover-content">
-      <p>
-        <i style="color: darkorange; margin-right: 5px" class="fa-solid fa-fire" />
-        现已推出
-        <span style="font-size: 18px;font-weight: bold;color: darkorange">8</span>
-        元月卡，快来体验全站加速与批量导出功能吧！
-      </p>
+      <p>成为会员后你可以：</p>
+      <el-row :gutter="gutter">
+        <el-col :span="12">
+          <p>
+            <i class="fa-solid fa-gauge-max fa-fw" />
+            全站资源加速
+          </p>
+        </el-col>
+        <el-col :span="12">
+          <p>
+            <i class="fa-solid fa-cards-blank fa-fw" />
+            卡片批量导出
+          </p>
+        </el-col>
+      </el-row>
       <el-button
         style="width: 100%;"
         type="primary"
@@ -200,6 +209,7 @@
     },
     data() {
       return {
+        gutter: 20,
         signTab: 'login',
         loading: false,
         captchaLoading: false,
@@ -447,6 +457,11 @@
     p {
       line-height: 1.7;
       margin: 0 0 10px;
+
+      i {
+        margin-right: 5px;
+        color: var(--primary-color);
+      }
     }
 
     .el-space {

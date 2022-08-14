@@ -39,8 +39,8 @@
           </p>
 
           <p class="title">会员权益</p>
-          <p class="content">1. 会员全站加速，包含图片、字体等资源加载提速，平均提速 10 倍以上。</p>
-          <p class="content">2. 会员专属功能，包含游戏王卡片与超速决斗的批量导出图片功能。</p>
+          <p class="content">1. 全站资源加速，包含图片、字体等资源加载提速，平均提速 10 倍以上。</p>
+          <p class="content">2. 卡片批量导出，包含游戏王卡片与超速决斗的批量导出图片功能。</p>
         </div>
 
         <div class="buy-notify">
