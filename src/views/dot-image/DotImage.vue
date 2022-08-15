@@ -2,7 +2,7 @@
   <div class="dot-image-container">
     <Page>
       <template #default>
-        <div class="dot-image">
+        <div ref="dotImage" class="dot-image">
           <canvas ref="canvas" />
         </div>
       </template>
@@ -186,7 +186,7 @@
         return false;
       },
       exportImage() {
-        let element = document.querySelector('.dot-image');
+        let element = this.$refs.dotImage;
         html2canvas(element, {
           backgroundColor: 'transparent',
         }).then(canvas => {

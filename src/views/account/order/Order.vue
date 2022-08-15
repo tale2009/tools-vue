@@ -1,5 +1,5 @@
 <template>
-  <div class="order-container">
+  <div v-loading="loading" class="order-container">
     <AccountPage>
       <div ref="searchForm" class="search-form" :style="searchFormStyle">
         <el-form

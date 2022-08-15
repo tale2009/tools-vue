@@ -129,9 +129,6 @@
       position: relative;
 
       .page-slot {
-        display: inline-flex;
-        flex-wrap: wrap;
-        vertical-align: top;
         padding: 20px;
       }
     }

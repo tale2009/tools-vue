@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="rushDuelCard"
     class="rush-duel-card notranslate"
     :class="cardClass"
     :style="cardStyle"
@@ -78,7 +79,7 @@
           <CompressText :text="item" :description-zoom="data.descriptionZoom" />
         </div>
         <!--最后一行压缩-->
-        <div v-else-if="index === data.description.split('\n').length - 1" class="last-description">
+        <div v-else-if="index === data.description.split('\n').length - 1" ref="lastDescription">
           <CompressText
             :text="item"
             :width="1196"
@@ -138,7 +139,7 @@
     methods: {
       // 获取最后一行效果的压缩高度
       getLastDescriptionHeight() {
-        let lastDescription = document.querySelector('.last-description');
+        let lastDescription = this.$refs.lastDescription?.[0];
         if (lastDescription) {
           this.lastDescriptionHeight = 340 - lastDescription.offsetTop;
           if (this.lastDescriptionHeight <= 40) {

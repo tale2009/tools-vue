@@ -46,6 +46,11 @@
         "title": "场地中心卡",
         "path": "/field-center",
         "icon": "fa-card-diamond"
+      },
+      {
+        "title": "我的卡片",
+        "path": "/my-cards",
+        "icon": "fa-cards-blank"
       }
     ]
   }

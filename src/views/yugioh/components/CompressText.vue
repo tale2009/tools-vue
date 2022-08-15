@@ -150,8 +150,7 @@
           el.style.transform = '';
           el.style.textAlignLast = '';
           that.textScale = 1;
-          let autoSizeElement = document.querySelector(that.autoSizeElement);
-          autoSizeElement?.classList.remove('small-description');
+          that.autoSizeElement?.classList.remove('small-description');
           const rubyList = Array.from(el.querySelectorAll('.ruby'));
           const rtList = Array.from(el.querySelectorAll('.rt'));
           if (!rtList.length) {
@@ -175,8 +174,8 @@
               if (el.clientHeight <= that.height && end - start <= 0.01) {
                 // 如果是英文，灵摆和效果栏字体判断缩小，当字号大于1不执行
                 if (that.language === 'en' && that.autoSizeElement && scale < 0.7 &&
-                  that.descriptionZoom <= 1 && !autoSizeElement?.classList.contains('small-description')) {
-                  autoSizeElement?.classList.add('small-description');
+                  that.descriptionZoom <= 1 && !that.autoSizeElement?.classList.contains('small-description')) {
+                  that.autoSizeElement?.classList.add('small-description');
                   scale = 0.5;
                   start = 0;
                   end = 1;

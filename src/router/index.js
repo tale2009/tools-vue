@@ -71,6 +71,15 @@ const routes = [
           title: '游戏王场地中心卡',
         },
       },
+      {
+        path: 'my-cards',
+        name: 'myCards',
+        component: () => import('../views/my-cards/MyCards.vue'),
+        meta: {
+          title: '我的卡片',
+          auth: true,
+        },
+      },
     ],
   },
   {

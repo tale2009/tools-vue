@@ -2,7 +2,7 @@
   <div class="dot-word-container">
     <Page>
       <template #default>
-        <div class="word-list" :style="wordListStyle">
+        <div ref="dotWord" class="word-list" :style="wordListStyle">
           <canvas v-for="(word,index) in wordList" :ref="el => canvasRefList[index] = el" :style="canvasStyle" />
         </div>
       </template>
@@ -219,7 +219,7 @@
         return /[\x00-\xff]/g.test(item);
       },
       exportImage() {
-        let element = document.querySelector('.word-list');
+        let element = this.$refs.dotWord;
         html2canvas(element, {
           backgroundColor: 'transparent',
         }).then(canvas => {

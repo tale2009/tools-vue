@@ -10,7 +10,7 @@
             :closable="false"
           />
         </div>
-        <YugiohCard :data="form" />
+        <YugiohCard ref="yugiohCard" :data="form" />
       </template>
 
       <template #form>
@@ -346,7 +346,7 @@
               <el-col :span="12">
                 <el-button
                   plain
-                  :loading="randomLoading"
+                  :loading="btnLoading"
                   :disabled="form.language === 'astral'"
                   @click="getRandomCard"
                 >
@@ -369,7 +369,7 @@
               <el-col :span="24">
                 <el-button
                   type="primary"
-                  :loading="exportLoading"
+                  :loading="btnLoading"
                   @click="exportImage"
                 >
                   导出图片
@@ -379,10 +379,19 @@
                 <el-button
                   type="primary"
                   :disabled="form.language === 'astral'"
-                  :loading="exportLoading"
+                  :loading="btnLoading"
                   @click="batchExportDialog = true"
                 >
                   批量导出图片
+                </el-button>
+              </el-col>
+              <el-col v-if="isAdmin || isMember" :span="24">
+                <el-button
+                  type="primary"
+                  :loading="btnLoading"
+                  @click="saveCard"
+                >
+                  云端保存卡片
                 </el-button>
               </el-col>
             </el-row>
@@ -441,8 +450,8 @@
     data() {
       return {
         gutter: 10,
-        randomLoading: false,
-        exportLoading: false,
+        btnLoading: false,
+        cardId: '',
         form: {
           language: 'sc',
           name: '',
@@ -512,7 +521,13 @@
       };
     },
     created() {
-      Object.assign(this.form, scDemo);
+      const query = this.$route.query;
+      this.cardId = query.cardId || '';
+      if (this.cardId) {
+        this.getCard();
+      } else {
+        Object.assign(this.form, scDemo);
+      }
     },
     mounted() {
       this.getConfig();
@@ -625,22 +640,27 @@
         this.searchCardByPassword();
       },
       searchCardByPassword(lang) {
-        return this.axios({
-          method: 'get',
-          url: '/yugioh/card/' + this.form.password,
-          params: {
-            lang: lang || this.form.language,
-          },
-        }).then(res => {
-          if (lang) {
-            this.form.language = lang;
-          }
-          let cardInfo = parseYugiohCard(res.data, this.form.language);
-          Object.assign(this.form, cardInfo);
-        });
+        if (this.form.password) {
+          this.btnLoading = true;
+          return this.axios({
+            method: 'get',
+            url: '/yugioh/card/' + this.form.password,
+            params: {
+              lang: lang || this.form.language,
+            },
+          }).then(res => {
+            if (lang) {
+              this.form.language = lang;
+            }
+            let cardInfo = parseYugiohCard(res.data, this.form.language);
+            Object.assign(this.form, cardInfo);
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        }
       },
       getRandomCard() {
-        this.randomLoading = true;
+        this.btnLoading = true;
         this.axios({
           method: 'get',
           url: '/yugioh/random-card',
@@ -651,7 +671,7 @@
           let cardInfo = parseYugiohCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
         }).finally(() => {
-          this.randomLoading = false;
+          this.btnLoading = false;
         });
       },
       shareCard() {
@@ -699,8 +719,8 @@
             this.$message.warning('暂不支持导出渐变色卡名');
           }
           nextTick(() => {
-            this.exportLoading = true;
-            let element = document.querySelector('.yugioh-card');
+            this.btnLoading = true;
+            let element = this.$refs.yugiohCard.$refs.yugiohCard;
             html2canvas(element, {
               useCORS: true,
               backgroundColor: 'transparent',
@@ -712,10 +732,75 @@
                 resolve();
               });
             }).finally(() => {
-              this.exportLoading = false;
+              this.btnLoading = false;
             });
           });
         });
+      },
+      getCard() {
+        if (this.cardId) {
+          this.axios({
+            method: 'get',
+            url: '/card/' + this.cardId,
+          }).then(res => {
+            const data = res.data;
+            this.form = Object.assign(this.form, data.data);
+          });
+        }
+      },
+      async saveCard() {
+        let mode = '';
+        if (this.cardId) {
+          await this.$messageBox.confirm('是否覆盖保存当前卡片？', '提示', {
+            confirmButtonText: '覆盖',
+            cancelButtonText: '另存为',
+            distinguishCancelAndClose: true,
+            type: 'warning',
+          }).then(() => {
+            mode = 'update';
+          }).catch(action => {
+            if (action === 'cancel') {
+              mode = 'add';
+            }
+          });
+        } else {
+          mode = 'add';
+        }
+        if (mode === 'add') {
+          this.axios({
+            method: 'post',
+            url: '/card',
+            data: {
+              name: this.cardName,
+              type: 'yugioh',
+              data: {
+                ...this.form,
+                image: '',
+              },
+            },
+          }).then(res => {
+            const data = res.data;
+            this.$router.push({
+              query: {
+                cardId: data.id,
+              },
+            });
+            this.$message.success('保存成功');
+          });
+        } else if (mode === 'update') {
+          this.axios({
+            method: 'put',
+            url: '/card/' + this.cardId,
+            data: {
+              data: {
+                ...this.form,
+                image: '',
+              },
+            },
+          }).then(() => {
+            this.$message.success('保存成功');
+          });
+        }
       },
     },
     computed: {

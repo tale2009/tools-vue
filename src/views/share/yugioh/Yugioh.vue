@@ -26,6 +26,7 @@
     },
     data() {
       return {
+        cardId: '',
         form: {
           language: 'sc',
           color: '',
@@ -49,6 +50,7 @@
     },
     created() {
       const query = this.$route.query;
+      this.cardId = query.cardId || '';
       this.form.language = query.language || 'sc';
       this.form.color = query.color || '';
       this.form.align = query.align || 'left';
@@ -64,7 +66,9 @@
       this.form.radius = query.radius === 'true';
       this.form.width = Number(query.width) || 0;
       this.updateScale();
-      if (this.form.password) {
+      if (this.cardId) {
+
+      } else if (this.form.password) {
         this.searchCardByPassword();
       } else {
         this.getRandomCard();

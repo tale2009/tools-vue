@@ -2,7 +2,7 @@
   <div class="yugioh-back-container">
     <Page>
       <template #default>
-        <YugiohBackCard :data="form" />
+        <YugiohBackCard ref="yugiohBackCard" :data="form" />
       </template>
 
       <template #form>
@@ -108,7 +108,7 @@
       exportImage() {
         nextTick(() => {
           this.exportLoading = true;
-          let element = document.querySelector('.yugioh-back-card');
+          let element = this.$refs.yugiohBackCard.$refs.yugiohBackCard;
           html2canvas(element, {
             useCORS: true,
             backgroundColor: 'transparent',

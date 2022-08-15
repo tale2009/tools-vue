@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="yugiohBackCard"
     class="yugioh-back-card notranslate"
     :style="cardStyle"
     ondragstart="return false"

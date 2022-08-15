@@ -2,7 +2,7 @@
   <div class="pixel-art-container">
     <Page>
       <template #default>
-        <div class="pixel-art">
+        <div ref="pixelArt" class="pixel-art">
           <canvas ref="canvas" />
           <!--hoverCanvas用来渲染悬浮边框-->
           <canvas ref="hoverCanvas" class="hover-canvas" />
@@ -116,6 +116,7 @@
       const context = ref(null);
       const hoverCanvas = ref(null);
       const hoverContext = ref(null);
+      const pixelArt = ref(null);
       let form = reactive({
         heightPixel: 16,
         widthPixel: 16,
@@ -354,7 +355,7 @@
       };
 
       const exportImage = () => {
-        let element = document.querySelector('.pixel-art');
+        let element = pixelArt.value;
         html2canvas(element, {
           backgroundColor: 'transparent',
         }).then(canvas => {
@@ -382,6 +383,7 @@
         context,
         hoverCanvas,
         hoverContext,
+        pixelArt,
         form,
         dotList,
         historyList,

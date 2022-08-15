@@ -2,7 +2,7 @@
   <div class="paint-board-container">
     <Page>
       <template #default>
-        <div class="paint-board" :style="paintBoardStyle">
+        <div ref="paintBoard" class="paint-board" :style="paintBoardStyle">
           <canvas ref="canvas" />
           <TextEditor
             ref="textEditor"
@@ -129,6 +129,7 @@
       const canvas = ref(null);
       const context = ref(null);
       const textEditor = ref(null);
+      const paintBoard = ref(null);
       const form = reactive({
         width: 1920,
         height: 1080,
@@ -264,7 +265,7 @@
       };
 
       const exportImage = () => {
-        let element = document.querySelector('.paint-board');
+        let element = paintBoard.value;
         html2canvas(element, {
           backgroundColor: 'transparent',
           onclone: doc => {
@@ -282,6 +283,7 @@
         canvas,
         context,
         textEditor,
+        paintBoard,
         form,
         historyList,
         paintBoardStyle,

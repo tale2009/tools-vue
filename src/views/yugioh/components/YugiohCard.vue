@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="yugiohCard"
     class="yugioh-card notranslate"
     :class="cardClass"
     :style="cardStyle"
@@ -100,7 +101,7 @@
       <el-image v-show="!data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-off.png'" style="top: 299px;left: 95px" />
     </div>
 
-    <div v-card-description class="card-description">
+    <div ref="cardDescription" v-card-description class="card-description">
       <div v-if="['monster','pendulum'].includes(data.type) && data.monsterType" class="card-effect">
         <CompressText
           :text="monsterType"
@@ -125,13 +126,13 @@
             <CompressText :text="item" :description-zoom="data.descriptionZoom" />
           </div>
           <!--最后一行压缩-->
-          <div v-else-if="index === data.description.split('\n').length - 1" class="last-description">
+          <div v-else-if="index === data.description.split('\n').length - 1" ref="lastDescription">
             <CompressText
               :text="item"
               :width="1175"
               :height="lastDescriptionHeight"
               :language="data.language"
-              auto-size-element=".card-description"
+              :auto-size-element="$refs.cardDescription"
               :description-zoom="data.descriptionZoom"
             />
           </div>
@@ -210,7 +211,7 @@
       numberToFull,
       // 获取最后一行效果的压缩高度
       getLastDescriptionHeight() {
-        let lastDescription = document.querySelector('.last-description');
+        let lastDescription = this.$refs.lastDescription?.[0];
         if (lastDescription) {
           if (['monster', 'pendulum'].includes(this.data.type)) {
             this.lastDescriptionHeight = 330 - lastDescription.offsetTop;

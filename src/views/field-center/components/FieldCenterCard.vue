@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="fieldCenterCard"
     class="field-center-card notranslate"
     :class="cardClass"
     :style="cardStyle"

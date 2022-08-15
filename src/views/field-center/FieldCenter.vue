@@ -2,7 +2,7 @@
   <div class="field-center-container">
     <Page>
       <template #default>
-        <FieldCenterCard :data="form" />
+        <FieldCenterCard ref="fieldCenterCard" :data="form" />
       </template>
 
       <template #form>
@@ -123,7 +123,7 @@
       exportImage() {
         nextTick(() => {
           this.exportLoading = true;
-          let element = document.querySelector('.field-center-card');
+          let element = this.$refs.fieldCenterCard.$refs.fieldCenterCard;
           html2canvas(element, {
             useCORS: true,
             backgroundColor: 'transparent',

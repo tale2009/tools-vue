@@ -64,6 +64,11 @@
           <span>我的订单</span>
           <i class="fa-duotone fa-angle-right" />
         </div>
+        <div class="menu-item" @click="toMyCards">
+          <i class="fa-duotone fa-cards-blank fa-fw" />
+          <span>我的卡片</span>
+          <i class="fa-duotone fa-angle-right" />
+        </div>
         <el-divider />
         <div class="menu-item" @click="logout">
           <i class="fa-duotone fa-arrow-right-from-bracket fa-fw" />
@@ -332,6 +337,10 @@
       },
       toAccountOrder() {
         this.$router.push('/account/order');
+        this.$refs.avatarPopover?.hide();
+      },
+      toMyCards() {
+        this.$router.push('/my-cards');
         this.$refs.avatarPopover?.hide();
       },
       forgotPassword() {

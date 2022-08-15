@@ -118,6 +118,7 @@
 
       .account-slot {
         padding: 20px;
+        width: fit-content;
       }
     }
   }

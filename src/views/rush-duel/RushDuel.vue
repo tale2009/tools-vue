@@ -10,7 +10,7 @@
             :closable="false"
           />
         </div>
-        <RushDuelCard :data="form" />
+        <RushDuelCard ref="rushDuelCard" :data="form" />
       </template>
 
       <template #form>
@@ -229,7 +229,7 @@
               <el-col :span="12">
                 <el-button
                   plain
-                  :loading="randomLoading"
+                  :loading="btnLoading"
                   :disabled="form.language !== 'sc'"
                   @click="getRandomCard"
                 >
@@ -252,7 +252,7 @@
               <el-col :span="24">
                 <el-button
                   type="primary"
-                  :loading="exportLoading"
+                  :loading="btnLoading"
                   @click="exportImage"
                 >
                   导出图片
@@ -262,7 +262,7 @@
                 <el-button
                   type="primary"
                   :disabled="form.language !== 'sc'"
-                  :loading="exportLoading"
+                  :loading="btnLoading"
                   @click="batchExportDialog = true"
                 >
                   批量导出图片
@@ -320,8 +320,7 @@
     data() {
       return {
         gutter: 10,
-        randomLoading: false,
-        exportLoading: false,
+        btnLoading: false,
         form: {
           language: 'sc',
           name: '',
@@ -439,22 +438,27 @@
         this.searchCardByPassword();
       },
       searchCardByPassword(lang) {
-        return this.axios({
-          method: 'get',
-          url: '/rush-duel/card/' + this.form.password,
-          params: {
-            lang: lang || this.form.language,
-          },
-        }).then(res => {
-          if (lang) {
-            this.form.language = lang;
-          }
-          let cardInfo = parseRushDuelCard(res.data, this.form.language);
-          Object.assign(this.form, cardInfo);
-        });
+        if (this.form.password) {
+          this.btnLoading = true;
+          return this.axios({
+            method: 'get',
+            url: '/rush-duel/card/' + this.form.password,
+            params: {
+              lang: lang || this.form.language,
+            },
+          }).then(res => {
+            if (lang) {
+              this.form.language = lang;
+            }
+            let cardInfo = parseRushDuelCard(res.data, this.form.language);
+            Object.assign(this.form, cardInfo);
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        }
       },
       getRandomCard() {
-        this.randomLoading = true;
+        this.btnLoading = true;
         this.axios({
           method: 'get',
           url: '/rush-duel/random-card',
@@ -465,7 +469,7 @@
           let cardInfo = parseRushDuelCard(res.data, this.form.language);
           Object.assign(this.form, cardInfo);
         }).finally(() => {
-          this.randomLoading = false;
+          this.btnLoading = false;
         });
       },
       shareCard() {
@@ -504,8 +508,8 @@
       exportImage() {
         return new Promise(resolve => {
           nextTick(() => {
-            this.exportLoading = true;
-            let element = document.querySelector('.rush-duel-card');
+            this.btnLoading = true;
+            let element = this.$refs.rushDuelCard.$refs.rushDuelCard;
             html2canvas(element, {
               useCORS: true,
               backgroundColor: 'transparent',
@@ -517,7 +521,7 @@
                 resolve();
               });
             }).finally(() => {
-              this.exportLoading = false;
+              this.btnLoading = false;
             });
           });
         });
