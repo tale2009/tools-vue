@@ -2,22 +2,66 @@
   <div v-loading="loading" class="my-cards-container">
     <Page>
       <template #default>
-        <div v-if="cardList.length" class="card-list">
-          <div
-            v-for="item in cardList"
-            class="card-item"
-            :style="cardItemStyle(item)"
-            @click="clickCard(item)"
-          >
-            <YugiohCard :data="item.data" />
-          </div>
-        </div>
-        <el-empty v-else style="width: 100%" description="暂无卡片" />
+        <SearchPage
+          v-model:span="span"
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :total="total"
+          @reset="reset"
+          @search="search"
+          @get-data="getCardList"
+        >
+          <template #search>
+            <el-form
+              ref="searchForm"
+              :model="searchForm"
+              label-width="auto"
+            >
+              <el-row :gutter="gutter">
+                <el-col :span="span">
+                  <el-form-item label="卡名" prop="name">
+                    <el-input v-model="searchForm.name" clearable placeholder="请输入卡名" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="span">
+                  <el-form-item label="类型" prop="type">
+                    <el-select
+                      v-model="searchForm.type"
+                      clearable
+                      placeholder="请选择类型"
+                    >
+                      <el-option v-for="item in typeList" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="span">
+                  <el-form-item label="数量">
+                    <span>{{ cardNumber }} / 100</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </template>
+
+          <template #list>
+            <div v-if="cardList.length" class="card-list">
+              <div
+                v-for="item in cardList"
+                class="card-item"
+                :style="cardItemStyle(item)"
+                @click="clickCard(item)"
+              >
+                <YugiohCard :data="item.data" />
+              </div>
+            </div>
+            <el-empty v-else style="width: 100%" description="暂无卡片" />
+          </template>
+        </SearchPage>
       </template>
 
       <template #form>
         <PageForm title="我的卡片" description="在这里管理你的云端卡片">
-          <el-form v-if="Object.keys(currentData).length" :model="form" label-width="auto">
+          <el-form v-if="currentCardId" :model="form" label-width="auto">
             <el-form-item label="卡名">
               <el-input v-model="form.name" />
             </el-form-item>
@@ -27,23 +71,24 @@
                   <el-button plain @click="viewCard">查看卡片</el-button>
                 </el-col>
                 <el-col :span="12">
-                  <el-button type="primary" @click="saveCard">保存修改</el-button>
+                  <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
                 </el-col>
                 <el-col :span="12">
-                  <el-button type="primary" @click="editCard">编辑卡片</el-button>
+                  <el-button type="primary" :loading="btnLoading" @click="saveCard">保存修改</el-button>
                 </el-col>
                 <el-col :span="24">
                   <el-popconfirm title="是否确认删除？" @confirm="deleteCard">
                     <template #reference>
-                      <el-button type="danger">删除卡片</el-button>
+                      <el-button :loading="btnLoading" type="danger">删除卡片</el-button>
                     </template>
                   </el-popconfirm>
                 </el-col>
               </el-row>
             </div>
           </el-form>
-          <el-empty v-else description="请点击左侧卡片" />
-          <CardDialog v-model="cardDialog" :card-id="currentData.id" />
+          <el-empty v-else description="请选择左侧卡片" />
+
+          <CardDialog v-model="cardDialog" :card-id="currentCardId" />
         </PageForm>
       </template>
     </Page>
@@ -52,8 +97,9 @@
 
 <script>
   import Page from '@/components/page/Page';
-  import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import PageForm from '@/components/page/PageForm';
+  import SearchPage from '@/components/page/SearchPage';
+  import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import CardDialog from '@/views/my-cards/components/CardDialog';
 
   export default {
@@ -61,21 +107,33 @@
     components: {
       Page,
       PageForm,
+      SearchPage,
       YugiohCard,
       CardDialog,
     },
     data() {
       return {
         gutter: 20,
+        span: 6,
         loading: false,
+        btnLoading: false,
+        searchForm: {
+          name: '',
+          type: '',
+        },
         form: {
           name: '',
         },
         currentPage: 1,
         pageSize: 20,
         total: 0,
+        cardNumber: 0,
         cardList: [],
-        currentData: {},
+        typeList: [
+          { label: '游戏王', value: 'yugioh' },
+          { label: '超速决斗', value: 'rushDuel' },
+        ],
+        currentCardId: '',
         cardDialog: false,
       };
     },
@@ -83,13 +141,28 @@
       this.getCardList();
     },
     methods: {
+      getCardNumber() {
+        this.axios({
+          method: 'get',
+          url: '/card/number',
+        }).then(res => {
+          this.cardNumber = res.data;
+        });
+      },
       getCardList() {
         this.loading = true;
         this.axios({
           method: 'get',
           url: '/card/list',
+          params: {
+            ...this.searchForm,
+            currentPage: this.currentPage,
+            pageSize: this.pageSize,
+          },
         }).then(res => {
+          this.getCardNumber();
           this.cardList = res.data;
+          this.total = res.total;
           this.cardList.forEach(item => {
             item.data.scale = 0.1;
             switch (item.type) {
@@ -99,45 +172,71 @@
               break;
             }
           });
-          this.total = res.total;
         }).finally(() => {
           this.loading = false;
         });
       },
+      search() {
+        this.getCardList();
+      },
+      reset() {
+        this.$refs.searchForm.resetFields();
+        this.getCardList();
+      },
       clickCard(item) {
         const { name } = item;
-        this.currentData = item;
+        this.currentCardId = item.id;
         this.form.name = name;
       },
       cardItemStyle(item) {
         return {
-          borderColor: item === this.currentData ? 'var(--primary-color)' : '',
-          background: item === this.currentData ? '#c6e2ff' : '',
+          borderColor: item.id === this.currentCardId ? 'var(--primary-color)' : '',
+          background: item.id === this.currentCardId ? '#c6e2ff' : '',
         };
       },
       viewCard() {
-        if (Object.keys(this.currentData).length) {
+        if (this.currentCardId) {
           this.cardDialog = true;
         }
       },
       editCard() {
-        if (Object.keys(this.currentData).length) {
+        if (this.currentCardId) {
           this.$router.push({
             path: '/yugioh',
             query: {
-              cardId: this.currentData.id,
+              cardId: this.currentCardId,
             },
           });
         }
       },
       saveCard() {
-        if (Object.keys(this.currentData).length) {
-
+        if (this.currentCardId) {
+          this.btnLoading = true;
+          this.axios({
+            method: 'put',
+            url: '/card/' + this.currentCardId,
+            data: this.form,
+          }).then(() => {
+            this.$message.success('保存成功');
+            this.getCardList();
+          }).finally(() => {
+            this.btnLoading = false;
+          });
         }
       },
       deleteCard() {
-        if (Object.keys(this.currentData).length) {
-
+        if (this.currentCardId) {
+          this.btnLoading = true;
+          this.axios({
+            method: 'delete',
+            url: '/card/' + this.currentCardId,
+          }).then(() => {
+            this.$message.success('删除成功');
+            this.currentCardId = '';
+            this.getCardList();
+          }).finally(() => {
+            this.btnLoading = false;
+          });
         }
       },
     },

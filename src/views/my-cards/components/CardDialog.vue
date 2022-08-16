@@ -1,14 +1,11 @@
 <template>
   <el-dialog
-    title="卡片预览"
+    custom-class="card-dialog"
     :model-value="modelValue"
     :width="maxDialogWidth(600)"
     :before-close="closeDialog"
   >
     <YugiohCard v-if="Object.keys(cardInfo).length" :data="cardInfo.data" />
-    <template #footer>
-      <el-button plain @click="closeDialog">关闭</el-button>
-    </template>
   </el-dialog>
 </template>
 
@@ -52,7 +49,7 @@
       // 把卡片宽度转换成scale
       updateScale() {
         if (Object.keys(this.cardInfo).length) {
-          const width = this.maxDialogWidth(600) - 40;
+          const width = this.maxDialogWidth(600);
           this.cardInfo.data.scale = width / 1394;
         }
       },
@@ -67,6 +64,17 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  .card-dialog {
+    background: none;
+    box-shadow: none;
 
+    .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog__body {
+      padding: 0;
+    }
+  }
 </style>
