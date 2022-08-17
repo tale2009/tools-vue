@@ -12,6 +12,7 @@
 <script>
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import { maxDialogWidth } from '@/utils';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'CardDialog',
@@ -33,6 +34,7 @@
     methods: {
       maxDialogWidth,
       closeDialog() {
+        this.cardInfo = {};
         this.$emit('update:modelValue', false);
       },
       getCardInfo() {
@@ -42,6 +44,9 @@
             url: '/card/' + this.cardId,
           }).then(res => {
             this.cardInfo = res.data;
+            if (this.cardInfo.image) {
+              this.cardInfo.data.image = `${this.baseImage}/${this.cardInfo.image}`;
+            }
             this.updateScale();
           });
         }
@@ -52,6 +57,12 @@
           const width = this.maxDialogWidth(600);
           this.cardInfo.data.scale = width / 1394;
         }
+      },
+    },
+    computed: {
+      ...mapState(['staticURL']),
+      baseImage() {
+        return `${this.staticURL}/tools/image`;
       },
     },
     watch: {

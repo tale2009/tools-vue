@@ -35,6 +35,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="span">
+                  <el-form-item label="缩放">
+                    <el-radio-group v-model="searchForm.scale" @change="changeScale">
+                      <el-radio-button :label="0.1">小</el-radio-button>
+                      <el-radio-button :label="0.15">中等</el-radio-button>
+                      <el-radio-button :label="0.2">大</el-radio-button>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="span">
                   <el-form-item label="数量">
                     <span>{{ cardNumber }} / 100</span>
                   </el-form-item>
@@ -61,6 +70,28 @@
 
       <template #form>
         <PageForm title="我的卡片" description="在这里管理你的云端卡片">
+          <el-alert
+            v-if="!isMember"
+            style="margin-bottom: 20px"
+            type="warning"
+            show-icon
+            :closable="false"
+          >
+            <template #title>
+              <div style="display: flex; align-items: center">
+                <span>会员专属功能</span>
+                <el-button
+                  style="margin-left: 10px"
+                  type="primary"
+                  link
+                  size="small"
+                  @click="toAccountBuy"
+                >
+                  购买会员
+                </el-button>
+              </div>
+            </template>
+          </el-alert>
           <el-form v-if="currentCardId" :model="form" label-width="auto">
             <el-form-item label="卡名">
               <el-input v-model="form.name" />
@@ -70,13 +101,13 @@
                 <el-col :span="24">
                   <el-button plain @click="viewCard">查看卡片</el-button>
                 </el-col>
-                <el-col :span="12">
+                <el-col v-if="isAdmin || isMember" :span="12">
                   <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
                 </el-col>
-                <el-col :span="12">
+                <el-col v-if="isAdmin || isMember" :span="12">
                   <el-button type="primary" :loading="btnLoading" @click="saveCard">保存修改</el-button>
                 </el-col>
-                <el-col :span="24">
+                <el-col v-if="isAdmin || isMember" :span="24">
                   <el-popconfirm title="是否确认删除？" @confirm="deleteCard">
                     <template #reference>
                       <el-button :loading="btnLoading" type="danger">删除卡片</el-button>
@@ -101,6 +132,7 @@
   import SearchPage from '@/components/page/SearchPage';
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import CardDialog from '@/views/my-cards/components/CardDialog';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'MyCards',
@@ -120,6 +152,7 @@
         searchForm: {
           name: '',
           type: '',
+          scale: 0.1,
         },
         form: {
           name: '',
@@ -146,7 +179,7 @@
           method: 'get',
           url: '/card/number',
         }).then(res => {
-          this.cardNumber = res.data;
+          this.cardNumber = res.data.cardNumber;
         });
       },
       getCardList() {
@@ -164,7 +197,9 @@
           this.cardList = res.data;
           this.total = res.total;
           this.cardList.forEach(item => {
-            item.data.scale = 0.1;
+            if (item.image) {
+              item.data.image = `${this.baseImage}/${item.image}`;
+            }
             switch (item.type) {
             case 'yugioh':
               item.data.pendulumDescription = '';
@@ -172,6 +207,7 @@
               break;
             }
           });
+          this.changeScale();
         }).finally(() => {
           this.loading = false;
         });
@@ -182,6 +218,11 @@
       reset() {
         this.$refs.searchForm.resetFields();
         this.getCardList();
+      },
+      changeScale() {
+        this.cardList.forEach(item => {
+          item.data.scale = this.searchForm.scale;
+        });
       },
       clickCard(item) {
         const { name } = item;
@@ -238,6 +279,15 @@
             this.btnLoading = false;
           });
         }
+      },
+      toAccountBuy() {
+        this.$router.push('/account/buy');
+      },
+    },
+    computed: {
+      ...mapState(['isAdmin', 'isMember', 'staticURL']),
+      baseImage() {
+        return `${this.staticURL}/tools/image`;
       },
     },
   };

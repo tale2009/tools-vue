@@ -103,7 +103,6 @@
       },
       updateAvatar(image) {
         const file = this.dataURLtoFile(image, 'avatar');
-        console.log(file);
         const formData = new FormData();
         formData.append('file', file);
         this.axios({

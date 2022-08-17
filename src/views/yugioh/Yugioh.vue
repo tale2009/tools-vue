@@ -766,12 +766,38 @@
         } else {
           mode = 'add';
         }
+        let compressedImage = '';
+        let cardImage = null;
+        if (this.form.image) {
+          await loadImage(this.form.image, {
+            maxWidth: 1000,
+            maxHeight: 1000,
+            canvas: true,
+          }).then(data => {
+            compressedImage = data.image.toDataURL('image/jpeg');
+          });
+          const file = this.dataURLtoFile(compressedImage, this.cardName);
+          const formData = new FormData();
+          formData.append('file', file);
+          this.btnLoading = true;
+          await this.axios({
+            method: 'post',
+            url: '/upload/image',
+            data: formData,
+          }).then(res => {
+            cardImage = res.data.fileName;
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        }
         if (mode === 'add') {
-          this.axios({
+          this.btnLoading = true;
+          await this.axios({
             method: 'post',
             url: '/card',
             data: {
               name: this.cardName,
+              image: cardImage,
               type: 'yugioh',
               data: {
                 ...this.form,
@@ -786,12 +812,16 @@
               },
             });
             this.$message.success('保存成功');
+          }).finally(() => {
+            this.btnLoading = false;
           });
         } else if (mode === 'update') {
-          this.axios({
+          this.btnLoading = true;
+          await this.axios({
             method: 'put',
             url: '/card/' + this.cardId,
             data: {
+              image: cardImage,
               data: {
                 ...this.form,
                 image: '',
@@ -799,6 +829,8 @@
             },
           }).then(() => {
             this.$message.success('保存成功');
+          }).finally(() => {
+            this.btnLoading = false;
           });
         }
       },
