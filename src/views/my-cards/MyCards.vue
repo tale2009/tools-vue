@@ -60,7 +60,8 @@
                 :style="cardItemStyle(item)"
                 @click="clickCard(item)"
               >
-                <YugiohCard :data="item.data" />
+                <YugiohCard v-if="item.type === 'yugioh'" :data="item.data" />
+                <RushDuelCard v-if="item.type === 'rushDuel'" :data="item.data" />
               </div>
             </div>
             <el-empty v-else style="width: 100%" description="暂无卡片" />
@@ -131,6 +132,7 @@
   import PageForm from '@/components/page/PageForm';
   import SearchPage from '@/components/page/SearchPage';
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
+  import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import CardDialog from '@/views/my-cards/components/CardDialog';
   import { mapState } from 'vuex';
 
@@ -141,6 +143,7 @@
       PageForm,
       SearchPage,
       YugiohCard,
+      RushDuelCard,
       CardDialog,
     },
     data() {
@@ -205,6 +208,9 @@
               item.data.pendulumDescription = '';
               item.data.description = '';
               break;
+            case 'rushDuel':
+              item.data.description = '';
+              break;
             }
           });
           this.changeScale();
@@ -242,8 +248,20 @@
       },
       editCard() {
         if (this.currentCardId) {
+          let path = '';
+          const currentCard = this.cardList.find(item => item.id === this.currentCardId);
+          if (currentCard) {
+            switch (currentCard.type) {
+            case 'yugioh':
+              path = '/yugioh';
+              break;
+            case 'rushDuel':
+              path = '/rush-duel';
+              break;
+            }
+          }
           this.$router.push({
-            path: '/yugioh',
+            path,
             query: {
               cardId: this.currentCardId,
             },

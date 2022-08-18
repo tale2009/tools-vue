@@ -268,6 +268,15 @@
                   批量导出图片
                 </el-button>
               </el-col>
+              <el-col v-if="isAdmin || isMember" :span="24">
+                <el-button
+                  type="primary"
+                  :loading="btnLoading"
+                  @click="saveCard"
+                >
+                  云端保存卡片
+                </el-button>
+              </el-col>
             </el-row>
           </div>
 
@@ -321,6 +330,7 @@
       return {
         gutter: 10,
         btnLoading: false,
+        cardId: '',
         form: {
           language: 'sc',
           name: '',
@@ -367,7 +377,13 @@
       };
     },
     created() {
-      Object.assign(this.form, scDemo);
+      const query = this.$route.query;
+      this.cardId = query.cardId || '';
+      if (this.cardId) {
+        this.getCardInfo();
+      } else {
+        Object.assign(this.form, scDemo);
+      }
     },
     mounted() {
       this.getConfig();
@@ -526,9 +542,116 @@
           });
         });
       },
+      getCardInfo() {
+        if (this.cardId) {
+          this.axios({
+            method: 'get',
+            url: '/card/' + this.cardId,
+          }).then(res => {
+            this.cardInfo = res.data;
+            this.form = Object.assign(this.form, this.cardInfo.data);
+            if (this.cardInfo.image) {
+              this.form.image = `${this.baseImage}/${this.cardInfo.image}`;
+            }
+          });
+        }
+      },
+      async saveCard() {
+        let mode = '';
+        if (this.cardId) {
+          await this.$messageBox.confirm('是否覆盖保存当前卡片？', '提示', {
+            confirmButtonText: '覆盖',
+            cancelButtonText: '另存为',
+            distinguishCancelAndClose: true,
+            type: 'warning',
+          }).then(() => {
+            mode = 'update';
+          }).catch(action => {
+            if (action === 'cancel') {
+              mode = 'add';
+            }
+          });
+        } else {
+          mode = 'add';
+        }
+        let cardImage = null;
+        if (this.form.image.startsWith('data:image')) {
+          let compressedImage = '';
+          await loadImage(this.form.image, {
+            maxWidth: 1000,
+            maxHeight: 1000,
+            canvas: true,
+          }).then(data => {
+            compressedImage = data.image.toDataURL('image/jpeg');
+          });
+          const file = this.dataURLtoFile(compressedImage, this.cardName);
+          const formData = new FormData();
+          formData.append('file', file);
+          this.btnLoading = true;
+          await this.axios({
+            method: 'post',
+            url: '/upload/image',
+            data: formData,
+          }).then(res => {
+            cardImage = res.data.fileName;
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        } else if (this.form.image.startsWith(this.baseImage)) {
+          cardImage = this.cardInfo.image;
+        }
+        if (mode === 'add') {
+          this.btnLoading = true;
+          await this.axios({
+            method: 'post',
+            url: '/card',
+            data: {
+              name: this.cardName,
+              image: cardImage,
+              type: 'rushDuel',
+              data: {
+                ...this.form,
+                image: '',
+              },
+            },
+          }).then(res => {
+            const data = res.data;
+            this.$router.push({
+              query: {
+                cardId: data.id,
+              },
+            });
+            this.$message.success('保存成功');
+            this.getCardInfo();
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        } else if (mode === 'update') {
+          this.btnLoading = true;
+          await this.axios({
+            method: 'put',
+            url: '/card/' + this.cardId,
+            data: {
+              image: cardImage,
+              data: {
+                ...this.form,
+                image: '',
+              },
+            },
+          }).then(() => {
+            this.$message.success('保存成功');
+            this.getCardInfo();
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        }
+      },
     },
     computed: {
-      ...mapState(['fontLoading', 'isAdmin', 'isMember']),
+      ...mapState(['fontLoading', 'staticURL', 'isAdmin', 'isMember']),
+      baseImage() {
+        return `${this.staticURL}/tools/image`;
+      },
       showLevel() {
         let flag = false;
         if (this.form.type === 'monster') {
@@ -543,7 +666,7 @@
     watch: {
       // 图片转base64
       'form.image'() {
-        if (this.form.image && !this.form.image.startsWith('data:image')) {
+        if (this.form.image && !this.form.image.startsWith('data:image') && !this.form.image.startsWith(this.baseImage)) {
           loadImage(this.form.image, {
             canvas: true,
             top: 0,

@@ -39,7 +39,7 @@
     "eslint-define-config": "^1.6.0",
     "eslint-plugin-vue": "^9.3.0",
     "sass": "^1.54.4",
-    "vite": "^3.0.7",
+    "vite": "^3.0.8",
     "vite-plugin-compression": "^0.5.1"
   },
   "engines": {

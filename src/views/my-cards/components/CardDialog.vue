@@ -5,12 +5,16 @@
     :width="maxDialogWidth(600)"
     :before-close="closeDialog"
   >
-    <YugiohCard v-if="Object.keys(cardInfo).length" :data="cardInfo.data" />
+    <template v-if="Object.keys(cardInfo).length">
+      <YugiohCard v-if="cardInfo.type === 'yugioh'" :data="cardInfo.data" />
+      <RushDuelCard v-if="cardInfo.type === 'rushDuel'" :data="cardInfo.data" />
+    </template>
   </el-dialog>
 </template>
 
 <script>
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
+  import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import { maxDialogWidth } from '@/utils';
   import { mapState } from 'vuex';
 
@@ -19,6 +23,7 @@
     props: ['modelValue', 'cardId'],
     components: {
       YugiohCard,
+      RushDuelCard,
     },
     data() {
       return {

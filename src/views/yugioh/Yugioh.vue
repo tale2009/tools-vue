@@ -452,7 +452,7 @@
         gutter: 10,
         btnLoading: false,
         cardId: '',
-        imageUpdated: false,
+        cardInfo: {},
         form: {
           language: 'sc',
           name: '',
@@ -525,7 +525,7 @@
       const query = this.$route.query;
       this.cardId = query.cardId || '';
       if (this.cardId) {
-        this.getCard();
+        this.getCardInfo();
       } else {
         Object.assign(this.form, scDemo);
       }
@@ -738,15 +738,17 @@
           });
         });
       },
-      getCard() {
+      getCardInfo() {
         if (this.cardId) {
           this.axios({
             method: 'get',
             url: '/card/' + this.cardId,
           }).then(res => {
-            const data = res.data;
-            this.form = Object.assign(this.form, data.data);
-            this.imageUpdated = false;
+            this.cardInfo = res.data;
+            this.form = Object.assign(this.form, this.cardInfo.data);
+            if (this.cardInfo.image) {
+              this.form.image = `${this.baseImage}/${this.cardInfo.image}`;
+            }
           });
         }
       },
@@ -768,8 +770,8 @@
         } else {
           mode = 'add';
         }
-        let cardImage = '';
-        if (this.form.image && this.imageUpdated) {
+        let cardImage = null;
+        if (this.form.image.startsWith('data:image')) {
           let compressedImage = '';
           await loadImage(this.form.image, {
             maxWidth: 1000,
@@ -791,24 +793,23 @@
           }).finally(() => {
             this.btnLoading = false;
           });
+        } else if (this.form.image.startsWith(this.baseImage)) {
+          cardImage = this.cardInfo.image;
         }
         if (mode === 'add') {
           this.btnLoading = true;
-          const data = {
-            name: this.cardName,
-            type: 'yugioh',
-            data: {
-              ...this.form,
-              image: '',
-            },
-          };
-          if (this.imageUpdated) {
-            data.image = this.form.image ? cardImage : null;
-          }
           await this.axios({
             method: 'post',
             url: '/card',
-            data,
+            data: {
+              name: this.cardName,
+              image: cardImage,
+              type: 'yugioh',
+              data: {
+                ...this.form,
+                image: '',
+              },
+            },
           }).then(res => {
             const data = res.data;
             this.$router.push({
@@ -817,26 +818,25 @@
               },
             });
             this.$message.success('保存成功');
+            this.getCardInfo();
           }).finally(() => {
             this.btnLoading = false;
           });
         } else if (mode === 'update') {
           this.btnLoading = true;
-          const data = {
-            data: {
-              ...this.form,
-              image: '',
-            },
-          };
-          if (this.imageUpdated) {
-            data.image = this.form.image ? cardImage : null;
-          }
           await this.axios({
             method: 'put',
             url: '/card/' + this.cardId,
-            data,
+            data: {
+              image: cardImage,
+              data: {
+                ...this.form,
+                image: '',
+              },
+            },
           }).then(() => {
             this.$message.success('保存成功');
+            this.getCardInfo();
           }).finally(() => {
             this.btnLoading = false;
           });
@@ -844,7 +844,10 @@
       },
     },
     computed: {
-      ...mapState(['fontLoading', 'isAdmin', 'isMember']),
+      ...mapState(['fontLoading', 'staticURL', 'isAdmin', 'isMember']),
+      baseImage() {
+        return `${this.staticURL}/tools/image`;
+      },
       showLevel() {
         let flag = false;
         if (this.form.type === 'monster') {
@@ -870,8 +873,7 @@
     watch: {
       // 图片转base64
       'form.image'() {
-        this.imageUpdated = true;
-        if (this.form.image && !this.form.image.startsWith('data:image')) {
+        if (this.form.image && !this.form.image.startsWith('data:image') && !this.form.image.startsWith(this.baseImage)) {
           loadImage(this.form.image, {
             canvas: true,
             top: 0,
