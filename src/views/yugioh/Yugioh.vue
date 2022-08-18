@@ -452,6 +452,7 @@
         gutter: 10,
         btnLoading: false,
         cardId: '',
+        imageUpdated: false,
         form: {
           language: 'sc',
           name: '',
@@ -745,6 +746,7 @@
           }).then(res => {
             const data = res.data;
             this.form = Object.assign(this.form, data.data);
+            this.imageUpdated = false;
           });
         }
       },
@@ -766,9 +768,9 @@
         } else {
           mode = 'add';
         }
-        let compressedImage = '';
-        let cardImage = null;
-        if (this.form.image) {
+        let cardImage = '';
+        if (this.form.image && this.imageUpdated) {
+          let compressedImage = '';
           await loadImage(this.form.image, {
             maxWidth: 1000,
             maxHeight: 1000,
@@ -792,18 +794,21 @@
         }
         if (mode === 'add') {
           this.btnLoading = true;
+          const data = {
+            name: this.cardName,
+            type: 'yugioh',
+            data: {
+              ...this.form,
+              image: '',
+            },
+          };
+          if (this.imageUpdated) {
+            data.image = this.form.image ? cardImage : null;
+          }
           await this.axios({
             method: 'post',
             url: '/card',
-            data: {
-              name: this.cardName,
-              image: cardImage,
-              type: 'yugioh',
-              data: {
-                ...this.form,
-                image: '',
-              },
-            },
+            data,
           }).then(res => {
             const data = res.data;
             this.$router.push({
@@ -817,16 +822,19 @@
           });
         } else if (mode === 'update') {
           this.btnLoading = true;
+          const data = {
+            data: {
+              ...this.form,
+              image: '',
+            },
+          };
+          if (this.imageUpdated) {
+            data.image = this.form.image ? cardImage : null;
+          }
           await this.axios({
             method: 'put',
             url: '/card/' + this.cardId,
-            data: {
-              image: cardImage,
-              data: {
-                ...this.form,
-                image: '',
-              },
-            },
+            data,
           }).then(() => {
             this.$message.success('保存成功');
           }).finally(() => {
@@ -862,6 +870,7 @@
     watch: {
       // 图片转base64
       'form.image'() {
+        this.imageUpdated = true;
         if (this.form.image && !this.form.image.startsWith('data:image')) {
           loadImage(this.form.image, {
             canvas: true,
