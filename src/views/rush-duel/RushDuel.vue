@@ -632,7 +632,9 @@
             method: 'put',
             url: '/card/' + this.cardId,
             data: {
+              name: this.cardName,
               image: cardImage,
+              type: 'rushDuel',
               data: {
                 ...this.form,
                 image: '',

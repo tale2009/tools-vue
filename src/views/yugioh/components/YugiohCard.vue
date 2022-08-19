@@ -814,7 +814,7 @@
       position: absolute;
       top: 1532px;
       left: 472px;
-      z-index: 120;
+      z-index: 10;
     }
   }
 </style>

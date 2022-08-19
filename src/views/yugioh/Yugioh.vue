@@ -828,7 +828,9 @@
             method: 'put',
             url: '/card/' + this.cardId,
             data: {
+              name: this.cardName,
               image: cardImage,
+              type: 'yugioh',
               data: {
                 ...this.form,
                 image: '',

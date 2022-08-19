@@ -103,6 +103,12 @@
             卡片批量导出
           </p>
         </el-col>
+        <el-col :span="12">
+          <p>
+            <i class="fa-solid fa-cloud-arrow-up fa-fw" />
+            云端管理卡片
+          </p>
+        </el-col>
       </el-row>
       <el-button
         style="width: 100%;"

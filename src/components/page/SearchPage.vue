@@ -39,9 +39,9 @@
         v-if="pagination"
         :current-page="currentPage"
         :page-size="pageSize"
-        :pager-count="isSmallScreen ? 5 : 7"
+        :pager-count="isSmallPagination ? 5 : 7"
         background
-        :layout="isSmallScreen ? 'prev, pager, next' : 'total, sizes, prev, pager, next, jumper'"
+        :layout="isSmallPagination ? 'prev, pager, next' : 'total, sizes, prev, pager, next, jumper'"
         :total="total"
         @size-change="sizeChange"
         @current-change="currentChange"
@@ -54,7 +54,6 @@
   import { RefreshLeft, Search } from '@element-plus/icons-vue';
   import { markRaw } from 'vue';
   import { useResizeObserver } from '@vueuse/core';
-  import { mapState } from 'vuex';
 
   export default {
     name: 'SearchPage',
@@ -86,6 +85,7 @@
         RefreshLeft: markRaw(RefreshLeft),
         Search: markRaw(Search),
         isSmallForm: false,
+        isSmallPagination: false,
       };
     },
     mounted() {
@@ -94,6 +94,7 @@
         const { width } = entry.contentRect;
         const formWidth = width - 172;
         this.isSmallForm = formWidth < 360;
+        this.isSmallPagination = width < 800;
         this.setSpan(formWidth);
       });
     },
@@ -119,7 +120,6 @@
       },
     },
     computed: {
-      ...mapState(['isSmallScreen']),
       searchFormStyle() {
         if (this.isSmallForm) {
           return {

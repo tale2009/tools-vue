@@ -27,6 +27,7 @@
     data() {
       return {
         cardId: '',
+        cardInfo: {},
         form: {
           language: 'sc',
           color: '',
@@ -67,7 +68,7 @@
       this.form.width = Number(query.width) || 0;
       this.updateScale();
       if (this.cardId) {
-
+        this.getCardInfo();
       } else if (this.form.password) {
         this.searchCardByPassword();
       } else {
@@ -81,6 +82,23 @@
       removeEventListener('resize', this.updateScale);
     },
     methods: {
+      getCardInfo() {
+        if (this.cardId) {
+          this.axios({
+            method: 'get',
+            url: '/card/' + this.cardId,
+          }).then(res => {
+            this.cardInfo = res.data;
+            if (this.cardInfo.image) {
+              this.cardInfo.data.image = `${this.baseImage}/${this.cardInfo.image}`;
+            }
+            Object.assign(this.form, this.cardInfo.data);
+            document.title = `${this.$route.meta.title} - ${this.cardName}`;
+            this.dataLoaded = true;
+            this.updateScale();
+          });
+        }
+      },
       searchCardByPassword() {
         this.axios({
           method: 'get',
@@ -120,7 +138,10 @@
       },
     },
     computed: {
-      ...mapState(['fontLoading']),
+      ...mapState(['fontLoading', 'staticURL']),
+      baseImage() {
+        return `${this.staticURL}/tools/image`;
+      },
       cardName() {
         return this.form.name.replace(/\[(.*?)\(.*?\)]/g, '$1');
       },

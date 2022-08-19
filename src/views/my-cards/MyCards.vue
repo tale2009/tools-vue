@@ -35,7 +35,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="span">
-                  <el-form-item label="缩放">
+                  <el-form-item label="查看">
                     <el-radio-group v-model="searchForm.scale" @change="changeScale">
                       <el-radio-button :label="0.1">小</el-radio-button>
                       <el-radio-button :label="0.15">中等</el-radio-button>
@@ -70,7 +70,7 @@
       </template>
 
       <template #form>
-        <PageForm title="我的卡片" description="在这里管理你的云端卡片">
+        <PageForm title="我的卡片" description="在云端管理你的卡片">
           <el-alert
             v-if="!isMember"
             style="margin-bottom: 20px"
@@ -80,7 +80,7 @@
           >
             <template #title>
               <div style="display: flex; align-items: center">
-                <span>会员专属功能</span>
+                <span>会员可以管理卡片</span>
                 <el-button
                   style="margin-left: 10px"
                   type="primary"
@@ -95,18 +95,21 @@
           </el-alert>
           <el-form v-if="currentCardId" :model="form" label-width="auto">
             <el-form-item label="卡名">
-              <el-input v-model="form.name" />
+              <span>{{ form.name }}</span>
+            </el-form-item>
+            <el-form-item label="类型">
+              <span>{{ formatList(form.type, typeList) }}</span>
             </el-form-item>
             <div class="button-group">
               <el-row :gutter="gutter">
-                <el-col :span="24">
+                <el-col :span="12">
                   <el-button plain @click="viewCard">查看卡片</el-button>
                 </el-col>
-                <el-col v-if="isAdmin || isMember" :span="12">
-                  <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
+                <el-col :span="12">
+                  <el-button type="success" @click="shareCard">分享卡片</el-button>
                 </el-col>
-                <el-col v-if="isAdmin || isMember" :span="12">
-                  <el-button type="primary" :loading="btnLoading" @click="saveCard">保存修改</el-button>
+                <el-col v-if="isAdmin || isMember" :span="24">
+                  <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
                 </el-col>
                 <el-col v-if="isAdmin || isMember" :span="24">
                   <el-popconfirm title="是否确认删除？" @confirm="deleteCard">
@@ -159,6 +162,7 @@
         },
         form: {
           name: '',
+          type: '',
         },
         currentPage: 1,
         pageSize: 20,
@@ -231,9 +235,10 @@
         });
       },
       clickCard(item) {
-        const { name } = item;
+        const { name, type } = item;
         this.currentCardId = item.id;
         this.form.name = name;
+        this.form.type = type;
       },
       cardItemStyle(item) {
         return {
@@ -244,6 +249,29 @@
       viewCard() {
         if (this.currentCardId) {
           this.cardDialog = true;
+        }
+      },
+      shareCard() {
+        let path = '';
+        const currentCard = this.cardList.find(item => item.id === this.currentCardId);
+        if (currentCard) {
+          if (currentCard) {
+            switch (currentCard.type) {
+            case 'yugioh':
+              path = '/share/yugioh';
+              break;
+            case 'rushDuel':
+              path = '/share/rush-duel';
+              break;
+            }
+          }
+          const { href } = this.$router.resolve({
+            path,
+            query: {
+              cardId: this.currentCardId,
+            },
+          });
+          open(href, '_blank');
         }
       },
       editCard() {
