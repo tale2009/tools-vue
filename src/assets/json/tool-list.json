@@ -51,6 +51,11 @@
         "title": "我的卡片",
         "path": "/my-cards",
         "icon": "fa-cards-blank"
+      },
+      {
+        "title": "卡片社区",
+        "path": "/cards-community",
+        "icon": "fa-message-image"
       }
     ]
   }

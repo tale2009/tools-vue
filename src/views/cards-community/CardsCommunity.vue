@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading" class="my-cards-container">
+  <div v-loading="loading" class="cards-community-container">
     <Page>
       <template #default>
         <SearchPage
@@ -18,6 +18,11 @@
               label-width="auto"
             >
               <el-row :gutter="gutter">
+                <el-col :span="span">
+                  <el-form-item label="作者" prop="nickname">
+                    <el-input v-model="searchForm.nickname" clearable placeholder="请输入作者" />
+                  </el-form-item>
+                </el-col>
                 <el-col :span="span">
                   <el-form-item label="卡名" prop="name">
                     <el-input v-model="searchForm.name" clearable placeholder="请输入卡名" />
@@ -43,11 +48,6 @@
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
-                <el-col :span="span">
-                  <el-form-item label="数量">
-                    <span>{{ cardNumber }} / 100</span>
-                  </el-form-item>
-                </el-col>
               </el-row>
             </el-form>
           </template>
@@ -70,7 +70,7 @@
       </template>
 
       <template #form>
-        <PageForm title="我的卡片" description="在云端管理你的卡片">
+        <PageForm title="卡片社区" description="社区共享公开的卡片">
           <el-alert
             v-if="!isMember"
             style="margin-bottom: 20px"
@@ -80,7 +80,7 @@
           >
             <template #title>
               <div style="display: flex; align-items: center">
-                <span>会员可以管理卡片</span>
+                <span>会员可以保存卡片</span>
                 <el-button
                   style="margin-left: 10px"
                   type="primary"
@@ -100,10 +100,14 @@
             <el-form-item label="类型">
               <span>{{ formatList(form.type, typeList) }}</span>
             </el-form-item>
-            <el-form-item label="公开">
-              <el-tooltip content="公开后所有用户都可见" placement="top">
-                <el-switch v-model="form.display" :loading="btnLoading" @change="updateDisplay" />
-              </el-tooltip>
+            <el-form-item label="作者">
+              <span style="width: 100%">{{ form.user.nickname }}</span>
+              <el-avatar
+                v-if="authorAvatarSrc"
+                style="margin-top: 10px"
+                :size="60"
+                :src="authorAvatarSrc"
+              />
             </el-form-item>
             <div class="button-group">
               <el-row :gutter="gutter">
@@ -113,15 +117,14 @@
                 <el-col :span="12">
                   <el-button type="success" @click="shareCard">分享卡片</el-button>
                 </el-col>
-                <el-col :span="24">
-                  <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
-                </el-col>
-                <el-col :span="24">
-                  <el-popconfirm title="是否确认删除？" @confirm="deleteCard">
-                    <template #reference>
-                      <el-button :loading="btnLoading" type="danger">删除卡片</el-button>
-                    </template>
-                  </el-popconfirm>
+                <el-col v-if="isAdmin || isMember" :span="24">
+                  <el-button
+                    type="primary"
+                    :loading="btnLoading"
+                    @click="copyCard"
+                  >
+                    保存为我的卡片
+                  </el-button>
                 </el-col>
               </el-row>
             </div>
@@ -145,7 +148,7 @@
   import { mapState } from 'vuex';
 
   export default {
-    name: 'MyCards',
+    name: 'CardsCommunity',
     components: {
       Page,
       PageForm,
@@ -161,6 +164,7 @@
         loading: false,
         btnLoading: false,
         searchForm: {
+          nickname: '',
           name: '',
           type: '',
           scale: 0.1,
@@ -168,12 +172,11 @@
         form: {
           name: '',
           type: '',
-          display: false,
+          user: {},
         },
         currentPage: 1,
         pageSize: 20,
         total: 0,
-        cardNumber: 0,
         cardList: [],
         typeList: [
           { label: '游戏王', value: 'yugioh' },
@@ -187,26 +190,17 @@
       this.getCardList();
     },
     methods: {
-      getCardNumber() {
-        this.axios({
-          method: 'get',
-          url: '/card/number',
-        }).then(res => {
-          this.cardNumber = res.data.cardNumber;
-        });
-      },
       getCardList() {
         this.loading = true;
         this.axios({
           method: 'get',
-          url: '/card/list',
+          url: '/card/community/list',
           params: {
             ...this.searchForm,
             currentPage: this.currentPage,
             pageSize: this.pageSize,
           },
         }).then(res => {
-          this.getCardNumber();
           this.cardList = res.data;
           this.total = res.total;
           this.cardList.forEach(item => {
@@ -241,11 +235,11 @@
         });
       },
       clickCard(item) {
-        const { name, type, display } = item;
+        const { name, type, user } = item;
         this.currentCardId = item.id;
         this.form.name = name;
         this.form.type = type;
-        this.form.display = display;
+        this.form.user = user;
       },
       cardItemStyle(item) {
         return {
@@ -281,53 +275,17 @@
           open(href, '_blank');
         }
       },
-      editCard() {
+      async copyCard() {
         if (this.currentCardId) {
-          let path = '';
-          const currentCard = this.cardList.find(item => item.id === this.currentCardId);
-          if (currentCard) {
-            switch (currentCard.type) {
-            case 'yugioh':
-              path = '/yugioh';
-              break;
-            case 'rushDuel':
-              path = '/rush-duel';
-              break;
-            }
-          }
-          this.$router.push({
-            path,
-            query: {
+          this.btnLoading = true;
+          await this.axios({
+            method: 'post',
+            url: '/card/copy',
+            data: {
               cardId: this.currentCardId,
             },
-          });
-        }
-      },
-      deleteCard() {
-        if (this.currentCardId) {
-          this.btnLoading = true;
-          this.axios({
-            method: 'delete',
-            url: '/card/' + this.currentCardId,
-          }).then(() => {
-            this.$message.success('删除成功');
-            this.currentCardId = '';
-            this.getCardList();
-          }).finally(() => {
-            this.btnLoading = false;
-          });
-        }
-      },
-      updateDisplay() {
-        if (this.currentCardId) {
-          this.btnLoading = true;
-          this.axios({
-            method: 'put',
-            url: '/card/display/' + this.currentCardId,
-            data: this.form,
           }).then(() => {
             this.$message.success('保存成功');
-            this.getCardList();
           }).finally(() => {
             this.btnLoading = false;
           });
@@ -342,12 +300,18 @@
       baseImage() {
         return `${this.staticURL}/tools/image`;
       },
+      authorAvatarSrc() {
+        if (this.form.user.avatar) {
+          return `${this.baseImage}/${this.form.user.avatar}`;
+        }
+        return '';
+      },
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  .my-cards-container {
+  .cards-community-container {
     .page-main {
       .card-list {
         display: flex;

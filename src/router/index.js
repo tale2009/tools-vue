@@ -80,6 +80,15 @@ const routes = [
           auth: true,
         },
       },
+      {
+        path: 'cards-community',
+        name: 'cardsCommunity',
+        component: () => import('../views/cards-community/CardsCommunity.vue'),
+        meta: {
+          title: '卡片社区',
+          auth: true,
+        },
+      },
     ],
   },
   {
