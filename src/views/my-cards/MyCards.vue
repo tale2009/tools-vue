@@ -108,10 +108,10 @@
                 <el-col :span="12">
                   <el-button type="success" @click="shareCard">分享卡片</el-button>
                 </el-col>
-                <el-col v-if="isAdmin || isMember" :span="24">
+                <el-col :span="24">
                   <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
                 </el-col>
-                <el-col v-if="isAdmin || isMember" :span="24">
+                <el-col :span="24">
                   <el-popconfirm title="是否确认删除？" @confirm="deleteCard">
                     <template #reference>
                       <el-button :loading="btnLoading" type="danger">删除卡片</el-button>
