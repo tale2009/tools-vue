@@ -98,6 +98,7 @@
           canvas.width = pixelX;
           canvas.height = pixelY;
 
+          context.imageSmoothingEnabled = false;
           context.drawImage(img, 0, 0, pixelX, pixelY);
           let imageData = context.getImageData(0, 0, pixelX, pixelY);
           let dotList = [];
