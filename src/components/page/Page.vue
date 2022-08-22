@@ -2,8 +2,11 @@
   <div class="page-container">
     <div class="page-main">
       <el-scrollbar>
-        <div class="page-slot">
-          <slot />
+        <div style="display: flex">
+          <div class="page-slot">
+            <slot />
+          </div>
+          <div />
         </div>
       </el-scrollbar>
     </div>
@@ -129,6 +132,7 @@
       position: relative;
 
       .page-slot {
+        flex-grow: 1;
         padding: 20px;
       }
     }
