@@ -7,8 +7,9 @@
     </span>
     <!--渐变色文本（依赖于非渐变色文本的压缩）-->
     <span v-if="gradient" class="text-gradient">
-      <span class="gradient" :style="gradientStyle">{{ textRuby }}</span>
       <span class="reflection">{{ textRuby }}</span>
+      <span class="gradient" :style="gradientStyle">{{ textRuby }}</span>
+      <span class="stroke">{{ textRuby }}</span>
       <span class="shadow">{{ textRuby }}</span>
     </span>
   </div>
@@ -229,16 +230,6 @@
       left: 0;
       right: 0;
 
-      .gradient {
-        position: absolute;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 10;
-      }
-
       .reflection {
         position: absolute;
         -webkit-background-clip: text;
@@ -252,15 +243,31 @@
         z-index: 20;
       }
 
-      .shadow {
+      .gradient {
         position: absolute;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        -webkit-text-stroke: 6px rgba(0, 0, 0, 0.6);
-        text-shadow: 3px 5px 1px rgba(0, 0, 0, 0.6);
         top: 0;
         left: 0;
         right: 0;
+        z-index: 10;
+      }
+
+      .stroke {
+        position: absolute;
+        -webkit-text-stroke: 6px rgba(0, 0, 0, 0.6);
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 0;
+      }
+
+      .shadow {
+        position: absolute;
+        color: rgba(0, 0, 0, 0.6);
+        top: 5px;
+        left: 3px;
+        right: -3px;
         z-index: 0;
       }
     }

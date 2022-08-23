@@ -310,7 +310,6 @@
   import jpDemo from '@/views/rush-duel/demo/jp-demo';
   import loadImage from 'blueimp-load-image';
   import { InfoFilled } from '@element-plus/icons-vue';
-  import { nextTick } from 'vue';
   import html2canvas from '@/views/yugioh/html2canvas';
   import { parseRushDuelCard } from '@/views/rush-duel/rush-duel';
   import { mapState } from 'vuex';
@@ -523,22 +522,20 @@
       },
       exportImage() {
         return new Promise(resolve => {
-          nextTick(() => {
-            this.btnLoading = true;
-            let element = this.$refs.rushDuelCard.$refs.rushDuelCard;
-            html2canvas(element, {
-              useCORS: true,
-              backgroundColor: 'transparent',
-              width: this.form.scale * 1394,
-              height: this.form.scale * 2031,
-            }).then(canvas => {
-              canvas.toBlob(blob => {
-                this.downloadBlob(blob, this.cardName);
-                resolve();
-              });
-            }).finally(() => {
-              this.btnLoading = false;
+          this.btnLoading = true;
+          let element = this.$refs.rushDuelCard.$refs.rushDuelCard;
+          html2canvas(element, {
+            useCORS: true,
+            backgroundColor: 'transparent',
+            width: this.form.scale * 1394,
+            height: this.form.scale * 2031,
+          }).then(canvas => {
+            canvas.toBlob(blob => {
+              this.downloadBlob(blob, this.cardName);
+              resolve();
             });
+          }).finally(() => {
+            this.btnLoading = false;
           });
         });
       },

@@ -40,10 +40,8 @@
               />
             </el-form-item>
             <el-form-item label="颜色">
-              <el-tooltip content="暂不支持导出" placement="top">
-                <el-switch v-model="form.gradient" active-text="渐变色" />
-              </el-tooltip>
-              <div v-if="form.gradient" style="width: 100%;margin-top: 10px">
+              <el-switch v-model="form.gradient" active-text="渐变色" />
+              <div v-if="form.gradient" style="width: 100%; margin-top: 10px">
                 <el-row :gutter="gutter">
                   <el-col :span="8">
                     <el-space :size="10" wrap>
@@ -432,7 +430,6 @@
   import html2canvas from './html2canvas';
   import loadImage from 'blueimp-load-image';
   import { InfoFilled } from '@element-plus/icons-vue';
-  import { nextTick } from 'vue';
   import { parseYugiohCard } from '@/views/yugioh/yugioh';
   import { mapState } from 'vuex';
 
@@ -715,26 +712,26 @@
       },
       exportImage() {
         return new Promise(resolve => {
-          if (this.form.gradient) {
-            this.form.gradient = false;
-            this.$message.warning('暂不支持导出渐变色卡名');
-          }
-          nextTick(() => {
-            this.btnLoading = true;
-            let element = this.$refs.yugiohCard.$refs.yugiohCard;
-            html2canvas(element, {
-              useCORS: true,
-              backgroundColor: 'transparent',
-              width: this.form.scale * 1394,
-              height: this.form.scale * 2031,
-            }).then(canvas => {
-              canvas.toBlob(blob => {
-                this.downloadBlob(blob, this.cardName);
-                resolve();
-              });
-            }).finally(() => {
-              this.btnLoading = false;
+          this.btnLoading = true;
+          let element = this.$refs.yugiohCard.$refs.yugiohCard;
+          html2canvas(element, {
+            useCORS: true,
+            backgroundColor: 'transparent',
+            width: this.form.scale * 1394,
+            height: this.form.scale * 2031,
+            onclone: doc => {
+              const reflection = doc.querySelector('.text-gradient .reflection');
+              if (reflection) {
+                reflection.remove();
+              }
+            },
+          }).then(canvas => {
+            canvas.toBlob(blob => {
+              this.downloadBlob(blob, this.cardName);
+              resolve();
             });
+          }).finally(() => {
+            this.btnLoading = false;
           });
         });
       },
