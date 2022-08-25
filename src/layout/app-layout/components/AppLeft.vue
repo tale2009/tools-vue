@@ -40,6 +40,7 @@
 <script>
   import toolList from '@/assets/json/tool-list.json';
   import poster1 from '@/assets/image/poster1.jpg';
+  import poster2 from '@/assets/image/poster2.jpg';
   import poster3 from '@/assets/image/poster3.jpg';
 
   export default {
@@ -58,6 +59,11 @@
             name: '铭振天下',
             image: poster3,
             url: 'https://item.taobao.com/item.htm?id=674640080866',
+          },
+          {
+            name: '二毛游戏王',
+            image: poster2,
+            url: 'https://shop480578296.taobao.com',
           },
         ],
       };
