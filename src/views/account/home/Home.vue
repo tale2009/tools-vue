@@ -89,8 +89,8 @@
         if (flag) {
           const { width, height } = await getImageFileSize(file);
           loadImage(file, {
-            maxWidth: height >= width ? 400 : 0,
-            maxHeight: width >= height ? 400 : 0,
+            maxWidth: height >= width ? 600 : 0,
+            maxHeight: width >= height ? 600 : 0,
             canvas: true,
           }).then(data => {
             this.cropperImage = data.image.toDataURL('image/png', 1);

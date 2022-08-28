@@ -102,11 +102,12 @@
             </el-form-item>
             <el-form-item label="作者">
               <span style="width: 100%">{{ form.user.nickname }}</span>
-              <el-avatar
+              <el-image
                 v-if="authorAvatarSrc"
-                style="margin-top: 10px"
-                :size="60"
+                class="user-avatar"
                 :src="authorAvatarSrc"
+                fit="cover"
+                :preview-src-list="[authorAvatarSrc]"
               />
             </el-form-item>
             <div class="button-group">
@@ -332,6 +333,14 @@
     }
 
     .form-main {
+      .user-avatar {
+        margin-top: 10px;
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
       .button-group {
         .el-row {
           margin-top: -20px;
