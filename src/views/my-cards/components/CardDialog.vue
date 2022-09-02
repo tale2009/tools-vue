@@ -15,9 +15,7 @@
           </template>
         </div>
         <div class="perspective-card__artwork perspective-card__artwork--back">
-          <img
-            src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/982762/pokemon_card_backside_in_high_resolution_by_atomicmonkeytcg_dah43cy-fullview.png"
-          />
+
         </div>
         <div class="perspective-card__shine"></div>
       </div>
