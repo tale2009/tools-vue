@@ -77,18 +77,23 @@
         if (Object.keys(this.cardInfo).length) {
           this.cardWidth = this.maxDialogWidth(600);
           const { offsetWidth, offsetHeight } = document.body;
-          const maxCardWidth = offsetWidth *0.8;
+          const maxCardWidth = offsetWidth * 0.8;
           const maxCardHeight = offsetHeight * 0.8;
           const scale = Math.min(maxCardWidth / 1394, maxCardHeight / 2031, 1);
           this.cardWidth = 1394 * scale;
           this.cardInfo.data.scale = scale;
+          if (Object.keys(this.perspectiveCard).length) {
+            this.perspectiveCard.resize();
+          }
         }
       },
       initPerspectiveCard() {
         nextTick(() => {
-          this.perspectiveCard = new PerspectiveCard(this.$refs.perspectiveCard, {
-            ambient: true,
-          });
+          if (!Object.keys(this.perspectiveCard).length) {
+            this.perspectiveCard = new PerspectiveCard(this.$refs.perspectiveCard, {
+              ambient: true,
+            });
+          }
         });
       },
     },
