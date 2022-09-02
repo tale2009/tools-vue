@@ -3,7 +3,7 @@
     class="card-dialog"
     align-center
     :model-value="modelValue"
-    :width="maxDialogWidth(600)"
+    :width="cardWidth"
     :before-close="closeDialog"
   >
     <div ref="perspectiveCard" class="perspective-card" :style="perspectiveCardStyle">
@@ -78,7 +78,12 @@
       updateScale() {
         if (Object.keys(this.cardInfo).length) {
           this.cardWidth = this.maxDialogWidth(600);
-          this.cardInfo.data.scale = this.cardWidth / 1394;
+          const { offsetWidth, offsetHeight } = document.body;
+          const maxCardWidth = offsetWidth *0.8;
+          const maxCardHeight = offsetHeight * 0.8;
+          const scale = Math.min(maxCardWidth / 1394, maxCardHeight / 2031, 1);
+          this.cardWidth = 1394 * scale;
+          this.cardInfo.data.scale = scale;
         }
       },
       initPerspectiveCard() {
