@@ -210,6 +210,7 @@
           this.cardList = res.data;
           this.total = res.total;
           this.cardList.forEach(item => {
+            item.data.radius = true;
             if (item.image) {
               item.data.image = `${this.baseImage}/${item.image}`;
             }

@@ -1,22 +1,37 @@
 <template>
   <el-dialog
-    custom-class="card-dialog"
+    class="card-dialog"
+    align-center
     :model-value="modelValue"
     :width="maxDialogWidth(600)"
     :before-close="closeDialog"
   >
-    <template v-if="Object.keys(cardInfo).length">
-      <YugiohCard v-if="cardInfo.type === 'yugioh'" :data="cardInfo.data" />
-      <RushDuelCard v-if="cardInfo.type === 'rushDuel'" :data="cardInfo.data" />
-    </template>
+    <div ref="perspectiveCard" class="perspective-card" :style="perspectiveCardStyle">
+      <div class="perspective-card__transformer">
+        <div class="perspective-card__artwork perspective-card__artwork--front">
+          <template v-if="Object.keys(cardInfo).length">
+            <YugiohCard v-if="cardInfo.type === 'yugioh'" :data="cardInfo.data" />
+            <RushDuelCard v-if="cardInfo.type === 'rushDuel'" :data="cardInfo.data" />
+          </template>
+        </div>
+        <div class="perspective-card__artwork perspective-card__artwork--back">
+          <img
+            src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/982762/pokemon_card_backside_in_high_resolution_by_atomicmonkeytcg_dah43cy-fullview.png"
+          />
+        </div>
+        <div class="perspective-card__shine"></div>
+      </div>
+    </div>
   </el-dialog>
 </template>
 
 <script>
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
+  import PerspectiveCard from 'wtc-perspective-card';
   import { maxDialogWidth } from '@/utils';
   import { mapState } from 'vuex';
+  import { nextTick } from 'vue';
 
   export default {
     name: 'CardDialog',
@@ -28,6 +43,8 @@
     data() {
       return {
         cardInfo: {},
+        perspectiveCard: {},
+        cardWidth: '',
       };
     },
     mounted() {
@@ -49,6 +66,7 @@
             url: '/card/' + this.cardId,
           }).then(res => {
             this.cardInfo = res.data;
+            this.cardInfo.data.radius = true;
             if (this.cardInfo.image) {
               this.cardInfo.data.image = `${this.baseImage}/${this.cardInfo.image}`;
             }
@@ -59,9 +77,16 @@
       // 把卡片宽度转换成scale
       updateScale() {
         if (Object.keys(this.cardInfo).length) {
-          const width = this.maxDialogWidth(600);
-          this.cardInfo.data.scale = width / 1394;
+          this.cardWidth = this.maxDialogWidth(600);
+          this.cardInfo.data.scale = this.cardWidth / 1394;
         }
+      },
+      initPerspectiveCard() {
+        nextTick(() => {
+          this.perspectiveCard = new PerspectiveCard(this.$refs.perspectiveCard, {
+            ambient: true,
+          });
+        });
       },
     },
     computed: {
@@ -69,11 +94,22 @@
       baseImage() {
         return `${this.staticURL}/tools/image`;
       },
+      perspectiveCardStyle() {
+        let borderRadius;
+        if (Object.keys(this.cardInfo).length) {
+          borderRadius = `${this.cardInfo.data.scale * 24}px`;
+        }
+        return {
+          borderRadius,
+          perspective: `${this.cardWidth * 2.4}px`,
+        };
+      },
     },
     watch: {
       modelValue() {
         if (this.modelValue) {
           this.getCardInfo();
+          this.initPerspectiveCard();
         }
       },
     },
@@ -81,6 +117,8 @@
 </script>
 
 <style lang="scss">
+  @use "../../../styles/wtc-perspective-card" as *;
+
   .card-dialog {
     background: none;
     box-shadow: none;
