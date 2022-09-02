@@ -108,6 +108,7 @@
                 :src="authorAvatarSrc"
                 fit="cover"
                 :preview-src-list="[authorAvatarSrc]"
+                hide-on-click-modal
               />
             </el-form-item>
             <div class="button-group">
