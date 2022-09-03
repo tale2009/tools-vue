@@ -111,6 +111,9 @@
                 hide-on-click-modal
               />
             </el-form-item>
+            <el-form-item label="时间">
+              <span>{{ formatTime(form.createDate) }}</span>
+            </el-form-item>
             <div class="button-group">
               <el-row :gutter="gutter">
                 <el-col :span="12">
@@ -175,6 +178,7 @@
           name: '',
           type: '',
           user: {},
+          createDate: '',
         },
         currentPage: 1,
         pageSize: 20,
@@ -211,13 +215,13 @@
               item.data.image = `${this.baseImage}/${item.image}`;
             }
             switch (item.type) {
-            case 'yugioh':
-              item.data.pendulumDescription = '';
-              item.data.description = '';
-              break;
-            case 'rushDuel':
-              item.data.description = '';
-              break;
+              case 'yugioh':
+                item.data.pendulumDescription = '';
+                item.data.description = '';
+                break;
+              case 'rushDuel':
+                item.data.description = '';
+                break;
             }
           });
           this.changeScale();
@@ -238,11 +242,12 @@
         });
       },
       clickCard(item) {
-        const { name, type, user } = item;
+        const { name, type, user, createDate } = item;
         this.currentCardId = item.id;
         this.form.name = name;
         this.form.type = type;
         this.form.user = user;
+        this.form.createDate = createDate;
       },
       cardItemStyle(item) {
         return {
@@ -261,12 +266,12 @@
         if (currentCard) {
           if (currentCard) {
             switch (currentCard.type) {
-            case 'yugioh':
-              path = '/share/yugioh';
-              break;
-            case 'rushDuel':
-              path = '/share/rush-duel';
-              break;
+              case 'yugioh':
+                path = '/share/yugioh';
+                break;
+              case 'rushDuel':
+                path = '/share/rush-duel';
+                break;
             }
           }
           const { href } = this.$router.resolve({
