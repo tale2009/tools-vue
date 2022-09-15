@@ -19,11 +19,14 @@
       </el-form-item>
       <el-form-item label="支付方式">
         <div class="pay-way-image">
-          <el-image :src="payWayImage" fit="contain" />
+          <el-image :src="payWayImage" fit="contain"/>
         </div>
       </el-form-item>
-      <el-form-item label="付款码">
-        <qrcode-vue :value="data.qrcode" :size="200" />
+      <el-form-item label="付款码" v-if="data.qrcode">
+        <qrcode-vue :value="data.qrcode" :size="200"/>
+      </el-form-item>
+      <el-form-item label="付款链接" v-if="data.payurl">
+        <el-button type="primary" link @click="toPayUrl">点击跳转</el-button>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -34,7 +37,7 @@
 
 <script>
   import QrcodeVue from 'qrcode.vue';
-  import { maxDialogWidth } from '@/utils';
+  import {maxDialogWidth} from '@/utils';
 
   export default {
     name: 'PayDialog',
@@ -69,6 +72,11 @@
           }
         });
       },
+      toPayUrl() {
+        if (this.data.payurl) {
+          open(this.data.payurl);
+        }
+      }
     },
     computed: {
       payWayImage() {
