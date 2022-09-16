@@ -15,6 +15,16 @@
         :closable="false"
       />
     </div>
+    <div>
+      <el-upload
+        action="/"
+        :show-file-list="false"
+        accept=".ydk"
+        :before-upload="beforeUpload"
+      >
+        <el-button>导入 YDK 文件</el-button>
+      </el-upload>
+    </div>
     <el-form
       ref="form"
       :model="form"
@@ -131,6 +141,15 @@
           this.errorList = [];
         }
       },
+      beforeUpload(file) {
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = e => {
+          const result = e.target.result;
+          this.form.password = result.split('\n').filter(item => !item.startsWith('#')).join('\n');
+        }
+        return false;
+      },
     },
     computed: {
       ...mapState(['fontLoading']),
@@ -162,5 +181,9 @@
     .el-alert {
       background: var(--primary-color);
     }
+  }
+
+  .el-form {
+    margin-top: 10px;
   }
 </style>
