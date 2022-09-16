@@ -22,7 +22,7 @@
         accept=".ydk"
         :before-upload="beforeUpload"
       >
-        <el-button>导入 YDK 文件</el-button>
+        <el-button plain>导入 YDK 文件</el-button>
       </el-upload>
     </div>
     <el-form
@@ -143,11 +143,12 @@
       },
       beforeUpload(file) {
         const reader = new FileReader();
-        reader.readAsText(file, "UTF-8");
+        reader.readAsText(file);
         reader.onload = e => {
           const result = e.target.result;
-          this.form.password = result.split('\n').filter(item => !item.startsWith('#')).join('\n');
-        }
+          const list = result.split('\n').filter(item => !item.startsWith('#'));
+          this.form.password = Array.from(new Set(list)).join('\n');
+        };
         return false;
       },
     },
