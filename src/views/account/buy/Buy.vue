@@ -2,6 +2,7 @@
   <div class="buy-container">
     <AccountPage>
       <div v-if="buyConfig.enable" class="enabled-buy">
+        <p class="title">购买会员</p>
         <el-space class="buy-list" :size="10" wrap>
           <div
             v-for="item in buyList"
@@ -15,6 +16,28 @@
           </div>
         </el-space>
 
+        <p class="title">云端卡片扩容</p>
+        <div class="capacity-notify">
+          <el-alert
+            title="云端卡片免费容量为 100 张 / 月，扩容后不支持降级。"
+            type="info"
+            show-icon
+            :closable="false"
+          />
+        </div>
+        <el-space class="capacity-list" :size="10" wrap>
+          <div
+            v-for="item in capacityList"
+            class="capacity-item"
+            :style="capacityItemStyle(item)"
+            @click="clickCapacityItem(item)"
+          >
+            <p class="capacity">{{ item.capacity }} 张 / 月</p>
+            <p class="price">{{ item.price }}</p>
+          </div>
+        </el-space>
+
+        <p class="title">支付方式</p>
         <el-space class="pay-way-list" :size="10" wrap>
           <div
             v-for="item in payWayList"
@@ -81,6 +104,7 @@
         form: {
           type: 'monthly',
           payWay: 'alipay',
+          capacity: 100,
         },
         buyList: [
           {
@@ -88,6 +112,32 @@
             type: 'monthly',
             price: '￥8',
             day: '30 天',
+          },
+        ],
+        capacityList: [
+          {
+            capacity: 100,
+            price: '￥0',
+          },
+          {
+            capacity: 200,
+            price: '￥2',
+          },
+          {
+            capacity: 300,
+            price: '￥4',
+          },
+          {
+            capacity: 400,
+            price: '￥6',
+          },
+          {
+            capacity: 600,
+            price: '￥10',
+          },
+          {
+            capacity: 1100,
+            price: '￥20',
           },
         ],
         payWayList: [
@@ -135,6 +185,14 @@
           borderColor: item.payWay === this.form.payWay ? 'var(--primary-color)' : '',
         };
       },
+      clickCapacityItem(item) {
+        this.form.capacity = item.capacity;
+      },
+      capacityItemStyle(item) {
+        return {
+          borderColor: item.capacity === this.form.capacity ? 'var(--primary-color)' : '',
+        };
+      },
       scanPay() {
         this.btnLoading = true;
         this.axios({
@@ -158,7 +216,19 @@
 <style lang="scss" scoped>
   .buy-container {
     .enabled-buy {
+      .title {
+        margin: 20px 0 0;
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--primary-color);
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
       .buy-list {
+        margin-top: 10px;
         display: flex;
 
         .buy-item {
@@ -172,28 +242,63 @@
           border: 2px solid var(--border-color);
           border-radius: 8px;
           cursor: pointer;
-        }
 
-        .name {
-          margin: 0;
-          font-size: 14px;
-        }
+          .name {
+            margin: 0;
+            font-size: 14px;
+          }
 
-        .price {
-          margin: 10px 0 0;
-          font-size: 24px;
-          font-weight: bold;
-          color: var(--primary-color);
-        }
+          .price {
+            margin: 10px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+          }
 
-        .day {
-          margin: 10px 0 0;
-          font-size: 14px;
+          .day {
+            margin: 10px 0 0;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .capacity-notify {
+        margin-top: 10px;
+      }
+
+      .capacity-list {
+        margin-top: 10px;
+        display: flex;
+
+        .capacity-item {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+          height: 100px;
+          width: 100px;
+          border: 2px solid var(--border-color);
+          border-radius: 8px;
+          cursor: pointer;
+
+          .capacity {
+            margin: 0;
+            font-size: 14px;
+          }
+
+          .price {
+            margin: 10px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+          }
         }
       }
 
       .pay-way-list {
-        margin-top: 20px;
+        margin-top: 10px;
+        display: flex;
 
         .pay-way-item {
           display: flex;
@@ -216,13 +321,6 @@
 
       .buy-article {
         margin-top: 40px;
-
-        .title {
-          margin: 20px 0 0;
-          font-size: 18px;
-          font-weight: bold;
-          color: var(--primary-color);
-        }
 
         .content {
           margin: 10px 0 0;
