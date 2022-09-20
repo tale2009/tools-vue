@@ -19,7 +19,7 @@
         <p class="title">云端卡片扩容</p>
         <div class="capacity-notify">
           <el-alert
-            title="云端卡片免费容量为 100 张 / 月，扩容后不支持降级。"
+            title="云端卡片免费容量为 100 张 / 月，扩容费用为 0.02 元 / 张·月，扩容后不支持降级。"
             type="info"
             show-icon
             :closable="false"

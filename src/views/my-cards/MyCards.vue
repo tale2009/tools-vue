@@ -45,7 +45,10 @@
                 </el-col>
                 <el-col :span="span">
                   <el-form-item label="数量">
-                    <span>{{ cardNumber }} / {{ memberCapacity }}</span>
+                    <el-space :size="10">
+                      <span>{{ cardNumber }} / {{ memberCapacity }}</span>
+                      <el-button link type="primary" @click="toAccountBuy">扩容</el-button>
+                    </el-space>
                   </el-form-item>
                 </el-col>
               </el-row>
