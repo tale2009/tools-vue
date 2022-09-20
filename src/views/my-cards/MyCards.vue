@@ -45,7 +45,7 @@
                 </el-col>
                 <el-col :span="span">
                   <el-form-item label="数量">
-                    <span>{{ cardNumber }} / 100</span>
+                    <span>{{ cardNumber }} / {{ memberCapacity }}</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -187,6 +187,9 @@
       };
     },
     created() {
+      if (Number(localStorage.getItem('pageSize'))) {
+        this.pageSize = Number(localStorage.getItem('pageSize'));
+      }
       this.getCardList();
     },
     methods: {
@@ -343,9 +346,12 @@
       },
     },
     computed: {
-      ...mapState(['isAdmin', 'isMember', 'staticURL']),
+      ...mapState(['userInfo', 'isAdmin', 'isMember', 'staticURL']),
       baseImage() {
         return `${this.staticURL}/tools/image`;
+      },
+      memberCapacity() {
+        return this.userInfo.member?.capacity || 100;
       },
     },
   };

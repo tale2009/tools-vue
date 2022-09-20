@@ -33,7 +33,7 @@ module.exports = defineConfig({
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multi-word-component-names': 'off',
     'vue/max-attributes-per-line': ['error', { singleline: 3, multiline: 1 }],
-    'vue/script-indent': ['error', 2, { baseIndent: 1 }],
+    'vue/script-indent': ['error', 2, { baseIndent: 1, switchCase: 1 }],
     'vue/order-in-components': 'off',
     'vue/require-default-prop': 'off',
     'vue/html-closing-bracket-spacing': 'error',

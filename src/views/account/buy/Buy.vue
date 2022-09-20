@@ -26,15 +26,17 @@
           />
         </div>
         <el-space class="capacity-list" :size="10" wrap>
-          <div
-            v-for="item in capacityList"
-            class="capacity-item"
-            :style="capacityItemStyle(item)"
-            @click="clickCapacityItem(item)"
-          >
-            <p class="capacity">{{ item.capacity }} 张 / 月</p>
-            <p class="price">{{ item.price }}</p>
-          </div>
+          <template v-for="item in capacityList">
+            <div
+              v-if="item.capacity>=memberCapacity"
+              class="capacity-item"
+              :style="capacityItemStyle(item)"
+              @click="clickCapacityItem(item)"
+            >
+              <p class="capacity">{{ item.capacity }} 张 / 月</p>
+              <p class="price">{{ item.price }}</p>
+            </div>
+          </template>
         </el-space>
 
         <p class="title">支付方式</p>
@@ -50,7 +52,7 @@
         </el-space>
 
         <div class="buy-button">
-          <el-button type="primary" :loading="btnLoading" @click="scanPay">扫码支付</el-button>
+          <el-button type="primary" :loading="btnLoading" @click="scanPay">立即购买</el-button>
         </div>
 
         <div class="buy-article">
@@ -91,6 +93,7 @@
   import PayDialog from '@/views/account/buy/components/PayDialog';
   import alipay from '@/assets/image/alipay.png';
   import wxpay from '@/assets/image/wxpay.png';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'Buy',
@@ -158,6 +161,7 @@
       };
     },
     created() {
+      this.form.capacity = this.memberCapacity;
       this.getBuyConfig();
     },
     methods: {
@@ -208,6 +212,12 @@
       },
       toBilibili() {
         open('https://space.bilibili.com/792063');
+      },
+    },
+    computed: {
+      ...mapState(['userInfo']),
+      memberCapacity() {
+        return this.userInfo.member?.capacity || 100;
       },
     },
   };

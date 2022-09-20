@@ -111,6 +111,7 @@
         }
       },
       sizeChange(size) {
+        localStorage.setItem('pageSize', size);
         this.$emit('update:page-size', size);
         this.$emit('get-data');
       },

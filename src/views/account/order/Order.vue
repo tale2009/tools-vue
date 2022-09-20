@@ -153,6 +153,9 @@
       };
     },
     created() {
+      if (Number(localStorage.getItem('pageSize'))) {
+        this.pageSize = Number(localStorage.getItem('pageSize'));
+      }
       this.getOrderList();
     },
     methods: {

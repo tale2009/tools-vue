@@ -30,7 +30,15 @@
     <el-row>
       <el-col :span="24">
         <div class="poster-list">
-          <el-image v-for="item in posterList" :src="item.image" @click="toPoster(item)" />
+          <div
+            v-for="item in posterList"
+            class="poster-item"
+            @click="toPoster(item)"
+          >
+            <div v-if="item.vip" class="vip-gradient" />
+            <el-image :src="item.image" :style="posterStyle(item)" />
+            <span v-if="item.vip" class="vip-tag">VIP</span>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -50,20 +58,29 @@
         toolList,
         activeTitle: '',
         posterList: [
+          // {
+          //   name: 'test',
+          //   image: poster1,
+          //   url: 'https://item.taobao.com/item.htm?id=665501436781',
+          //   vip: true,
+          // },
           {
             name: '霜灷卡牌',
             image: poster1,
             url: 'https://item.taobao.com/item.htm?id=665501436781',
+            vip: false,
           },
           {
             name: '铭振天下',
             image: poster3,
             url: 'https://item.taobao.com/item.htm?id=674640080866',
+            vip: false,
           },
           {
             name: '二毛游戏王',
             image: poster2,
             url: 'https://shop480578296.taobao.com',
+            vip: false,
           },
         ],
       };
@@ -97,6 +114,11 @@
         const isRoute = this.$route.path === item.path;
         return {
           color: isRoute ? 'var(--primary-color)' : '',
+        };
+      },
+      posterStyle(item) {
+        return {
+          border: item.vip ? '6px solid transparent' : '',
         };
       },
       toPoster(item) {
@@ -159,14 +181,52 @@
         }
 
         .poster-list {
-          display: flex;
-          flex-wrap: wrap;
-
-          .el-image {
+          .poster-item {
+            display: flex;
+            position: relative;
             margin-top: 10px;
             width: 100%;
+            min-height: 89.5px;
             cursor: pointer;
             border-radius: 4px;
+            overflow: hidden;
+
+            .vip-gradient {
+              position: absolute;
+              height: 224%; // 根号5
+              width: 112%;
+              background-image: conic-gradient(#fd004c, #fe9000, #fff020, #3edf4b, #3363ff, #b102b7, #fd004c);
+              top: -62%;
+              left: -6%;
+              animation: gradient-spin 3s infinite linear;
+              z-index: 10;
+
+              @keyframes gradient-spin {
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+            }
+
+            ::v-deep(.el-image) {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              z-index: 20;
+            }
+
+            .vip-tag {
+              position: absolute;
+              top: 10px;
+              left: 10px;
+              color: white;
+              background: orangered;
+              border-radius: 4px;
+              padding: 2px 4px;
+              font-size: 12px;
+              line-height: 1;
+              z-index: 30;
+            }
           }
         }
       }
