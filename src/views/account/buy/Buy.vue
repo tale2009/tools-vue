@@ -28,7 +28,7 @@
         <el-space class="capacity-list" :size="10" wrap>
           <template v-for="item in capacityList">
             <div
-              v-if="item.capacity>=memberCapacity"
+              v-if="item.capacity >= memberCapacity"
               class="capacity-item"
               :style="capacityItemStyle(item)"
               @click="clickCapacityItem(item)"
