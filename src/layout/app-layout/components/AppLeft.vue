@@ -186,7 +186,7 @@
             position: relative;
             margin-top: 10px;
             width: 100%;
-            min-height: 89.5px;
+            aspect-ratio: 2;
             cursor: pointer;
             border-radius: 4px;
             overflow: hidden;
