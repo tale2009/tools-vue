@@ -108,11 +108,12 @@
       },
     },
     computed: {
-      ...mapState(['rightCollapse']),
+      ...mapState(['rightCollapse', 'bodyOffsetWidth']),
       formStyle() {
+        const width = Math.min(this.pageFormWidth, this.bodyOffsetWidth);
         return {
-          width: `${this.pageFormWidth}px`,
-          marginRight: this.rightCollapse ? `-${this.pageFormWidth}px` : '0',
+          width: `${width}px`,
+          marginRight: this.rightCollapse ? `-${width}px` : '0',
         };
       },
     },
