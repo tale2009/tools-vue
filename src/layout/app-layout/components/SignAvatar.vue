@@ -149,9 +149,10 @@
       :rules="rules"
       label-width="auto"
       :disabled="loading"
+      :validate-on-rule-change="false"
     >
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username" :maxlength="32" placeholder="请输入用户名" />
+        <el-input v-model="form.username" :maxlength="32" :placeholder="signTab === 'login' ? '请输入用户名或手机号' : '请输入用户名'" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input
@@ -373,7 +374,7 @@
       },
       rules() {
         return {
-          username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+          username: [{ required: true, message: this.signTab === 'login' ? '请输入用户名或手机号' : '请输入用户名', trigger: 'blur' }],
           nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
