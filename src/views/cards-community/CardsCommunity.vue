@@ -196,6 +196,9 @@
       if (Number(localStorage.getItem('pageSize'))) {
         this.pageSize = Number(localStorage.getItem('pageSize'));
       }
+      if (Number(localStorage.getItem('searchScale'))) {
+        this.searchForm.scale = Number(localStorage.getItem('searchScale'));
+      }
       this.getCardList();
     },
     methods: {
@@ -240,6 +243,7 @@
         this.getCardList();
       },
       changeScale() {
+        localStorage.setItem('searchScale', this.searchForm.scale);
         this.cardList.forEach(item => {
           item.data.scale = this.searchForm.scale;
         });
