@@ -78,6 +78,7 @@
     position: relative;
     user-select: none;
     color: black;
+    line-height: 1.15;
     transform-origin: 0 0;
 
     .card-konami {

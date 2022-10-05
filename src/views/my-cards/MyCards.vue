@@ -55,6 +55,13 @@
             </el-form>
           </template>
 
+          <template #action>
+            <el-radio-group v-model="mode" @change="changeMode">
+              <el-radio-button label="single">单选</el-radio-button>
+              <el-radio-button label="multiple">多选</el-radio-button>
+            </el-radio-group>
+          </template>
+
           <template #list>
             <div v-if="cardList.length" class="card-list">
               <div
@@ -96,7 +103,8 @@
               </div>
             </template>
           </el-alert>
-          <el-form v-if="currentCardId" :model="form" label-width="auto">
+          <!--单选模式-->
+          <el-form v-if="mode === 'single' && selectCard.id" :model="form" label-width="auto">
             <el-form-item label="卡名">
               <span>{{ form.name }}</span>
             </el-form-item>
@@ -120,6 +128,9 @@
                   <el-button type="success" @click="shareCard">分享卡片</el-button>
                 </el-col>
                 <el-col :span="24">
+                  <el-button type="primary" :loading="btnLoading" @click="exportImage">导出图片</el-button>
+                </el-col>
+                <el-col :span="24">
                   <el-button type="primary" :loading="btnLoading" @click="editCard">编辑卡片</el-button>
                 </el-col>
                 <el-col :span="24">
@@ -132,9 +143,33 @@
               </el-row>
             </div>
           </el-form>
+          <!--多选模式-->
+          <div v-if="mode === 'multiple' && selectCardList.length">
+            <p class="select-tip">当前已选择 {{ selectCardList.length }} 张</p>
+            <div class="button-group">
+              <el-row :gutter="gutter">
+                <el-col :span="24">
+                  <el-button
+                    type="primary"
+                    :loading="btnLoading"
+                    @click="batchExportImage"
+                  >
+                    批量导出图片
+                  </el-button>
+                </el-col>
+                <el-col :span="24">
+                  <el-popconfirm title="是否确认批量删除？" @confirm="batchDeleteCard">
+                    <template #reference>
+                      <el-button :loading="btnLoading" type="danger">批量删除卡片</el-button>
+                    </template>
+                  </el-popconfirm>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
           <el-empty v-else description="请选择左侧卡片" />
 
-          <CardDialog v-model="cardDialog" :card-id="currentCardId" />
+          <CardDialog v-model="cardDialog" :card-id="selectCard.id" />
         </PageForm>
       </template>
     </Page>
@@ -148,7 +183,7 @@
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import CardDialog from '@/views/my-cards/components/CardDialog';
-  import { mapState } from 'vuex';
+  import { mapMutations, mapState } from 'vuex';
 
   export default {
     name: 'MyCards',
@@ -185,7 +220,9 @@
           { label: '游戏王', value: 'yugioh' },
           { label: '超速决斗', value: 'rushDuel' },
         ],
-        currentCardId: '',
+        mode: 'single',
+        selectCard: {},
+        selectCardList: [],
         cardDialog: false,
       };
     },
@@ -199,6 +236,7 @@
       this.getCardList();
     },
     methods: {
+      ...mapMutations(['setBatchExportCardList']),
       getCardNumber() {
         this.axios({
           method: 'get',
@@ -255,53 +293,66 @@
         });
       },
       clickCard(item) {
-        const { name, type, display, createDate } = item;
-        this.currentCardId = item.id;
-        this.form.name = name;
-        this.form.type = type;
-        this.form.display = display;
-        this.form.createDate = createDate;
+        if (this.mode === 'single') {
+          const { name, type, display, createDate } = item;
+          this.selectCard = item;
+          this.form.name = name;
+          this.form.type = type;
+          this.form.display = display;
+          this.form.createDate = createDate;
+        } else if (this.mode === 'multiple') {
+          const card = this.selectCardList.find(value => value.id === item.id);
+          if (card) {
+            this.selectCardList = this.selectCardList.filter(value => value.id !== item.id);
+          } else {
+            this.selectCardList.push(item);
+          }
+        }
       },
       cardItemStyle(item) {
-        return {
-          borderColor: item.id === this.currentCardId ? 'var(--primary-color)' : '',
-          background: item.id === this.currentCardId ? '#c6e2ff' : '',
-        };
+        if (this.mode === 'single') {
+          return {
+            borderColor: item.id === this.selectCard.id ? 'var(--primary-color)' : '',
+            background: item.id === this.selectCard.id ? '#c6e2ff' : '',
+          };
+        } else if (this.mode === 'multiple') {
+          const card = this.selectCardList.find(value => value.id === item.id);
+          return {
+            borderColor: card ? 'var(--primary-color)' : '',
+            background: card ? '#c6e2ff' : '',
+          };
+        }
       },
       viewCard() {
-        if (this.currentCardId) {
+        if (this.selectCard.id) {
           this.cardDialog = true;
         }
       },
       shareCard() {
         let path = '';
-        const currentCard = this.cardList.find(item => item.id === this.currentCardId);
-        if (currentCard) {
-          if (currentCard) {
-            switch (currentCard.type) {
-              case 'yugioh':
-                path = '/share/yugioh';
-                break;
-              case 'rushDuel':
-                path = '/share/rush-duel';
-                break;
-            }
+        if (this.selectCard.id) {
+          switch (this.selectCard.type) {
+            case 'yugioh':
+              path = '/share/yugioh';
+              break;
+            case 'rushDuel':
+              path = '/share/rush-duel';
+              break;
           }
           const { href } = this.$router.resolve({
             path,
             query: {
-              cardId: this.currentCardId,
+              cardId: this.selectCard.id,
             },
           });
           open(href, '_blank');
         }
       },
       editCard() {
-        if (this.currentCardId) {
+        if (this.selectCard.id) {
           let path = '';
-          const currentCard = this.cardList.find(item => item.id === this.currentCardId);
-          if (currentCard) {
-            switch (currentCard.type) {
+          if (this.selectCard.id) {
+            switch (this.selectCard.type) {
               case 'yugioh':
                 path = '/yugioh';
                 break;
@@ -313,20 +364,82 @@
           this.$router.push({
             path,
             query: {
-              cardId: this.currentCardId,
+              cardId: this.selectCard.id,
             },
           });
         }
       },
       deleteCard() {
-        if (this.currentCardId) {
+        if (this.selectCard.id) {
           this.btnLoading = true;
           this.axios({
             method: 'delete',
-            url: '/card/' + this.currentCardId,
+            url: '/card/' + this.selectCard.id,
           }).then(() => {
             this.$message.success('删除成功');
-            this.currentCardId = '';
+            this.selectCard = {};
+            this.getCardList();
+          }).finally(() => {
+            this.btnLoading = false;
+          });
+        }
+      },
+      exportImage() {
+        if (this.selectCard.id) {
+          this.setBatchExportCardList([this.selectCard]);
+          let path = '';
+          switch (this.selectCard.type) {
+            case 'yugioh':
+              path = '/yugioh';
+              break;
+            case 'rushDuel':
+              path = '/rush-duel';
+              break;
+          }
+          this.$router.push({
+            path,
+            query: {
+              cardId: this.selectCard.id,
+              batchExport: true,
+            },
+          });
+        }
+      },
+      batchExportImage() {
+        if (this.selectCardList.length) {
+          const typeSet = new Set(this.selectCardList.map(value => value.type));
+          if (typeSet.size > 1) {
+            this.$message.warning('请选择相同类型的卡片');
+            return;
+          }
+          this.setBatchExportCardList(this.selectCardList);
+          let path = '';
+          switch (this.selectCardList[0].type) {
+            case 'yugioh':
+              path = '/yugioh';
+              break;
+            case 'rushDuel':
+              path = '/rush-duel';
+              break;
+          }
+          this.$router.push({
+            path,
+            query: {
+              batchExport: true,
+            },
+          });
+        }
+      },
+      batchDeleteCard() {
+        if (this.selectCardList.length) {
+          this.btnLoading = true;
+          this.axios({
+            method: 'delete',
+            url: '/card',
+            data: this.selectCardList.map(value => value.id),
+          }).then(() => {
+            this.$message.success('批量删除成功');
+            this.selectCardList = [];
             this.getCardList();
           }).finally(() => {
             this.btnLoading = false;
@@ -334,11 +447,11 @@
         }
       },
       updateDisplay() {
-        if (this.currentCardId) {
+        if (this.selectCard.id) {
           this.btnLoading = true;
           this.axios({
             method: 'put',
-            url: '/card/display/' + this.currentCardId,
+            url: '/card/display/' + this.selectCard.id,
             data: this.form,
           }).then(() => {
             this.$message.success('保存成功');
@@ -350,6 +463,10 @@
       },
       toAccountBuy() {
         this.$router.push('/account/buy');
+      },
+      changeMode() {
+        this.selectCard = {};
+        this.selectCardList = [];
       },
     },
     computed: {
@@ -386,6 +503,11 @@
     }
 
     .form-main {
+      .select-tip {
+        margin: 0 0 20px;
+        color: var(--normal-color);
+      }
+
       .button-group {
         .el-row {
           margin-top: -20px;

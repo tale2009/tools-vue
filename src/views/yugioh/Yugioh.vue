@@ -405,7 +405,9 @@
           <BatchExportDialog
             v-model="batchExportDialog"
             v-model:password="form.password"
+            v-model:card-id="cardId"
             :search-card-by-password="searchCardByPassword"
+            :get-card-info="getCardInfo"
             :export-image="exportImage"
           />
         </PageForm>
@@ -737,7 +739,7 @@
       },
       getCardInfo() {
         if (this.cardId) {
-          this.axios({
+          return this.axios({
             method: 'get',
             url: '/card/' + this.cardId,
           }).then(res => {

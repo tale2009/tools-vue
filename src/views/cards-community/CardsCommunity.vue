@@ -93,7 +93,7 @@
               </div>
             </template>
           </el-alert>
-          <el-form v-if="currentCardId" :model="form" label-width="auto">
+          <el-form v-if="selectCard.id" :model="form" label-width="auto">
             <el-form-item label="卡名">
               <span>{{ form.name }}</span>
             </el-form-item>
@@ -136,7 +136,7 @@
           </el-form>
           <el-empty v-else description="请选择左侧卡片" />
 
-          <CardDialog v-model="cardDialog" :card-id="currentCardId" />
+          <CardDialog v-model="cardDialog" :card-id="selectCard.id" />
         </PageForm>
       </template>
     </Page>
@@ -188,7 +188,7 @@
           { label: '游戏王', value: 'yugioh' },
           { label: '超速决斗', value: 'rushDuel' },
         ],
-        currentCardId: '',
+        selectCard: {},
         cardDialog: false,
       };
     },
@@ -250,7 +250,7 @@
       },
       clickCard(item) {
         const { name, type, user, createDate } = item;
-        this.currentCardId = item.id;
+        this.selectCard = item;
         this.form.name = name;
         this.form.type = type;
         this.form.user = user;
@@ -258,46 +258,43 @@
       },
       cardItemStyle(item) {
         return {
-          borderColor: item.id === this.currentCardId ? 'var(--primary-color)' : '',
-          background: item.id === this.currentCardId ? '#c6e2ff' : '',
+          borderColor: item.id === this.selectCard.id ? 'var(--primary-color)' : '',
+          background: item.id === this.selectCard.id ? '#c6e2ff' : '',
         };
       },
       viewCard() {
-        if (this.currentCardId) {
+        if (this.selectCard.id) {
           this.cardDialog = true;
         }
       },
       shareCard() {
         let path = '';
-        const currentCard = this.cardList.find(item => item.id === this.currentCardId);
-        if (currentCard) {
-          if (currentCard) {
-            switch (currentCard.type) {
-              case 'yugioh':
-                path = '/share/yugioh';
-                break;
-              case 'rushDuel':
-                path = '/share/rush-duel';
-                break;
-            }
+        if (this.selectCard.id) {
+          switch (this.selectCard.type) {
+            case 'yugioh':
+              path = '/share/yugioh';
+              break;
+            case 'rushDuel':
+              path = '/share/rush-duel';
+              break;
           }
           const { href } = this.$router.resolve({
             path,
             query: {
-              cardId: this.currentCardId,
+              cardId: this.selectCard.id,
             },
           });
           open(href, '_blank');
         }
       },
       async copyCard() {
-        if (this.currentCardId) {
+        if (this.selectCard.id) {
           this.btnLoading = true;
           await this.axios({
             method: 'post',
             url: '/card/copy',
             data: {
-              cardId: this.currentCardId,
+              cardId: this.selectCard.id,
             },
           }).then(() => {
             this.$message.success('保存成功');

@@ -70,12 +70,12 @@
 
 <script>
   import { maxDialogWidth } from '@/utils';
-  import { mapState } from 'vuex';
+  import { mapMutations, mapState } from 'vuex';
 
   export default {
     name: 'BatchExportDialog',
-    props: ['modelValue', 'password', 'searchCardByPassword', 'exportImage'],
-    emits: ['update:password'],
+    props: ['modelValue', 'password', 'cardId', 'searchCardByPassword', 'getCardInfo', 'exportImage'],
+    emits: ['update:modelValue', 'update:password', 'update:cardId'],
     data() {
       return {
         btnLoading: false,
@@ -87,7 +87,17 @@
         errorList: [],
       };
     },
+    created() {
+      const query = this.$route.query;
+      const batchExport = query.batchExport === 'true';
+      if (batchExport && this.batchExportCardList.length) {
+        this.form.password = this.batchExportCardList.map(value => value.id).join('\n');
+        this.setBatchExportCardList([]);
+        this.$emit('update:modelValue', true);
+      }
+    },
     methods: {
+      ...mapMutations(['setBatchExportCardList']),
       maxDialogWidth,
       closeDialog() {
         this.$refs.form.resetFields();
@@ -99,8 +109,16 @@
       },
       batchExport() {
         this.btnLoading = true;
-        this.$emit('update:password', this.passwordList[this.currentIndex]);
-        this.searchCardByPassword().then(() => {
+        const password = this.passwordList[this.currentIndex];
+        let api;
+        if (/\w{8}(-\w{4}){3}-\w{12}/.test(password)) {
+          this.$emit('update:cardId', password);
+          api = this.getCardInfo;
+        } else {
+          this.$emit('update:password', password);
+          api = this.searchCardByPassword;
+        }
+        api().then(() => {
           const imageList = document.querySelectorAll('img');
           this.timer = setInterval(() => {
             const flag = Array.from(imageList).every(item => item.complete) && !this.fontLoading;
@@ -153,7 +171,7 @@
       },
     },
     computed: {
-      ...mapState(['fontLoading']),
+      ...mapState(['fontLoading', 'batchExportCardList']),
       exportDisabled() {
         return this.fontLoading || !this.passwordList.length || this.passwordList.length > 100;
       },

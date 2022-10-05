@@ -17,6 +17,7 @@ export default createStore({
     userInfo: {},
     isAdmin: false,
     isMember: false,
+    batchExportCardList: [],
   },
   mutations: {
     setBodyOffsetWidth(state) {
@@ -68,6 +69,9 @@ export default createStore({
           state.isMember = dayjs().isBefore(expireDate);
         }
       }
+    },
+    setBatchExportCardList(state, value) {
+      state.batchExportCardList = value;
     },
   },
   actions: {
