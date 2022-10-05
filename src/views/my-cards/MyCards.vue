@@ -425,6 +425,7 @@
           this.$router.push({
             path,
             query: {
+              cardId: this.selectCardList[0].id,
               batchExport: true,
             },
           });
