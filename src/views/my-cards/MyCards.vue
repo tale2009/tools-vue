@@ -144,7 +144,7 @@
             </div>
           </el-form>
           <!--多选模式-->
-          <div v-if="mode === 'multiple' && selectCardList.length">
+          <div v-else-if="mode === 'multiple' && selectCardList.length">
             <p class="select-tip">当前已选择 {{ selectCardList.length }} 张</p>
             <div class="button-group">
               <el-row :gutter="gutter">
@@ -436,8 +436,7 @@
           this.btnLoading = true;
           this.axios({
             method: 'delete',
-            url: '/card',
-            data: this.selectCardList.map(value => value.id),
+            url: '/card/' + this.selectCardList.map(value => value.id).join('|'),
           }).then(() => {
             this.$message.success('批量删除成功');
             this.selectCardList = [];
