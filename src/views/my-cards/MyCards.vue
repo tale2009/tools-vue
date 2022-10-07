@@ -142,6 +142,7 @@
                 </el-col>
               </el-row>
             </div>
+            <CommentList :card-id="selectCard.id" />
           </el-form>
           <!--多选模式-->
           <div v-else-if="mode === 'multiple' && selectCardList.length">
@@ -183,6 +184,7 @@
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import CardDialog from '@/views/my-cards/components/CardDialog';
+  import CommentList from '@/components/CommentList';
   import { mapMutations, mapState } from 'vuex';
 
   export default {
@@ -194,6 +196,7 @@
       YugiohCard,
       RushDuelCard,
       CardDialog,
+      CommentList,
     },
     data() {
       return {
@@ -524,6 +527,10 @@
             }
           }
         }
+      }
+
+      .comment-list {
+        margin-top: 20px;
       }
     }
   }
