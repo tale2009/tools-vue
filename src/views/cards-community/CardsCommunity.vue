@@ -133,6 +133,7 @@
                 </el-col>
               </el-row>
             </div>
+            <CommentList :card-id="selectCard.id" />
           </el-form>
           <el-empty v-else description="请选择左侧卡片" />
 
@@ -150,6 +151,7 @@
   import YugiohCard from '@/views/yugioh/components/YugiohCard';
   import RushDuelCard from '@/views/rush-duel/components/RushDuelCard';
   import CardDialog from '@/views/my-cards/components/CardDialog';
+  import CommentList from '@/components/CommentList';
   import { mapState } from 'vuex';
 
   export default {
@@ -161,6 +163,7 @@
       YugiohCard,
       RushDuelCard,
       CardDialog,
+      CommentList,
     },
     data() {
       return {
@@ -349,7 +352,6 @@
         height: 60px;
         width: 60px;
         border-radius: 50%;
-        cursor: pointer;
       }
 
       .button-group {
@@ -368,6 +370,10 @@
             }
           }
         }
+      }
+
+      .comment-list {
+        margin-top: 20px;
       }
     }
   }
