@@ -50,6 +50,7 @@
   import poster1 from '@/assets/image/poster1.jpg';
   import poster2 from '@/assets/image/poster2.jpg';
   import poster3 from '@/assets/image/poster3.jpg';
+  import poster4 from '@/assets/image/poster4.jpg';
 
   export default {
     name: 'AppLeft',
@@ -58,12 +59,12 @@
         toolList,
         activeTitle: '',
         posterList: [
-          // {
-          //   name: 'test',
-          //   image: poster1,
-          //   url: 'https://item.taobao.com/item.htm?id=665501436781',
-          //   vip: true,
-          // },
+          {
+            name: '阿猫',
+            image: poster4,
+            url: 'https://item.taobao.com/item.htm?id=683562508914',
+            vip: true,
+          },
           {
             name: '霜灷卡牌',
             image: poster1,
