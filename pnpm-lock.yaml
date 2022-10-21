@@ -9,7 +9,7 @@ specifiers:
   color: ^4.2.3
   cropperjs: ^1.5.12
   dayjs: ^1.11.6
-  element-plus: ^2.2.18
+  element-plus: ^2.2.19
   escape-string-regexp: ^5.0.0
   eslint: ^8.25.0
   eslint-define-config: ^1.7.0
@@ -40,7 +40,7 @@ dependencies:
   color: 4.2.3
   cropperjs: 1.5.12
   dayjs: 1.11.6
-  element-plus: 2.2.18_vue@3.2.41
+  element-plus: 2.2.19_vue@3.2.41
   escape-string-regexp: 5.0.0
   html2canvas: 1.4.1
   js-cookie: 3.0.1
@@ -586,8 +586,8 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /element-plus/2.2.18_vue@3.2.41:
-    resolution: {integrity: sha512-2pK2zmVOwP14eFl3rGoR+3BWJwDyO+DZCvzjQ8L6qjUR+hVKwFhgxIcSkKJatbcHFw5Xui6UyN20jV+gQP7mLg==}
+  /element-plus/2.2.19_vue@3.2.41:
+    resolution: {integrity: sha512-uN0gt9lUus/IHzu5J6vkbYoYJgUtU05osdtFv9RO27bHKOG5GN7dH6uA3OKfkQQ6R2sV8ZxY1rc9PH1X8Dgrow==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
