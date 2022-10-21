@@ -24,13 +24,13 @@
           <template #prepend>+86</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="新密码" prop="password">
         <el-input
           v-model="form.password"
           type="password"
           autocomplete="new-password"
           show-password
-          placeholder="请输入密码"
+          placeholder="请输入新密码"
           @keydown.enter="confirm"
         />
       </el-form-item>
@@ -146,7 +146,7 @@
       rules() {
         return {
           password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
+            { required: true, message: '请输入新密码', trigger: 'blur' },
             { min: 6, message: '至少 6 位', trigger: ['blur', 'change'] },
           ],
           phone: [
