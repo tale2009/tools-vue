@@ -44,7 +44,10 @@
       <div class="comment-info">
         <p class="nickname">{{ item.user.nickname }}</p>
         <p class="comment">{{ item.message }}</p>
-        <p class="time">{{ formatTime(item.createDate) }}</p>
+        <p class="time">
+          <span>{{ formatTime(item.createDate) }}</span>
+          <span v-if="item.region" style="margin-left: 10px">IP 属地：{{ item.region }}</span>
+        </p>
         <el-popconfirm v-if="item.user.id === userInfo.id" title="是否确认删除？" @confirm="deleteComment(item)">
           <template #reference>
             <el-button class="comment-delete" link :loading="btnLoading">删除</el-button>
@@ -209,6 +212,7 @@
           right: 0;
           bottom: 0;
           visibility: hidden;
+          background: white;
         }
       }
 
