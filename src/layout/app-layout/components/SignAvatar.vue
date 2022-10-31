@@ -219,6 +219,7 @@
   import { maxDialogWidth } from '@/utils';
   import md5 from 'md5';
   import ForgotPasswordDialog from '@/layout/app-layout/components/ForgotPasswordDialog';
+  import { phoneReg } from '@/utils/rules';
 
   export default {
     name: 'SignAvatar',
@@ -382,7 +383,7 @@
           ],
           phone: [
             { required: true, message: '请输入手机号', trigger: 'blur' },
-            { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: ['blur', 'change'] },
+            { pattern: phoneReg, message: '请输入正确的手机号', trigger: ['blur', 'change'] },
           ],
           captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
         };

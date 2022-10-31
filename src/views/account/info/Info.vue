@@ -47,6 +47,7 @@
 <script>
   import AccountPage from '@/components/page/AccountPage';
   import { mapActions, mapState } from 'vuex';
+  import { phoneReg } from '@/utils/rules';
 
   export default {
     name: 'Info',
@@ -101,7 +102,7 @@
           nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
           phone: [
             { required: true, message: '请输入手机号', trigger: 'blur' },
-            { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号', trigger: ['blur', 'change'] },
+            { pattern: phoneReg, message: '请输入正确的手机号', trigger: ['blur', 'change'] },
           ],
         };
       },
