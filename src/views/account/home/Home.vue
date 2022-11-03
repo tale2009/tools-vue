@@ -12,36 +12,7 @@
         </el-upload>
         <div class="user-other">
           <p class="nickname">{{ userInfo.nickname }}</p>
-          <el-space class="tag-list" :size="10" wrap>
-            <el-tag v-if="isAdmin" effect="dark" size="small">管理员</el-tag>
-            <el-tag
-              v-if="isMember && userInfo.member?.type === 'monthly'"
-              effect="dark"
-              size="small"
-              color="darkorange"
-              style="border-color: darkorange"
-            >
-              月卡会员
-            </el-tag>
-            <el-tag
-              v-if="isMember && userInfo.member?.type === 'permanent'"
-              effect="dark"
-              size="small"
-              color="orangered"
-              style="border-color: orangered"
-            >
-              永久会员
-            </el-tag>
-            <el-button
-              v-if="!isMember"
-              type="primary"
-              link
-              size="small"
-              @click="toAccountBuy"
-            >
-              购买会员
-            </el-button>
-          </el-space>
+          <MemberTag />
           <p v-if="isMember" class="expire-date">
             有效期至：{{ userInfo.member?.type === 'permanent' ? '永久' : formatTime(userInfo.member.expireDate) }}
           </p>
@@ -61,6 +32,7 @@
 
 <script>
   import AccountPage from '@/components/page/AccountPage';
+  import MemberTag from '@/components/MemberTag';
   import CropperDialog from '@/components/dialog/CropperDialog';
   import { mapActions, mapState } from 'vuex';
   import loadImage from 'blueimp-load-image';
@@ -70,6 +42,7 @@
     name: 'Home',
     components: {
       AccountPage,
+      MemberTag,
       CropperDialog,
     },
     data() {
@@ -113,9 +86,6 @@
           this.$message.success('上传成功');
           this.getUserInfo();
         });
-      },
-      toAccountBuy() {
-        this.$router.push('/account/buy');
       },
     },
     computed: {
@@ -172,7 +142,7 @@
           color: var(--main-color);
         }
 
-        .tag-list {
+        .member-tag {
           margin-top: 5px;
         }
 

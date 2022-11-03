@@ -23,36 +23,7 @@
     </template>
     <div class="avatar-popover-content">
       <p class="nickname">{{ userInfo.nickname }}</p>
-      <el-space class="tag-list" :size="10" wrap>
-        <el-tag v-if="isAdmin" effect="dark" size="small">管理员</el-tag>
-        <el-tag
-          v-if="isMember && userInfo.member?.type === 'monthly'"
-          effect="dark"
-          size="small"
-          color="darkorange"
-          style="border-color: darkorange"
-        >
-          月卡会员
-        </el-tag>
-        <el-tag
-          v-if="isMember && userInfo.member?.type === 'permanent'"
-          effect="dark"
-          size="small"
-          color="orangered"
-          style="border-color: orangered"
-        >
-          永久会员
-        </el-tag>
-        <el-button
-          v-if="!isMember"
-          type="primary"
-          link
-          size="small"
-          @click="toAccountBuy"
-        >
-          购买会员
-        </el-button>
-      </el-space>
+      <MemberTag @get-data="toAccountBuy" />
       <div class="menu-list">
         <div class="menu-item" @click="toAccountHome">
           <i class="fa-duotone fa-user fa-fw" />
@@ -218,12 +189,14 @@
   import { mapActions, mapState } from 'vuex';
   import { maxDialogWidth } from '@/utils';
   import md5 from 'md5';
+  import MemberTag from '@/components/MemberTag';
   import ForgotPasswordDialog from '@/layout/app-layout/components/ForgotPasswordDialog';
   import { phoneReg } from '@/utils/rules';
 
   export default {
     name: 'SignAvatar',
     components: {
+      MemberTag,
       ForgotPasswordDialog,
     },
     data() {
@@ -431,7 +404,7 @@
       color: var(--main-color);
     }
 
-    .tag-list {
+    .member-tag {
       margin-top: 5px;
       justify-content: center;
       width: 100%;
