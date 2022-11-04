@@ -139,6 +139,8 @@
         orderList: [],
         typeList: [
           { label: '月卡', value: 'monthly' },
+          { label: '季卡', value: 'quarterly' },
+          { label: '年卡', value: 'yearly' },
           { label: '永久', value: 'permanent' },
         ],
         payWayList: [

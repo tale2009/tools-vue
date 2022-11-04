@@ -11,8 +11,8 @@
             @click="clickBuyItem(item)"
           >
             <p class="name">{{ item.name }}</p>
-            <p class="price">{{ item.price }}</p>
-            <p class="day">{{ item.day }}</p>
+            <p class="price">￥{{ item.price }}</p>
+            <p class="day">{{ item.day }} 天</p>
           </div>
         </el-space>
 
@@ -34,10 +34,15 @@
               @click="clickCapacityItem(item)"
             >
               <p class="capacity">{{ item.capacity }} 张 / 月</p>
-              <p class="price">{{ item.price }}</p>
+              <p class="price">￥{{ item.price }}</p>
             </div>
           </template>
         </el-space>
+
+        <p class="total-amount">
+          <span class="label">总计：</span>
+          <span class="value">￥{{ totalAmount }}</span>
+        </p>
 
         <p class="title">支付方式</p>
         <el-space class="pay-way-list" :size="10" wrap>
@@ -113,34 +118,49 @@
           {
             name: '月卡会员',
             type: 'monthly',
-            price: '￥8',
-            day: '30 天',
+            price: 8,
+            day: 30,
+            month: 1,
+          },
+          {
+            name: '季卡会员',
+            type: 'quarterly',
+            price: 24,
+            day: 90,
+            month: 3,
+          },
+          {
+            name: '年卡会员',
+            type: 'yearly',
+            price: 96,
+            day: 365,
+            month: 12,
           },
         ],
         capacityList: [
           {
             capacity: 100,
-            price: '￥0',
+            price: 0,
           },
           {
             capacity: 200,
-            price: '￥2',
+            price: 2,
           },
           {
             capacity: 300,
-            price: '￥4',
+            price: 4,
           },
           {
             capacity: 400,
-            price: '￥6',
+            price: 6,
           },
           {
             capacity: 600,
-            price: '￥10',
+            price: 10,
           },
           {
             capacity: 1100,
-            price: '￥20',
+            price: 20,
           },
         ],
         payWayList: [
@@ -219,6 +239,14 @@
       memberCapacity() {
         return this.userInfo.member?.capacity || 100;
       },
+      totalAmount() {
+        const buy = this.buyList.find(item => item.type === this.form.type);
+        const capacity = this.capacityList.find(item => item.capacity === this.form.capacity);
+        if (buy && capacity) {
+          return buy.price + capacity.price * buy.month;
+        }
+        return 0;
+      },
     },
   };
 </script>
@@ -234,6 +262,20 @@
 
         &:first-child {
           margin-top: 0;
+        }
+      }
+
+      .total-amount {
+        margin: 20px 0 0;
+
+        .label {
+          font-size: 16px;
+        }
+
+        .value {
+          font-size: 24px;
+          font-weight: bold;
+          color: var(--primary-color);
         }
       }
 

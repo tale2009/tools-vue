@@ -12,6 +12,24 @@
         月卡会员
       </el-tag>
       <el-tag
+        v-else-if="userInfo.member?.type === 'quarterly'"
+        effect="dark"
+        size="small"
+        color="darkorange"
+        style="border-color: darkorange"
+      >
+        季卡会员
+      </el-tag>
+      <el-tag
+        v-else-if="userInfo.member?.type === 'yearly'"
+        effect="dark"
+        size="small"
+        color="orangered"
+        style="border-color: orangered"
+      >
+        年卡会员
+      </el-tag>
+      <el-tag
         v-else-if="userInfo.member?.type === 'permanent'"
         effect="dark"
         size="small"

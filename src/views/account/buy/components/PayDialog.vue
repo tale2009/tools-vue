@@ -19,15 +19,16 @@
       </el-form-item>
       <el-form-item label="支付方式">
         <div class="pay-way-image">
-          <el-image :src="payWayImage" fit="contain"/>
+          <el-image :src="payWayImage" fit="contain" />
         </div>
       </el-form-item>
-      <el-form-item label="付款码" v-if="data.qrcode">
-        <qrcode-vue :value="data.qrcode" :size="200"/>
+      <el-form-item v-if="data.qrcode" label="付款码">
+        <qrcode-vue :value="data.qrcode" :size="200" />
       </el-form-item>
-      <el-form-item label="付款链接" v-if="data.payurl">
+      <el-form-item v-if="data.payurl" label="付款链接">
         <el-button type="primary" link @click="toPayUrl">点击跳转</el-button>
       </el-form-item>
+      <p class="pay-tip">如果支付失效请换一种支付方式</p>
     </el-form>
     <template #footer>
       <el-button plain @click="closeDialog">关闭</el-button>
@@ -37,7 +38,7 @@
 
 <script>
   import QrcodeVue from 'qrcode.vue';
-  import {maxDialogWidth} from '@/utils';
+  import { maxDialogWidth } from '@/utils';
 
   export default {
     name: 'PayDialog',
@@ -76,7 +77,7 @@
         if (this.data.payurl) {
           open(this.data.payurl);
         }
-      }
+      },
     },
     computed: {
       payWayImage() {
@@ -108,6 +109,12 @@
         height: 40px;
         width: 120px;
       }
+    }
+
+    .pay-tip {
+      margin: 20px 0 0;
+      color: var(--info-color);
+      font-size: 12px;
     }
   }
 </style>
