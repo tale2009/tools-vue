@@ -344,6 +344,7 @@
 
       .amount-detail {
         margin-top: 10px;
+        padding-left: 2em;
         color: var(--normal-color);
       }
 
