@@ -284,7 +284,7 @@
       oldCapacityPrice() {
         const capacity = this.capacityList.find(item => item.capacity === this.form.capacity);
         if (capacity) {
-          return Math.round((capacity.capacity - this.memberCapacity) * this.capacityPrice * this.memberDay / 30 * 100) / 100;
+          return this.formatPrice((capacity.capacity - this.memberCapacity) * this.capacityPrice * this.memberDay / 30);
         }
         return 0;
       },
@@ -292,7 +292,7 @@
         const buy = this.buyList.find(item => item.type === this.form.type);
         const capacity = this.capacityList.find(item => item.capacity === this.form.capacity);
         if (buy && capacity) {
-          return (capacity.capacity - this.defaultCapacity) * this.capacityPrice * buy.month;
+          return this.formatPrice((capacity.capacity - this.defaultCapacity) * this.capacityPrice * buy.month);
         }
         return 0;
       },
@@ -304,7 +304,7 @@
         return 0;
       },
       totalAmount() {
-        return this.memberPrice + this.oldCapacityPrice + this.newCapacityPrice;
+        return this.formatPrice(this.memberPrice + this.oldCapacityPrice + this.newCapacityPrice);
       },
     },
   };

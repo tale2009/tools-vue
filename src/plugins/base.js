@@ -18,6 +18,8 @@ export default {
       return '';
     };
 
+    app.config.globalProperties.formatPrice = value => Math.round(value * 100) / 100;
+
     app.config.globalProperties.downloadBlob = function (blob, fileName) {
       if (!fileName) {
         fileName = new Date().getTime();
