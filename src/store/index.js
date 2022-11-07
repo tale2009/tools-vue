@@ -17,6 +17,8 @@ export default createStore({
     userInfo: {},
     isAdmin: false,
     isMember: false,
+    defaultCapacity: 100,
+    capacityPrice: 0.02,
     batchExportCardList: [],
   },
   mutations: {

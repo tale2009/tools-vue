@@ -4,16 +4,18 @@
       <div v-if="buyConfig.enable" class="enabled-buy">
         <p class="title">购买会员</p>
         <el-space class="buy-list" :size="10" wrap>
-          <div
-            v-for="item in buyList"
-            class="buy-item"
-            :style="buyItemStyle(item)"
-            @click="clickBuyItem(item)"
-          >
-            <p class="name">{{ item.name }}</p>
-            <p class="price">￥{{ item.price }}</p>
-            <p class="day">{{ item.day }} 天</p>
-          </div>
+          <template v-for="item in buyList">
+            <div
+              v-if="item.type !== 'capacity' || (item.type === 'capacity' && isMember)"
+              class="buy-item"
+              :style="buyItemStyle(item)"
+              @click="clickBuyItem(item)"
+            >
+              <p class="name" :class="{'capacity-name' : item.type === 'capacity'}">{{ item.name }}</p>
+              <p v-if="item.type !== 'capacity'" class="price">￥{{ item.price }}</p>
+              <p v-if="item.type !== 'capacity'" class="day">{{ item.day }} 天</p>
+            </div>
+          </template>
         </el-space>
 
         <p class="title">云端卡片扩容</p>
@@ -42,7 +44,20 @@
         <p class="total-amount">
           <span class="label">总计：</span>
           <span class="value">￥{{ totalAmount }}</span>
+          <el-button
+            class="button"
+            type="primary"
+            link
+            @click="toggleDetail"
+          >
+            {{ showDetail ? '收起明细' : '展开明细' }}
+          </el-button>
         </p>
+        <div v-if="showDetail" class="amount-detail">
+          <p>会员费：￥{{ memberPrice }}</p>
+          <p>旧扩容费：￥{{ oldCapacityPrice }}（根据剩余会员时长计算）</p>
+          <p>新扩容费：￥{{ newCapacityPrice }}</p>
+        </div>
 
         <p class="title">支付方式</p>
         <el-space class="pay-way-list" :size="10" wrap>
@@ -136,6 +151,13 @@
             day: 365,
             month: 12,
           },
+          {
+            name: '单扩容',
+            type: 'capacity',
+            price: 0,
+            day: 0,
+            month: 0,
+          },
         ],
         capacityList: [
           {
@@ -177,6 +199,7 @@
         ],
         buyConfig: {},
         payInfo: {},
+        showDetail: false,
         payDialog: false,
       };
     },
@@ -233,19 +256,55 @@
       toBilibili() {
         open('https://space.bilibili.com/792063');
       },
+      toggleDetail() {
+        this.showDetail = !this.showDetail;
+      },
     },
     computed: {
-      ...mapState(['userInfo']),
+      ...mapState(['userInfo', 'defaultCapacity', 'capacityPrice', 'isMember']),
       memberCapacity() {
-        return this.userInfo.member?.capacity || 100;
+        if (!this.userInfo.member) {
+          return this.defaultCapacity;
+        }
+        const { capacity } = this.userInfo.member;
+        return capacity || this.defaultCapacity;
       },
-      totalAmount() {
+      memberDay() {
+        if (!this.userInfo.member) {
+          return 0;
+        }
+        const nowTimestamp = new Date().getTime();
+        const { expireDate } = this.userInfo.member;
+        if (expireDate < nowTimestamp) {
+          return 0;
+        } else {
+          return Math.floor((expireDate - nowTimestamp) / 86400000);
+        }
+      },
+      oldCapacityPrice() {
+        const capacity = this.capacityList.find(item => item.capacity === this.form.capacity);
+        if (capacity) {
+          return Math.round((capacity.capacity - this.memberCapacity) * this.capacityPrice * this.memberDay / 30 * 100) / 100;
+        }
+        return 0;
+      },
+      newCapacityPrice() {
         const buy = this.buyList.find(item => item.type === this.form.type);
         const capacity = this.capacityList.find(item => item.capacity === this.form.capacity);
         if (buy && capacity) {
-          return buy.price + capacity.price * buy.month;
+          return (capacity.capacity - this.defaultCapacity) * this.capacityPrice * buy.month;
         }
         return 0;
+      },
+      memberPrice() {
+        const buy = this.buyList.find(item => item.type === this.form.type);
+        if (buy) {
+          return buy.price;
+        }
+        return 0;
+      },
+      totalAmount() {
+        return this.memberPrice + this.oldCapacityPrice + this.newCapacityPrice;
       },
     },
   };
@@ -277,6 +336,15 @@
           font-weight: bold;
           color: var(--primary-color);
         }
+
+        .button {
+          margin-left: 10px;
+        }
+      }
+
+      .amount-detail {
+        margin-top: 10px;
+        color: var(--normal-color);
       }
 
       .buy-list {
@@ -310,6 +378,12 @@
           .day {
             margin: 10px 0 0;
             font-size: 14px;
+          }
+
+          .capacity-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
           }
         }
       }
