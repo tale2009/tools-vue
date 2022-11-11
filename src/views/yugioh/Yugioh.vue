@@ -10,6 +10,13 @@
             :closable="false"
           />
         </div>
+        <el-alert
+          title="非常抱歉，三方图库不再提供外链支持，请大家手动下载卡图后上传。参考链接，最后数字是卡密：https://images.ygoprodeck.com/images/cards_cropped/10000.jpg"
+          effect="dark"
+          type="warning"
+          center
+          closable
+        />
         <YugiohCard ref="yugiohCard" :data="form" />
       </template>
 
