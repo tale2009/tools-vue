@@ -162,7 +162,7 @@ export function parseIcon(data) {
 }
 
 export function parseImage(data) {
-  return `https://storage.googleapis.com/ygoprodeck.com/pics_artgame/${data.id}.jpg`;
+  return `https://images.ygoprodeck.com/images/cards_cropped/${data.id}.jpg`;
 }
 
 export function parseCardType(data) {
