@@ -49,71 +49,16 @@
     </div>
   </el-popover>
   <!--未登录-->
-  <el-popover
-    v-else
-    ref="loginPopover"
-    trigger="hover"
-    placement="bottom"
-    :width="300"
-  >
-    <template #reference>
-      <el-avatar class="login-avatar" @click="login">登录</el-avatar>
-    </template>
-    <div class="login-popover-content">
-      <p>成为会员后你可以：</p>
-      <el-row :gutter="gutter">
-        <el-col :span="12">
-          <p>
-            <i class="fa-solid fa-gauge-max fa-fw" />
-            全站资源加速
-          </p>
-        </el-col>
-        <el-col :span="12">
-          <p>
-            <i class="fa-solid fa-cards-blank fa-fw" />
-            卡片批量导出
-          </p>
-        </el-col>
-        <el-col :span="12">
-          <p>
-            <i class="fa-solid fa-cloud-arrow-up fa-fw" />
-            云端管理卡片
-          </p>
-        </el-col>
-        <el-col :span="12">
-          <p>
-            <i class="fa-solid fa-message-image fa-fw" />
-            卡片社区交流
-          </p>
-        </el-col>
-      </el-row>
-      <el-button
-        style="width: 100%;"
-        type="primary"
-        size="large"
-        @click="login"
-      >
-        戳此登录
-      </el-button>
-      <el-space :size="10">
-        <el-button type="primary" text @click="register">立即注册</el-button>
-        <el-button text @click="closeTip">不再提示</el-button>
-      </el-space>
-    </div>
-  </el-popover>
+  <el-avatar v-else class="login-avatar" @click="login">登录</el-avatar>
 
   <el-dialog
     v-model="signDialog"
-    title="登录 & 注册"
+    title="登录"
     :width="maxDialogWidth(500)"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="closeDialog"
   >
-    <el-tabs v-model="signTab" stretch @tab-change="tabChange">
-      <el-tab-pane label="登录" name="login" />
-      <el-tab-pane label="注册" name="register" />
-    </el-tabs>
     <el-form
       ref="form"
       :model="form"
@@ -217,14 +162,6 @@
         signDialog: false,
         forgotPasswordDialog: false,
       };
-    },
-    mounted() {
-      const loginTip = localStorage.getItem('loginTip');
-      if (loginTip !== 'false') {
-        setTimeout(() => {
-          this.$refs.loginPopover?.$refs.tooltipRef.onOpen();
-        });
-      }
     },
     methods: {
       ...mapActions(['removeUserInfo']),

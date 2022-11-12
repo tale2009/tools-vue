@@ -162,7 +162,7 @@ export function parseIcon(data) {
 }
 
 export function parseImage(data) {
-  return `https://images.ygoprodeck.com/images/cards_cropped/${data.id}.jpg`;
+  return `/`;
 }
 
 export function parseCardType(data) {
