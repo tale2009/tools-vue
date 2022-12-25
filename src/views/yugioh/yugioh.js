@@ -162,8 +162,8 @@ export function parseIcon(data) {
 }
 
 export function parseImage(data) {
-  return `/`;
-}
+  return `http://127.0.0.1:8080/images/${data.id}`;
+ }
 
 export function parseCardType(data) {
   if (data.type & 0x4000000) {
@@ -220,7 +220,7 @@ export function parseLevelRank(data) {
 
 export function parsePendulumScale(data) {
   if (parseType(data) === 'pendulum') {
-    let list = data.desc.split('【Pendulum Effect】');
+    let list = data.desc.split('【灵摆】');//let list = data.desc.split('【Pendulum Effect】');
     return parseInt(list[0]?.replace(/[^\d]/g, ''));
   } else {
     return 0;
@@ -231,7 +231,7 @@ export function parsePendulumDescription(data, lang) {
   if (parseType(data) === 'pendulum') {
     let description = characterToHalf(data.desc).replace(/'''/g, '')
       .replace(/\r/g, '\n').replace(/(\n)\1*/g, '\n');
-    const list = description.split(/【Pendulum Effect】|【Monster Effect】|【Flavor Text】|【怪獸敘述】|【怪獸效果】|【怪獸描述】/).filter(item => item && item !== '\n');
+    const list = description.split(/【Pendulum Effect】|【Monster Effect】|【灵摆】|【怪兽效果】|【Flavor Text】|【怪獸敘述】|【怪獸效果】|【怪獸描述】/).filter(item => item && item !== '\n');
     if (lang === 'tc') {
       description = list[2]?.replace(/\d+→|\n/g, '') || '';
     } else {
