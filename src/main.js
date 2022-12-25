@@ -53,8 +53,9 @@ document.fonts.onloadingerror = () => {
 // 接口请求地址配置
 if (process.env.NODE_ENV === 'production') {
   // 上线环境
-  app.config.globalProperties.baseURL = 'https://tools.kooriookami.top/api';
+  app.config.globalProperties.baseURL = 'http://172.16.0.8:8080/api';//https://tools.kooriookami.top/api
 } else {
   // 本地环境
-  app.config.globalProperties.baseURL = 'http://127.0.0.1:7010/api';
+  app.config.globalProperties.baseURL = 'http://172.16.0.8:8080/api';
 }
+
