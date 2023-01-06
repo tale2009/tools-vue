@@ -22,21 +22,21 @@
     </div>
 
     <div v-if="showAttributeRare" class="attribute-rare">
-      <el-image :src="`${baseImage}/attribute-rare.png`" />
+      <el-image :src="'http://172.16.0.8:8080/yugioh/image/attribute-rare.png'" />
     </div>
 
     <div v-if="showLevel" class="card-level" :style="levelStyle">
-      <el-image v-for="item in data.level" :src="baseImage + '/level.png'" />
+      <el-image v-for="item in data.level" :src="'http://172.16.0.8:8080/yugioh/image/level.png'" />
     </div>
 
     <div v-if="showRank" class="card-rank" :style="rankStyle">
-      <el-image v-for="item in data.rank" :src="baseImage + '/rank.png'" />
+      <el-image v-for="item in data.rank" :src="'http://172.16.0.8:8080/yugioh/image/rank.png'" />
     </div>
 
     <div v-if="['spell','trap'].includes(data.type)" class="spell-trap">
       <span>{{ ['en', 'kr'].includes(data.language) ? '[' : '【' }}</span>
       <CompressText :text="spellTrapName" />
-      <el-image v-if="data.icon" class="spell-trap-icon" :src="`${baseImage}/icon-${data.icon}.png`" />
+      <el-image v-if="data.icon" class="spell-trap-icon" :src="'http://172.16.0.8:8080/yugioh/image/'+`icon-${data.icon}.png`" />
       <span>{{ ['en', 'kr'].includes(data.language) ? ']' : '】' }}</span>
     </div>
 
@@ -56,9 +56,7 @@
       </el-image>
     </div>
 
-    <div class="card-mask" :style="maskStyle">
-      <el-image :src="maskSrc" fit="cover" />
-    </div>
+
 
     <div v-if="data.type === 'pendulum'" class="left-pendulum" :style="leftPendulumStyle">
       <span>{{ data.pendulumScale }}</span>
@@ -82,23 +80,23 @@
     </div>
 
     <div v-if="data.type === 'monster' && data.cardType === 'link'" class="link-arrow">
-      <el-image v-show="data.arrowList.includes(1)" :src="baseImage + '/arrow-up-on.png'" style="top: 278px;left: 555px" />
-      <el-image v-show="data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-on.png'" style="top: 299px;left: 1130px" />
-      <el-image v-show="data.arrowList.includes(3)" :src="baseImage + '/arrow-right-on.png'" style="top: 761px;left: 1223px" />
-      <el-image v-show="data.arrowList.includes(4)" :src="baseImage + '/arrow-right-down-on.png'" style="top: 1336px;left: 1130px" />
-      <el-image v-show="data.arrowList.includes(5)" :src="baseImage + '/arrow-down-on.png'" style="top: 1428px;left: 555px" />
-      <el-image v-show="data.arrowList.includes(6)" :src="baseImage + '/arrow-left-down-on.png'" style="top: 1336px;left: 95px" />
-      <el-image v-show="data.arrowList.includes(7)" :src="baseImage + '/arrow-left-on.png'" style="top: 758px;left: 71px" />
-      <el-image v-show="data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-on.png'" style="top: 299px;left: 95px" />
+      <el-image v-show="data.arrowList.includes(1)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-up-on.png'" style="top: 278px;left: 555px" />
+      <el-image v-show="data.arrowList.includes(2)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-right-up-on.png'" style="top: 299px;left: 1130px" />
+      <el-image v-show="data.arrowList.includes(3)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-right-on.png'" style="top: 761px;left: 1223px" />
+      <el-image v-show="data.arrowList.includes(4)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-right-down-on.png'" style="top: 1336px;left: 1130px" />
+      <el-image v-show="data.arrowList.includes(5)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-down-on.png'" style="top: 1428px;left: 555px" />
+      <el-image v-show="data.arrowList.includes(6)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-left-down-on.png'" style="top: 1336px;left: 95px" />
+      <el-image v-show="data.arrowList.includes(7)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-left-on.png'" style="top: 758px;left: 71px" />
+      <el-image v-show="data.arrowList.includes(8)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-left-up-on.png'" style="top: 299px;left: 95px" />
 
-      <el-image v-show="!data.arrowList.includes(1)" :src="baseImage + '/arrow-up-off.png'" style="top: 278px;left: 555px" />
-      <el-image v-show="!data.arrowList.includes(2)" :src="baseImage + '/arrow-right-up-off.png'" style="top: 299px;left: 1130px" />
-      <el-image v-show="!data.arrowList.includes(3)" :src="baseImage + '/arrow-right-off.png'" style="top: 761px;left: 1223px" />
-      <el-image v-show="!data.arrowList.includes(4)" :src="baseImage + '/arrow-right-down-off.png'" style="top: 1336px;left: 1130px" />
-      <el-image v-show="!data.arrowList.includes(5)" :src="baseImage + '/arrow-down-off.png'" style="top: 1428px;left: 555px" />
-      <el-image v-show="!data.arrowList.includes(6)" :src="baseImage + '/arrow-left-down-off.png'" style="top: 1336px;left: 95px" />
-      <el-image v-show="!data.arrowList.includes(7)" :src="baseImage + '/arrow-left-off.png'" style="top: 758px;left: 71px" />
-      <el-image v-show="!data.arrowList.includes(8)" :src="baseImage + '/arrow-left-up-off.png'" style="top: 299px;left: 95px" />
+      <el-image v-show="!data.arrowList.includes(1)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-up-off.png'" style="top: 278px;left: 555px" />
+      <el-image v-show="!data.arrowList.includes(2)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-right-up-off.png'" style="top: 299px;left: 1130px" />
+      <el-image v-show="!data.arrowList.includes(3)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-right-off.png'" style="top: 761px;left: 1223px" />
+      <el-image v-show="!data.arrowList.includes(4)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-right-down-off.png'" style="top: 1336px;left: 1130px" />
+      <el-image v-show="!data.arrowList.includes(5)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-down-off.png'" style="top: 1428px;left: 555px" />
+      <el-image v-show="!data.arrowList.includes(6)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-left-down-off.png'" style="top: 1336px;left: 95px" />
+      <el-image v-show="!data.arrowList.includes(7)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-left-off.png'" style="top: 758px;left: 71px" />
+      <el-image v-show="!data.arrowList.includes(8)" :src="'http://172.16.0.8:8080/yugioh/image' + '/arrow-left-up-off.png'" style="top: 299px;left: 95px" />
     </div>
 
     <div ref="cardDescription" v-card-description class="card-description">
@@ -144,12 +142,12 @@
 
     <div class="atk-def-link">
       <template v-if="data.language === 'astral'">
-        <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="baseImage + '/atk-def-astral.svg'" />
-        <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="baseImage + '/atk-link-astral.svg'" />
+        <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="'http://172.16.0.8:8080/yugioh/svg/atk-def-astral.svg'" />
+        <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="'http://172.16.0.8:8080/yugioh/svg/atk-link-astral.svg'" />
       </template>
       <template v-else>
-        <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="baseImage + '/atk-def.svg'" />
-        <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="baseImage + '/atk-link.svg'" />
+        <el-image v-if="(data.type === 'monster' && data.cardType !== 'link') || data.type === 'pendulum'" :src="'http://172.16.0.8:8080/yugioh/svg/atk-def.svg'" />
+        <el-image v-if="data.type === 'monster' && data.cardType === 'link'" :src="'http://172.16.0.8:8080/yugioh/svg/atk-link.svg'" />
       </template>
     </div>
 
@@ -186,15 +184,15 @@
     </div>
 
     <div v-if="data.twentieth" class="card-twentieth">
-      <el-image :src="baseImage + '/twentieth.png'" />
+      <el-image :src="'http://172.16.0.8:8080/yugioh/image' + '/twentieth.png'" />
     </div>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex';
-  import CompressText from '@/views/yugioh/components/CompressText';
-  import { numberToFull } from '@/views/yugioh/yugioh';
+  import CompressText from '@/render/views/yugioh/components/CompressText';
+  import { numberToFull } from '@/render/views/yugioh/yugioh';
 
   export default {
     name: 'YugiohCard',
@@ -229,7 +227,7 @@
     computed: {
       ...mapState(['staticURL']),
       baseImage() {
-        return `${this.staticURL}/yugioh/image`;
+        return `http://172.16.0.8:8080/yugioh/image`;
       },
       cardClass() {
         return `${this.data.language}-class`;
@@ -237,11 +235,11 @@
       cardStyle() {
         let background;
         if (this.data.type === 'monster') {
-          background = `url(${this.baseImage}/card-${this.data.cardType}.png) no-repeat center/cover`;
+          background = `url(http://172.16.0.8:8080/yugioh/image/card-${this.data.cardType}.png) no-repeat center/cover`;
         } else if (this.data.type === 'pendulum') {
-          background = `url(${this.baseImage}/card-${this.data.pendulumType}.png) no-repeat center/cover`;
+          background = `url(http://172.16.0.8:8080/yugioh/image/card-${this.data.pendulumType}.png) no-repeat center/cover`;
         } else {
-          background = `url(${this.baseImage}/card-${this.data.type}.png) no-repeat center/cover`;
+          background = `url(http://172.16.0.8:8080/yugioh/image/card-${this.data.type}.png) no-repeat center/cover`;
         }
         return {
           transform: `scale(${this.data.scale})`,
@@ -281,9 +279,9 @@
           if (!this.data.attribute) {
             return '';
           }
-          return `${this.baseImage}/attribute-${this.data.attribute}${suffix}.png`;
+          return `http://172.16.0.8:8080/yugioh/image/attribute-${this.data.attribute}${suffix}.png`;
         } else {
-          return `${this.baseImage}/attribute-${this.data.type}${suffix}.png`;
+          return `http://172.16.0.8:8080/yugioh/image/attribute-${this.data.type}${suffix}.png`;
         }
       },
       spellTrapName() {
@@ -392,9 +390,9 @@
       },
       maskSrc() {
         if (this.data.type === 'pendulum') {
-          return `${this.baseImage}/card-mask-pendulum.png`;
+          return `http://172.16.0.8:8080/yugioh/image/card-mask-pendulum.png`;
         } else {
-          return `${this.baseImage}/card-mask.png`;
+          return `http://172.16.0.8:8080/yugioh/image/card-mask.png`;
         }
       },
       maskStyle() {
@@ -572,14 +570,14 @@
       },
       copyrightSrc() {
         let color = this.data.type === 'monster' && this.data.cardType === 'xyz' ? 'white' : 'black';
-        return `${this.baseImage}/copyright-${this.data.copyright}-${color}.svg`;
+        return `http://172.16.0.8:8080/yugioh/image/copyright-${this.data.copyright}-${color}.svg`;
       },
       laserSrc() {
-        return `${this.baseImage}/${this.data.laser}.png`;
+        return `http://172.16.0.8:8080/yugioh/image/${this.data.laser}.png`;
       },
       rareSrc() {
         const suffix = this.data.type === 'pendulum' ? '-pendulum' : '';
-        return `${this.baseImage}/rare-${this.data.rare}${suffix}.png`;
+        return `http://172.16.0.8:8080/yugioh/image/rare-${this.data.rare}${suffix}.png`;
       },
       rareStyle() {
         return {
