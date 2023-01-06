@@ -5,13 +5,15 @@ import store from './store';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import 'normalize.css';
-import '@/styles/main.scss';
-import '@/router/router-hooks';
+import '../../node_modules/normalize.css/normalize.css';
+import '@/render/styles/main.scss';
+import '@/render/router/router-hooks';
+import './assets/font/ygo-font.css';
+import './assets/css/all.css';
 import httpService from './plugins/http-service';
 import dayjs from 'dayjs';
-import base from '@/plugins/base';
-import ElImageExtend from '@/extends/el-image-extend';
+import base from '@/render/plugins/base';
+import ElImageExtend from '@/render/extends/el-image-extend';
 import Cookies from 'js-cookie';
 
 const app = createApp(App);
@@ -28,6 +30,7 @@ app.use(router);
 app.use(store);
 app.mount('#app');
 
+store.commit('setIsElectron');
 store.commit('setUserInfo');
 
 if (Cookies.get('token')) {
@@ -58,4 +61,3 @@ if (process.env.NODE_ENV === 'production') {
   // 本地环境
   app.config.globalProperties.baseURL = 'http://172.16.0.8:8080/api';
 }
-
