@@ -56,7 +56,9 @@
       </el-image>
     </div>
 
-
+    <div class="card-mask" :style="maskStyle">
+      <el-image :src="maskSrc" fit="cover" />
+    </div>
 
     <div v-if="data.type === 'pendulum'" class="left-pendulum" :style="leftPendulumStyle">
       <span>{{ data.pendulumScale }}</span>
@@ -398,11 +400,11 @@
       maskStyle() {
         let top, left;
         if (this.data.type === 'pendulum') {
-          top = '342px';
-          left = '68px';
+          top = '1255px';
+          left = '82px';
         } else {
-          top = '322px';
-          left = '117px';
+          top = '373px';
+          left = '169px';
         }
         return {
           top,
